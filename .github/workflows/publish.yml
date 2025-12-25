@@ -3,15 +3,80 @@ name: Publish Packages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run in dry-run mode (no actual publish)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
+  verify-token:
+    name: Verify NPM Token
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check NPM_TOKEN is set
+        run: |
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "❌ NPM_TOKEN secret is not set"
+            echo ""
+            echo "To fix this:"
+            echo "1. Create a token at https://www.npmjs.com/settings/<username>/tokens"
+            echo "2. Go to https://github.com/${{ github.repository }}/settings/secrets/actions"
+            echo "3. Add a new secret named NPM_TOKEN with your token value"
+            exit 1
+          fi
+          echo "✅ NPM_TOKEN secret is configured"
+
+      - name: Verify token is valid
+        run: |
+          echo "🔍 Verifying NPM token..."
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer ${{ secrets.NPM_TOKEN }}" \
+            https://registry.npmjs.org/-/npm/v1/user)
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" = "200" ]; then
+            USERNAME=$(echo "$BODY" | jq -r '.name')
+            echo "✅ Token is valid for user: $USERNAME"
+          elif [ "$HTTP_CODE" = "401" ]; then
+            echo "❌ Token is invalid or expired"
+            exit 1
+          else
+            echo "❌ Unexpected response: $HTTP_CODE"
+            echo "$BODY"
+            exit 1
+          fi
+
+      - name: Check publish permissions
+        run: |
+          echo "🔍 Checking publish permissions..."
+
+          # Try to get package info for one of our packages
+          RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer ${{ secrets.NPM_TOKEN }}" \
+            https://registry.npmjs.org/@jmlweb/prettier-config-base)
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "404" ]; then
+            echo "✅ Token has access to @jmlweb scope"
+          else
+            echo "⚠️  Could not verify scope access (HTTP $HTTP_CODE)"
+            echo "This might be normal if packages haven't been published yet"
+          fi
+
   detect-changes:
     name: Detect Package Changes
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    needs: verify-token
     outputs:
       packages: ${{ steps.detect.outputs.packages }}
       has-changes: ${{ steps.detect.outputs.has-changes }}
@@ -124,8 +189,19 @@ jobs:
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Dry-run publish
+        if: steps.check-version.outputs.exists == 'false' && inputs.dry-run == true
+        run: |
+          cd "${{ matrix.package }}"
+          echo "🧪 DRY-RUN MODE - Simulating publish..."
+          echo ""
+          npm publish --access public --dry-run
+          echo ""
+          echo "✅ Dry-run successful! Package would publish correctly."
+          echo "   Run workflow without dry-run to actually publish."
+
       - name: Publish to npm
-        if: steps.check-version.outputs.exists == 'false'
+        if: steps.check-version.outputs.exists == 'false' && inputs.dry-run != true
         run: |
           cd "${{ matrix.package }}"
           npm publish --access public
@@ -133,7 +209,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create git tag
-        if: steps.check-version.outputs.exists == 'false'
+        if: steps.check-version.outputs.exists == 'false' && inputs.dry-run != true
         run: |
           PACKAGE_NAME="${{ steps.package-info.outputs.name }}"
           PACKAGE_VERSION="${{ steps.package-info.outputs.version }}"

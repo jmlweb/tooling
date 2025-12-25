@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { format } from 'prettier';
+import { fileURLToPath } from 'node:url';
+
 import chalk from 'chalk';
+import { format } from 'prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -53,10 +54,7 @@ log.info('Test 3: Testing formatting...');
 try {
   const prettierConfig = await import('@jmlweb/prettier-config-base');
   const badFormatPath = resolve(appRoot, 'fixtures/invalid/bad-formatting.ts');
-  const expectedPath = resolve(
-    appRoot,
-    'fixtures/expected/bad-formatting.ts',
-  );
+  const expectedPath = resolve(appRoot, 'fixtures/expected/bad-formatting.ts');
 
   const badFormat = readFileSync(badFormatPath, 'utf-8');
   const expected = readFileSync(expectedPath, 'utf-8');

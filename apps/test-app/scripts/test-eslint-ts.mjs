@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { ESLint } from 'eslint';
+import { fileURLToPath } from 'node:url';
+
 import chalk from 'chalk';
+import { ESLint } from 'eslint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -63,7 +64,10 @@ try {
   const validTsPath = resolve(appRoot, 'fixtures/valid/typescript.ts');
   const results = await eslint.lintFiles([validTsPath]);
 
-  const errorCount = results.reduce((sum, result) => sum + result.errorCount, 0);
+  const errorCount = results.reduce(
+    (sum, result) => sum + result.errorCount,
+    0,
+  );
 
   if (errorCount === 0) {
     log.success('Valid TypeScript file passes linting');
@@ -72,7 +76,9 @@ try {
     console.log(chalk.yellow('\nErrors:'));
     results.forEach((result) => {
       result.messages.forEach((msg) => {
-        console.log(`  ${msg.line}:${msg.column} - ${msg.message} (${msg.ruleId})`);
+        console.log(
+          `  ${msg.line}:${msg.column} - ${msg.message} (${msg.ruleId})`,
+        );
       });
     });
   }
@@ -93,10 +99,15 @@ try {
   const lintErrorsPath = resolve(appRoot, 'fixtures/invalid/lint-errors.ts');
   const results = await eslint.lintFiles([lintErrorsPath]);
 
-  const errorCount = results.reduce((sum, result) => sum + result.errorCount, 0);
+  const errorCount = results.reduce(
+    (sum, result) => sum + result.errorCount,
+    0,
+  );
 
   if (errorCount > 0) {
-    log.success(`Config correctly detects ${errorCount} error(s) in invalid file`);
+    log.success(
+      `Config correctly detects ${errorCount} error(s) in invalid file`,
+    );
   } else {
     log.error('Config failed to detect errors in invalid file');
   }
@@ -111,9 +122,10 @@ try {
   const flatConfig = config.default;
 
   // Check that config has TypeScript-specific configuration
-  const hasTypeScriptConfig = flatConfig.some(cfg =>
-    cfg.languageOptions?.parserOptions?.project !== undefined ||
-    cfg.files?.some(pattern => pattern.includes('.ts'))
+  const hasTypeScriptConfig = flatConfig.some(
+    (cfg) =>
+      cfg.languageOptions?.parserOptions?.project !== undefined ||
+      cfg.files?.some((pattern) => pattern.includes('.ts')),
   );
 
   if (hasTypeScriptConfig) {

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import chalk from 'chalk';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -83,9 +84,7 @@ const runAllTests = async () => {
   console.log();
 
   if (failed === 0) {
-    console.log(
-      chalk.green.bold(`✅ All ${total} test suites passed!\n`),
-    );
+    console.log(chalk.green.bold(`✅ All ${total} test suites passed!\n`));
     process.exit(0);
   } else {
     console.log(

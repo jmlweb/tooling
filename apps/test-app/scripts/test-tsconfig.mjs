@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
 import { exec } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
+
 import chalk from 'chalk';
 
 const execAsync = promisify(exec);

@@ -1,4 +1,5 @@
 import baseConfig from '@jmlweb/eslint-config-base-js';
+import globals from 'globals';
 
 export default [
   {
@@ -15,6 +16,17 @@ export default [
         __dirname: 'readonly',
         __filename: 'readonly',
       },
+    },
+  },
+  {
+    files: ['scripts/**/*.mjs', 'apps/test-app/scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-unused-vars': 'off',
     },
   },
 ];

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { ESLint } from 'eslint';
+import { fileURLToPath } from 'node:url';
+
 import chalk from 'chalk';
+import { ESLint } from 'eslint';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -64,7 +65,10 @@ try {
   const validJsPath = resolve(appRoot, 'fixtures/valid/javascript.js');
   const results = await eslint.lintFiles([validJsPath]);
 
-  const errorCount = results.reduce((sum, result) => sum + result.errorCount, 0);
+  const errorCount = results.reduce(
+    (sum, result) => sum + result.errorCount,
+    0,
+  );
 
   if (errorCount === 0) {
     log.success('Valid JavaScript file passes linting');
@@ -73,7 +77,9 @@ try {
     console.log(chalk.yellow('\nErrors:'));
     results.forEach((result) => {
       result.messages.forEach((msg) => {
-        console.log(`  ${msg.line}:${msg.column} - ${msg.message} (${msg.ruleId})`);
+        console.log(
+          `  ${msg.line}:${msg.column} - ${msg.message} (${msg.ruleId})`,
+        );
       });
     });
   }
@@ -88,7 +94,9 @@ try {
   const flatConfig = config.default;
 
   // Check that config has rules defined
-  const hasRules = flatConfig.some(cfg => cfg.rules && Object.keys(cfg.rules).length > 0);
+  const hasRules = flatConfig.some(
+    (cfg) => cfg.rules && Object.keys(cfg.rules).length > 0,
+  );
 
   if (hasRules) {
     log.success('Config includes rules');

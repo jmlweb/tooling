@@ -15,7 +15,8 @@
     "validate": "pnpm format --check && pnpm lint:root && pnpm lint",
     "ci": "pnpm validate && pnpm build",
     "clean": "turbo run clean && rm -rf node_modules",
-    "check": "turbo run check"
+    "check": "turbo run check",
+    "verify-npm-token": "node scripts/verify-npm-token.mjs"
   },
   "lint-staged": {
     "*.{js,mjs,cjs}": [
@@ -33,6 +34,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.3.3",
