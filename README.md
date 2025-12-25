@@ -83,11 +83,59 @@ npm run validate
 
 The `apps/test-app/` directory contains a test application that validates all configuration packages work correctly.
 
+## Node.js Compatibility
+
+Different packages in this monorepo have different Node.js version requirements. Most packages work with Node.js >= 18.0.0, while some TypeScript ESLint configurations require Node.js >= 20.11.0 due to the use of `import.meta.dirname`, which was introduced in Node.js 20.11.0.
+
+### Compatibility Matrix
+
+| Package                            | Node.js Requirement | Reason                                      |
+| ---------------------------------- | ------------------- | ------------------------------------------- |
+| `@jmlweb/prettier-config-base`     | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/prettier-config-tailwind` | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/eslint-config-base-js`    | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/eslint-config-base`       | >= 20.11.0          | Uses `import.meta.dirname` for config files |
+| `@jmlweb/eslint-config-react`      | >= 20.11.0          | Uses `import.meta.dirname` for config files |
+| `@jmlweb/vitest-config`            | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/tsconfig-base`            | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/tsconfig-react`           | >= 18.0.0           | Standard compatibility                      |
+
+### Why Different Requirements?
+
+**Node.js >= 18.0.0 (Most Packages)**
+
+- Most packages use standard JavaScript/TypeScript features available in Node.js 18.0.0
+- These packages are compatible with all Node.js LTS versions
+
+**Node.js >= 20.11.0 (TypeScript ESLint Configs)**
+
+- `@jmlweb/eslint-config-base` and `@jmlweb/eslint-config-react` require Node.js >= 20.11.0
+- These packages use `import.meta.dirname` in their configuration files, which was introduced in Node.js 20.11.0
+- This feature enables better path resolution for ESLint configuration files in the flat config format
+
+### Choosing the Right Node.js Version
+
+- **If you're using TypeScript ESLint configs** (`@jmlweb/eslint-config-base` or `@jmlweb/eslint-config-react`):
+  - Use **Node.js >= 20.11.0**
+  - Recommended: Use the latest Node.js LTS version
+
+- **If you're only using other packages** (Prettier, Vitest, or TypeScript configs):
+  - Use **Node.js >= 18.0.0**
+  - Recommended: Use Node.js 18 LTS or later for security updates
+
+### Checking Your Node.js Version
+
+```bash
+node --version
+```
+
+To install or update Node.js, visit [nodejs.org](https://nodejs.org/) or use a version manager like [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm).
+
 ## Requirements
 
-- **Node.js** >= 18.0.0 (ESLint TypeScript config requires >= 20.11.0)
-- **ESLint** >= 9.0.0 (flat config format)
-- **Prettier** >= 3.0.0
+- **Node.js** >= 18.0.0 (see [Node.js Compatibility](#nodejs-compatibility) for package-specific requirements)
+- **ESLint** >= 9.0.0 (flat config format, required for ESLint config packages)
+- **Prettier** >= 3.0.0 (required for Prettier config packages)
 
 ## License
 
