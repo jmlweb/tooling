@@ -180,6 +180,64 @@ You can enable auto-merge for patch/minor updates in GitHub repository settings:
 
 Major version updates should always be reviewed manually.
 
+## Support
+
+### Getting Help
+
+- **Bug Reports**: [Open an issue](https://github.com/jmlweb/tooling/issues/new?labels=bug) with detailed reproduction steps
+- **Feature Requests**: [Open an issue](https://github.com/jmlweb/tooling/issues/new?labels=enhancement) with your use case
+- **Questions**: [Open an issue](https://github.com/jmlweb/tooling/issues/new?labels=question) or check existing issues
+
+### Response Times
+
+This is an open-source project maintained in spare time. While we aim to respond to issues promptly, response times may vary. Critical bugs are prioritized.
+
+## Package Analytics
+
+Track package usage and health through npm statistics:
+
+### Download Statistics
+
+| Package                            | Weekly Downloads                                                                               | Total Downloads                                                                         |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `@jmlweb/prettier-config-base`     | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-base?label=)     | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-base?label=)     |
+| `@jmlweb/prettier-config-tailwind` | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-tailwind?label=) | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-tailwind?label=) |
+| `@jmlweb/eslint-config-base-js`    | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base-js?label=)    | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base-js?label=)    |
+| `@jmlweb/eslint-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base?label=)       |
+| `@jmlweb/eslint-config-react`      | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-react?label=)      | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-react?label=)      |
+| `@jmlweb/tsconfig-base`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-base?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-base?label=)            |
+| `@jmlweb/tsconfig-react`           | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-react?label=)           | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-react?label=)           |
+| `@jmlweb/vitest-config`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/vitest-config?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/vitest-config?label=)            |
+
+### Viewing Detailed Statistics
+
+- **npm Stats**: Visit [npmjs.com/package/@jmlweb/PACKAGE_NAME](https://www.npmjs.com/package/@jmlweb/prettier-config-base) (replace with package name)
+- **npm-stat**: Visit [npm-stat.com](https://npm-stat.com/charts.html?package=@jmlweb/prettier-config-base) for historical download charts
+
+## Security
+
+### Vulnerability Monitoring
+
+This project uses multiple layers of security monitoring:
+
+1. **Dependabot**: Automatically monitors dependencies for known vulnerabilities and creates PRs to update affected packages (see [Dependency Updates](#dependency-updates))
+
+2. **npm audit**: Run locally to check for vulnerabilities:
+
+   ```bash
+   pnpm audit
+   ```
+
+3. **GitHub Security Advisories**: Security alerts are enabled on this repository
+
+### Reporting Security Issues
+
+If you discover a security vulnerability:
+
+1. **Do not** open a public issue
+2. Email the maintainer directly or use GitHub's private vulnerability reporting
+3. Include a detailed description and reproduction steps
+
 ## License
 
 MIT
