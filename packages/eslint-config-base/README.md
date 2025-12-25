@@ -202,13 +202,15 @@ npx eslint --fix .
 
 Use this configuration when you want:
 
-- ✅ Maximum type safety
+- ✅ Maximum type safety with strict TypeScript rules
 - ✅ Strict code quality standards
 - ✅ Consistent code style across the team
 - ✅ Prevention of common TypeScript pitfalls
 - ✅ Best practices enforcement
 
 **For JavaScript-only projects**, use [`@jmlweb/eslint-config-base-js`](../eslint-config-base-js) instead.
+
+**For React projects**, use [`@jmlweb/eslint-config-react`](../eslint-config-react) instead.
 
 **For less strict projects**, you can override the strict rules as shown in the examples above.
 
@@ -247,6 +249,13 @@ Add linting scripts to your `package.json`:
 }
 ```
 
+Then run:
+
+```bash
+npm run lint      # Lint all files
+npm run lint:fix  # Fix auto-fixable issues
+```
+
 ## 📋 Requirements
 
 - **Node.js** >= 20.11.0 (required for `import.meta.dirname` in config files)
@@ -268,6 +277,7 @@ This package requires the following peer dependencies:
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base-js`](../eslint-config-base-js) - JavaScript ESLint config (extended by this package)
+- [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint config for React projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 

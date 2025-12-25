@@ -94,6 +94,86 @@ When creating or updating published packages:
 - Test against all supported Node.js versions
 - Update compatibility requirements as Node.js versions reach end-of-life
 
+## File Organization Rules
+
+### Descriptive File Names
+
+File names must be descriptive and written in uppercase.
+
+#### Requirements
+
+- **Descriptive Names**: File names should clearly indicate their purpose and content
+- **Uppercase Convention**: Use uppercase letters for file names (e.g., `AGENTS.md`, `SPECS.md`, `README.md`)
+- **Clarity**: Avoid abbreviations unless they are widely understood and documented
+
+#### Examples
+
+- ✅ `AGENTS.md` - Clear and descriptive
+- ✅ `SPECS.md` - Clear and descriptive
+- ✅ `README.md` - Standard convention
+- ❌ `agents.md` - Not uppercase
+- ❌ `rules.md` - Not descriptive enough
+- ❌ `doc.md` - Too generic
+
+### File Size Management
+
+When a file becomes very large, it must be divided into smaller, more manageable files.
+
+#### Guidelines
+
+1. **Size Threshold**: Consider splitting files when they exceed approximately 500-1000 lines or become difficult to navigate
+2. **Logical Division**: Split files based on logical sections, topics, or functionality
+3. **Maintain Structure**: Ensure the file structure remains organized and easy to navigate
+4. **Update References**: Update any references or links to the split content
+
+#### Process
+
+When dividing a large file:
+
+1. Identify logical sections that can be separated
+2. Create new files with descriptive, uppercase names
+3. Move content to appropriate new files
+4. Update the original file to reference the new files
+5. Update any cross-references in other files
+
+### Avoid Duplicate Content
+
+Duplicate content must be avoided. Instead, link to the content that needs to be referenced in another file.
+
+#### Principles
+
+1. **Single Source of Truth**: Maintain content in one location only
+2. **Use Links**: Reference content using markdown links or file references
+3. **Keep Updated**: When content changes, update it in the single source location
+
+#### Best Practices
+
+- **Cross-References**: Use markdown links to reference content in other files
+
+  ```markdown
+  For details, see [File Organization Rules](#file-organization-rules)
+  ```
+
+- **Include Statements**: For code or configuration, use import/export mechanisms rather than duplicating code
+
+- **Documentation Links**: Link to relevant sections rather than copying content
+
+#### Link Examples
+
+- ✅ Link to existing content: `See [Package Naming Convention](#package-naming-convention)`
+- ✅ Reference a section: `As specified in [General Rules](#general-rules)`
+- ❌ Copying entire sections into multiple files
+- ❌ Duplicating code examples across multiple documentation files
+
+#### Enforcement
+
+When creating or editing files:
+
+- Check if similar content already exists before adding new content
+- Use links to reference existing content instead of duplicating it
+- If content must be duplicated for context, clearly mark it as a reference and link to the original source
+- Regularly review files for duplicate content and consolidate when found
+
 ## Code Style and Formatting
 
 This project uses shared configuration packages for consistent code style:
@@ -148,14 +228,367 @@ When creating a new configuration package:
 
    ```text
    packages/{package-name}/
-   ├── index.js       # Configuration export
+   ├── src/
+   │   └── index.ts   # Configuration export (TypeScript)
    ├── package.json   # Package metadata
+   ├── tsconfig.json # TypeScript configuration
+   ├── tsup.config.ts # Build configuration (if needed)
    └── README.md      # Usage documentation
    ```
 
 4. **Set appropriate `engines.node`** based on features used
 5. **Use `workspace:*`** for internal dependencies
 6. **Add peer dependencies** for tools the config requires
+7. **Follow package.json structure guidelines** (see below)
+8. **Configure build system** if package requires compilation (see below)
+9. **Set up TypeScript configuration** (see below)
+10. **Create README** following standard structure (see [README Standards](#readme-standards))
+
+## Package.json Structure
+
+All packages must follow a consistent `package.json` structure to ensure proper publishing and consumption.
+
+### Required Fields
+
+The following fields are required for all published packages:
+
+- `name`: Must follow `@jmlweb/{tool}-config-{variant}` pattern
+- `version`: Must follow semantic versioning (e.g., `1.0.0`)
+- `description`: Clear, concise description of the package
+- `author`: Package author (use `"jmlweb"`)
+- `license`: Always `"MIT"`
+- `repository`: Object with `type: "git"` and `url` pointing to GitHub repository
+- `files`: Array of files/directories to include in published package (typically `["dist", "README.md", "CHANGELOG.md"]`)
+
+### Recommended Fields
+
+These fields are recommended but not strictly required:
+
+- `engines.node`: Minimum Node.js version (e.g., `">=18.0.0"`)
+- `keywords`: Array of keywords for npm search
+- `bugs`: Object with `url` pointing to GitHub issues
+- `homepage`: URL to package README on GitHub
+
+### Package Exports
+
+All packages that export code must use the modern `exports` field for dual ESM/CJS support:
+
+```json
+{
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  }
+}
+```
+
+This structure ensures:
+
+- CommonJS compatibility via `require`
+- ESM compatibility via `import`
+- TypeScript type definitions for both module systems
+- Proper resolution for both `.js` and `.ts` consumers
+
+### Files Field
+
+The `files` field controls what gets published to npm. Always include:
+
+- `dist`: Built output directory (if package requires building)
+- `README.md`: Package documentation
+- `CHANGELOG.md`: Version history (auto-generated by Changesets)
+
+Do not include:
+
+- Source files (`src/`)
+- Build configuration (`tsup.config.ts`, `tsconfig.json`)
+- Development dependencies
+- Test files
+
+### Publish Configuration
+
+All packages must include:
+
+```json
+{
+  "publishConfig": {
+    "access": "public"
+  }
+}
+```
+
+This ensures packages are published as public packages under the `@jmlweb` scope.
+
+## Build System
+
+Packages that require TypeScript compilation or bundling use `tsup` as the build tool.
+
+### When to Use tsup
+
+Use `tsup` when:
+
+- Package is written in TypeScript
+- Package needs to support both ESM and CommonJS
+- Package needs type definitions generated
+
+Do not use `tsup` when:
+
+- Package is pure JavaScript with no compilation needed
+- Package is a configuration file (e.g., `tsconfig.json`)
+
+### tsup Configuration
+
+Create a `tsup.config.ts` file in the package root:
+
+```typescript
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['src/index.ts'],
+  format: ['cjs', 'esm'],
+  dts: true,
+  clean: true,
+  outDir: 'dist',
+  external: [
+    // List all peer dependencies and workspace dependencies
+    '@jmlweb/related-package',
+    'peer-dependency',
+  ],
+});
+```
+
+**Key Configuration Options:**
+
+- `entry`: Source file(s) to build
+- `format`: Output formats (`['cjs', 'esm']` for dual support)
+- `dts`: Generate TypeScript declaration files
+- `clean`: Clean output directory before building
+- `outDir`: Output directory (always `dist`)
+- `external`: Dependencies that should not be bundled (always include peer dependencies and workspace dependencies)
+
+### Build Scripts
+
+All packages with a build step should include:
+
+```json
+{
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+  }
+}
+```
+
+The `prepublishOnly` hook ensures:
+
+- Package validation runs before publishing
+- Build step executes before publishing
+- Only valid, built packages are published
+
+## Dependency Management
+
+Understanding when to use `dependencies`, `devDependencies`, and `peerDependencies` is crucial for proper package configuration.
+
+### Dependencies
+
+Use `dependencies` for:
+
+- **Workspace dependencies**: Other packages in this monorepo (use `workspace:*`)
+- **Runtime dependencies**: Packages that are bundled with your package
+
+**Example:**
+
+```json
+{
+  "dependencies": {
+    "@jmlweb/eslint-config-base-js": "workspace:*"
+  }
+}
+```
+
+### DevDependencies
+
+Use `devDependencies` for:
+
+- **Build tools**: `tsup`, `typescript`
+- **Development tools**: `prettier`, `eslint` (when used for development)
+- **Type definitions**: `@types/*` packages
+- **Testing tools**: Test frameworks and utilities
+- **Peer dependencies**: Include peer dependencies here for development/testing
+
+**Example:**
+
+```json
+{
+  "devDependencies": {
+    "@jmlweb/tsconfig-internal": "workspace:*",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "eslint": "^9.0.0"
+  }
+}
+```
+
+### Peer Dependencies
+
+Use `peerDependencies` for:
+
+- **Required runtime dependencies**: Tools that consumers must install (e.g., `prettier`, `eslint`, `typescript`)
+- **Version ranges**: Use caret (`^`) to allow compatible versions
+
+**Example:**
+
+```json
+{
+  "peerDependencies": {
+    "prettier": "^3.0.0",
+    "eslint": "^9.0.0"
+  }
+}
+```
+
+**Important:**
+
+- Peer dependencies are not installed automatically
+- Consumers must install peer dependencies themselves
+- Always include peer dependencies in `devDependencies` for local development
+- Document peer dependencies in package README
+
+### Workspace Dependencies
+
+For internal dependencies within the monorepo, use `workspace:*`:
+
+```json
+{
+  "dependencies": {
+    "@jmlweb/base-package": "workspace:*"
+  },
+  "devDependencies": {
+    "@jmlweb/tsconfig-internal": "workspace:*"
+  }
+}
+```
+
+This ensures:
+
+- Packages reference the local workspace version during development
+- CI/CD handles version resolution during publishing
+- No version conflicts in the monorepo
+
+## TypeScript Configuration
+
+All TypeScript packages should extend `@jmlweb/tsconfig-internal` for consistent configuration.
+
+### tsconfig.json Structure
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-internal/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+**Key Points:**
+
+- Always extend `@jmlweb/tsconfig-internal` for consistency
+- Set `outDir` to `./dist` to match build output
+- Include only source files in `include` (typically `src/**/*`)
+- Exclude `node_modules` and `dist` directories
+
+### TypeScript as DevDependency
+
+TypeScript should be a `devDependency`, not a peer dependency, since:
+
+- TypeScript is only needed for building the package
+- Consumers don't need TypeScript to use the compiled package
+- Type definitions are included in the published package
+
+## Pre-publish Validation
+
+All packages are validated before publishing using the `validate-package.mjs` script.
+
+### Validation Checks
+
+The validation script verifies:
+
+- **Required fields**: All required `package.json` fields are present
+- **Name format**: Package name follows `@jmlweb/` pattern
+- **Version format**: Version follows semantic versioning
+- **File existence**: Files listed in `files` field exist
+- **README**: README.md exists
+- **Build outputs**: Main, module, and types files exist (or will be created by build)
+- **Exports structure**: Exports field is properly structured
+- **Repository structure**: Repository field has correct format
+
+### Using Validation
+
+Validation runs automatically via the `prepublishOnly` hook:
+
+```json
+{
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+  }
+}
+```
+
+You can also run validation manually:
+
+```bash
+node scripts/validate-package.mjs packages/package-name
+```
+
+### Validation Errors
+
+If validation fails:
+
+- Fix all errors before publishing
+- Warnings are informational but don't block publishing
+- Common issues: missing fields, incorrect file paths, invalid version format
+
+## README Standards
+
+All package READMEs must follow a standardized structure for consistency and maintainability.
+
+### Standard Structure
+
+Package READMEs follow a specific section order and formatting. For complete guidelines, see [`packages/AGENTS.md`](packages/AGENTS.md).
+
+**Key Requirements:**
+
+- Use standardized section order (Title, Description, Features, Installation, etc.)
+- Include all required sections
+- Use consistent emoji prefixes for sections
+- Provide complete, runnable code examples
+- Link to related packages using relative paths
+- Document peer dependencies clearly
+- Include Node.js version requirements
+
+### Creating READMEs
+
+When creating a new package README:
+
+1. Reference [`packages/AGENTS.md`](packages/AGENTS.md) for the complete structure
+2. Use existing package READMEs as examples
+3. Ensure all code examples are tested and working
+4. Verify all links are correct
+5. Match formatting style of other packages
 
 ## Testing Guidelines
 

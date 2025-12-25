@@ -82,7 +82,33 @@ This package extends `@jmlweb/prettier-config-base` and adds:
   - And all other base settings
 - ✅ `prettier-plugin-tailwindcss` - Automatically sorts Tailwind CSS classes
 
-## 🔧 Usage with Scripts
+## 🎯 When to Use
+
+Use this package when:
+
+- ✅ You're using Tailwind CSS in your project
+- ✅ You want consistent class ordering across your codebase
+- ✅ You want to follow Tailwind's recommended class order
+- ✅ You want automatic class sorting on save/format
+
+**For projects without Tailwind**, use [`@jmlweb/prettier-config-base`](../prettier-config-base) instead.
+
+## 🔧 Extending the Configuration
+
+You can extend this config for project-specific needs:
+
+```javascript
+// .prettierrc.js
+const tailwindConfig = require('@jmlweb/prettier-config-tailwind');
+
+module.exports = {
+  ...tailwindConfig,
+  // Override or add specific options
+  printWidth: 100,
+};
+```
+
+## 📝 Usage with Scripts
 
 Add formatting scripts to your `package.json`:
 
@@ -95,33 +121,31 @@ Add formatting scripts to your `package.json`:
 }
 ```
 
-## 🎯 When to Use
+Then run:
 
-Use this package when:
+```bash
+npm run format        # Format all files
+npm run format:check  # Check formatting without modifying files
+```
 
-- ✅ You're using Tailwind CSS in your project
-- ✅ You want consistent class ordering across your codebase
-- ✅ You want to follow Tailwind's recommended class order
-- ✅ You want automatic class sorting on save/format
+## 📋 Requirements
 
-For projects without Tailwind, use [`@jmlweb/prettier-config-base`](../prettier-config-base) instead.
+- **Node.js** >= 18.0.0
+- **Prettier** >= 3.0.0
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `prettier` (>= 3.0.0)
+- `prettier-plugin-tailwindcss` (latest)
+
+**Note**: The `prettier-plugin-tailwindcss` plugin must be installed. The plugin uses Tailwind's recommended class order and must be loaded last in Prettier's plugin chain (handled automatically).
 
 ## 🔗 Related Packages
 
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Base Prettier configuration (extended by this package)
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
-
-## ⚠️ Important Notes
-
-1. **Plugin Installation**: Make sure `prettier-plugin-tailwindcss` is installed. It's a peer dependency.
-2. **Class Ordering**: The plugin uses Tailwind's recommended class order. This may differ from your current ordering.
-3. **Performance**: The plugin must be loaded last in Prettier's plugin chain (it handles this automatically).
-
-## 📝 Requirements
-
-- **Node.js** >= 18.0.0
-- **Prettier** >= 3.0.0
-- **prettier-plugin-tailwindcss** (peer dependency)
 
 ## 📄 License
 

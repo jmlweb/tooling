@@ -173,9 +173,22 @@ You can extend or override the configuration for your specific needs:
 }
 ```
 
-## 📝 Usage with Build Tools
+## 📝 Usage with Scripts
 
-### Vite
+TypeScript compilation is typically handled by your build tool. For manual compilation:
+
+```json
+{
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+### Usage with Build Tools
+
+#### Vite
 
 ```typescript
 // vite.config.ts
@@ -187,7 +200,7 @@ export default defineConfig({
 });
 ```
 
-### Webpack
+#### Webpack
 
 ```typescript
 // webpack.config.ts

@@ -208,6 +208,13 @@ Add linting scripts to your `package.json`:
 }
 ```
 
+Then run:
+
+```bash
+npm run lint      # Lint all files
+npm run lint:fix  # Fix auto-fixable issues
+```
+
 ## 📋 Requirements
 
 - **Node.js** >= 20.11.0 (required for `import.meta.dirname` in config files)

@@ -86,7 +86,34 @@ function greet(user) {
 }
 ```
 
-## 🔧 Usage with Scripts
+## 🎯 When to Use
+
+Use this package when you want:
+
+- ✅ Consistent code formatting across projects
+- ✅ Zero-configuration Prettier setup
+- ✅ Modern JavaScript/TypeScript formatting defaults
+- ✅ Foundation for extending with framework-specific configs
+
+**For Tailwind CSS projects**, use [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) instead.
+
+## 🔧 Extending the Configuration
+
+You can extend this config for project-specific needs:
+
+```javascript
+// .prettierrc.js
+const baseConfig = require('@jmlweb/prettier-config-base');
+
+module.exports = {
+  ...baseConfig,
+  // Override or add specific options
+  printWidth: 100,
+  arrowParens: 'always',
+};
+```
+
+## 📝 Usage with Scripts
 
 Add formatting scripts to your `package.json`:
 
@@ -106,31 +133,21 @@ npm run format        # Format all files
 npm run format:check  # Check formatting without modifying files
 ```
 
-## 🎨 Extending the Configuration
+## 📋 Requirements
 
-You can extend this config for project-specific needs:
+- **Node.js** >= 18.0.0
+- **Prettier** >= 3.0.0
 
-```javascript
-// .prettierrc.js
-const baseConfig = require('@jmlweb/prettier-config-base');
+## 📦 Peer Dependencies
 
-module.exports = {
-  ...baseConfig,
-  // Override or add specific options
-  printWidth: 100,
-  arrowParens: 'always',
-};
-```
+This package requires the following peer dependency:
+
+- `prettier` (>= 3.0.0)
 
 ## 🔗 Related Packages
 
 - [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) - Adds Tailwind CSS class sorting
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config that works seamlessly with this Prettier config
-
-## 📝 Requirements
-
-- **Node.js** >= 18.0.0
-- **Prettier** >= 3.0.0
 
 ## 📄 License
 

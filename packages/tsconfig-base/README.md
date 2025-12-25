@@ -157,7 +157,21 @@ This base config intentionally omits `include` and `exclude` patterns because:
 - ✅ Prevents conflicts with project-specific patterns
 - ✅ More flexible for various project types
 
-## 🔧 Common Overrides
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Strict TypeScript type checking for maximum type safety
+- ✅ Modern JavaScript features (ES2022)
+- ✅ Node.js ESM module system
+- ✅ Flexible file inclusion/exclusion patterns
+- ✅ Foundation for extending with framework-specific configs
+
+**For React projects**, use [`@jmlweb/tsconfig-react`](../tsconfig-react) instead.
+
+**For internal tooling projects**, use [`@jmlweb/tsconfig-internal`](../tsconfig-internal) instead.
+
+## 🔧 Extending the Configuration
 
 ### Using ES Modules (ESM)
 
@@ -195,15 +209,35 @@ This base config intentionally omits `include` and `exclude` patterns because:
 }
 ```
 
-## 📝 Requirements
+## 📝 Usage with Scripts
+
+TypeScript compilation is typically handled by your build tool or IDE. For manual compilation:
+
+```json
+{
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+## 📋 Requirements
 
 - **Node.js** >= 18.0.0
 - **TypeScript** >= 5.0.0
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependency:
+
+- `typescript` (>= 5.0.0)
 
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint configuration for TypeScript projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier configuration
+- [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript configuration for React projects
 
 ## 📄 License
 

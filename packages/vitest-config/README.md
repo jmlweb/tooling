@@ -218,6 +218,16 @@ Add test scripts to your `package.json`:
 }
 ```
 
+Then run:
+
+```bash
+npm run test           # Run tests in watch mode
+npm run test:run       # Run tests once
+npm run test:coverage # Run tests with coverage
+npm run test:ui       # Open Vitest UI
+npm run test:typecheck # Run TypeScript type checking
+```
+
 ### TypeScript Type Checking
 
 Type checking is performed separately using the `vitest typecheck` command for better performance. This allows you to run type checking independently of your test suite:

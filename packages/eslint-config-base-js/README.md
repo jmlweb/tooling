@@ -166,15 +166,16 @@ This configuration disables all ESLint rules that conflict with Prettier, allowi
 
 **Recommended**: Use [`@jmlweb/prettier-config-base`](../prettier-config-base) for consistent formatting.
 
-## 🔗 TypeScript Projects
+## 🎯 When to Use
 
-For TypeScript projects, use [`@jmlweb/eslint-config-base`](../eslint-config-base) which extends this config with strict type checking:
+Use this package when you want:
 
-```javascript
-import baseConfig from '@jmlweb/eslint-config-base';
+- ✅ JavaScript-only projects (no TypeScript)
+- ✅ Modern JavaScript linting with ESLint 9+ flat config
+- ✅ Automatic import/export sorting
+- ✅ Foundation for extending with TypeScript or React configs
 
-export default [...baseConfig];
-```
+**For TypeScript projects**, use [`@jmlweb/eslint-config-base`](../eslint-config-base) instead, which extends this config with strict type checking.
 
 ## 🔧 Extending the Configuration
 
@@ -209,6 +210,13 @@ Add linting scripts to your `package.json`:
     "lint:fix": "eslint . --fix"
   }
 }
+```
+
+Then run:
+
+```bash
+npm run lint      # Lint all files
+npm run lint:fix  # Fix auto-fixable issues
 ```
 
 ## 📋 Requirements
