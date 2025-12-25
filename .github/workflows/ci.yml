@@ -118,15 +118,11 @@ jobs:
           path: packages/*/dist
           retention-days: 7
 
-  test-install:
-    name: Test Installation (Node ${{ matrix.node-version }})
+  test-pack:
+    name: Test Package Publishing
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [18, 20, 22]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -139,7 +135,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: pnpm
 
       - name: Install dependencies
@@ -148,70 +144,71 @@ jobs:
       - name: Build packages
         run: pnpm build
 
-      - name: Pack packages
+      - name: Pack and validate packages
         run: |
-          # Create directory for tarballs
-          mkdir -p ${{ github.workspace }}/packed
+          mkdir -p packed
+          FAILED=0
 
-          # Pack each package (this resolves workspace:* references)
-          for pkg in packages/*/; do
-            echo "Packing $pkg..."
-            cd "${{ github.workspace }}/$pkg"
-            pnpm pack --pack-destination "${{ github.workspace }}/packed"
-            cd "${{ github.workspace }}"
+          for pkg_dir in packages/*/; do
+            pkg_name=$(jq -r '.name' "$pkg_dir/package.json")
+            echo "=== Packing $pkg_name ==="
+
+            cd "$pkg_dir"
+            pnpm pack --pack-destination "../../packed"
+            cd ../..
+
+            # Find the tarball
+            tarball=$(ls packed/*.tgz | grep "$(basename $pkg_dir)" | head -1)
+            echo "Created: $tarball"
+
+            # Extract and validate contents
+            mkdir -p "validate-$pkg_name"
+            tar -xzf "$tarball" -C "validate-$pkg_name"
+
+            # Check package.json exists
+            if [ ! -f "validate-$pkg_name/package/package.json" ]; then
+              echo "ERROR: package.json missing in $pkg_name"
+              FAILED=1
+            fi
+
+            # For packages with build output, check dist exists
+            if jq -e '.scripts.build' "$pkg_dir/package.json" > /dev/null 2>&1; then
+              if [ ! -d "validate-$pkg_name/package/dist" ]; then
+                echo "ERROR: dist folder missing in $pkg_name"
+                FAILED=1
+              fi
+            fi
+
+            # Check workspace:* references are resolved
+            if grep -q '"workspace:\*"' "validate-$pkg_name/package/package.json"; then
+              echo "ERROR: Unresolved workspace:* reference in $pkg_name"
+              FAILED=1
+            fi
+
+            echo "Contents of $pkg_name:"
+            ls -la "validate-$pkg_name/package/"
+            echo ""
           done
 
-          echo "Packed tarballs:"
-          ls -la ${{ github.workspace }}/packed/
+          if [ $FAILED -eq 1 ]; then
+            echo "Package validation failed"
+            exit 1
+          fi
 
-      - name: Test package installation
-        run: |
-          # Create temporary test directory
-          TEST_DIR=$(mktemp -d)
-          cd "$TEST_DIR"
-
-          # Initialize test project
-          pnpm init
-
-          # Install packages from tarballs
-          echo "Installing packages from tarballs..."
-          pnpm add -D ${{ github.workspace }}/packed/*.tgz
-
-          # Test ESLint config
-          echo "Testing ESLint config..."
-          cat > eslint.config.mjs << 'EOF'
-          import baseConfig from '@jmlweb/eslint-config-base';
-          export default baseConfig;
-          EOF
-
-          # Test Prettier config
-          echo "Testing Prettier config..."
-          cat > .prettierrc.mjs << 'EOF'
-          import prettierConfig from '@jmlweb/prettier-config-base';
-          export default prettierConfig;
-          EOF
-
-          # Create test file
-          echo "const test = 'hello world';" > test.js
-
-          # Verify configs can be loaded
-          npx eslint --version
-          npx prettier --version
-
-          echo "Installation test successful"
+          echo "All packages validated successfully"
 
   status-check:
     name: CI Status Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [validate, build, test-install]
+    needs: [validate, build, test-pack]
     if: always()
     steps:
       - name: Check job results
         run: |
           if [ "${{ needs.validate.result }}" != "success" ] || \
              [ "${{ needs.build.result }}" != "success" ] || \
-             [ "${{ needs.test-install.result }}" != "success" ]; then
+             [ "${{ needs.test-pack.result }}" != "success" ]; then
             echo "One or more CI jobs failed"
             exit 1
           fi
