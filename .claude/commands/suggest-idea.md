@@ -1,8 +1,3 @@
----
-name: suggest-idea
-description: Proactively analyze the project and suggest improvement ideas. Use when you want Claude to identify opportunities, gaps, or enhancements based on codebase analysis.
----
-
 # Suggest Idea
 
 Analyze the project and proactively suggest improvement ideas.
