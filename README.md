@@ -137,6 +137,40 @@ To install or update Node.js, visit [nodejs.org](https://nodejs.org/) or use a v
 - **ESLint** >= 9.0.0 (flat config format, required for ESLint config packages)
 - **Prettier** >= 3.0.0 (required for Prettier config packages)
 
+## Dependency Updates
+
+This project uses [Dependabot](https://docs.github.com/en/code-security/dependabot) to automatically keep dependencies up to date.
+
+### Update Policies
+
+- **Patch and Minor Updates**: Dependabot creates pull requests for patch and minor version updates automatically. These can typically be merged after CI passes.
+- **Major Updates**: Major version updates are ignored by default and require manual review. To update a dependency to a major version:
+  1. Manually create a PR with the update
+  2. Review breaking changes in the dependency's changelog
+  3. Test thoroughly before merging
+
+### Update Schedule
+
+- **Weekly**: Dependabot checks for updates every Monday at 9:00 AM
+- **GitHub Actions**: Updates for GitHub Actions workflows are checked weekly as well
+
+### Handling Update PRs
+
+1. **Review the PR**: Check what changed and why
+2. **Verify CI**: Ensure all CI checks pass
+3. **Test Locally** (if needed): For significant updates, test locally
+4. **Merge**: Merge when ready, using a conventional commit message if squashing
+
+### Auto-merge (Optional)
+
+You can enable auto-merge for patch/minor updates in GitHub repository settings:
+
+- Go to Settings → General → Pull Requests
+- Enable "Allow auto-merge"
+- Configure auto-merge rules for Dependabot PRs
+
+Major version updates should always be reviewed manually.
+
 ## License
 
 MIT
