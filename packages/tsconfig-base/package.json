@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-base",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Base TypeScript configuration with strict type checking and modern defaults",
   "main": "tsconfig.json",
   "exports": {
