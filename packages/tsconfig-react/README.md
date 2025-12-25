@@ -231,6 +231,12 @@ This package requires the following peer dependencies:
 - `typescript` (>= 5.0.0)
 - `@jmlweb/tsconfig-base` (^1.0.0)
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-react-typescript-app`](../../apps/example-react-typescript-app) - React TypeScript app example
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - Base TypeScript configuration (extended by this package)

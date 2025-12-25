@@ -236,6 +236,12 @@ This package requires the following peer dependencies:
 - `eslint-plugin-simple-import-sort` (^12.0.0)
 - `@jmlweb/eslint-config-base` (^1.0.0)
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-react-typescript-app`](../../apps/example-react-typescript-app) - React TypeScript app example
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - Base TypeScript ESLint config (extended by this package)

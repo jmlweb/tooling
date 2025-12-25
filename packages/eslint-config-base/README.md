@@ -274,6 +274,12 @@ This package requires the following peer dependencies:
 - `eslint-plugin-simple-import-sort` (^12.0.0)
 - `@jmlweb/eslint-config-base-js` (workspace or published version)
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-nodejs-typescript-api`](../../apps/example-nodejs-typescript-api) - Node.js TypeScript API example
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base-js`](../eslint-config-base-js) - JavaScript ESLint config (extended by this package)

@@ -142,6 +142,12 @@ This package requires the following peer dependencies:
 
 **Note**: The `prettier-plugin-tailwindcss` plugin must be installed. The plugin uses Tailwind's recommended class order and must be loaded last in Prettier's plugin chain (handled automatically).
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-react-typescript-app`](../../apps/example-react-typescript-app) - React TypeScript app with Tailwind CSS
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Base Prettier configuration (extended by this package)

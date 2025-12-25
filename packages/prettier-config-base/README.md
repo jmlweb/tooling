@@ -144,6 +144,13 @@ This package requires the following peer dependency:
 
 - `prettier` (>= 3.0.0)
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-nodejs-typescript-api`](../../apps/example-nodejs-typescript-api) - Node.js TypeScript API example
+- [`example-nodejs-javascript`](../../apps/example-nodejs-javascript) - Node.js JavaScript example
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) - Adds Tailwind CSS class sorting

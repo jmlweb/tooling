@@ -233,6 +233,12 @@ This package requires the following peer dependency:
 
 - `typescript` (>= 5.0.0)
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-nodejs-typescript-api`](../../apps/example-nodejs-typescript-api) - Node.js TypeScript API example
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint configuration for TypeScript projects

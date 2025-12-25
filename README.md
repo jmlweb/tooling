@@ -81,7 +81,16 @@ npm run test
 npm run validate
 ```
 
-The `apps/test-app/` directory contains a test application that validates all configuration packages work correctly.
+## Examples
+
+See [`apps/`](./apps) directory for test applications and real-world usage examples. The [`apps/README.md`](./apps/README.md) provides detailed documentation for:
+
+- **Test App** - Validates all configuration packages work correctly
+- **Node.js TypeScript API** - Express.js API with TypeScript, ESLint, Prettier, and Vitest
+- **React TypeScript App** - React app with Tailwind CSS, TypeScript, ESLint, and Vitest
+- **Node.js JavaScript** - Pure JavaScript Express.js API with ESLint and Prettier
+
+Each example includes complete setup instructions and demonstrates best practices for using the packages.
 
 ## Node.js Compatibility
 

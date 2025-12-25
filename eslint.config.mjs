@@ -29,4 +29,12 @@ export default [
       'no-unused-vars': 'off',
     },
   },
+  {
+    files: ['apps/example-nodejs-javascript/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
 ];

@@ -235,6 +235,12 @@ This package requires the following peer dependencies:
 
 **Note**: This package does NOT require `typescript-eslint` as it's for JavaScript-only projects.
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-nodejs-javascript`](../../apps/example-nodejs-javascript) - Node.js JavaScript example
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - TypeScript ESLint config (extends this package)

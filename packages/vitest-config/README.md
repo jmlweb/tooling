@@ -252,6 +252,13 @@ This package requires the following peer dependency:
 
 - `vitest` (^1.0.0)
 
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-nodejs-typescript-api`](../../apps/example-nodejs-typescript-api) - Node.js TypeScript API with testing
+- [`example-react-typescript-app`](../../apps/example-react-typescript-app) - React TypeScript app with component testing
+
 ## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects

@@ -1,0 +1,31 @@
+{
+  "name": "nodejs-javascript-example",
+  "version": "1.0.0",
+  "description": "Example Node.js JavaScript project using @jmlweb tooling packages",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md}\""
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@jmlweb/eslint-config-base-js": "workspace:*",
+    "@jmlweb/prettier-config-base": "workspace:*",
+    "eslint": "^9.39.2",
+    "@eslint/js": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.2.0",
+    "prettier": "^3.3.3"
+  },
+  "prettier": "@jmlweb/prettier-config-base",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
