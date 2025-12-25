@@ -1,4 +1,4 @@
-import type { UserConfig } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 
 /**
  * Base Vitest configuration with TypeScript support, coverage settings, and sensible defaults.
@@ -11,6 +11,10 @@ import type { UserConfig } from 'vitest/config';
  * - Node.js environment by default
  * - Globals enabled for cleaner test syntax
  * - Standard reporter configuration
+ * - Optimized test execution settings
+ *
+ * Note: Type checking should be run separately using `vitest typecheck` command
+ * for better performance, rather than enabling it in the test configuration.
  *
  * @example
  * ```ts
@@ -23,13 +27,19 @@ import type { UserConfig } from 'vitest/config';
  * });
  * ```
  */
-const config: UserConfig = {
+const config = defineConfig({
   test: {
     // Enable globals for cleaner test syntax (e.g., describe, it, expect without imports)
     globals: true,
 
     // Use Node.js environment by default
     environment: 'node',
+
+    // Test timeout (5 seconds default, can be overridden)
+    testTimeout: 5000,
+
+    // Hook timeout (10 seconds for setup/teardown)
+    hookTimeout: 10000,
 
     // Coverage configuration
     coverage: {
@@ -59,7 +69,7 @@ const config: UserConfig = {
         '**/*.spec.{ts,tsx,js,jsx}',
       ],
 
-      // Coverage reporters
+      // Coverage reporters (HTML is valid here for coverage reports)
       reporter: ['text', 'json', 'html'],
     },
 
@@ -75,15 +85,26 @@ const config: UserConfig = {
       '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*',
     ],
 
-    // Reporter configuration
-    reporters: ['verbose', 'json', 'html'],
+    // Test reporter configuration (HTML is only for coverage, not test reporters)
+    // Use 'verbose' for detailed output, 'basic' for minimal, 'dot' for dots, 'json' for CI/CD
+    reporters: ['verbose'],
 
-    // TypeScript configuration
-    typecheck: {
-      enabled: true,
+    // Pool configuration for test execution
+    // threads: faster but may have issues with shared state
+    // forks: more isolated but slower
+    // Use threads by default for better performance
+    pool: 'threads',
+
+    // Pool options for better performance
+    poolOptions: {
+      threads: {
+        // Use all available CPUs minus 1 to leave one for the system
+        minThreads: 1,
+        maxThreads: undefined, // Let Vitest decide based on available CPUs
+      },
     },
   },
-};
+});
 
 export default config;
 

@@ -9,9 +9,10 @@
 
 ## ✨ Features
 
-- 🔧 **TypeScript Support**: Configured for TypeScript projects with type checking enabled
+- 🔧 **TypeScript Support**: Configured for TypeScript projects (type checking via CLI)
 - 📊 **Coverage Configuration**: Pre-configured with v8 provider and 80% coverage thresholds
-- 🎯 **Sensible Defaults**: Node.js environment, globals enabled, standard reporters
+- 🎯 **Sensible Defaults**: Node.js environment, globals enabled, optimized test execution
+- ⚡ **Performance Optimized**: Thread pool configuration for efficient parallel test execution
 - 🚀 **Easy Extension**: Flat config format for easy customization
 - 📦 **Zero Config**: Works out of the box with minimal setup
 
@@ -123,16 +124,18 @@ export default defineConfig({
 
 ### Default Settings
 
-| Setting                          | Value  | Description                                          |
-| -------------------------------- | ------ | ---------------------------------------------------- |
-| `globals`                        | `true` | Enables global test functions (describe, it, expect) |
-| `environment`                    | `node` | Node.js environment by default                       |
-| `coverage.provider`              | `v8`   | Coverage provider                                    |
-| `coverage.thresholds.lines`      | `80`   | Minimum line coverage                                |
-| `coverage.thresholds.functions`  | `80`   | Minimum function coverage                            |
-| `coverage.thresholds.branches`   | `80`   | Minimum branch coverage                              |
-| `coverage.thresholds.statements` | `80`   | Minimum statement coverage                           |
-| `typecheck.enabled`              | `true` | Enable TypeScript type checking                      |
+| Setting                          | Value     | Description                                          |
+| -------------------------------- | --------- | ---------------------------------------------------- |
+| `globals`                        | `true`    | Enables global test functions (describe, it, expect) |
+| `environment`                    | `node`    | Node.js environment by default                       |
+| `testTimeout`                    | `5000`    | Test timeout in milliseconds (5 seconds)             |
+| `hookTimeout`                    | `10000`   | Hook timeout in milliseconds (10 seconds)            |
+| `pool`                           | `threads` | Use thread pool for parallel test execution          |
+| `coverage.provider`              | `v8`      | Coverage provider                                    |
+| `coverage.thresholds.lines`      | `80`      | Minimum line coverage                                |
+| `coverage.thresholds.functions`  | `80`      | Minimum function coverage                            |
+| `coverage.thresholds.branches`   | `80`      | Minimum branch coverage                              |
+| `coverage.thresholds.statements` | `80`      | Minimum statement coverage                           |
 
 ### Coverage Exclusions
 
@@ -156,11 +159,15 @@ Tests are automatically discovered from:
 
 ### Reporters
 
-Default reporters include:
+**Test Reporters:**
 
-- `verbose` - Detailed test output
-- `json` - JSON format for CI/CD
-- `html` - HTML coverage report
+- `verbose` - Detailed test output with full test names and results
+
+**Coverage Reporters:**
+
+- `text` - Text summary in terminal
+- `json` - JSON format for CI/CD integration
+- `html` - HTML coverage report (generated in `coverage/` directory)
 
 ## 🎯 When to Use
 
@@ -169,6 +176,7 @@ Use this configuration when you want:
 - ✅ Consistent testing setup across projects
 - ✅ TypeScript support out of the box
 - ✅ Coverage thresholds enforced
+- ✅ Optimized test execution with thread pool
 - ✅ Sensible defaults for Node.js projects
 - ✅ Easy customization and extension
 
@@ -204,9 +212,22 @@ Add test scripts to your `package.json`:
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:typecheck": "vitest typecheck"
   }
 }
+```
+
+### TypeScript Type Checking
+
+Type checking is performed separately using the `vitest typecheck` command for better performance. This allows you to run type checking independently of your test suite:
+
+```bash
+# Run type checking only
+npm run test:typecheck
+
+# Or run tests and type checking together
+npm run test && npm run test:typecheck
 ```
 
 ## 📋 Requirements
