@@ -118,26 +118,26 @@ You can override any option in your project's `tsconfig.json`:
 
 ### Compiler Options Included
 
-| Option | Value | Description |
-|--------|-------|-------------|
-| `strict` | `true` | Enables all strict type checking options |
-| `target` | `ES2022` | Modern JavaScript features |
-| `module` | `NodeNext` | Node.js ESM module system |
-| `moduleResolution` | `NodeNext` | Node.js module resolution |
-| `esModuleInterop` | `true` | CommonJS/ESM interoperability |
-| `skipLibCheck` | `true` | Skip type checking of declaration files |
-| `forceConsistentCasingInFileNames` | `true` | Enforce consistent file name casing |
-| `declaration` | `true` | Generate `.d.ts` files |
-| `declarationMap` | `true` | Generate sourcemaps for `.d.ts` files |
-| `sourceMap` | `true` | Generate sourcemaps for debugging |
-| `noUncheckedIndexedAccess` | `true` | Add `undefined` to index signatures |
-| `noImplicitOverride` | `true` | Require `override` keyword |
-| `noPropertyAccessFromIndexSignature` | `true` | Require bracket notation for index signatures |
-| `exactOptionalPropertyTypes` | `true` | Differentiate between `undefined` and optional |
-| `noFallthroughCasesInSwitch` | `true` | Report fallthrough cases in switch |
-| `isolatedModules` | `true` | Ensure compatibility with transpilers |
-| `verbatimModuleSyntax` | `true` | Enforce explicit type imports/exports |
-| `resolveJsonModule` | `true` | Allow importing JSON files |
+| Option                               | Value      | Description                                    |
+| ------------------------------------ | ---------- | ---------------------------------------------- |
+| `strict`                             | `true`     | Enables all strict type checking options       |
+| `target`                             | `ES2022`   | Modern JavaScript features                     |
+| `module`                             | `NodeNext` | Node.js ESM module system                      |
+| `moduleResolution`                   | `NodeNext` | Node.js module resolution                      |
+| `esModuleInterop`                    | `true`     | CommonJS/ESM interoperability                  |
+| `skipLibCheck`                       | `true`     | Skip type checking of declaration files        |
+| `forceConsistentCasingInFileNames`   | `true`     | Enforce consistent file name casing            |
+| `declaration`                        | `true`     | Generate `.d.ts` files                         |
+| `declarationMap`                     | `true`     | Generate sourcemaps for `.d.ts` files          |
+| `sourceMap`                          | `true`     | Generate sourcemaps for debugging              |
+| `noUncheckedIndexedAccess`           | `true`     | Add `undefined` to index signatures            |
+| `noImplicitOverride`                 | `true`     | Require `override` keyword                     |
+| `noPropertyAccessFromIndexSignature` | `true`     | Require bracket notation for index signatures  |
+| `exactOptionalPropertyTypes`         | `true`     | Differentiate between `undefined` and optional |
+| `noFallthroughCasesInSwitch`         | `true`     | Report fallthrough cases in switch             |
+| `isolatedModules`                    | `true`     | Ensure compatibility with transpilers          |
+| `verbatimModuleSyntax`               | `true`     | Enforce explicit type imports/exports          |
+| `resolveJsonModule`                  | `true`     | Allow importing JSON files                     |
 
 ### What You Need to Configure
 

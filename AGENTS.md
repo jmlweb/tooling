@@ -15,6 +15,7 @@ All documentation in this project must be written in English.
 #### Scope
 
 This rule applies to:
+
 - README files (README.md, README.txt, etc.)
 - Specification documents (SPECS.md, SPEC.md, etc.)
 - Documentation files in the `docs/` directory
@@ -36,6 +37,7 @@ Always use the latest stable versions of tools and packages for internal develop
 #### Scope
 
 This rule applies to:
+
 - Node.js and runtime versions
 - Package dependencies (in `package.json` files)
 - Development tools (Turborepo, Prettier, ESLint, TypeScript, etc.)
@@ -79,12 +81,14 @@ Packages should support at minimum all Active LTS versions, and ideally all Main
 #### Enforcement
 
 When adding new dependencies or updating existing ones:
+
 - Verify the latest stable version is available
 - Use exact version numbers (avoid `^` or `~` unless there's a specific reason)
 - Document any exceptions to this rule
 - Update dependencies regularly to maintain security and compatibility
 
 When creating or updating published packages:
+
 - Verify Node.js compatibility requirements
 - Set appropriate `engines.node` field in `package.json`
 - Test against all supported Node.js versions
@@ -119,6 +123,7 @@ Each package in `packages/` is a standalone npm package that can be published in
 All packages follow the pattern: `@jmlweb/{tool}-config-{variant}`
 
 Examples:
+
 - `@jmlweb/prettier-config-base`
 - `@jmlweb/prettier-config-tailwind`
 - `@jmlweb/eslint-config-base` (TypeScript, default)
@@ -127,6 +132,7 @@ Examples:
 ## Versioning
 
 All packages follow semantic versioning (semver):
+
 - **MAJOR**: Breaking changes
 - **MINOR**: New features (backward compatible)
 - **PATCH**: Bug fixes (backward compatible)
@@ -192,4 +198,3 @@ docs: update README with package table
 - Maintain consistency across all packages
 - Update documentation when making changes
 - Test packages before publishing
-

@@ -144,20 +144,21 @@ export default [
 ### TypeScript Files
 
 This configuration applies strict TypeScript rules to:
+
 - `**/*.ts` - TypeScript files
 - `**/*.tsx` - TypeScript React files
 
 ### Key Rules Enforced
 
-| Rule | Level | Description |
-|------|-------|-------------|
-| `@typescript-eslint/no-explicit-any` | `error` | Prevents `any` type usage |
-| `@typescript-eslint/explicit-function-return-type` | `error` | Requires explicit return types |
-| `@typescript-eslint/consistent-type-imports` | `error` | Enforces `import type` for type-only imports |
-| `@typescript-eslint/consistent-type-definitions` | `error` | Prefers `type` over `interface` |
-| `@typescript-eslint/no-enum` | `error` | Prevents enum usage (prefer const maps) |
-| `@typescript-eslint/no-parameter-properties` | `error` | Prevents parameter properties |
-| `@typescript-eslint/naming-convention` | `error` | Enforces naming conventions |
+| Rule                                               | Level   | Description                                  |
+| -------------------------------------------------- | ------- | -------------------------------------------- |
+| `@typescript-eslint/no-explicit-any`               | `error` | Prevents `any` type usage                    |
+| `@typescript-eslint/explicit-function-return-type` | `error` | Requires explicit return types               |
+| `@typescript-eslint/consistent-type-imports`       | `error` | Enforces `import type` for type-only imports |
+| `@typescript-eslint/consistent-type-definitions`   | `error` | Prefers `type` over `interface`              |
+| `@typescript-eslint/no-enum`                       | `error` | Prevents enum usage (prefer const maps)      |
+| `@typescript-eslint/no-parameter-properties`       | `error` | Prevents parameter properties                |
+| `@typescript-eslint/naming-convention`             | `error` | Enforces naming conventions                  |
 
 ### What's Included
 
@@ -174,6 +175,7 @@ This configuration applies strict TypeScript rules to:
 The configuration automatically sorts imports and enforces type-only imports:
 
 **Before:**
+
 ```typescript
 import { Component } from './component';
 import React, { useState } from 'react';
@@ -182,6 +184,7 @@ import fs from 'fs';
 ```
 
 **After auto-fix:**
+
 ```typescript
 import fs from 'fs';
 import React, { useState } from 'react';

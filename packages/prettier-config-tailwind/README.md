@@ -60,6 +60,7 @@ module.exports = require('@jmlweb/prettier-config-tailwind');
 ```
 
 The plugin automatically sorts classes following Tailwind's recommended order:
+
 1. Layout (display, position, etc.)
 2. Flexbox & Grid
 3. Spacing (padding, margin)

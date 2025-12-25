@@ -7,5 +7,3 @@ module.exports = {
   endOfLine: 'lf',
   proseWrap: 'preserve',
 };
-
-

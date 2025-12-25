@@ -8,13 +8,13 @@ Centralized configuration packages for development tools. One source of truth fo
 
 ## Packages
 
-| Package | Description | Version |
-|---------|-------------|---------|
-| [`@jmlweb/prettier-config-base`](./packages/prettier-config-base) | Base Prettier configuration | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-base?label=) |
+| Package                                                                   | Description                    | Version                                                                      |
+| ------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------------------------------- |
+| [`@jmlweb/prettier-config-base`](./packages/prettier-config-base)         | Base Prettier configuration    | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-base?label=)     |
 | [`@jmlweb/prettier-config-tailwind`](./packages/prettier-config-tailwind) | Prettier + Tailwind CSS plugin | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-tailwind?label=) |
-| [`@jmlweb/eslint-config-base`](./packages/eslint-config-base) | ESLint for TypeScript (strict) | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base?label=) |
-| [`@jmlweb/eslint-config-base-js`](./packages/eslint-config-base-js) | ESLint for JavaScript | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js?label=) |
-| [`@jmlweb/tsconfig-base`](./packages/tsconfig-base) | Base TypeScript configuration | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-base?label=) |
+| [`@jmlweb/eslint-config-base`](./packages/eslint-config-base)             | ESLint for TypeScript (strict) | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base?label=)       |
+| [`@jmlweb/eslint-config-base-js`](./packages/eslint-config-base-js)       | ESLint for JavaScript          | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js?label=)    |
+| [`@jmlweb/tsconfig-base`](./packages/tsconfig-base)                       | Base TypeScript configuration  | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-base?label=)            |
 
 ## Quick Start
 

@@ -1,7 +1,7 @@
 import baseConfig from '@jmlweb/eslint-config-base-js';
-import tseslint from 'typescript-eslint';
 import prettierConfig from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import tseslint from 'typescript-eslint';
 
 /**
  * TypeScript ESLint configuration that extends the base config.
@@ -81,4 +81,3 @@ export default [
     },
   },
 ];
-

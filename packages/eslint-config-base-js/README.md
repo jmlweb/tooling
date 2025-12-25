@@ -111,6 +111,7 @@ export default [
 ### JavaScript Files
 
 The base configuration applies to:
+
 - `**/*.js` - Standard JavaScript files
 - `**/*.mjs` - ES modules
 - `**/*.cjs` - CommonJS files
@@ -134,6 +135,7 @@ The configuration automatically sorts imports and exports. The default sorting o
 ### Example
 
 **Before:**
+
 ```javascript
 import './styles.css';
 import { Component } from './component';
@@ -143,6 +145,7 @@ import { utils } from '@/utils';
 ```
 
 **After auto-fix:**
+
 ```javascript
 import './styles.css';
 import fs from 'fs';

@@ -51,24 +51,24 @@ Create a `.prettierrc.json` file:
 
 This package provides the following Prettier settings:
 
-| Option | Value | Description |
-|--------|-------|-------------|
-| `semi` | `true` | Use semicolons at the end of statements |
-| `singleQuote` | `true` | Use single quotes instead of double quotes |
-| `tabWidth` | `2` | Use 2 spaces for indentation |
-| `trailingComma` | `'all'` | Add trailing commas wherever possible |
-| `useTabs` | `false` | Use spaces instead of tabs |
-| `endOfLine` | `'lf'` | Use LF line endings (Unix-style) |
-| `proseWrap` | `'preserve'` | Preserve prose wrapping in markdown files |
+| Option          | Value        | Description                                |
+| --------------- | ------------ | ------------------------------------------ |
+| `semi`          | `true`       | Use semicolons at the end of statements    |
+| `singleQuote`   | `true`       | Use single quotes instead of double quotes |
+| `tabWidth`      | `2`          | Use 2 spaces for indentation               |
+| `trailingComma` | `'all'`      | Add trailing commas wherever possible      |
+| `useTabs`       | `false`      | Use spaces instead of tabs                 |
+| `endOfLine`     | `'lf'`       | Use LF line endings (Unix-style)           |
+| `proseWrap`     | `'preserve'` | Preserve prose wrapping in markdown files  |
 
 ## 💡 Examples
 
 ### Before Formatting
 
 ```javascript
-const user = {name:"John",age:30,email:"john@example.com"}
-function greet(user){
-  return "Hello, "+user.name+"!"
+const user = { name: 'John', age: 30, email: 'john@example.com' };
+function greet(user) {
+  return 'Hello, ' + user.name + '!';
 }
 ```
 
@@ -135,5 +135,3 @@ module.exports = {
 ## 📄 License
 
 MIT
-
-

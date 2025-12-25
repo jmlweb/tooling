@@ -4,5 +4,3 @@ module.exports = {
   ...baseConfig,
   plugins: ['prettier-plugin-tailwindcss'],
 };
-
-
