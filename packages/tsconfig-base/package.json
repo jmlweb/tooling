@@ -29,5 +29,8 @@
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsconfig-base#readme",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

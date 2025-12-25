@@ -41,44 +41,24 @@ jobs:
         run: |
           echo "🔍 Verifying NPM token..."
 
-          HTTP_CODE=$(curl -s -o /tmp/response.json -w "%{http_code}" \
-            -H "Authorization: Bearer $NPM_TOKEN" \
-            https://registry.npmjs.org/-/npm/v1/user)
+          # Create temporary .npmrc with token
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > /tmp/.npmrc
 
-          if [ "$HTTP_CODE" = "200" ]; then
-            USERNAME=$(jq -r '.name' /tmp/response.json)
+          # Use npm whoami to verify token (works with Granular Access Tokens)
+          if USERNAME=$(npm whoami --registry https://registry.npmjs.org --userconfig /tmp/.npmrc 2>&1); then
             echo "✅ Token is valid for user: $USERNAME"
-          elif [ "$HTTP_CODE" = "401" ]; then
-            echo "❌ Token is invalid or expired (HTTP 401)"
+          else
+            echo "❌ Token is invalid or expired"
             echo ""
             echo "Please check:"
             echo "- Token has not expired"
             echo "- Token has publish permissions"
             echo "- Token is correctly copied (no extra spaces)"
-            exit 1
-          else
-            echo "❌ Unexpected response: HTTP $HTTP_CODE"
-            cat /tmp/response.json || true
+            rm -f /tmp/.npmrc
             exit 1
           fi
 
-      - name: Check publish permissions
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "🔍 Checking publish permissions..."
-
-          # Try to get package info for one of our packages
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $NPM_TOKEN" \
-            https://registry.npmjs.org/@jmlweb/prettier-config-base)
-
-          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "404" ]; then
-            echo "✅ Token has access to @jmlweb scope"
-          else
-            echo "⚠️  Could not verify scope access (HTTP $HTTP_CODE)"
-            echo "This might be normal if packages haven't been published yet"
-          fi
+          rm -f /tmp/.npmrc
 
   detect-changes:
     name: Detect Package Changes

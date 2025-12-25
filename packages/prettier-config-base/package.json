@@ -45,6 +45,9 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "prettier": "^3.0.0"
   },
