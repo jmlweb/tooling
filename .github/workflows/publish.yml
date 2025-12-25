@@ -21,8 +21,10 @@ jobs:
     timeout-minutes: 2
     steps:
       - name: Check NPM_TOKEN is set
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+          if [ -z "$NPM_TOKEN" ]; then
             echo "❌ NPM_TOKEN secret is not set"
             echo ""
             echo "To fix this:"
@@ -34,36 +36,42 @@ jobs:
           echo "✅ NPM_TOKEN secret is configured"
 
       - name: Verify token is valid
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "🔍 Verifying NPM token..."
 
-          RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer ${{ secrets.NPM_TOKEN }}" \
+          HTTP_CODE=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -H "Authorization: Bearer $NPM_TOKEN" \
             https://registry.npmjs.org/-/npm/v1/user)
 
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-          BODY=$(echo "$RESPONSE" | sed '$d')
-
           if [ "$HTTP_CODE" = "200" ]; then
-            USERNAME=$(echo "$BODY" | jq -r '.name')
+            USERNAME=$(jq -r '.name' /tmp/response.json)
             echo "✅ Token is valid for user: $USERNAME"
           elif [ "$HTTP_CODE" = "401" ]; then
-            echo "❌ Token is invalid or expired"
+            echo "❌ Token is invalid or expired (HTTP 401)"
+            echo ""
+            echo "Please check:"
+            echo "- Token has not expired"
+            echo "- Token has publish permissions"
+            echo "- Token is correctly copied (no extra spaces)"
             exit 1
           else
-            echo "❌ Unexpected response: $HTTP_CODE"
-            echo "$BODY"
+            echo "❌ Unexpected response: HTTP $HTTP_CODE"
+            cat /tmp/response.json || true
             exit 1
           fi
 
       - name: Check publish permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "🔍 Checking publish permissions..."
 
           # Try to get package info for one of our packages
-          RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer ${{ secrets.NPM_TOKEN }}" \
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $NPM_TOKEN" \
             https://registry.npmjs.org/@jmlweb/prettier-config-base)
-
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
 
           if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "404" ]; then
             echo "✅ Token has access to @jmlweb scope"
