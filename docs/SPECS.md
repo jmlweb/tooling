@@ -190,7 +190,13 @@ All non-internal packages will be published to npm under the `@jmlweb` scope pre
 - Namespace organization
 - Easy discovery and installation
 
-**Versioning Strategy**: Packages will follow semantic versioning (semver) to communicate changes clearly to consumers.
+**Versioning Strategy**: Packages follow semantic versioning (semver) and use [Changesets](https://github.com/changesets/changesets) for automated versioning and changelog generation. The workflow:
+
+1. Developers create changesets using `pnpm changeset` after making changes
+2. When changes are merged to `main`, CI automatically versions packages and generates changelogs
+3. Packages with new versions are automatically published to npm
+
+See `AGENTS.md` for detailed publishing workflow documentation.
 
 **Example package names**:
 

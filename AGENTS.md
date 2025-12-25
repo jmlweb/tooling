@@ -168,12 +168,41 @@ Before publishing or committing:
 
 ## Publishing Workflow
 
-Packages are published to npm under the `@jmlweb` scope:
+Packages are published to npm under the `@jmlweb` scope using [Changesets](https://github.com/changesets/changesets) for automated versioning and changelog generation.
 
-1. **Version bump**: Update `package.json` version following semver
-2. **Update changelog**: Document changes if applicable
-3. **Test locally**: Verify package works as expected
-4. **Publish**: `npm publish --access public`
+### Versioning Process
+
+1. **Create a changeset**: After making changes, run `pnpm changeset` to create a changeset file describing the changes
+2. **Commit changes**: Commit both your code changes and the changeset file
+3. **Merge PR**: When the PR is merged to `main`, the CI workflow automatically:
+   - Runs `changeset version` to bump package versions and generate changelogs
+   - Commits the version changes
+   - Publishes packages with new versions to npm
+
+### Manual Commands
+
+- `pnpm changeset` - Create a new changeset interactively
+- `pnpm version` - Manually version packages (usually done by CI)
+- `pnpm version:snapshot` - Create a snapshot version for testing
+
+### Publishing
+
+Publishing is handled automatically by the GitHub Actions workflow when:
+
+- Changes are merged to `main`
+- Changesets exist
+- Packages have new versions not yet published to npm
+
+The workflow:
+
+1. Versions packages based on changesets
+2. Detects which packages need publishing
+3. Builds and publishes each package to npm
+4. Creates git tags for each published package version
+
+### Workflow Documentation
+
+For detailed information about the publishing workflow, see `.github/workflows/publish.yml`.
 
 ## Commit Conventions
 

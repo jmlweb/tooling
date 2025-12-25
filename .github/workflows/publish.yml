@@ -15,10 +15,73 @@ permissions:
   contents: write
 
 jobs:
+  version:
+    name: Version Packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      versioned: ${{ steps.version.outputs.versioned }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for changesets
+        id: changesets
+        run: |
+          if [ -n "$(find .changeset -name '*.md' -type f ! -name 'README.md' 2>/dev/null)" ]; then
+            echo "Changesets found"
+            echo "has-changesets=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changesets found"
+            echo "has-changesets=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Version packages
+        id: version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if [ "${{ steps.changesets.outputs.has-changesets }}" == "true" ]; then
+            pnpm changeset version
+            
+            if [ -n "$(git status --porcelain)" ]; then
+              echo "Packages versioned"
+              echo "versioned=true" >> $GITHUB_OUTPUT
+              git add .
+              git commit -m "chore: version packages [skip ci]"
+              git push
+            else
+              echo "No version changes"
+              echo "versioned=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "No changesets found, skipping versioning"
+            echo "versioned=false" >> $GITHUB_OUTPUT
+          fi
+
   detect-changes:
     name: Detect Package Changes
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    needs: version
     outputs:
       packages: ${{ steps.detect.outputs.packages }}
       has-changes: ${{ steps.detect.outputs.has-changes }}
