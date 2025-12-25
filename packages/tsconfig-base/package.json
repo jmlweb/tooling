@@ -1,0 +1,31 @@
+{
+  "name": "@jmlweb/tsconfig-base",
+  "version": "0.0.1",
+  "description": "Base TypeScript configuration with strict type checking and modern defaults",
+  "main": "tsconfig.json",
+  "type": "module",
+  "files": [
+    "tsconfig.json",
+    "README.md"
+  ],
+  "keywords": [
+    "tsconfig",
+    "typescript",
+    "config",
+    "strict",
+    "type-checking"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jmlweb/tooling/issues"
+  },
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsconfig-base#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

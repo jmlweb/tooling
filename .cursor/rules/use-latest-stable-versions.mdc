@@ -1,0 +1,68 @@
+---
+alwaysApply: true
+---
+
+# Use Latest Stable Versions Rule
+
+> **Note**: This rule is also documented in `AGENTS.md` for compatibility with other AI agents. This file provides Cursor-specific metadata.
+
+Always use the latest stable versions of tools and packages for internal development and dependencies.
+
+## Scope
+
+This rule applies to:
+- Node.js and runtime versions
+- Package dependencies (in `package.json` files)
+- Development tools (Turborepo, Prettier, ESLint, TypeScript, etc.)
+- Build tools and bundlers
+- Testing frameworks
+- Any other development dependencies
+
+## Guidelines
+
+1. **Check for Updates**: Before adding or updating dependencies, check for the latest stable version
+2. **Stable Versions Only**: Use stable releases, avoid beta, alpha, or release candidate versions unless specifically required
+3. **Version Pinning**: While using latest stable versions, pin exact versions in `package.json` for reproducibility
+4. **Regular Updates**: Periodically review and update dependencies to maintain current stable versions
+5. **Security**: Latest stable versions often include security patches, so staying current is important
+
+## Published Packages Node.js Compatibility
+
+All exported packages must be compatible with all Node.js versions that are still supported by the Node.js project.
+
+### Requirements
+
+- **Check Node.js Support**: Verify which Node.js versions are currently in Active LTS, Maintenance LTS, or Current release status
+- **Minimum Version**: Set the `engines.node` field in `package.json` to the oldest supported Node.js version
+- **Testing**: Test packages against all supported Node.js versions to ensure compatibility
+- **Documentation**: Document Node.js version requirements in package README files
+
+### Node.js Support Lifecycle
+
+- **Active LTS**: Fully supported with regular updates
+- **Maintenance LTS**: Security updates only
+- **Current**: Latest features, but may not be stable
+
+Packages should support at minimum all Active LTS versions, and ideally all Maintenance LTS versions as well.
+
+## Exceptions
+
+- If a specific version is required for compatibility reasons, document why
+- If a newer stable version introduces breaking changes that require significant refactoring, evaluate the trade-off
+- For published packages, consider compatibility with consumers when updating major versions
+
+## Enforcement
+
+When adding new dependencies or updating existing ones:
+- Verify the latest stable version is available
+- Use exact version numbers (avoid `^` or `~` unless there's a specific reason)
+- Document any exceptions to this rule
+- Update dependencies regularly to maintain security and compatibility
+
+When creating or updating published packages:
+- Verify Node.js compatibility requirements
+- Set appropriate `engines.node` field in `package.json`
+- Test against all supported Node.js versions
+- Update compatibility requirements as Node.js versions reach end-of-life
+
+For complete details, see `AGENTS.md`.

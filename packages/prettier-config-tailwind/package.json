@@ -1,0 +1,38 @@
+{
+  "name": "@jmlweb/prettier-config-tailwind",
+  "version": "0.0.1",
+  "description": "Prettier configuration for jmlweb projects with Tailwind CSS support",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [
+    "prettier",
+    "prettier-config",
+    "tailwind",
+    "tailwindcss",
+    "code-formatter"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jmlweb/tooling/issues"
+  },
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/prettier-config-tailwind#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "@jmlweb/prettier-config-base": "workspace:*",
+    "prettier-plugin-tailwindcss": "^0.6.9"
+  }
+}
+

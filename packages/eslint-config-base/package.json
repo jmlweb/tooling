@@ -1,0 +1,43 @@
+{
+  "name": "@jmlweb/eslint-config-base",
+  "version": "0.0.1",
+  "description": "Base ESLint configuration for TypeScript projects with strict type checking and best practices",
+  "main": "index.js",
+  "type": "module",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [
+    "eslint",
+    "eslint-config",
+    "typescript",
+    "javascript",
+    "linting",
+    "code-quality"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jmlweb/tooling/issues"
+  },
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/eslint-config-base#readme",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "@eslint/js": "^9.0.0",
+    "typescript-eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-simple-import-sort": "^12.0.0"
+  },
+  "dependencies": {
+    "@jmlweb/eslint-config-base-js": "workspace:*"
+  }
+}
+

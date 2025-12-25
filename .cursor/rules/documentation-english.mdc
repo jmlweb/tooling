@@ -1,0 +1,28 @@
+---
+alwaysApply: true
+---
+
+# Documentation Language Rule
+
+> **Note**: This rule is also documented in `AGENTS.md` for compatibility with other AI agents. This file provides Cursor-specific metadata.
+
+All documentation in this project must be written in English.
+
+## Scope
+
+This rule applies to:
+- README files (README.md, README.txt, etc.)
+- Specification documents (SPECS.md, SPEC.md, etc.)
+- Documentation files in the `docs/` directory
+- Code comments within documentation files
+- Any other markdown or text documentation files
+
+## Exceptions
+
+Code comments within source code files (`.ts`, `.js`, `.tsx`, `.jsx`, etc.) may be in any language, though English is preferred for consistency.
+
+## Enforcement
+
+When creating or editing documentation files, ensure all content is in English. This applies to both human-written and AI-generated documentation.
+
+For complete details, see `AGENTS.md`.
