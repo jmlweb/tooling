@@ -8,7 +8,8 @@
   },
   "files": [
     "tsconfig.json",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
   ],
   "keywords": [
     "tsconfig",
