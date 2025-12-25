@@ -1,8 +1,3 @@
----
-name: add-task
-description: Create GitHub Issues from prompts with intelligent title, description, and labels. Use when you need to create a new task, feature request, or bug report as a GitHub Issue.
----
-
 # Add Task
 
 Create a new GitHub Issue from a user prompt.

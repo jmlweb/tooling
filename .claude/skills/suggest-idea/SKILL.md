@@ -82,12 +82,12 @@ I've identified an improvement opportunity:
 **Estimated Effort:** Low/Medium/High
 **Estimated Impact:** Low/Medium/High
 
-Would you like me to create this as an idea with /new-idea?
+Would you like me to create this as an idea with /add-idea?
 ```
 
 ### Step 5 - Create If Approved
 
-If user approves, invoke `/new-idea` with the generated description.
+If user approves, invoke `/add-idea` with the generated description.
 
 ## Analysis Focus Areas
 

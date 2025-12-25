@@ -1,0 +1,240 @@
+# @jmlweb/eslint-config-react
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-react)](https://www.npmjs.com/package/@jmlweb/eslint-config-react)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
+[![ESLint](https://img.shields.io/badge/ESLint-9.0%2B-4B32C3.svg)](https://eslint.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18%2B-61DAFB.svg)](https://react.dev/)
+
+> ESLint configuration for React libraries with TypeScript. Extends `@jmlweb/eslint-config-base` with React-specific rules, hooks validation, and JSX best practices.
+
+## ✨ Features
+
+- 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
+- ⚛️ **React Best Practices**: Enforces React-specific rules and patterns
+- 🪝 **Hooks Validation**: Validates React Hooks rules and exhaustive dependencies
+- 🎨 **JSX Support**: Optimized for modern JSX transform (React 17+)
+- 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
+- 🎯 **Code Quality**: Prevents common React pitfalls and anti-patterns
+- 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
+- 🚀 **Flat Config**: Uses ESLint 9+ flat config format (latest stable)
+
+## 📦 Installation
+
+```bash
+npm install --save-dev @jmlweb/eslint-config-react eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
+```
+
+## 🚀 Quick Start
+
+Create an `eslint.config.js` file in your project root:
+
+```javascript
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [
+  ...reactConfig,
+  // Add your project-specific overrides here
+];
+```
+
+## 💡 Examples
+
+### Basic Setup
+
+```javascript
+// eslint.config.js
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [...reactConfig];
+```
+
+### With Project-Specific Overrides
+
+```javascript
+// eslint.config.js
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [
+  ...reactConfig,
+  {
+    files: ['**/*.test.tsx', '**/*.spec.tsx'],
+    rules: {
+      // Allow any in tests
+      '@typescript-eslint/no-explicit-any': 'off',
+      // Allow console in tests
+      'no-console': 'off',
+      // Relax React rules in tests
+      'react/display-name': 'off',
+    },
+  },
+  {
+    ignores: ['dist/', 'build/', 'node_modules/', '*.config.ts'],
+  },
+];
+```
+
+### With Custom React Settings
+
+```javascript
+// eslint.config.js
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [
+  ...reactConfig,
+  {
+    files: ['**/*.tsx', '**/*.jsx'],
+    settings: {
+      react: {
+        version: '18.2', // Specify React version explicitly
+      },
+    },
+  },
+];
+```
+
+## 📋 Configuration Details
+
+### React Files
+
+This configuration applies React-specific rules to:
+
+- `**/*.tsx` - TypeScript React files
+- `**/*.jsx` - JavaScript React files
+
+### Key Rules Enforced
+
+| Rule                             | Level   | Description                                |
+| -------------------------------- | ------- | ------------------------------------------ |
+| `react-hooks/rules-of-hooks`     | `error` | Enforces Rules of Hooks                    |
+| `react-hooks/exhaustive-deps`    | `warn`  | Validates exhaustive dependencies in hooks |
+| `react/jsx-key`                  | `error` | Prevents missing keys in lists             |
+| `react/jsx-no-duplicate-props`   | `error` | Prevents duplicate props                   |
+| `react/jsx-pascal-case`          | `error` | Enforces PascalCase for component names    |
+| `react/no-array-index-key`       | `warn`  | Warns against using array index as key     |
+| `react/jsx-boolean-value`        | `error` | Enforces `{prop}` over `prop={true}`       |
+| `react/jsx-curly-brace-presence` | `error` | Prevents unnecessary curly braces          |
+| `react/jsx-fragments`            | `error` | Enforces shorthand fragment syntax         |
+| `react/jsx-sort-props`           | `error` | Enforces consistent prop ordering          |
+
+### What's Included
+
+- ✅ All TypeScript ESLint rules from `@jmlweb/eslint-config-base`
+- ✅ React recommended rules
+- ✅ React JSX runtime rules (for React 17+)
+- ✅ React Hooks rules and exhaustive deps validation
+- ✅ JSX best practices and anti-pattern prevention
+- ✅ Automatic import/export sorting
+- ✅ Prettier conflict resolution
+- ✅ React version auto-detection
+
+## 🔄 Import Sorting
+
+The configuration automatically sorts imports and enforces type-only imports:
+
+**Before:**
+
+```typescript
+import { Component } from './component';
+import React, { useState } from 'react';
+import type { User } from './types';
+import fs from 'fs';
+```
+
+**After auto-fix:**
+
+```typescript
+import fs from 'fs';
+import React, { useState } from 'react';
+import type { User } from './types';
+import { Component } from './component';
+```
+
+Fix import order automatically:
+
+```bash
+npx eslint --fix .
+```
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ React library development with TypeScript
+- ✅ Maximum type safety with React
+- ✅ Strict code quality standards for React code
+- ✅ Consistent React patterns across the team
+- ✅ Prevention of common React pitfalls
+- ✅ Best practices enforcement for hooks and JSX
+
+**For non-React TypeScript projects**, use [`@jmlweb/eslint-config-base`](../eslint-config-base) instead.
+
+**For JavaScript-only React projects**, you can extend `@jmlweb/eslint-config-base-js` and add React plugins manually.
+
+## 🔧 Extending the Configuration
+
+You can extend or override the configuration for your specific needs:
+
+```javascript
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [
+  ...reactConfig,
+  {
+    files: ['**/*.test.tsx', '**/*.spec.tsx'],
+    rules: {
+      // Test-specific rules
+      '@typescript-eslint/no-explicit-any': 'off',
+      'react/display-name': 'off',
+    },
+  },
+  {
+    ignores: ['dist/', 'build/', 'node_modules/'],
+  },
+];
+```
+
+## 📝 Usage with Scripts
+
+Add linting scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}
+```
+
+## 📋 Requirements
+
+- **Node.js** >= 20.11.0 (required for `import.meta.dirname` in config files)
+- **ESLint** >= 9.0.0 (flat config format)
+- **TypeScript** project with `tsconfig.json`
+- **React** >= 17.0.0 (for JSX runtime support)
+- **TypeScript project service** enabled (automatic with this config)
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `eslint` (^9.0.0)
+- `@eslint/js` (^9.0.0)
+- `typescript-eslint` (^8.0.0)
+- `eslint-config-prettier` (^9.1.0)
+- `eslint-plugin-react` (^7.37.0)
+- `eslint-plugin-react-hooks` (^5.0.0)
+- `eslint-plugin-simple-import-sort` (^12.0.0)
+- `@jmlweb/eslint-config-base` (^1.0.0)
+
+## 🔗 Related Packages
+
+- [`@jmlweb/eslint-config-base`](../eslint-config-base) - Base TypeScript ESLint config (extended by this package)
+- [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript configuration for React libraries
+- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+
+## 📄 License
+
+MIT

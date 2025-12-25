@@ -1,8 +1,3 @@
----
-name: validate-ideas
-description: Batch validate all pending ideas at once. Use when you have multiple ideas waiting for validation and want to review them efficiently.
----
-
 # Validate Ideas (Batch)
 
 Review and validate all pending ideas in a single session.
@@ -37,10 +32,10 @@ Pending Ideas Analysis:
 
 | #   | Title                          | Effort | Impact | Recommendation |
 |-----|--------------------------------|--------|--------|----------------|
-| #12 | Add JSON schema validation     | Low    | High   | ✅ Accept      |
-| #15 | Generate TS types from schemas | Medium | High   | ✅ Accept      |
-| #18 | Dark mode for docs             | High   | Low    | ❌ Reject      |
-| #20 | Add logging utility            | Low    | Medium | ✅ Accept      |
+| #12 | Add JSON schema validation     | Low    | High   | Accept         |
+| #15 | Generate TS types from schemas | Medium | High   | Accept         |
+| #18 | Dark mode for docs             | High   | Low    | Reject         |
+| #20 | Add logging utility            | Low    | Medium | Accept         |
 
 Details:
 - #12: Quick win, improves data integrity
@@ -70,8 +65,8 @@ For each confirmed decision, execute the same logic as `/validate-idea`:
 ```text
 Validation complete:
 
-✅ Accepted: #12, #15, #20
-❌ Rejected: #18
+Accepted: #12, #15, #20
+Rejected: #18
 
 3 ideas ready for /feed-backlog
 1 idea rejected and closed
@@ -91,12 +86,12 @@ Validation complete:
 
 Found 4 pending ideas. Analyzing...
 
-| #   | Title                      | Effort | Impact | Rec.      |
-|-----|----------------------------|--------|--------|-----------|
-| #12 | JSON schema validation     | Low    | High   | ✅ Accept |
-| #15 | Generate TS types          | Medium | High   | ✅ Accept |
-| #18 | Dark mode for docs         | High   | Low    | ❌ Reject |
-| #20 | Add logging utility        | Low    | Medium | ✅ Accept |
+| #   | Title                      | Effort | Impact | Rec.   |
+|-----|----------------------------|--------|--------|--------|
+| #12 | JSON schema validation     | Low    | High   | Accept |
+| #15 | Generate TS types          | Medium | High   | Accept |
+| #18 | Dark mode for docs         | High   | Low    | Reject |
+| #20 | Add logging utility        | Low    | Medium | Accept |
 
 Apply all recommendations? [Yes/Select/Cancel]
 > Yes

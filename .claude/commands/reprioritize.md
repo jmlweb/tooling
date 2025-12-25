@@ -1,8 +1,3 @@
----
-name: reprioritize
-description: Analyze and automatically reprioritize all open GitHub Issues based on urgency, security, and impact. Use when you want to audit and optimize task priorities.
----
-
 # Reprioritize
 
 Analyze all open tasks and automatically reprioritize them.

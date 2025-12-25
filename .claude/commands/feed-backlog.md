@@ -1,8 +1,3 @@
----
-name: feed-backlog
-description: Convert accepted ideas into actionable GitHub Issues (tasks). Use when you have validated ideas ready to become work items in the backlog.
----
-
 # Feed Backlog
 
 Convert accepted ideas into actionable tasks (GitHub Issues).
@@ -41,10 +36,10 @@ For each accepted idea:
 | High   | Low    | low      |
 
 5. Determine task type:
-   - feature/improvement → `type:feature`
-   - refactor → `type:chore`
-   - fix → `type:bug`
-   - documentation → `type:chore`
+   - feature/improvement -> `type:feature`
+   - refactor -> `type:chore`
+   - fix -> `type:bug`
+   - documentation -> `type:chore`
 
 ### Step 3 - Present Conversion Plan
 
@@ -58,9 +53,9 @@ Ready to convert 3 accepted ideas to tasks:
 | #20   | Add logging utility        | 1     | medium   |
 
 Breakdown:
-- #12 → 1 task: "Implement JSON schema validation"
-- #15 → 2 tasks: "Create type generator CLI", "Add tests for generator"
-- #20 → 1 task: "Add logging utility package"
+- #12 -> 1 task: "Implement JSON schema validation"
+- #15 -> 2 tasks: "Create type generator CLI", "Add tests for generator"
+- #20 -> 1 task: "Add logging utility package"
 
 Proceed? [Yes/No]
 ```
@@ -155,9 +150,9 @@ Found 2 accepted ideas:
 | #15  | TS type generator  | Medium | High   | high     |
 
 Tasks to create:
-1. #12 → "Implement JSON schema validation" (priority:critical)
-2. #15 → "Create type generator CLI" (priority:high)
-3. #15 → "Add generator tests" (priority:high)
+1. #12 -> "Implement JSON schema validation" (priority:critical)
+2. #15 -> "Create type generator CLI" (priority:high)
+3. #15 -> "Add generator tests" (priority:high)
 
 Create these 3 tasks? [Yes/No]
 > Yes

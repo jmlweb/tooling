@@ -1,6 +1,6 @@
 ---
 name: validate-idea
-description: Evaluate a single idea and decide to accept or reject it. Use when you want to validate a pending idea by analyzing its feasibility, effort, and impact.
+description: Evaluate a single idea and decide to accept or reject it. Used internally by /validate-ideas or when the user mentions a specific idea number.
 ---
 
 # Validate Idea
@@ -9,7 +9,7 @@ Evaluate a pending idea and decide whether to accept or reject it.
 
 ## Instructions
 
-When the user runs `/validate-idea #N` (where N is the issue number):
+When validating idea #N:
 
 ### Step 1 - Fetch the Idea
 
@@ -26,7 +26,6 @@ Evaluate against project context:
 1. Read relevant files:
    - `README.md`, `AGENTS.md` for project goals
    - Existing packages and their purpose
-   - Current roadmap or priorities
 
 2. Check for duplicates:
    - Search existing issues for similar concepts
@@ -55,103 +54,40 @@ Evaluate against project context:
 | Medium | Noticeable improvement, moderate benefit |
 | High   | Game changer, significant benefit        |
 
-### Step 4 - Present Recommendation
-
-Show:
-
-- Effort estimate with reasoning
-- Impact estimate with reasoning
-- Recommendation: Accept or Reject
-- If reject: specific reason
-
-Ask user to confirm decision.
-
-### Step 5 - Apply Decision
+### Step 4 - Apply Decision
 
 **If ACCEPTED:**
 
 ```bash
-# Remove pending, add accepted + effort + impact labels
 gh issue edit N --repo jmlweb/tooling \
   --remove-label "idea:pending" \
   --add-label "idea:accepted,effort:medium,impact:high"
 
-# Add validation comment
-gh issue comment N --repo jmlweb/tooling --body "$(cat <<'EOF'
-## Validation Result: ✅ ACCEPTED
+gh issue comment N --repo jmlweb/tooling --body "## Validation: ACCEPTED
 
-**Effort:** Medium (2-4 hours estimated)
-**Impact:** High (improves developer experience significantly)
+**Effort:** [level] | **Impact:** [level]
 
-**Reasoning:**
-[Why this idea was accepted]
+**Reasoning:** [Why accepted]
 
----
-*Ready for `/feed-backlog` to convert to task.*
-EOF
-)"
+*Ready for /feed-backlog*"
 ```
 
 **If REJECTED:**
 
 ```bash
-# Change to rejected label
 gh issue edit N --repo jmlweb/tooling \
   --remove-label "idea:pending" \
   --add-label "idea:rejected"
 
-# Add rejection comment and close
-gh issue comment N --repo jmlweb/tooling --body "$(cat <<'EOF'
-## Validation Result: ❌ REJECTED
+gh issue comment N --repo jmlweb/tooling --body "## Validation: REJECTED
 
-**Reason:** [Specific reason for rejection]
-
-**Details:**
-[Explanation of why this idea was not accepted]
-
----
-*This idea has been rejected. The issue will be closed.*
-EOF
-)"
+**Reason:** [Why rejected]"
 
 gh issue close N --repo jmlweb/tooling
 ```
 
 ## Decision Guidelines
 
-**Lean toward ACCEPT when:**
+**Accept when:** High impact + low effort, aligns with goals, solves pain point
 
-- High impact + low effort (quick wins)
-- Aligns with project goals
-- Solves real pain point
-- Natural extension of existing features
-
-**Lean toward REJECT when:**
-
-- Low impact + high effort (poor ROI)
-- Out of project scope
-- Already exists or duplicates another idea
-- Technical infeasibility
-- Security concerns
-
-## Example
-
-```text
-/validate-idea #15
-
-Analyzing idea #15: Generate TypeScript types from JSON schemas
-
-Effort: Medium
-- Requires new CLI command
-- Need to integrate with existing build pipeline
-- Some testing required
-
-Impact: High
-- Reduces manual type definition work
-- Ensures types match schemas
-- Improves DX significantly
-
-Recommendation: ✅ ACCEPT
-
-Accept this idea? [Yes/No]
-```
+**Reject when:** Low ROI, out of scope, duplicates, infeasible

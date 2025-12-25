@@ -1,0 +1,41 @@
+{
+  "name": "@jmlweb/tsconfig-react",
+  "version": "1.0.0",
+  "description": "TypeScript configuration for React libraries with JSX support and modern defaults",
+  "main": "tsconfig.json",
+  "exports": {
+    ".": "./tsconfig.json"
+  },
+  "files": [
+    "tsconfig.json",
+    "README.md"
+  ],
+  "keywords": [
+    "tsconfig",
+    "typescript",
+    "config",
+    "react",
+    "jsx",
+    "strict",
+    "type-checking"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jmlweb/tooling/issues"
+  },
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsconfig-react#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@jmlweb/tsconfig-base": "^1.0.0"
+  }
+}

@@ -1,8 +1,3 @@
----
-name: next-task
-description: Pick the highest-priority open GitHub Issue and work on it. Use when you want to work on the next task in the queue automatically.
----
-
 # Next Task
 
 Pick the next highest-priority task, work on it, and close it.

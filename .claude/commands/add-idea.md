@@ -1,15 +1,10 @@
----
-name: new-idea
-description: Create a new idea as a GitHub Issue for later validation. Use when capturing feature ideas, improvements, or suggestions that need evaluation before becoming tasks.
----
-
-# New Idea
+# Add Idea
 
 Create a new idea as a GitHub Issue pending validation.
 
 ## Instructions
 
-When the user runs `/new-idea <description>`:
+When the user runs `/add-idea <description>`:
 
 ### Step 1 - Analyze the Idea
 
@@ -74,7 +69,7 @@ Display:
 
 ## Example
 
-User: `/new-idea Add a CLI command to generate TypeScript types from JSON schemas`
+User: `/add-idea Add a CLI command to generate TypeScript types from JSON schemas`
 
 Creates:
 

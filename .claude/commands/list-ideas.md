@@ -1,8 +1,3 @@
----
-name: list-ideas
-description: List all ideas filtered by status. Use when you want to see pending, accepted, rejected, or all ideas in the system.
----
-
 # List Ideas
 
 Display ideas filtered by status.
