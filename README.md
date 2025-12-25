@@ -8,13 +8,20 @@ Centralized configuration packages for development tools. One source of truth fo
 
 ## Packages
 
-| Package                                                                   | Description                    | Version                                                                      |
-| ------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------------------------------- |
-| [`@jmlweb/prettier-config-base`](./packages/prettier-config-base)         | Base Prettier configuration    | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-base?label=)     |
-| [`@jmlweb/prettier-config-tailwind`](./packages/prettier-config-tailwind) | Prettier + Tailwind CSS plugin | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-tailwind?label=) |
-| [`@jmlweb/eslint-config-base`](./packages/eslint-config-base)             | ESLint for TypeScript (strict) | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base?label=)       |
-| [`@jmlweb/eslint-config-base-js`](./packages/eslint-config-base-js)       | ESLint for JavaScript          | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js?label=)    |
-| [`@jmlweb/tsconfig-base`](./packages/tsconfig-base)                       | Base TypeScript configuration  | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-base?label=)            |
+| Package                                                                   | Description                                                             | Version                                                                      |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Formatting**                                                            |                                                                         |                                                                              |
+| [`@jmlweb/prettier-config-base`](./packages/prettier-config-base)         | Base Prettier configuration                                             | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-base?label=)     |
+| [`@jmlweb/prettier-config-tailwind`](./packages/prettier-config-tailwind) | Prettier + Tailwind CSS plugin                                          | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-tailwind?label=) |
+| **Linting**                                                               |                                                                         |                                                                              |
+| [`@jmlweb/eslint-config-base`](./packages/eslint-config-base)             | ESLint for TypeScript (strict)                                          | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base?label=)       |
+| [`@jmlweb/eslint-config-base-js`](./packages/eslint-config-base-js)       | ESLint for JavaScript                                                   | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js?label=)    |
+| [`@jmlweb/eslint-config-react`](./packages/eslint-config-react)           | ESLint for React libraries with TypeScript, extending base config       | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-react?label=)      |
+| **TypeScript**                                                            |                                                                         |                                                                              |
+| [`@jmlweb/tsconfig-base`](./packages/tsconfig-base)                       | Base TypeScript configuration                                           | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-base?label=)            |
+| [`@jmlweb/tsconfig-react`](./packages/tsconfig-react)                     | TypeScript configuration for React libraries with JSX support           | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-react?label=)           |
+| **Testing**                                                               |                                                                         |                                                                              |
+| [`@jmlweb/vitest-config`](./packages/vitest-config)                       | Base Vitest configuration with TypeScript support and coverage settings | ![npm](https://img.shields.io/npm/v/@jmlweb/vitest-config?label=)            |
 
 ## Quick Start
 

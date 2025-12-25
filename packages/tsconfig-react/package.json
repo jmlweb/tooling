@@ -35,6 +35,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/validate-package.mjs"
+  },
   "peerDependencies": {
     "@jmlweb/tsconfig-base": "^1.0.0"
   }

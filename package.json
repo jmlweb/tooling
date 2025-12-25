@@ -13,6 +13,7 @@
     "prepare": "husky",
     "test": "turbo run test",
     "validate": "pnpm format --check && pnpm lint:root && pnpm lint",
+    "validate:packages": "node scripts/validate-all-packages.mjs",
     "ci": "pnpm validate && pnpm build",
     "clean": "turbo run clean && rm -rf node_modules",
     "check": "turbo run check"
