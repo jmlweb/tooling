@@ -110,6 +110,7 @@ This is a Turborepo monorepo with the following structure:
 ```
 jmlweb-tooling/
 ├── packages/          # Publishable configuration packages
+├── apps/              # Test applications (e.g., test-app)
 ├── docs/              # Project documentation
 ├── turbo.json         # Turborepo configuration
 ├── package.json       # Root workspace configuration

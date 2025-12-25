@@ -66,7 +66,15 @@ npm run format
 
 # Run linting
 npm run lint
+
+# Run tests (validates all packages)
+npm run test
+
+# Validate everything (format check + lint)
+npm run validate
 ```
+
+The `apps/test-app/` directory contains a test application that validates all configuration packages work correctly.
 
 ## Requirements
 

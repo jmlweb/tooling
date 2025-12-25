@@ -15,34 +15,35 @@ All package.json files now include:
 - `bugs.url`: link to GitHub issues
 - `homepage`: link to each package's README
 
-### 2. Testing & Validation Setup
+### ~~2. Testing & Validation Setup~~ ✅
 
-**Current State**: SPECS.md mentions testing as a step, but no testing infrastructure exists.
+**Status**: Completed
 
-**Impact**: No way to validate that packages work correctly before publishing.
+A test app has been created in `apps/test-app/` with validation scripts that verify:
 
-**Suggestion**:
+- Packages can be installed and imported correctly
+- Configuration inheritance works as expected
+- Formatting/linting actually applies the rules
 
-- Create a test app in `apps/test-app/` that uses all configuration packages
-- Add validation scripts that verify:
-  - Packages can be installed and imported correctly
-  - Configuration inheritance works as expected
-  - Formatting/linting actually applies the rules
-- Add `test` script to root package.json and turbo.json pipeline
+The `test` script has been added to root package.json and turbo.json pipeline.
 
-### 3. CI/CD Pipeline
+### ~~3. CI/CD Pipeline~~ ✅
 
-**Current State**: No continuous integration setup.
+**Status**: Completed
 
-**Impact**: Manual testing and no automated checks before publishing.
+GitHub Actions workflows have been set up:
 
-**Suggestion**:
+- **CI workflow** (`.github/workflows/ci.yml`):
+  - Runs linting and formatting checks on PRs
+  - Validates package.json files
+  - Builds and tests packages
+  - Validates package publishing readiness
 
-- Add GitHub Actions workflow (or similar) to:
-  - Run linting and formatting checks on PRs
-  - Validate package.json files
-  - Test package installation in different Node.js versions
-  - Optionally automate publishing on version bumps
+- **Publish workflow** (`.github/workflows/publish.yml`):
+  - Automatically detects packages that need publishing
+  - Supports dry-run mode for testing
+  - Publishes packages to npm on version bumps
+  - Creates git tags for releases
 
 ### ~~4. Update README Package Table~~ ✅
 
@@ -109,19 +110,16 @@ All package.json files now include:
 
 ## Low Priority
 
-### 9. Development Scripts Enhancement
+### ~~9. Development Scripts Enhancement~~ ✅
 
-**Current State**: Basic scripts exist (format, lint, build). `clean` task exists in turbo.json.
+**Status**: Completed
 
-**Impact**: Could improve developer experience with more helpful scripts.
+All suggested scripts have been implemented:
 
-**Suggestion**:
-
-- Add scripts like:
-  - `npm run validate` - Run all validation checks
-  - `npm run clean` - Clean build artifacts (task exists in turbo.json, but no root script)
-  - `npm run check` - Type check (if applicable)
-  - `npm run prepare` - Setup hooks for git/npm (already exists)
+- `npm run validate` - Run all validation checks ✅
+- `npm run clean` - Clean build artifacts ✅
+- `npm run check` - Type check ✅
+- `npm run prepare` - Setup hooks for git/npm ✅
 
 ### 10. TypeScript Support for Config Files
 

@@ -85,6 +85,16 @@ Base TypeScript configuration with strict type checking and modern defaults:
 
 This base configuration provides a solid foundation for TypeScript projects with emphasis on type safety.
 
+### `@jmlweb/tsconfig-internal`
+
+Internal TypeScript configuration for building packages within the monorepo. This is a private package (not published to npm) optimized for:
+
+- Building packages with tsup/esbuild
+- Dual CJS/ESM output
+- Type declaration generation
+
+**Note**: This package is for internal monorepo use only. For consuming projects, use `@jmlweb/tsconfig-base` instead.
+
 ## PROJECT STRUCTURE
 
 The monorepo follows a standard Turborepo structure:
@@ -96,8 +106,10 @@ jmlweb-tooling/
 │   ├── prettier-config-tailwind/
 │   ├── eslint-config-base-js/
 │   ├── eslint-config-base/
-│   └── tsconfig-base/
-├── apps/ (if needed for testing)
+│   ├── tsconfig-base/
+│   └── tsconfig-internal/ (private, internal use only)
+├── apps/
+│   └── test-app/ (testing and validation)
 ├── turbo.json
 ├── package.json
 └── docs/
@@ -105,11 +117,12 @@ jmlweb-tooling/
     └── IMPROVEMENTS.md
 ```
 
-- **packages/**: Contains all publishable configuration packages
+- **packages/**: Contains all publishable configuration packages (and one private internal package)
+- **apps/**: Contains test applications for validating packages
 - **turbo.json**: Turborepo configuration for task orchestration
 - **package.json**: Root package.json for workspace management
 
-Each package in `packages/` is a standalone npm package that can be published independently.
+Each package in `packages/` is a standalone npm package that can be published independently, except for `tsconfig-internal` which is private and used only within the monorepo.
 
 ## STEPS
 
@@ -134,10 +147,11 @@ The project implementation follows these steps:
    - ~~Set up `@jmlweb/eslint-config-base-js` for JavaScript~~
    - ~~Set up `@jmlweb/eslint-config-base` for TypeScript (strict)~~
 
-6. **Testing and validation**: Ensure packages work correctly
-   - Test package installation and usage
-   - Verify configuration inheritance
-   - Validate formatting and linting behavior
+6. ~~**Testing and validation**: Ensure packages work correctly~~ ✅
+   - ~~Test package installation and usage~~
+   - ~~Verify configuration inheritance~~
+   - ~~Validate formatting and linting behavior~~
+   - ~~Create test app in `apps/test-app/` with validation scripts~~
 
 7. **Publishing setup**: Prepare packages for npm publication
    - Configure npm publishing settings
