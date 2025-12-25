@@ -148,6 +148,22 @@ jobs:
       - name: Build packages
         run: pnpm build
 
+      - name: Pack packages
+        run: |
+          # Create directory for tarballs
+          mkdir -p ${{ github.workspace }}/packed
+
+          # Pack each package (this resolves workspace:* references)
+          for pkg in packages/*/; do
+            echo "Packing $pkg..."
+            cd "${{ github.workspace }}/$pkg"
+            pnpm pack --pack-destination "${{ github.workspace }}/packed"
+            cd "${{ github.workspace }}"
+          done
+
+          echo "Packed tarballs:"
+          ls -la ${{ github.workspace }}/packed/
+
       - name: Test package installation
         run: |
           # Create temporary test directory
@@ -157,17 +173,9 @@ jobs:
           # Initialize test project
           pnpm init
 
-          # Get absolute path to monorepo
-          MONOREPO_PATH="${{ github.workspace }}"
-
-          # Install packages as file dependencies
-          echo "Installing packages..."
-          pnpm add -D \
-            "file:$MONOREPO_PATH/packages/eslint-config-base" \
-            "file:$MONOREPO_PATH/packages/eslint-config-base-js" \
-            "file:$MONOREPO_PATH/packages/prettier-config-base" \
-            "file:$MONOREPO_PATH/packages/prettier-config-tailwind" \
-            "file:$MONOREPO_PATH/packages/tsconfig-base"
+          # Install packages from tarballs
+          echo "Installing packages from tarballs..."
+          pnpm add -D ${{ github.workspace }}/packed/*.tgz
 
           # Test ESLint config
           echo "Testing ESLint config..."
