@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build packages
+        run: pnpm build
+
       - name: Check formatting
         run: pnpm format --check
 
@@ -152,7 +155,7 @@ jobs:
           cd "$TEST_DIR"
 
           # Initialize test project
-          pnpm init -y
+          pnpm init
 
           # Get absolute path to monorepo
           MONOREPO_PATH="${{ github.workspace }}"
