@@ -15,56 +15,10 @@ permissions:
   contents: write
 
 jobs:
-  verify-token:
-    name: Verify NPM Token
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-    steps:
-      - name: Check NPM_TOKEN is set
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ -z "$NPM_TOKEN" ]; then
-            echo "❌ NPM_TOKEN secret is not set"
-            echo ""
-            echo "To fix this:"
-            echo "1. Create a token at https://www.npmjs.com/settings/<username>/tokens"
-            echo "2. Go to https://github.com/${{ github.repository }}/settings/secrets/actions"
-            echo "3. Add a new secret named NPM_TOKEN with your token value"
-            exit 1
-          fi
-          echo "✅ NPM_TOKEN secret is configured"
-
-      - name: Verify token is valid
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "🔍 Verifying NPM token..."
-
-          # Create temporary .npmrc with token
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > /tmp/.npmrc
-
-          # Use npm whoami to verify token (works with Granular Access Tokens)
-          if USERNAME=$(npm whoami --registry https://registry.npmjs.org --userconfig /tmp/.npmrc 2>&1); then
-            echo "✅ Token is valid for user: $USERNAME"
-          else
-            echo "❌ Token is invalid or expired"
-            echo ""
-            echo "Please check:"
-            echo "- Token has not expired"
-            echo "- Token has publish permissions"
-            echo "- Token is correctly copied (no extra spaces)"
-            rm -f /tmp/.npmrc
-            exit 1
-          fi
-
-          rm -f /tmp/.npmrc
-
   detect-changes:
     name: Detect Package Changes
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: verify-token
     outputs:
       packages: ${{ steps.detect.outputs.packages }}
       has-changes: ${{ steps.detect.outputs.has-changes }}
