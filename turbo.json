@@ -1,14 +1,25 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "tasks": {
     "build": {
-      "outputs": []
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "inputs": ["src/**", "tsup.config.ts", "package.json"]
     },
     "lint": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "format": {
       "outputs": []
+    },
+    "clean": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "inputs": ["fixtures/**", "scripts/**", "package.json"]
     }
   }
 }

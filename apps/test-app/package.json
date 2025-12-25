@@ -1,0 +1,35 @@
+{
+  "name": "@jmlweb/test-app",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Test application for validating configuration packages",
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/test-all.mjs",
+    "test:prettier-base": "node scripts/test-prettier-base.mjs",
+    "test:prettier-tailwind": "node scripts/test-prettier-tailwind.mjs",
+    "test:eslint-js": "node scripts/test-eslint-js.mjs",
+    "test:eslint-ts": "node scripts/test-eslint-ts.mjs",
+    "test:tsconfig": "node scripts/test-tsconfig.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@jmlweb/eslint-config-base": "workspace:*",
+    "@jmlweb/eslint-config-base-js": "workspace:*",
+    "@jmlweb/prettier-config-base": "workspace:*",
+    "@jmlweb/prettier-config-tailwind": "workspace:*",
+    "@jmlweb/tsconfig-base": "workspace:*",
+    "chalk": "^5.3.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.34.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

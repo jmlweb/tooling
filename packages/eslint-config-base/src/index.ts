@@ -1,3 +1,5 @@
+import type { Linter } from 'eslint';
+
 import baseConfig from '@jmlweb/eslint-config-base-js';
 import prettierConfig from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -8,36 +10,25 @@ import tseslint from 'typescript-eslint';
  * Includes strict type checking, stylistic rules, and best practices.
  * For non-strict projects, override the strict rules in your eslint.config.js.
  */
-export default [
+const config = tseslint.config(
   ...baseConfig,
-  // TypeScript recommended configuration
-  ...tseslint.configs.recommended.map((config) => ({
-    ...config,
-    files: ['**/*.ts', '**/*.tsx'],
-    plugins: {
-      ...config.plugins,
-      'simple-import-sort': simpleImportSort,
-    },
-    rules: {
-      ...config.rules,
-      ...prettierConfig.rules,
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
-    },
-  })),
-  // Strict type checking configuration
+  ...tseslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
     files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {
       ...prettierConfig.rules,
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
       // TypeScript strict rules
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
@@ -80,4 +71,6 @@ export default [
       'no-param-reassign': ['error', { props: true }],
     },
   },
-];
+) as Linter.Config[];
+
+export default config;

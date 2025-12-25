@@ -1,3 +1,5 @@
+import type { Linter } from 'eslint';
+
 import js from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -6,8 +8,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
  * Base ESLint configuration for JavaScript files.
  * This is the foundation that other configs extend.
  */
-export default [
-  // Base configuration for JavaScript files
+const config: Linter.Config[] = [
   {
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     languageOptions: {
@@ -25,3 +26,5 @@ export default [
     },
   },
 ];
+
+export default config;

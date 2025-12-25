@@ -6,7 +6,7 @@ export default [
   },
   ...baseConfig,
   {
-    files: ['**/*.cjs', '.prettierrc.js', 'packages/prettier-*/index.js'],
+    files: ['**/*.cjs'],
     languageOptions: {
       sourceType: 'commonjs',
       globals: {

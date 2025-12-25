@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from 'prettier';
+
+const config: Config = {
   semi: true,
   singleQuote: true,
   tabWidth: 2,
@@ -7,3 +9,5 @@ module.exports = {
   endOfLine: 'lf',
   proseWrap: 'preserve',
 };
+
+export default config;

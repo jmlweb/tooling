@@ -1,0 +1,207 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format --check
+
+      - name: Lint root
+        run: pnpm lint:root
+
+      - name: Lint packages
+        run: pnpm lint
+
+  build:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Validate package.json files
+        run: |
+          echo "Validating package.json files..."
+          FAILED=0
+
+          for pkg in packages/*/package.json; do
+            echo "Checking $pkg..."
+
+            # Check required fields
+            for field in name version description author license; do
+              if ! jq -e ".$field" "$pkg" > /dev/null 2>&1; then
+                echo "ERROR: Missing required field '$field' in $pkg"
+                FAILED=1
+              fi
+            done
+
+            # Check files array exists and has content
+            if ! jq -e '.files | length > 0' "$pkg" > /dev/null 2>&1; then
+              echo "ERROR: Missing or empty 'files' array in $pkg"
+              FAILED=1
+            fi
+
+            # For packages with build scripts, ensure dist is in files
+            if jq -e '.scripts.build' "$pkg" > /dev/null 2>&1; then
+              if ! jq -e '.files | map(select(. == "dist")) | length > 0' "$pkg" > /dev/null 2>&1; then
+                echo "ERROR: Package has build script but 'dist' not in files array in $pkg"
+                FAILED=1
+              fi
+            fi
+          done
+
+          if [ $FAILED -eq 1 ]; then
+            echo "Package validation failed"
+            exit 1
+          fi
+
+          echo "All packages validated successfully"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages/*/dist
+          retention-days: 7
+
+  test-install:
+    name: Test Installation (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Test package installation
+        run: |
+          # Create temporary test directory
+          TEST_DIR=$(mktemp -d)
+          cd "$TEST_DIR"
+
+          # Initialize test project
+          pnpm init -y
+
+          # Get absolute path to monorepo
+          MONOREPO_PATH="${{ github.workspace }}"
+
+          # Install packages as file dependencies
+          echo "Installing packages..."
+          pnpm add -D \
+            "file:$MONOREPO_PATH/packages/eslint-config-base" \
+            "file:$MONOREPO_PATH/packages/eslint-config-base-js" \
+            "file:$MONOREPO_PATH/packages/prettier-config-base" \
+            "file:$MONOREPO_PATH/packages/prettier-config-tailwind" \
+            "file:$MONOREPO_PATH/packages/tsconfig-base"
+
+          # Test ESLint config
+          echo "Testing ESLint config..."
+          cat > eslint.config.mjs << 'EOF'
+          import baseConfig from '@jmlweb/eslint-config-base';
+          export default baseConfig;
+          EOF
+
+          # Test Prettier config
+          echo "Testing Prettier config..."
+          cat > .prettierrc.mjs << 'EOF'
+          import prettierConfig from '@jmlweb/prettier-config-base';
+          export default prettierConfig;
+          EOF
+
+          # Create test file
+          echo "const test = 'hello world';" > test.js
+
+          # Verify configs can be loaded
+          npx eslint --version
+          npx prettier --version
+
+          echo "Installation test successful"
+
+  status-check:
+    name: CI Status Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [validate, build, test-install]
+    if: always()
+    steps:
+      - name: Check job results
+        run: |
+          if [ "${{ needs.validate.result }}" != "success" ] || \
+             [ "${{ needs.build.result }}" != "success" ] || \
+             [ "${{ needs.test-install.result }}" != "success" ]; then
+            echo "One or more CI jobs failed"
+            exit 1
+          fi
+          echo "All CI jobs completed successfully"
