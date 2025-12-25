@@ -61,8 +61,8 @@ jobs:
             echo "has-changes=false" >> $GITHUB_OUTPUT
             echo "packages=[]" >> $GITHUB_OUTPUT
           else
-            # Convert to JSON array
-            JSON_PACKAGES=$(printf '%s\n' "${PACKAGES_TO_PUBLISH[@]}" | jq -R . | jq -s .)
+            # Convert to JSON array (compact, single line)
+            JSON_PACKAGES=$(printf '%s\n' "${PACKAGES_TO_PUBLISH[@]}" | jq -R . | jq -sc .)
             echo "Packages to publish: $JSON_PACKAGES"
             echo "has-changes=true" >> $GITHUB_OUTPUT
             echo "packages=$JSON_PACKAGES" >> $GITHUB_OUTPUT
