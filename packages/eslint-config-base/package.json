@@ -38,10 +38,7 @@
   ],
   "author": "jmlweb",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jmlweb/tooling.git"
-  },
+  "repository": "jmlweb/tooling.git",
   "bugs": "https://github.com/jmlweb/tooling/issues",
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/eslint-config-base#readme",
   "engines": {

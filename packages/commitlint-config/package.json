@@ -1,7 +1,7 @@
 {
-  "name": "@jmlweb/prettier-config-base",
-  "version": "1.0.0",
-  "description": "Base Prettier configuration for jmlweb projects",
+  "name": "@jmlweb/commitlint-config",
+  "version": "0.0.0",
+  "description": "Shared commitlint configuration for enforcing Conventional Commits",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -29,15 +29,17 @@
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
   "keywords": [
-    "code-formatter",
-    "prettier",
-    "prettier-config"
+    "commitlint",
+    "commitlint-config",
+    "conventional-commits",
+    "git",
+    "lint"
   ],
   "author": "jmlweb",
   "license": "MIT",
   "repository": "jmlweb/tooling.git",
   "bugs": "https://github.com/jmlweb/tooling/issues",
-  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/prettier-config-base#readme",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/commitlint-config#readme",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -45,11 +47,14 @@
     "access": "public"
   },
   "peerDependencies": {
-    "prettier": "^3.0.0"
+    "@commitlint/cli": ">=19.0.0",
+    "@commitlint/config-conventional": ">=19.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/types": "^19.8.1",
     "@jmlweb/tsconfig-internal": "workspace:*",
-    "prettier": "^3.3.3",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   }
