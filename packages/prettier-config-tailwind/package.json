@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@jmlweb/prettier-config-base": "workspace:*",
-    "prettier-plugin-tailwindcss": "^0.6.14"
+    "prettier-plugin-tailwindcss": "^0.7.2"
   },
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
