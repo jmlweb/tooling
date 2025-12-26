@@ -25,6 +25,7 @@ export const COMMIT_SCOPES = [
   // ESLint configs
   'eslint-config-base',
   'eslint-config-base-js',
+  'eslint-config-node',
   'eslint-config-react',
   // Prettier configs
   'prettier-config-base',
