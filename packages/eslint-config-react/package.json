@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-react",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "ESLint configuration for React libraries with TypeScript, extending base config with React-specific rules",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -53,7 +53,7 @@
   },
   "peerDependencies": {
     "@eslint/js": "^9.0.0",
-    "@jmlweb/eslint-config-base": "^2.0.0",
+    "@jmlweb/eslint-config-base": "^2.0.1",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.37.0",

@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-nextjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TypeScript configuration for Next.js applications with App Router and Pages Router support",
   "main": "tsconfig.json",
   "exports": {
@@ -39,7 +39,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@jmlweb/tsconfig-react": "^1.0.0",
+    "@jmlweb/tsconfig-react": "^1.0.1",
     "next": ">=13.0.0",
     "typescript": ">=5.0.0"
   }

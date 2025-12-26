@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TypeScript configuration for React libraries with JSX support and modern defaults",
   "main": "tsconfig.json",
   "exports": {
@@ -38,6 +38,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@jmlweb/tsconfig-base": "^1.0.0"
+    "@jmlweb/tsconfig-base": "^1.0.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsup-config-base",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Base tsup configuration for jmlweb projects with sensible defaults",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -1,5 +1,11 @@
 # @jmlweb/vitest-config
 
+## 1.0.2
+
+### Patch Changes
+
+- 2208f74: Standardize repository field format to object format across all packages and configure syncpack to preserve it.
+
 ## 1.0.1
 
 ### Patch Changes
