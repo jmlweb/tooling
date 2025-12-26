@@ -14,8 +14,37 @@ permissions:
   contents: read
 
 jobs:
-  validate:
-    name: Validate Code Quality
+  # Parallel validation checks that don't require builds
+  validate-format:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build prettier configs (required for format check)
+        run: pnpm build --filter='@jmlweb/prettier-config-*'
+
+      - name: Check formatting
+        run: pnpm format --check
+
+  validate-lint:
+    name: Lint Code
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -36,11 +65,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm build
-
-      - name: Check formatting
-        run: pnpm format --check
+      - name: Build eslint configs (required for lint check)
+        run: pnpm build --filter='@jmlweb/eslint-config-*'
 
       - name: Lint root
         run: pnpm lint:root
@@ -48,13 +74,10 @@ jobs:
       - name: Lint packages
         run: pnpm lint
 
-      - name: Check dependency versions
-        run: pnpm syncpack:check
-
-  build:
-    name: Build Packages
+  validate-deps:
+    name: Check Dependencies
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -73,8 +96,66 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check dependency versions
+        run: pnpm syncpack:check
+
+  # Single build job with Turborepo remote cache
+  build:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          # Full history needed for filtering in PRs
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          # Try frozen lockfile first
+          if ! pnpm install --frozen-lockfile 2>&1; then
+            echo "::warning::Lockfile is out of sync. This usually happens when the PR branch is not up to date with main."
+            echo "Updating lockfile and continuing..."
+            pnpm install --no-frozen-lockfile
+            echo "::warning::Please merge main into your PR branch and commit the updated pnpm-lock.yaml file."
+          fi
+
       - name: Build packages
-        run: pnpm build
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "🔍 PR detected - Building only changed packages..."
+            # Fetch the base branch to calculate merge base
+            git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
+            # Get the merge base with the target branch
+            BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
+            echo "Comparing changes from $BASE to HEAD"
+            echo "Base branch: ${{ github.base_ref }}"
+            echo "Merge base commit: $BASE"
+            # Use filter to build only changed packages
+            # Turborepo filter syntax: [<base>...HEAD] compares changes from base to HEAD
+            FILTER="[$BASE...HEAD]"
+            echo "Using filter: $FILTER"
+            # If filter fails, fallback to building all packages
+            if ! pnpm build --filter="$FILTER"; then
+              echo "⚠️  Filter build failed, falling back to building all packages..."
+              pnpm build
+            fi
+          else
+            echo "📦 Push to main - Building all packages..."
+            pnpm build
+          fi
 
       - name: Validate package.json files
         run: |
@@ -116,11 +197,14 @@ jobs:
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
+        continue-on-error: true
         with:
           name: build-artifacts
           path: packages/*/dist
           retention-days: 7
+        if: always()
 
+  # Test pack using artifacts instead of rebuilding
   test-pack:
     name: Test Package Publishing
     runs-on: ubuntu-latest
@@ -129,6 +213,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          # Full history needed for filtering in PRs (if artifacts not found)
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -144,17 +231,55 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm build
+      - name: Download build artifacts
+        id: download-artifacts
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Build packages if artifacts not found
+        if: steps.download-artifacts.outcome == 'failure'
+        run: |
+          echo "⚠️  No artifacts found, building packages..."
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "🔍 PR detected - Building only changed packages..."
+            git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
+            BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
+            FILTER="[$BASE...HEAD]"
+            echo "Using filter: $FILTER"
+            pnpm build --filter="$FILTER" || pnpm build
+          else
+            echo "📦 Building all packages..."
+            pnpm build
+          fi
 
       - name: Pack and validate packages
         run: |
           mkdir -p packed
           FAILED=0
+          PACKAGES_VALIDATED=0
 
           for pkg_dir in packages/*/; do
             pkg_name=$(jq -r '.name' "$pkg_dir/package.json")
+            
+            # Skip packages that weren't built (no dist folder)
+            # This happens in PRs when filtering is used
+            if [ ! -d "$pkg_dir/dist" ]; then
+              # If package has build script, it should have been built
+              if jq -e '.scripts.build' "$pkg_dir/package.json" > /dev/null 2>&1; then
+                echo "⚠️  Skipping $pkg_name - no dist folder (not built in this run)"
+                continue
+              else
+                # Package doesn't need building, skip it
+                echo "⏭️  Skipping $pkg_name - no build script"
+                continue
+              fi
+            fi
+
             echo "=== Packing $pkg_name ==="
+            PACKAGES_VALIDATED=$((PACKAGES_VALIDATED + 1))
 
             cd "$pkg_dir"
             pnpm pack --pack-destination "../../packed"
@@ -198,18 +323,20 @@ jobs:
             exit 1
           fi
 
-          echo "All packages validated successfully"
+          echo "✅ Validated $PACKAGES_VALIDATED package(s) successfully"
 
   status-check:
     name: CI Status Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [validate, build, test-pack]
+    needs: [validate-format, validate-lint, validate-deps, build, test-pack]
     if: always()
     steps:
       - name: Check job results
         run: |
-          if [ "${{ needs.validate.result }}" != "success" ] || \
+          if [ "${{ needs.validate-format.result }}" != "success" ] || \
+             [ "${{ needs.validate-lint.result }}" != "success" ] || \
+             [ "${{ needs.validate-deps.result }}" != "success" ] || \
              [ "${{ needs.build.result }}" != "success" ] || \
              [ "${{ needs.test-pack.result }}" != "success" ]; then
             echo "One or more CI jobs failed"
