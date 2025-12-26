@@ -101,6 +101,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          # Full history needed for filtering in PRs
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -117,7 +120,17 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: pnpm build
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "🔍 PR detected - Building only changed packages..."
+            # Get the merge base with the target branch (main)
+            BASE=$(git merge-base HEAD origin/main)
+            echo "Comparing changes from $BASE to HEAD"
+            pnpm build --filter='[$BASE...HEAD]'
+          else
+            echo "📦 Push to main - Building all packages..."
+            pnpm build
+          fi
 
       - name: Validate package.json files
         run: |
@@ -198,10 +211,27 @@ jobs:
         run: |
           mkdir -p packed
           FAILED=0
+          PACKAGES_VALIDATED=0
 
           for pkg_dir in packages/*/; do
             pkg_name=$(jq -r '.name' "$pkg_dir/package.json")
+            
+            # Skip packages that weren't built (no dist folder)
+            # This happens in PRs when filtering is used
+            if [ ! -d "$pkg_dir/dist" ]; then
+              # If package has build script, it should have been built
+              if jq -e '.scripts.build' "$pkg_dir/package.json" > /dev/null 2>&1; then
+                echo "⚠️  Skipping $pkg_name - no dist folder (not built in this run)"
+                continue
+              else
+                # Package doesn't need building, skip it
+                echo "⏭️  Skipping $pkg_name - no build script"
+                continue
+              fi
+            fi
+
             echo "=== Packing $pkg_name ==="
+            PACKAGES_VALIDATED=$((PACKAGES_VALIDATED + 1))
 
             cd "$pkg_dir"
             pnpm pack --pack-destination "../../packed"
@@ -245,7 +275,7 @@ jobs:
             exit 1
           fi
 
-          echo "All packages validated successfully"
+          echo "✅ Validated $PACKAGES_VALIDATED package(s) successfully"
 
   status-check:
     name: CI Status Check
