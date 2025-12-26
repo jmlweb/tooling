@@ -17,55 +17,28 @@ export const COMMIT_TYPES = [
   'revert', // Reverting previous commits
 ] as const;
 
-/**
- * Allowed scopes matching @jmlweb package names
- * These are extracted from the package names without the @jmlweb/ prefix
- */
-export const COMMIT_SCOPES = [
-  // ESLint configs
-  'eslint-config-base',
-  'eslint-config-base-js',
-  'eslint-config-node',
-  'eslint-config-react',
-  // Prettier configs
-  'prettier-config-base',
-  'prettier-config-tailwind',
-  // TypeScript configs
-  'tsconfig-base',
-  'tsconfig-internal',
-  'tsconfig-nextjs',
-  'tsconfig-node',
-  'tsconfig-react',
-  // Build configs
-  'tsup-config-base',
-  'vite-config',
-  'postcss-config',
-  // Test configs
-  'vitest-config',
-  // Commitlint config
-  'commitlint-config',
-  // Common scopes
-  'deps', // Dependency updates
-  'release', // Release-related changes
-  'scripts', // Build/CI scripts
-  'workspace', // Workspace configuration
-] as const;
-
 export type CommitType = (typeof COMMIT_TYPES)[number];
-export type CommitScope = (typeof COMMIT_SCOPES)[number];
 
 /**
  * Options for creating a commitlint configuration
  */
 export interface CommitlintConfigOptions {
   /**
-   * Additional commit types to allow
+   * Additional commit types to allow (merged with defaults)
    * @default []
    */
   additionalTypes?: string[];
 
   /**
-   * Additional scopes to allow
+   * Scopes to allow. When provided, completely replaces any base scopes.
+   * Use this when you want full control over allowed scopes.
+   * @default undefined (no scope restrictions)
+   */
+  scopes?: string[];
+
+  /**
+   * Additional scopes to allow (merged with base scopes if any).
+   * Only used when `scopes` is not provided.
    * @default []
    */
   additionalScopes?: string[];
@@ -87,24 +60,31 @@ export interface CommitlintConfigOptions {
    * @default false
    */
   bodyRequired?: boolean;
+
+  /**
+   * Custom function to ignore certain commits (e.g., merge commits, dependabot)
+   * Return true to skip validation for a commit
+   */
+  ignores?: ((commit: string) => boolean)[];
 }
 
 /**
- * Creates a commitlint configuration with sensible defaults
+ * Creates a commitlint configuration with sensible defaults.
+ * By default, no scope restrictions are applied - any scope is allowed.
  *
  * @example
  * ```typescript
- * // Simple usage with defaults
+ * // Simple usage - any scope is allowed
  * import { createCommitlintConfig } from '@jmlweb/commitlint-config';
  * export default createCommitlintConfig();
  * ```
  *
  * @example
  * ```typescript
- * // With additional scopes for your project
+ * // Define allowed scopes for your project
  * import { createCommitlintConfig } from '@jmlweb/commitlint-config';
  * export default createCommitlintConfig({
- *   additionalScopes: ['api', 'ui', 'database'],
+ *   scopes: ['api', 'ui', 'database', 'auth'],
  * });
  * ```
  *
@@ -113,26 +93,52 @@ export interface CommitlintConfigOptions {
  * // Strict configuration with required scope
  * import { createCommitlintConfig } from '@jmlweb/commitlint-config';
  * export default createCommitlintConfig({
+ *   scopes: ['core', 'utils', 'deps'],
  *   scopeRequired: true,
  *   headerMaxLength: 72,
+ * });
+ * ```
+ *
+ * @example
+ * ```typescript
+ * // Ignore merge commits and dependabot
+ * import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+ * export default createCommitlintConfig({
+ *   ignores: [
+ *     (commit) => commit.startsWith('Merge'),
+ *     (commit) => /^chore\(deps\)/.test(commit),
+ *   ],
  * });
  * ```
  */
 export const createCommitlintConfig = (
   options: CommitlintConfigOptions = {},
+  baseScopes?: readonly string[],
 ): UserConfig => {
   const {
     additionalTypes = [],
+    scopes,
     additionalScopes = [],
     headerMaxLength = 100,
     scopeRequired = false,
     bodyRequired = false,
+    ignores,
   } = options;
 
   const allTypes = [...COMMIT_TYPES, ...additionalTypes];
-  const allScopes = [...COMMIT_SCOPES, ...additionalScopes];
 
-  return {
+  // Determine scopes:
+  // 1. If `scopes` is provided, use it (complete override)
+  // 2. Otherwise, merge baseScopes (if any) with additionalScopes
+  // 3. If no scopes defined at all, disable scope-enum check
+  let finalScopes: string[] | undefined;
+  if (scopes !== undefined) {
+    finalScopes = scopes;
+  } else if (baseScopes !== undefined || additionalScopes.length > 0) {
+    finalScopes = [...(baseScopes ?? []), ...additionalScopes];
+  }
+
+  const config: UserConfig = {
     extends: ['@commitlint/config-conventional'],
     rules: {
       // Type rules
@@ -140,8 +146,8 @@ export const createCommitlintConfig = (
       'type-case': [2, 'always', 'lower-case'],
       'type-empty': [2, 'never'],
 
-      // Scope rules
-      'scope-enum': [2, 'always', allScopes],
+      // Scope rules - only enforce enum if scopes are defined
+      'scope-enum': finalScopes ? [2, 'always', finalScopes] : [0],
       'scope-case': [2, 'always', 'kebab-case'],
       'scope-empty': scopeRequired ? [2, 'never'] : [0],
 
@@ -163,11 +169,18 @@ export const createCommitlintConfig = (
       'footer-max-line-length': [2, 'always', 100],
     },
   };
+
+  // Add custom ignores if provided
+  if (ignores && ignores.length > 0) {
+    config.ignores = ignores;
+  }
+
+  return config;
 };
 
 /**
  * Default commitlint configuration
- * Use this directly if you don't need customization
+ * Generic configuration with no scope restrictions - suitable for any project.
  *
  * @example
  * ```javascript

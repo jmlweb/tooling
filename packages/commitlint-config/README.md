@@ -5,16 +5,15 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
-> Shared commitlint configuration for enforcing Conventional Commits across projects. Includes predefined scopes for @jmlweb packages and configurable options.
+> Shared commitlint configuration for enforcing Conventional Commits across projects. Flexible design works out-of-the-box for any project, with optional scope restrictions.
 
 ## Features
 
 - Enforces [Conventional Commits](https://conventionalcommits.org) specification
-- Predefined commit types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`, `perf`, `style`, `build`, `revert`
-- Predefined scopes matching @jmlweb package names
-- Configurable options for custom scopes and stricter rules
+- **No scope restrictions by default** - works with any project structure
+- Configurable scopes when you need them
+- Custom ignore functions for merge commits, dependabot, etc.
 - TypeScript support with full type definitions
-- Easy integration with husky for Git hooks
 
 ## Installation
 
@@ -38,12 +37,61 @@ import commitlintConfig from '@jmlweb/commitlint-config';
 export default commitlintConfig;
 ```
 
-Or with CommonJS:
+That's it! Any commit type/scope following Conventional Commits is allowed.
+
+## Usage Examples
+
+### No Scope Restrictions (Default)
 
 ```javascript
-const commitlintConfig = require('@jmlweb/commitlint-config');
+// commitlint.config.js
+import commitlintConfig from '@jmlweb/commitlint-config';
 
-module.exports = commitlintConfig;
+export default commitlintConfig;
+```
+
+Valid commits:
+
+```text
+feat: add new feature
+fix(auth): resolve login issue
+chore(whatever-you-want): update deps
+```
+
+### Define Your Own Scopes
+
+```typescript
+// commitlint.config.ts
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['api', 'ui', 'database', 'auth', 'deps'],
+});
+```
+
+### Strict Configuration
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['core', 'utils', 'config'],
+  scopeRequired: true,
+  headerMaxLength: 72,
+});
+```
+
+### Ignore Specific Commits
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  ignores: [
+    (commit) => commit.startsWith('Merge'),
+    (commit) => /^\[dependabot\]/.test(commit),
+  ],
+});
 ```
 
 ## Commit Message Format
@@ -58,15 +106,15 @@ This configuration enforces the Conventional Commits format:
 [optional footer(s)]
 ```
 
-### Examples of Valid Commits
+### Example Commits
 
 ```text
-feat(eslint-config-base): add new rule for import sorting
-fix(prettier-config-tailwind): correct plugin order
-docs: update README with installation instructions
+feat(api): add user authentication endpoint
+fix: correct date parsing logic
+docs: update README with examples
 chore(deps): update dependencies
-refactor(tsconfig-base): simplify compiler options
-test(vitest-config): add unit tests for config factory
+refactor(ui): simplify form validation
+test: add unit tests for utils
 ci: add GitHub Actions workflow
 ```
 
@@ -86,73 +134,46 @@ ci: add GitHub Actions workflow
 | `build`    | Build system changes                  |
 | `revert`   | Reverting previous commits            |
 
-## Allowed Scopes
+## Configuration Options
 
-### Package Scopes
+| Option             | Type                              | Default     | Description                                    |
+| ------------------ | --------------------------------- | ----------- | ---------------------------------------------- |
+| `scopes`           | `string[]`                        | `undefined` | Define allowed scopes (enables scope checking) |
+| `additionalScopes` | `string[]`                        | `[]`        | Add scopes when extending base configs         |
+| `additionalTypes`  | `string[]`                        | `[]`        | Additional commit types to allow               |
+| `headerMaxLength`  | `number`                          | `100`       | Maximum length for the header line             |
+| `scopeRequired`    | `boolean`                         | `false`     | Whether to require a scope                     |
+| `bodyRequired`     | `boolean`                         | `false`     | Whether to require a commit body               |
+| `ignores`          | `((commit: string) => boolean)[]` | `undefined` | Functions to ignore certain commits            |
 
-- `eslint-config-base`, `eslint-config-base-js`, `eslint-config-node`, `eslint-config-react`
-- `prettier-config-base`, `prettier-config-tailwind`
-- `tsconfig-base`, `tsconfig-internal`, `tsconfig-nextjs`, `tsconfig-node`, `tsconfig-react`
-- `tsup-config-base`, `vite-config`, `postcss-config`
-- `vitest-config`
-- `commitlint-config`
-
-### Common Scopes
-
-- `deps` - Dependency updates
-- `release` - Release-related changes
-- `scripts` - Build/CI scripts
-- `workspace` - Workspace configuration
-
-## Customization
-
-### Adding Custom Scopes
+## Exports
 
 ```typescript
+// Default config - no scope restrictions
+import config from '@jmlweb/commitlint-config';
+
+// Factory function for custom configs
 import { createCommitlintConfig } from '@jmlweb/commitlint-config';
 
-export default createCommitlintConfig({
-  additionalScopes: ['api', 'ui', 'database', 'auth'],
-});
-```
-
-### Stricter Configuration
-
-```typescript
-import { createCommitlintConfig } from '@jmlweb/commitlint-config';
-
-export default createCommitlintConfig({
-  scopeRequired: true,
-  headerMaxLength: 72,
-  bodyRequired: true,
-});
-```
-
-### Adding Custom Types
-
-```typescript
-import { createCommitlintConfig } from '@jmlweb/commitlint-config';
-
-export default createCommitlintConfig({
-  additionalTypes: ['wip', 'merge'],
-});
+// Commit types constant
+import { COMMIT_TYPES } from '@jmlweb/commitlint-config';
 ```
 
 ## Integration with Husky
 
-### Step 1: Install husky
+### Step 1 - Install husky
 
 ```bash
 pnpm add -D husky
 ```
 
-### Step 2: Initialize husky
+### Step 2 - Initialize husky
 
 ```bash
 pnpm exec husky init
 ```
 
-### Step 3: Add commit-msg hook
+### Step 3 - Add commit-msg hook
 
 Create or edit `.husky/commit-msg`:
 
@@ -160,7 +181,7 @@ Create or edit `.husky/commit-msg`:
 pnpm exec commitlint --edit $1
 ```
 
-### Step 4: Test your setup
+### Step 4 - Test your setup
 
 ```bash
 # This should fail
@@ -168,37 +189,6 @@ git commit -m "bad commit message"
 
 # This should pass
 git commit -m "feat: add new feature"
-```
-
-## Configuration Options
-
-| Option             | Type       | Default | Description                        |
-| ------------------ | ---------- | ------- | ---------------------------------- |
-| `additionalTypes`  | `string[]` | `[]`    | Additional commit types to allow   |
-| `additionalScopes` | `string[]` | `[]`    | Additional scopes to allow         |
-| `headerMaxLength`  | `number`   | `100`   | Maximum length for the header line |
-| `scopeRequired`    | `boolean`  | `false` | Whether to require a scope         |
-| `bodyRequired`     | `boolean`  | `false` | Whether to require a commit body   |
-
-## Exports
-
-### Default Export
-
-The default export is a ready-to-use commitlint configuration:
-
-```javascript
-import config from '@jmlweb/commitlint-config';
-export default config;
-```
-
-### Named Exports
-
-```typescript
-import {
-  createCommitlintConfig, // Factory function for custom configs
-  COMMIT_TYPES, // Array of allowed commit types
-  COMMIT_SCOPES, // Array of allowed scopes
-} from '@jmlweb/commitlint-config';
 ```
 
 ## Requirements
