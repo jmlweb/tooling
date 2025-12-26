@@ -491,8 +491,8 @@ importers:
   packages/tsconfig-nextjs:
     dependencies:
       '@jmlweb/tsconfig-react':
-        specifier: ^1.0.0
-        version: 1.0.0(@jmlweb/tsconfig-base@1.0.0)
+        specifier: ^1.0.1
+        version: 1.0.1(@jmlweb/tsconfig-base@1.0.1)
       next:
         specifier: '>=13.0.0'
         version: 16.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -503,8 +503,8 @@ importers:
   packages/tsconfig-node:
     dependencies:
       '@jmlweb/tsconfig-base':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.1
+        version: 1.0.1
       typescript:
         specifier: '>=5.0.0'
         version: 5.9.3
@@ -512,8 +512,8 @@ importers:
   packages/tsconfig-react:
     dependencies:
       '@jmlweb/tsconfig-base':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.1
+        version: 1.0.1
 
   packages/tsup-config-base:
     devDependencies:
@@ -1448,15 +1448,15 @@ packages:
     resolution: {integrity: sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==}
     engines: {node: '>=8'}
 
-  '@jmlweb/tsconfig-base@1.0.0':
-    resolution: {integrity: sha512-2LRBNInkCfh4b3rpV5SryqeZ5ayDbj6wfYqBgKf9vAbkl06T8JpV2l4x0LrEfQTUeNLk/lMouCFr0jbqvxs3dg==}
+  '@jmlweb/tsconfig-base@1.0.1':
+    resolution: {integrity: sha512-hKsDsaW85aUnla+KV2BEA53ehUD5PrMGjg3EBYEsgkq9QlQcbEBQ1zGhkLslO6qDAIDeahahBT5O4LzlEhisbg==}
     engines: {node: '>=18.0.0'}
 
-  '@jmlweb/tsconfig-react@1.0.0':
-    resolution: {integrity: sha512-+pLUTxOE0snpT8KvTAoCCJhvnOzxX4jJ0G/PPaB/N0DpqzTGiYWr4kpUXeOXI51E521fERo9fNLETKPoDzQuug==}
+  '@jmlweb/tsconfig-react@1.0.1':
+    resolution: {integrity: sha512-fkIa//1c07/zAZCc4yR08GFHstlRDrP7aS9lI1kePBE6TEYtGTrKcbSBZx+wxJ1PedfhEPgSiLyruspLJzgqFQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@jmlweb/tsconfig-base': ^1.0.0
+      '@jmlweb/tsconfig-base': ^1.0.1
 
   '@jridgewell/gen-mapping@0.3.13':
     resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
@@ -5181,11 +5181,11 @@ snapshots:
 
   '@istanbuljs/schema@0.1.3': {}
 
-  '@jmlweb/tsconfig-base@1.0.0': {}
+  '@jmlweb/tsconfig-base@1.0.1': {}
 
-  '@jmlweb/tsconfig-react@1.0.0(@jmlweb/tsconfig-base@1.0.0)':
+  '@jmlweb/tsconfig-react@1.0.1(@jmlweb/tsconfig-base@1.0.1)':
     dependencies:
-      '@jmlweb/tsconfig-base': 1.0.0
+      '@jmlweb/tsconfig-base': 1.0.1
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
