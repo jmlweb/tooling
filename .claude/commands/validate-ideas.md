@@ -60,7 +60,87 @@ For each confirmed decision, execute the same logic as `/validate-idea`:
 - Add validation comment
 - Close rejected issues
 
-### Step 6 - Show Summary
+### Step 6 - Offer Task Creation
+
+If there are accepted ideas, ask:
+
+```text
+Create tasks for accepted ideas now? [Yes/No]
+```
+
+**If Yes**: For each accepted idea, apply `/feed-backlog` logic:
+
+1. Map effort/impact to priority:
+
+   | Effort | Impact | Priority |
+   | ------ | ------ | -------- |
+   | Low    | High   | critical |
+   | Low    | Medium | high     |
+   | Medium | High   | high     |
+   | Medium | Medium | medium   |
+   | High   | High   | high     |
+   | \*     | Low    | low      |
+
+2. Create task issue:
+
+   ```bash
+   gh issue create \
+     --repo jmlweb/tooling \
+     --title "Task title derived from idea" \
+     --body "$(cat <<'EOF'
+   ## Description
+
+   [Description from idea]
+
+   ## Acceptance Criteria
+
+   - [ ] Criteria from idea
+
+   ## Source
+
+   Derived from idea #N: [Idea title]
+
+   ---
+   *Created via /validate-ideas*
+   EOF
+   )" \
+     --label "type:feature,priority:high"
+   ```
+
+3. Close the idea with a comment referencing the created task(s):
+
+   ```bash
+   gh issue close N --repo jmlweb/tooling --comment "$(cat <<'EOF'
+   ## Converted to Backlog
+
+   This idea has been converted to actionable task(s) and is now closed:
+
+   - #X: Task title
+
+   The idea is considered "resolved" as it has been broken down into work items. Track progress through the individual task(s) above.
+
+   ---
+   *Closed automatically via /validate-ideas*
+   EOF
+   )"
+   ```
+
+**If No**: Skip task creation, ideas remain as `idea:accepted` for later `/feed-backlog`.
+
+### Step 7 - Show Summary
+
+```text
+Validation complete:
+
+Accepted: #12, #15, #20
+Rejected: #18
+
+Tasks created: #25, #26, #27
+3 ideas converted to tasks and closed
+1 idea rejected and closed
+```
+
+Or if user skipped task creation:
 
 ```text
 Validation complete:
@@ -96,5 +176,9 @@ Found 4 pending ideas. Analyzing...
 Apply all recommendations? [Yes/Select/Cancel]
 > Yes
 
+Create tasks for accepted ideas now? [Yes/No]
+> Yes
+
 Done! 3 accepted, 1 rejected.
+Tasks created: #25 (from #12), #26 (from #15), #27 (from #20)
 ```

@@ -89,23 +89,33 @@ EOF
   --label "type:feature,priority:high"
 ```
 
-### Step 5 - Update Idea Issues
+### Step 5 - Close Idea Issues
 
-After creating tasks, update the original idea:
+After creating tasks, close the original idea with a comment referencing the created tasks:
 
 ```bash
-gh issue comment N --repo jmlweb/tooling --body "$(cat <<'EOF'
+gh issue close N --repo jmlweb/tooling --comment "$(cat <<'EOF'
 ## Converted to Backlog
 
-This idea has been converted to the following task(s):
+This idea has been converted to actionable task(s) and is now closed:
+
 - #X: Task title 1
 - #Y: Task title 2
 
-The idea will remain open until all tasks are completed.
-Use `/complete-idea #N` when done.
+The idea is considered "resolved" as it has been broken down into work items. Track progress through the individual tasks above.
+
+---
+*Closed automatically via /feed-backlog*
 EOF
 )"
 ```
+
+**Rationale**: Ideas are closed immediately upon conversion to tasks because:
+
+- The idea is conceptually "resolved" (it's been converted to actionable work)
+- Tasks are what will actually be worked on
+- Prevents duplication and confusion in the backlog
+- Simplifies workflow (no need for separate `/complete-idea` step)
 
 ### Step 6 - Show Summary
 
@@ -118,7 +128,7 @@ Created tasks:
 - #27: Add tests for generator (from #15)
 - #28: Add logging utility package (from #20)
 
-Ideas updated with task references.
+Ideas closed (converted to tasks above).
 Use /next-task to start working!
 ```
 
@@ -162,5 +172,5 @@ Created:
 - #26: Create type generator CLI
 - #27: Add generator tests
 
-Ideas #12 and #15 updated with task references.
+Ideas #12 and #15 closed (converted to tasks above).
 ```

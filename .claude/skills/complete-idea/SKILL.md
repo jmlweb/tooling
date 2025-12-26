@@ -1,11 +1,17 @@
 ---
 name: complete-idea
-description: Mark an idea as completed when all its derived tasks are done. Use automatically when detecting all tasks from an idea are closed.
+description: Mark an idea as completed when all its derived tasks are done. Note: Ideas are automatically closed when converted to tasks via /feed-backlog. Use this skill only for edge cases (manually created tasks, legacy ideas, etc.).
 ---
 
 # Complete Idea
 
-Mark an accepted idea as completed after all its tasks are done.
+Mark an accepted idea as completed after all its derived tasks are done.
+
+**Note**: Since `/feed-backlog` automatically closes ideas when converting them to tasks, this skill is primarily for edge cases:
+
+- Ideas that were manually converted to tasks (not via `/feed-backlog`)
+- Legacy ideas that predate the auto-close feature
+- Cases where an idea needs to be closed but wasn't automatically closed
 
 ## Instructions
 
@@ -55,7 +61,9 @@ gh issue close N --repo jmlweb/tooling
 ```text
 /add-idea       -> Creates idea (idea:pending)
 /validate-ideas -> Accepts or rejects (idea:accepted | idea:rejected)
-/feed-backlog   -> Creates tasks from accepted ideas
+/feed-backlog   -> Creates tasks from accepted ideas AND closes the idea automatically
 /next-task      -> Implements tasks
-complete-idea   -> Closes the cycle (idea:completed)
+complete-idea   -> Manual closure for edge cases (normally not needed)
 ```
+
+**Normal Flow**: Ideas are automatically closed when converted to tasks via `/feed-backlog`. This skill is only needed for edge cases.
