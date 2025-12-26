@@ -14,8 +14,34 @@ permissions:
   contents: read
 
 jobs:
-  validate:
-    name: Validate Code Quality
+  # Parallel validation checks that don't require builds
+  validate-format:
+    name: Check Formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format --check
+
+  validate-lint:
+    name: Lint Code
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -36,21 +62,38 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm build
-
-      - name: Check formatting
-        run: pnpm format --check
-
       - name: Lint root
         run: pnpm lint:root
 
       - name: Lint packages
         run: pnpm lint
 
+  validate-deps:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Check dependency versions
         run: pnpm syncpack:check
 
+  # Single build job with Turborepo remote cache
   build:
     name: Build Packages
     runs-on: ubuntu-latest
@@ -73,8 +116,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Setup Turborepo Remote Cache
+        uses: turborepo/cache-action@v2
+        with:
+          token: ${{ secrets.TURBO_TOKEN }}
+
       - name: Build packages
         run: pnpm build
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+          TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
 
       - name: Validate package.json files
         run: |
@@ -121,6 +173,7 @@ jobs:
           path: packages/*/dist
           retention-days: 7
 
+  # Test pack using artifacts instead of rebuilding
   test-pack:
     name: Test Package Publishing
     runs-on: ubuntu-latest
@@ -144,8 +197,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm build
+      - name: Download build artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: build-artifacts
+          path: packages
 
       - name: Pack and validate packages
         run: |
@@ -204,12 +260,14 @@ jobs:
     name: CI Status Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [validate, build, test-pack]
+    needs: [validate-format, validate-lint, validate-deps, build, test-pack]
     if: always()
     steps:
       - name: Check job results
         run: |
-          if [ "${{ needs.validate.result }}" != "success" ] || \
+          if [ "${{ needs.validate-format.result }}" != "success" ] || \
+             [ "${{ needs.validate-lint.result }}" != "success" ] || \
+             [ "${{ needs.validate-deps.result }}" != "success" ] || \
              [ "${{ needs.build.result }}" != "success" ] || \
              [ "${{ needs.test-pack.result }}" != "success" ]; then
             echo "One or more CI jobs failed"
