@@ -27,13 +27,25 @@ const REQUIRED_FIELDS = [
   'version',
   'description',
   'main',
-  'types',
   'exports',
   'files',
   'author',
   'license',
   'repository',
 ];
+
+/**
+ * Checks if this is a config-only package (exports JSON, not JS/TS)
+ * @param {object} packageJson
+ * @returns {boolean}
+ */
+function isConfigOnlyPackage(packageJson) {
+  // If main points to a JSON file, it's a config package
+  if (packageJson.main && packageJson.main.endsWith('.json')) {
+    return true;
+  }
+  return false;
+}
 
 const SEMVER_REGEX =
   /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
@@ -62,11 +74,18 @@ function validatePackage(packageDir) {
 
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
 
+  const isConfigPkg = isConfigOnlyPackage(packageJson);
+
   // Check required fields
   for (const field of REQUIRED_FIELDS) {
     if (!packageJson[field]) {
       errors.push(`Missing required field: ${field}`);
     }
+  }
+
+  // types is only required for non-config packages
+  if (!isConfigPkg && !packageJson.types) {
+    errors.push('Missing required field: types');
   }
 
   // Validate name format
@@ -92,14 +111,22 @@ function validatePackage(packageDir) {
     const mainExport = packageJson.exports['.'];
     if (!mainExport) {
       errors.push('exports["."] is required');
-    } else {
-      if (!mainExport.import) {
-        errors.push('exports["."].import is required');
-      }
-      if (!mainExport.require) {
-        errors.push('exports["."].require is required');
+    } else if (!isConfigPkg) {
+      // Only require import/require for non-config packages
+      if (typeof mainExport === 'string') {
+        errors.push(
+          'exports["."] should be an object with import/require fields',
+        );
+      } else {
+        if (!mainExport.import) {
+          errors.push('exports["."].import is required');
+        }
+        if (!mainExport.require) {
+          errors.push('exports["."].require is required');
+        }
       }
     }
+    // Config packages can use simple string exports like "./tsconfig.json"
   }
 
   // Validate repository structure
