@@ -129,13 +129,32 @@ function validatePackage(packageDir) {
     // Config packages can use simple string exports like "./tsconfig.json"
   }
 
-  // Validate repository structure
+  // Validate repository structure - must be object with type and full URL
   if (packageJson.repository) {
     if (typeof packageJson.repository === 'string') {
-      // Simple format is okay
+      errors.push(
+        'repository must be an object with "type" and "url" fields, not a string. ' +
+          `Got: "${packageJson.repository}". ` +
+          'Use format: { "type": "git", "url": "https://github.com/jmlweb/tooling.git" }',
+      );
     } else if (typeof packageJson.repository === 'object') {
-      if (!packageJson.repository.type || !packageJson.repository.url) {
-        warnings.push('repository should have type and url fields');
+      if (!packageJson.repository.type) {
+        errors.push('repository.type is required (e.g., "git")');
+      }
+      if (!packageJson.repository.url) {
+        errors.push(
+          'repository.url is required (e.g., "https://github.com/jmlweb/tooling.git")',
+        );
+      } else {
+        // Validate URL format - should be a full URL, not shorthand
+        const url = packageJson.repository.url;
+        if (!url.startsWith('https://') && !url.startsWith('git://')) {
+          errors.push(
+            `repository.url must be a full URL starting with https:// or git://. ` +
+              `Got: "${url}". ` +
+              'Use format: "https://github.com/jmlweb/tooling.git"',
+          );
+        }
       }
     }
   }
