@@ -15,6 +15,7 @@
     "syncpack:fix": "syncpack fix-mismatches && syncpack format",
     "test": "turbo run test",
     "validate": "pnpm format --check && pnpm lint:root && pnpm lint && pnpm syncpack:check",
+    "validate:docs": "node scripts/validate-docs.mjs",
     "validate:packages": "node scripts/validate-all-packages.mjs",
     "version": "changeset version",
     "version:prerelease": "changeset version --snapshot prerelease",

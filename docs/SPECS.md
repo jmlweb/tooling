@@ -95,6 +95,15 @@ Internal TypeScript configuration for building packages within the monorepo. Thi
 
 **Note**: This package is for internal monorepo use only. For consuming projects, use `@jmlweb/tsconfig-base` instead.
 
+### `@jmlweb/tsconfig-node`
+
+TypeScript configuration for Node.js and CLI projects:
+
+- Extends `@jmlweb/tsconfig-base`
+- Excludes DOM types (`lib: ["ES2022"]`)
+- Optimized for Node.js APIs and environments
+- Suitable for backend services, CLI tools, and Node.js libraries
+
 ### `@jmlweb/tsconfig-react`
 
 TypeScript configuration for React libraries with JSX support:
@@ -177,6 +186,7 @@ jmlweb-tooling/
 │   ├── eslint-config-base/
 │   ├── eslint-config-react/
 │   ├── tsconfig-base/
+│   ├── tsconfig-node/
 │   ├── tsconfig-react/
 │   ├── tsconfig-nextjs/
 │   ├── tsconfig-internal/ (private, internal use only)
@@ -245,9 +255,9 @@ This monorepo is designed to grow over time. Current progress and future package
 ### TypeScript Configuration
 
 - ~~`@jmlweb/tsconfig-base`: Base TypeScript configuration~~ ✅
+- ~~`@jmlweb/tsconfig-node`: TypeScript config for Node.js-specific projects~~ ✅
 - ~~`@jmlweb/tsconfig-react`: TypeScript config for React projects~~ ✅
 - ~~`@jmlweb/tsconfig-nextjs`: TypeScript config for Next.js applications~~ ✅
-- `@jmlweb/tsconfig-node`: TypeScript config for Node.js-specific projects
 
 ### ESLint Configuration
 

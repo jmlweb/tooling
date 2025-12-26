@@ -90,9 +90,9 @@ ci: add GitHub Actions workflow
 
 ### Package Scopes
 
-- `eslint-config-base`, `eslint-config-base-js`, `eslint-config-react`
+- `eslint-config-base`, `eslint-config-base-js`, `eslint-config-node`, `eslint-config-react`
 - `prettier-config-base`, `prettier-config-tailwind`
-- `tsconfig-base`, `tsconfig-internal`, `tsconfig-nextjs`, `tsconfig-react`
+- `tsconfig-base`, `tsconfig-internal`, `tsconfig-nextjs`, `tsconfig-node`, `tsconfig-react`
 - `tsup-config-base`, `vite-config`, `postcss-config`
 - `vitest-config`
 - `commitlint-config`

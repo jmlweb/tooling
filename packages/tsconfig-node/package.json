@@ -1,0 +1,42 @@
+{
+  "name": "@jmlweb/tsconfig-node",
+  "version": "1.0.0",
+  "description": "TypeScript configuration for Node.js and CLI projects. Extends @jmlweb/tsconfig-base with Node.js-specific settings excluding DOM types.",
+  "main": "tsconfig.json",
+  "exports": {
+    ".": "./tsconfig.json"
+  },
+  "files": [
+    "tsconfig.json",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/validate-package.mjs"
+  },
+  "keywords": [
+    "config",
+    "node",
+    "nodejs",
+    "cli",
+    "strict",
+    "tsconfig",
+    "type-checking",
+    "typescript"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": "jmlweb/tooling.git",
+  "bugs": "https://github.com/jmlweb/tooling/issues",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsconfig-node#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@jmlweb/tsconfig-base": "^1.0.0",
+    "typescript": ">=5.0.0"
+  }
+}
