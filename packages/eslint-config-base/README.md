@@ -14,6 +14,7 @@
 - 🛡️ **Type Safety**: Enforces explicit return types and prevents `any` usage
 - 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
 - 🎯 **Best Practices**: Prevents enum usage, encourages immutability, enforces naming conventions
+- 🚫 **No Default Exports**: Enforces named exports for better tree-shaking and clearer imports
 - 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
 - 🚀 **Flat Config**: Uses ESLint 9+ flat config format (latest stable)
 - 🔧 **Extensible**: Built on `@jmlweb/eslint-config-base-js` foundation
@@ -88,6 +89,25 @@ export default [
 ];
 ```
 
+### Allowing Default Exports
+
+This config forbids default exports by default for better tree-shaking and clearer imports. If you need default exports (e.g., for config files or specific libraries):
+
+```javascript
+// eslint.config.js
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    files: ['*.config.ts', '*.config.js'],
+    rules: {
+      'no-restricted-exports': 'off',
+    },
+  },
+];
+```
+
 ### Less Strict Configuration
 
 This config uses strict type checking by default. If you need non-strict rules, you have two options:
@@ -150,15 +170,15 @@ This configuration applies strict TypeScript rules to:
 
 ### Key Rules Enforced
 
-| Rule                                               | Level   | Description                                  |
-| -------------------------------------------------- | ------- | -------------------------------------------- |
-| `@typescript-eslint/no-explicit-any`               | `error` | Prevents `any` type usage                    |
-| `@typescript-eslint/explicit-function-return-type` | `error` | Requires explicit return types               |
-| `@typescript-eslint/consistent-type-imports`       | `error` | Enforces `import type` for type-only imports |
-| `@typescript-eslint/consistent-type-definitions`   | `error` | Prefers `type` over `interface`              |
-| `@typescript-eslint/no-enum`                       | `error` | Prevents enum usage (prefer const maps)      |
-| `@typescript-eslint/no-parameter-properties`       | `error` | Prevents parameter properties                |
-| `@typescript-eslint/naming-convention`             | `error` | Enforces naming conventions                  |
+| Rule                                               | Level   | Description                                   |
+| -------------------------------------------------- | ------- | --------------------------------------------- |
+| `@typescript-eslint/no-explicit-any`               | `error` | Prevents `any` type usage                     |
+| `@typescript-eslint/explicit-function-return-type` | `error` | Requires explicit return types                |
+| `@typescript-eslint/consistent-type-imports`       | `error` | Enforces `import type` for type-only imports  |
+| `@typescript-eslint/consistent-type-definitions`   | `error` | Prefers `type` over `interface`               |
+| `no-restricted-syntax` (TSEnumDeclaration)         | `error` | Prevents enum usage (prefer const maps)       |
+| `no-restricted-exports`                            | `error` | Prevents default exports (named exports only) |
+| `@typescript-eslint/naming-convention`             | `error` | Enforces naming conventions                   |
 
 ### What's Included
 

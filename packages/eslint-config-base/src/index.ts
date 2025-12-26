@@ -69,6 +69,20 @@ const config = tseslint.config(
 
       // Encourage immutability (functional programming)
       'no-param-reassign': ['error', { props: true }],
+
+      // Enforce named exports only (no default exports)
+      'no-restricted-exports': [
+        'error',
+        {
+          restrictDefaultExports: {
+            direct: true,
+            named: true,
+            defaultFrom: true,
+            namedFrom: true,
+            namespaceFrom: true,
+          },
+        },
+      ],
     },
   },
 ) as Linter.Config[];
