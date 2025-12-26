@@ -130,7 +130,15 @@ jobs:
             echo "Comparing changes from $BASE to HEAD"
             echo "Base branch: ${{ github.base_ref }}"
             echo "Merge base commit: $BASE"
-            pnpm build --filter='[$BASE...HEAD]'
+            # Use filter to build only changed packages
+            # Turborepo filter syntax: [<base>...HEAD] compares changes from base to HEAD
+            FILTER="[$BASE...HEAD]"
+            echo "Using filter: $FILTER"
+            # If filter fails, fallback to building all packages
+            if ! pnpm build --filter="$FILTER"; then
+              echo "⚠️  Filter build failed, falling back to building all packages..."
+              pnpm build
+            fi
           else
             echo "📦 Push to main - Building all packages..."
             pnpm build
