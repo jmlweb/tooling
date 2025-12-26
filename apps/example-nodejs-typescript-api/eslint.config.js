@@ -1,8 +1,14 @@
 import baseConfig from '@jmlweb/eslint-config-base';
 
 export default [
-  ...baseConfig,
   {
-    ignores: ['dist/', 'node_modules/', 'coverage/'],
+    ignores: [
+      'dist/',
+      'node_modules/',
+      'coverage/',
+      'eslint.config.js',
+      'vitest.config.ts',
+    ],
   },
+  ...baseConfig,
 ];

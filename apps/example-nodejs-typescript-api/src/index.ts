@@ -51,6 +51,6 @@ app.post('/api/users', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${String(PORT)}`);
 });
 

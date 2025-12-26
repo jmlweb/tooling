@@ -17,8 +17,8 @@ const config = [
   react.configs.flat.recommended,
   // React JSX runtime config (for React 17+)
   react.configs.flat['jsx-runtime'],
-  // React Hooks recommended config
-  reactHooks.configs.recommended,
+  // Note: We don't spread reactHooks.configs.recommended directly as it uses
+  // legacy plugin format (array). Instead, we configure the plugin manually below.
   {
     files: ['**/*.tsx', '**/*.jsx'],
     plugins: {
@@ -45,6 +45,20 @@ const config = [
       ...prettierConfig.rules,
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+
+      // Override naming convention to allow PascalCase for React components
+      '@typescript-eslint/naming-convention': [
+        'error',
+        { selector: 'typeLike', format: ['PascalCase'] },
+        { selector: 'variable', format: ['camelCase', 'UPPER_CASE'] },
+        {
+          selector: 'variable',
+          modifiers: ['const', 'exported'],
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+        },
+        // Allow PascalCase for functions (React components)
+        { selector: 'function', format: ['camelCase', 'PascalCase'] },
+      ],
 
       // React plugin overrides
       'react/react-in-jsx-scope': 'off', // Not needed with new JSX transform

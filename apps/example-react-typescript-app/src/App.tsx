@@ -11,7 +11,7 @@ const initialUsers: User[] = [
   { id: 2, name: 'Bob', email: 'bob@example.com' },
 ];
 
-function App() {
+function App(): React.JSX.Element {
   const [users] = useState<User[]>(initialUsers);
 
   return (
