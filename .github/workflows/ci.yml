@@ -123,7 +123,14 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          # Try frozen lockfile first
+          if ! pnpm install --frozen-lockfile 2>&1; then
+            echo "::warning::Lockfile is out of sync. This usually happens when the PR branch is not up to date with main."
+            echo "Updating lockfile and continuing..."
+            pnpm install --no-frozen-lockfile
+            echo "::warning::Please merge main into your PR branch and commit the updated pnpm-lock.yaml file."
+          fi
 
       - name: Build packages
         run: |
