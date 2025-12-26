@@ -1,0 +1,58 @@
+{
+  "name": "@jmlweb/tsup-config-base",
+  "version": "1.0.0",
+  "description": "Base tsup configuration for jmlweb projects with sensible defaults",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+  },
+  "keywords": [
+    "build",
+    "bundler",
+    "config",
+    "tsup",
+    "tsup-config",
+    "typescript"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": "jmlweb/tooling.git",
+  "bugs": "https://github.com/jmlweb/tooling/issues",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsup-config-base#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "tsup": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@jmlweb/tsconfig-internal": "workspace:*",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
