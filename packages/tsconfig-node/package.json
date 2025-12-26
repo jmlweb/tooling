@@ -15,10 +15,10 @@
     "prepublishOnly": "node ../../scripts/validate-package.mjs"
   },
   "keywords": [
+    "cli",
     "config",
     "node",
     "nodejs",
-    "cli",
     "strict",
     "tsconfig",
     "type-checking",
