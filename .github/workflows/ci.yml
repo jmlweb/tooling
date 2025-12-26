@@ -48,6 +48,9 @@ jobs:
       - name: Lint packages
         run: pnpm lint
 
+      - name: Check dependency versions
+        run: pnpm syncpack:check
+
   build:
     name: Build Packages
     runs-on: ubuntu-latest

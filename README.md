@@ -77,8 +77,14 @@ npm run lint
 # Run tests (validates all packages)
 npm run test
 
-# Validate everything (format check + lint)
+# Validate everything (format + lint + syncpack)
 npm run validate
+
+# Check dependency version consistency
+pnpm syncpack:check
+
+# Fix dependency version mismatches
+pnpm syncpack:fix
 ```
 
 ## Examples
@@ -145,6 +151,34 @@ To install or update Node.js, visit [nodejs.org](https://nodejs.org/) or use a v
 - **Node.js** >= 18.0.0 (see [Node.js Compatibility](#nodejs-compatibility) for package-specific requirements)
 - **ESLint** >= 9.0.0 (flat config format, required for ESLint config packages)
 - **Prettier** >= 3.0.0 (required for Prettier config packages)
+
+## Dependency Version Consistency
+
+This project uses [syncpack](https://jamiemason.github.io/syncpack/) to ensure consistent dependency versions across all packages in the monorepo.
+
+### Available Commands
+
+```bash
+# Check for version mismatches (included in `validate`)
+pnpm syncpack:check
+
+# Fix version mismatches automatically
+pnpm syncpack:fix
+```
+
+### Configuration
+
+The syncpack configuration (`.syncpackrc.json`) enforces:
+
+- **Version consistency**: All dev and prod dependencies use the same version across packages
+- **Semver ranges**: All dependencies use caret (`^`) ranges for flexibility
+- **Formatting**: Package.json files are sorted consistently
+
+Peer dependencies are intentionally excluded from version matching since they specify broader compatibility ranges.
+
+### CI Integration
+
+Syncpack checks run automatically in the CI pipeline. PRs with version mismatches will fail the `validate` job.
 
 ## Dependency Updates
 

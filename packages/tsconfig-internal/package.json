@@ -1,7 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-internal",
   "version": "0.0.1",
-  "private": true,
   "description": "Internal TypeScript configuration for building monorepo packages",
   "main": "tsconfig.json",
   "exports": {
@@ -11,5 +10,6 @@
     "tsconfig.json"
   ],
   "author": "jmlweb",
-  "license": "MIT"
+  "license": "MIT",
+  "private": true
 }

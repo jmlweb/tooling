@@ -8,13 +8,13 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      },
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
@@ -29,22 +29,17 @@
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
   "keywords": [
+    "code-quality",
     "eslint",
     "eslint-config",
-    "typescript",
     "javascript",
     "linting",
-    "code-quality"
+    "typescript"
   ],
   "author": "jmlweb",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jmlweb/tooling.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jmlweb/tooling/issues"
-  },
+  "repository": "jmlweb/tooling.git",
+  "bugs": "https://github.com/jmlweb/tooling/issues",
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/eslint-config-base#readme",
   "engines": {
     "node": ">=20.11.0"

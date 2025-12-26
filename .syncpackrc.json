@@ -1,0 +1,52 @@
+{
+  "$schema": "https://unpkg.com/syncpack/dist/schema.json",
+  "sortFirst": [
+    "name",
+    "version",
+    "description",
+    "type",
+    "main",
+    "module",
+    "types",
+    "exports",
+    "files",
+    "scripts",
+    "keywords",
+    "author",
+    "license",
+    "repository",
+    "bugs",
+    "homepage",
+    "engines",
+    "publishConfig",
+    "peerDependencies",
+    "peerDependenciesMeta",
+    "dependencies",
+    "devDependencies"
+  ],
+  "versionGroups": [
+    {
+      "label": "Ignore workspace protocol references",
+      "dependencies": ["@jmlweb/**"],
+      "specifierTypes": ["workspace"],
+      "isIgnored": true
+    },
+    {
+      "label": "Ignore peer dependency ranges (intentionally broader for compatibility)",
+      "dependencyTypes": ["peer"],
+      "isIgnored": true
+    },
+    {
+      "label": "Ensure consistent versions for all other dependencies",
+      "dependencies": ["**"],
+      "dependencyTypes": ["dev", "prod"]
+    }
+  ],
+  "semverGroups": [
+    {
+      "label": "Use caret ranges for dev and prod dependencies",
+      "range": "^",
+      "dependencyTypes": ["dev", "prod"]
+    }
+  ]
+}
