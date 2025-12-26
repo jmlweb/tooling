@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/syncpack/dist/schema.json",
+  "formatRepository": false,
   "sortFirst": [
     "name",
     "version",

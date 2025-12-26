@@ -35,7 +35,10 @@
   ],
   "author": "jmlweb",
   "license": "MIT",
-  "repository": "jmlweb/tooling.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
   "bugs": "https://github.com/jmlweb/tooling/issues",
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/prettier-config-base#readme",
   "engines": {
