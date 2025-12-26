@@ -47,7 +47,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "vitest": "^1.0.0"
+    "vitest": ">=1.0.0"
   },
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
