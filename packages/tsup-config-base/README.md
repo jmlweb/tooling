@@ -15,6 +15,7 @@
 - **Clean API**: Simple function to create configurations with external dependencies
 - **Zero Config**: Works out of the box with minimal setup
 - **Fully Typed**: Complete TypeScript support with exported types
+- **CLI Preset**: Specialized configuration for CLI packages with shebang support
 
 ## Installation
 
@@ -113,6 +114,90 @@ export default createTsupConfig({
 });
 ```
 
+### Object-Style Entry Points
+
+```typescript
+// tsup.config.ts
+import { createTsupConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupConfig({
+  entry: {
+    index: 'src/index.ts',
+    utils: 'src/utils/index.ts',
+  },
+});
+```
+
+## CLI Package Configuration
+
+For CLI packages that need shebang injection, use `createTsupCliConfig`:
+
+### Simple CLI
+
+```typescript
+// tsup.config.ts
+import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupCliConfig();
+// Output: dist/cli.js with #!/usr/bin/env node shebang
+```
+
+### CLI with Custom Entry
+
+```typescript
+// tsup.config.ts
+import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupCliConfig({
+  entry: { bin: 'src/bin.ts' },
+  external: ['commander'],
+});
+```
+
+### CLI with Library API
+
+```typescript
+// tsup.config.ts
+import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupCliConfig({
+  entry: {
+    cli: 'src/cli.ts',
+    index: 'src/index.ts',
+  },
+  shebang: 'cli', // Only add shebang to cli entry
+  external: ['commander'],
+});
+```
+
+### CLI Targeting Specific Node.js Version
+
+```typescript
+// tsup.config.ts
+import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupCliConfig({
+  target: 'node22',
+  external: ['commander', 'chalk'],
+});
+```
+
+### CLI Package.json Setup
+
+```json
+{
+  "name": "my-cli",
+  "type": "module",
+  "bin": {
+    "my-cli": "./dist/cli.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup"
+  }
+}
+```
+
 ## Configuration Details
 
 ### Default Settings
@@ -130,29 +215,60 @@ export default createTsupConfig({
 
 #### `createTsupConfig(options?: TsupConfigOptions): Options`
 
-Creates a tsup configuration with sensible defaults.
+Creates a tsup configuration with sensible defaults for library packages.
 
 **Parameters:**
 
-| Option     | Type                           | Default            | Description                      |
-| ---------- | ------------------------------ | ------------------ | -------------------------------- |
-| `entry`    | `string[]`                     | `['src/index.ts']` | Entry point files                |
-| `format`   | `('cjs' \| 'esm' \| 'iife')[]` | `['cjs', 'esm']`   | Output formats                   |
-| `dts`      | `boolean`                      | `true`             | Generate declaration files       |
-| `clean`    | `boolean`                      | `true`             | Clean output before build        |
-| `outDir`   | `string`                       | `'dist'`           | Output directory                 |
-| `external` | `(string \| RegExp)[]`         | `[]`               | Packages to exclude from bundle  |
-| `options`  | `Partial<Options>`             | `{}`               | Additional tsup options to merge |
+| Option     | Type                                 | Default            | Description                      |
+| ---------- | ------------------------------------ | ------------------ | -------------------------------- |
+| `entry`    | `string[] \| Record<string, string>` | `['src/index.ts']` | Entry point files                |
+| `format`   | `('cjs' \| 'esm' \| 'iife')[]`       | `['cjs', 'esm']`   | Output formats                   |
+| `dts`      | `boolean`                            | `true`             | Generate declaration files       |
+| `clean`    | `boolean`                            | `true`             | Clean output before build        |
+| `outDir`   | `string`                             | `'dist'`           | Output directory                 |
+| `external` | `(string \| RegExp)[]`               | `[]`               | Packages to exclude from bundle  |
+| `options`  | `Partial<Options>`                   | `{}`               | Additional tsup options to merge |
 
 **Returns:** A complete tsup `Options` object.
 
+#### `createTsupCliConfig(options?: TsupCliConfigOptions): Options | Options[]`
+
+Creates a CLI-specific tsup configuration with shebang support.
+
+**Parameters:**
+
+| Option     | Type                                 | Default                 | Description                                 |
+| ---------- | ------------------------------------ | ----------------------- | ------------------------------------------- |
+| `entry`    | `string[] \| Record<string, string>` | `{ cli: 'src/cli.ts' }` | Entry point files                           |
+| `format`   | `('cjs' \| 'esm' \| 'iife')[]`       | `['esm']`               | Output formats (ESM only by default)        |
+| `dts`      | `boolean`                            | `true`                  | Generate declaration files                  |
+| `clean`    | `boolean`                            | `true`                  | Clean output before build                   |
+| `outDir`   | `string`                             | `'dist'`                | Output directory                            |
+| `external` | `(string \| RegExp)[]`               | `[]`                    | Packages to exclude from bundle             |
+| `target`   | `NodeTarget`                         | `'node18'`              | Node.js target version                      |
+| `shebang`  | `boolean \| string \| string[]`      | `true`                  | Add shebang to entries (true = all entries) |
+| `options`  | `Partial<Options>`                   | `{}`                    | Additional tsup options to merge            |
+
+**Returns:** A tsup `Options` object, or an array of `Options` when selective shebang is used.
+
 #### `BASE_DEFAULTS`
 
-Exported constant containing the default configuration values for reference.
+Exported constant containing the default library configuration values.
+
+#### `CLI_DEFAULTS`
+
+Exported constant containing the default CLI configuration values.
 
 #### `Options` (re-exported from tsup)
 
 The tsup Options type is re-exported for convenience when extending configurations.
+
+#### Type Exports
+
+- `EntryConfig` - Entry point configuration type (`string[] | Record<string, string>`)
+- `NodeTarget` - Node.js target version type (`'node16' | 'node18' | 'node20' | 'node22' | ...`)
+- `TsupConfigOptions` - Options for `createTsupConfig`
+- `TsupCliConfigOptions` - Options for `createTsupCliConfig`
 
 ## When to Use
 
