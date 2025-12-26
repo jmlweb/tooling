@@ -123,9 +123,13 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             echo "🔍 PR detected - Building only changed packages..."
-            # Get the merge base with the target branch (main)
-            BASE=$(git merge-base HEAD origin/main)
+            # Fetch the base branch to calculate merge base
+            git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
+            # Get the merge base with the target branch
+            BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
             echo "Comparing changes from $BASE to HEAD"
+            echo "Base branch: ${{ github.base_ref }}"
+            echo "Merge base commit: $BASE"
             pnpm build --filter='[$BASE...HEAD]'
           else
             echo "📦 Push to main - Building all packages..."
