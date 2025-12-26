@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build prettier config (required for format check)
+        run: pnpm build --filter='@jmlweb/prettier-config-base'
+
       - name: Check formatting
         run: pnpm format --check
 
@@ -61,6 +64,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Build eslint config (required for lint check)
+        run: pnpm build --filter='@jmlweb/eslint-config-base-js'
 
       - name: Lint root
         run: pnpm lint:root
