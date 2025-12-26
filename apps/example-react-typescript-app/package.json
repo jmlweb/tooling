@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@jmlweb/eslint-config-react": "workspace:*",
+    "@jmlweb/postcss-config": "workspace:*",
     "@jmlweb/prettier-config-tailwind": "workspace:*",
     "@jmlweb/tsconfig-react": "workspace:*",
     "@jmlweb/vitest-config": "workspace:*",
