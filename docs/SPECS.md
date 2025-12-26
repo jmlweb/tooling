@@ -95,6 +95,75 @@ Internal TypeScript configuration for building packages within the monorepo. Thi
 
 **Note**: This package is for internal monorepo use only. For consuming projects, use `@jmlweb/tsconfig-base` instead.
 
+### `@jmlweb/tsconfig-react`
+
+TypeScript configuration for React libraries with JSX support:
+
+- Extends `@jmlweb/tsconfig-base`
+- JSX support with `react-jsx` transform
+- Suitable for React component libraries
+
+### `@jmlweb/tsconfig-nextjs`
+
+TypeScript configuration for Next.js applications:
+
+- Extends `@jmlweb/tsconfig-react`
+- Next.js plugin support
+- Path aliases configuration
+- SSR-compatible settings
+
+### `@jmlweb/eslint-config-react`
+
+ESLint configuration for React projects with TypeScript:
+
+- Extends `@jmlweb/eslint-config-base`
+- React and React Hooks rules
+- Accessibility (a11y) rules
+- JSX-specific linting
+
+### `@jmlweb/vitest-config`
+
+Base Vitest configuration for testing:
+
+- TypeScript support
+- Coverage settings
+- Sensible test defaults
+- Factory function for customization
+
+### `@jmlweb/tsup-config-base`
+
+Base tsup configuration for building TypeScript packages:
+
+- Dual CJS/ESM output
+- Type declaration generation
+- External dependency handling
+- Clean output directory
+
+### `@jmlweb/vite-config`
+
+Base Vite configuration for frontend projects:
+
+- TypeScript support
+- Build optimization
+- Development server settings
+- Optional React integration via helper function
+
+### `@jmlweb/postcss-config`
+
+PostCSS configuration for Tailwind CSS projects:
+
+- Tailwind CSS plugin
+- Autoprefixer for vendor prefixes
+- Zero configuration needed
+
+### `@jmlweb/commitlint-config`
+
+Commitlint configuration for enforcing Conventional Commits:
+
+- Predefined commit types and scopes
+- Customizable options
+- Integration with husky for Git hooks
+
 ## PROJECT STRUCTURE
 
 The monorepo follows a standard Turborepo structure:
@@ -106,15 +175,26 @@ jmlweb-tooling/
 │   ├── prettier-config-tailwind/
 │   ├── eslint-config-base-js/
 │   ├── eslint-config-base/
+│   ├── eslint-config-react/
 │   ├── tsconfig-base/
-│   └── tsconfig-internal/ (private, internal use only)
+│   ├── tsconfig-react/
+│   ├── tsconfig-nextjs/
+│   ├── tsconfig-internal/ (private, internal use only)
+│   ├── vitest-config/
+│   ├── tsup-config-base/
+│   ├── vite-config/
+│   ├── postcss-config/
+│   └── commitlint-config/
 ├── apps/
-│   └── test-app/ (testing and validation)
+│   ├── test-app/ (testing and validation)
+│   ├── example-nodejs-typescript-api/
+│   ├── example-react-typescript-app/
+│   └── example-nodejs-javascript/
 ├── turbo.json
 ├── package.json
 └── docs/
     ├── SPECS.md
-    └── IMPROVEMENTS.md
+    └── README-TEMPLATE.md
 ```
 
 - **packages/**: Contains all publishable configuration packages (and one private internal package)
@@ -160,24 +240,41 @@ The project implementation follows these steps:
 
 ## FUTURE CONSIDERATIONS
 
-This monorepo is designed to grow over time. Future packages may include:
+This monorepo is designed to grow over time. Current progress and future packages:
 
 ### TypeScript Configuration
 
 - ~~`@jmlweb/tsconfig-base`: Base TypeScript configuration~~ ✅
-- `@jmlweb/tsconfig-node`: TypeScript config for Node.js projects
-- `@jmlweb/tsconfig-react`: TypeScript config for React projects
+- ~~`@jmlweb/tsconfig-react`: TypeScript config for React projects~~ ✅
+- ~~`@jmlweb/tsconfig-nextjs`: TypeScript config for Next.js applications~~ ✅
+- `@jmlweb/tsconfig-node`: TypeScript config for Node.js-specific projects
 
 ### ESLint Configuration
 
 - ~~`@jmlweb/eslint-config-base`: Base ESLint configuration for TypeScript projects (default)~~ ✅
 - ~~`@jmlweb/eslint-config-base-js`: Base ESLint configuration for JavaScript-only projects~~ ✅
-- `@jmlweb/eslint-config-react`: ESLint config for React projects
-- `@jmlweb/eslint-config-node`: ESLint config for Node.js projects
+- ~~`@jmlweb/eslint-config-react`: ESLint config for React projects~~ ✅
+- `@jmlweb/eslint-config-node`: ESLint config for Node.js-specific projects
+- `@jmlweb/eslint-config-nextjs`: ESLint config for Next.js applications
+
+### Testing Configuration
+
+- ~~`@jmlweb/vitest-config`: Vitest testing configuration~~ ✅
+
+### Build Tools
+
+- ~~`@jmlweb/tsup-config-base`: tsup bundler configuration~~ ✅
+- ~~`@jmlweb/vite-config`: Vite build configuration~~ ✅
+- ~~`@jmlweb/postcss-config`: PostCSS configuration~~ ✅
+
+### Git & Workflow
+
+- ~~`@jmlweb/commitlint-config`: Commitlint configuration~~ ✅
+- `@jmlweb/lint-staged-config`: lint-staged configuration
 
 ### Additional Prettier Packages
 
-- Framework-specific configurations (React, Vue, etc.)
+- Framework-specific configurations (React, Vue, etc.) as needed
 - Library-specific configurations as needed
 
 The modular structure allows for easy addition of new packages while maintaining consistency through shared base configurations.

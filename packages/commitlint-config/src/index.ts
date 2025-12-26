@@ -36,6 +36,8 @@ export const COMMIT_SCOPES = [
   'tsconfig-react',
   // Build configs
   'tsup-config-base',
+  'vite-config',
+  'postcss-config',
   // Test configs
   'vitest-config',
   // Commitlint config

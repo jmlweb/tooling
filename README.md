@@ -25,6 +25,10 @@ Centralized configuration packages for development tools. One source of truth fo
 | [`@jmlweb/vitest-config`](./packages/vitest-config)                       | Base Vitest configuration with TypeScript support and coverage settings | ![npm](https://img.shields.io/npm/v/@jmlweb/vitest-config?label=)            |
 | **Build Tools**                                                           |                                                                         |                                                                              |
 | [`@jmlweb/tsup-config-base`](./packages/tsup-config-base)                 | Base tsup configuration for building TypeScript packages                | ![npm](https://img.shields.io/npm/v/@jmlweb/tsup-config-base?label=)         |
+| [`@jmlweb/vite-config`](./packages/vite-config)                           | Base Vite configuration for frontend projects                           | ![npm](https://img.shields.io/npm/v/@jmlweb/vite-config?label=)              |
+| [`@jmlweb/postcss-config`](./packages/postcss-config)                     | PostCSS configuration with Tailwind CSS and Autoprefixer                | ![npm](https://img.shields.io/npm/v/@jmlweb/postcss-config?label=)           |
+| **Commit Linting**                                                        |                                                                         |                                                                              |
+| [`@jmlweb/commitlint-config`](./packages/commitlint-config)               | Commitlint configuration for Conventional Commits                       | ![npm](https://img.shields.io/npm/v/@jmlweb/commitlint-config?label=)        |
 
 ## Quick Start
 
@@ -69,6 +73,13 @@ tsconfig-base ────► tsconfig-react ────► tsconfig-nextjs
                             │                    │
                             └── + JSX            └── + Next.js plugin
                                 support               & path aliases
+
+Standalone packages (no inheritance):
+├── vitest-config      - Testing configuration
+├── tsup-config-base   - Package bundling
+├── vite-config        - Frontend build tool
+├── postcss-config     - CSS processing
+└── commitlint-config  - Commit message linting
 ```
 
 ## Development
@@ -125,6 +136,9 @@ Different packages in this monorepo have different Node.js version requirements.
 | `@jmlweb/tsconfig-react`           | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsconfig-nextjs`          | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsup-config-base`         | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/vite-config`              | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/postcss-config`           | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/commitlint-config`        | >= 18.0.0           | Standard compatibility                      |
 
 ### Why Different Requirements?
 
@@ -255,6 +269,9 @@ Track package usage and health through npm statistics:
 | `@jmlweb/tsconfig-nextjs`          | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-nextjs?label=)          | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-nextjs?label=)          |
 | `@jmlweb/vitest-config`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/vitest-config?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/vitest-config?label=)            |
 | `@jmlweb/tsup-config-base`         | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsup-config-base?label=)         | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsup-config-base?label=)         |
+| `@jmlweb/vite-config`              | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/vite-config?label=)              | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/vite-config?label=)              |
+| `@jmlweb/postcss-config`           | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/postcss-config?label=)           | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/postcss-config?label=)           |
+| `@jmlweb/commitlint-config`        | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/commitlint-config?label=)        | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/commitlint-config?label=)        |
 
 ### Viewing Detailed Statistics
 

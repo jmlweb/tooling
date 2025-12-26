@@ -734,10 +734,51 @@ fix(prettier-config-tailwind): resolve plugin loading issue
 docs: update README with package table
 ```
 
+## Documentation Maintenance
+
+When making changes to the codebase, documentation must be kept up to date. This is a critical rule to ensure the project remains well-documented and maintainable.
+
+### When to Update Documentation
+
+Documentation updates are **required** when:
+
+1. **Creating a new package**: Update all relevant documentation:
+   - Add package to `README.md` (packages table, compatibility matrix, analytics table)
+   - Add package to `docs/SPECS.md` (packages section, project structure, future considerations)
+   - Add package scope to `commitlint-config` if not already present
+   - Update `apps/README.md` if the package is used in any example app
+
+2. **Modifying an existing package**: Update affected documentation:
+   - Update package README if functionality changes
+   - Update related example apps if usage patterns change
+   - Update root README if package description changes
+
+3. **Adding example applications**: Update `apps/README.md` with the new example
+
+4. **Changing project configuration**: Update relevant documentation files
+
+### Documentation Files Checklist
+
+When creating a new package, ensure these files are updated:
+
+| File                                      | Update Required                                        |
+| ----------------------------------------- | ------------------------------------------------------ |
+| `README.md`                               | Add to packages table, compatibility matrix, analytics |
+| `docs/SPECS.md`                           | Add package description, update structure              |
+| `packages/commitlint-config/src/index.ts` | Add package scope                                      |
+| `packages/commitlint-config/README.md`    | Add scope to documentation                             |
+| `apps/README.md`                          | If package is used in examples                         |
+
+### Enforcement
+
+- Before marking a package as complete, verify all documentation is updated
+- PR reviewers should check that documentation changes accompany code changes
+- Stale documentation creates confusion and maintenance burden
+
 ## Additional Guidelines
 
 - Always check existing packages before creating new ones to avoid duplication
 - Extend base configurations rather than duplicating them
 - Maintain consistency across all packages
-- Update documentation when making changes
+- Update documentation when making changes (see [Documentation Maintenance](#documentation-maintenance))
 - Test packages before publishing

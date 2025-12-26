@@ -67,6 +67,7 @@ Example projects demonstrating how to use `@jmlweb` tooling packages in real-wor
 - [`@jmlweb/prettier-config-tailwind`](../packages/prettier-config-tailwind) - Code formatting with Tailwind class sorting
 - [`@jmlweb/eslint-config-react`](../packages/eslint-config-react) - React + TypeScript linting with strict rules
 - [`@jmlweb/tsconfig-react`](../packages/tsconfig-react) - TypeScript configuration for React
+- [`@jmlweb/postcss-config`](../packages/postcss-config) - PostCSS configuration for Tailwind CSS
 - [`@jmlweb/vitest-config`](../packages/vitest-config) - Testing configuration
 
 **Use Case:** React application with TypeScript, Tailwind CSS, and Vite.
@@ -75,6 +76,7 @@ Example projects demonstrating how to use `@jmlweb` tooling packages in real-wor
 
 - React 18 with TypeScript
 - Tailwind CSS with automatic class sorting
+- PostCSS for CSS processing
 - ESLint with React and strict TypeScript rules
 - Vitest for component testing with jsdom
 
