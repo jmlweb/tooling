@@ -193,7 +193,7 @@ jobs:
           cd "${{ matrix.package }}"
           echo "🧪 DRY-RUN MODE - Simulating publish..."
           echo ""
-          npm publish --access public --dry-run
+          pnpm publish --access public --dry-run --no-git-checks
           echo ""
           echo "✅ Dry-run successful! Package would publish correctly."
           echo "   Run workflow without dry-run to actually publish."
@@ -202,7 +202,7 @@ jobs:
         if: steps.check-version.outputs.exists == 'false' && inputs.dry-run != true
         run: |
           cd "${{ matrix.package }}"
-          npm publish --access public
+          pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
