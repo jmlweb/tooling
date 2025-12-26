@@ -44,6 +44,9 @@ jobs:
 
       - name: Build packages
         run: pnpm build
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
       - name: Check for changesets
         id: changesets
@@ -168,6 +171,9 @@ jobs:
 
       - name: Build package
         run: pnpm build --filter="./${{ matrix.package }}"
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
       - name: Get package info
         id: package-info
