@@ -37,8 +37,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build prettier config (required for format check)
-        run: pnpm build --filter='@jmlweb/prettier-config-base'
+      - name: Build prettier configs (required for format check)
+        run: pnpm build --filter='@jmlweb/prettier-config-*'
 
       - name: Check formatting
         run: pnpm format --check
