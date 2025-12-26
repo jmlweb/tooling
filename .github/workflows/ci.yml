@@ -116,17 +116,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Setup Turborepo Remote Cache
-        uses: turborepo/cache-action@v2
-        with:
-          token: ${{ secrets.TURBO_TOKEN }}
-
       - name: Build packages
         run: pnpm build
-        env:
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-          TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
 
       - name: Validate package.json files
         run: |
