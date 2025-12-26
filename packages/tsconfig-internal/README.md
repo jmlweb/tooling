@@ -22,3 +22,7 @@ This config is optimized for:
 - Type declaration generation
 
 **Note:** This is a private package, not published to npm. For consuming projects, use `@jmlweb/tsconfig-base` instead.
+
+## 📄 License
+
+MIT

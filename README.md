@@ -19,6 +19,7 @@ Centralized configuration packages for development tools. One source of truth fo
 | [`@jmlweb/eslint-config-react`](./packages/eslint-config-react)           | ESLint for React libraries with TypeScript, extending base config       | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-react?label=)      |
 | **TypeScript**                                                            |                                                                         |                                                                              |
 | [`@jmlweb/tsconfig-base`](./packages/tsconfig-base)                       | Base TypeScript configuration                                           | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-base?label=)            |
+| [`@jmlweb/tsconfig-node`](./packages/tsconfig-node)                       | TypeScript configuration for Node.js and CLI projects                   | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-node?label=)            |
 | [`@jmlweb/tsconfig-react`](./packages/tsconfig-react)                     | TypeScript configuration for React libraries with JSX support           | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-react?label=)           |
 | [`@jmlweb/tsconfig-nextjs`](./packages/tsconfig-nextjs)                   | TypeScript configuration for Next.js applications                       | ![npm](https://img.shields.io/npm/v/@jmlweb/tsconfig-nextjs?label=)          |
 | **Testing**                                                               |                                                                         |                                                                              |
@@ -69,7 +70,12 @@ eslint-config-base-js ────► eslint-config-base ────► eslint-
                                     └── + TypeScript        └── + React rules
                                         strict rules
 
-tsconfig-base ────► tsconfig-react ────► tsconfig-nextjs
+tsconfig-base ────► tsconfig-node
+              │            │
+              │            └── + Node.js types only
+              │                (excludes DOM)
+              │
+              └──► tsconfig-react ────► tsconfig-nextjs
                             │                    │
                             └── + JSX            └── + Next.js plugin
                                 support               & path aliases
@@ -133,6 +139,7 @@ Different packages in this monorepo have different Node.js version requirements.
 | `@jmlweb/eslint-config-react`      | >= 20.11.0          | Uses `import.meta.dirname` for config files |
 | `@jmlweb/vitest-config`            | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsconfig-base`            | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/tsconfig-node`            | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsconfig-react`           | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsconfig-nextjs`          | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsup-config-base`         | >= 18.0.0           | Standard compatibility                      |
@@ -265,6 +272,7 @@ Track package usage and health through npm statistics:
 | `@jmlweb/eslint-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base?label=)       |
 | `@jmlweb/eslint-config-react`      | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-react?label=)      | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-react?label=)      |
 | `@jmlweb/tsconfig-base`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-base?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-base?label=)            |
+| `@jmlweb/tsconfig-node`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-node?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-node?label=)            |
 | `@jmlweb/tsconfig-react`           | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-react?label=)           | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-react?label=)           |
 | `@jmlweb/tsconfig-nextjs`          | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-nextjs?label=)          | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-nextjs?label=)          |
 | `@jmlweb/vitest-config`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/vitest-config?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/vitest-config?label=)            |

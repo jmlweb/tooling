@@ -33,6 +33,7 @@ export const COMMIT_SCOPES = [
   'tsconfig-base',
   'tsconfig-internal',
   'tsconfig-nextjs',
+  'tsconfig-node',
   'tsconfig-react',
   // Build configs
   'tsup-config-base',

@@ -1,5 +1,7 @@
 # Package README Documentation for AI Agents
 
+> **Note for Cursor**: Cursor automatically reads this `AGENTS.md` file. All guidelines in this document are automatically applied when creating or updating package READMEs.
+
 This document describes the standardized README structure used across all packages in this monorepo. When creating or updating package READMEs, follow this structure to ensure consistency and maintainability.
 
 ## Overview
