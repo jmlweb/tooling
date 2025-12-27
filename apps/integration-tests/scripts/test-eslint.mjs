@@ -5,6 +5,7 @@ import { ESLint } from 'eslint';
 
 import {
   createTestFile,
+  importFromTestEnv,
   initTestProject,
   installDependencies,
 } from './utils.mjs';
@@ -65,15 +66,14 @@ async function testESLintPackage(pkg, allPackages) {
 
     // Test 1: Can import the config
     log.info('Test 1: Importing config...');
-    const configModule = await import(`${pkg.packageJson.name}`);
-    if (!configModule.default) {
+    const config = await importFromTestEnv(pkg.packageJson.name);
+    if (!config) {
       throw new Error('Config does not export a default export');
     }
     log.success('Config imported successfully');
 
     // Test 2: Config is a valid ESLint config array
     log.info('Test 2: Verifying config structure...');
-    const config = configModule.default;
     if (!Array.isArray(config)) {
       throw new Error('Config should export an array');
     }

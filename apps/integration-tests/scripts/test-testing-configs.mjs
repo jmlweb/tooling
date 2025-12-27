@@ -4,6 +4,7 @@ import chalk from 'chalk';
 
 import {
   createTestFile,
+  importFromTestEnv,
   initTestProject,
   installDependencies,
 } from './utils.mjs';
@@ -60,15 +61,14 @@ async function testTestingPackage(pkg, allPackages) {
 
     // Test 1: Can import the config
     log.info('Test 1: Importing config...');
-    const configModule = await import(`${pkg.packageJson.name}`);
-    if (!configModule.default) {
+    const config = await importFromTestEnv(pkg.packageJson.name);
+    if (!config) {
       throw new Error('Config does not export a default export');
     }
     log.success('Config imported successfully');
 
     // Test 2: Config has expected structure
     log.info('Test 2: Verifying config structure...');
-    const config = configModule.default;
 
     if (pkg.name.includes('vitest-config')) {
       // Vitest config should have test property

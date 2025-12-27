@@ -231,7 +231,43 @@ export async function importFromTestEnv(packageName) {
   const scriptPath = join(testDir, '__import-helper.mjs');
   const script = `
 import pkg from '${packageName}';
-console.log(JSON.stringify(pkg, null, 2));
+
+// Custom JSON serializer that handles functions and symbols
+function serialize(obj, seen = new WeakSet()) {
+  if (obj === null || obj === undefined) return obj;
+
+  if (typeof obj === 'function') {
+    return '[Function]';
+  }
+
+  if (typeof obj === 'symbol') {
+    return obj.toString();
+  }
+
+  if (typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (seen.has(obj)) {
+    return '[Circular]';
+  }
+
+  seen.add(obj);
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => serialize(item, seen));
+  }
+
+  const result = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      result[key] = serialize(obj[key], seen);
+    }
+  }
+  return result;
+}
+
+console.log(JSON.stringify(serialize(pkg), null, 2));
   `.trim();
 
   writeFileSync(scriptPath, script);
@@ -240,7 +276,7 @@ console.log(JSON.stringify(pkg, null, 2));
     const output = execSync(`node __import-helper.mjs`, {
       cwd: testDir,
       encoding: 'utf-8',
-      stdio: ['ignore', 'pipe', 'pipe'],
+      stdio: ['ignore', 'pipe', 'inherit'], // Show stderr for debugging
     });
     rmSync(scriptPath);
     return JSON.parse(output);
