@@ -22,16 +22,15 @@ jobs:
     outputs:
       versioned: ${{ steps.version.outputs.versioned }}
     steps:
-      - name: Checkout repository (for action)
+      - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          # Full history needed for versioning
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          fetch-depth: '0'
-          checkout-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build packages
         run: pnpm build
@@ -88,15 +87,14 @@ jobs:
       packages: ${{ steps.detect.outputs.packages }}
       has-changes: ${{ steps.detect.outputs.has-changes }}
     steps:
-      - name: Checkout repository (for action)
+      - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          # Need recent history to detect changes
+          fetch-depth: 2
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          fetch-depth: '2'
 
       - name: Detect packages to publish
         id: detect
@@ -149,7 +147,7 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
     steps:
-      - name: Checkout repository (for action)
+      - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
