@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-astro",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "TypeScript configuration for Astro projects with JSX support and modern defaults",
   "main": "tsconfig.json",
   "exports": {

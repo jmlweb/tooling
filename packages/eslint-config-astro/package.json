@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-astro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ESLint configuration for Astro projects with TypeScript. Extends @jmlweb/eslint-config-base with Astro-specific rules.",
   "type": "module",
   "main": "./dist/index.cjs",
