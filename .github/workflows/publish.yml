@@ -22,25 +22,11 @@ jobs:
     outputs:
       versioned: ${{ steps.version.outputs.versioned }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.26.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          fetch-depth: '0'
+          checkout-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build packages
         run: pnpm build
@@ -97,10 +83,10 @@ jobs:
       packages: ${{ steps.detect.outputs.packages }}
       has-changes: ${{ steps.detect.outputs.has-changes }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup
         with:
-          fetch-depth: 2
+          fetch-depth: '2'
 
       - name: Detect packages to publish
         id: detect
@@ -153,26 +139,16 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Setup environment
+        uses: ./.github/actions/setup
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.26.2
-
-      - name: Setup Node.js
+      - name: Configure npm registry
         uses: actions/setup-node@v6
         with:
-          node-version: 20
-          cache: pnpm
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Build package
         run: pnpm build --filter="./${{ matrix.package }}"

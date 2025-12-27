@@ -1,0 +1,63 @@
+name: 'Setup Environment'
+description: 'Common setup steps for CI jobs: checkout, pnpm, Node.js, and dependencies'
+
+inputs:
+  fetch-depth:
+    description: 'Git fetch depth (0 for full history, default 1)'
+    required: false
+    default: '1'
+  checkout-token:
+    description: 'GitHub token for checkout (for jobs that need to push commits)'
+    required: false
+  install-strategy:
+    description: 'Install strategy: frozen (default) or update'
+    required: false
+    default: 'frozen'
+  restore-turbo-cache:
+    description: 'Whether to restore Turborepo cache'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        token: ${{ inputs.checkout-token }}
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10.26.2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 20
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        if [ "${{ inputs.install-strategy }}" == "frozen" ]; then
+          # Try frozen lockfile first
+          if ! pnpm install --frozen-lockfile 2>&1; then
+            echo "::warning::Lockfile is out of sync. This usually happens when the PR branch is not up to date with main."
+            echo "Updating lockfile and continuing..."
+            pnpm install --no-frozen-lockfile
+            echo "::warning::Please merge main into your PR branch and commit the updated pnpm-lock.yaml file."
+          fi
+        else
+          pnpm install --no-frozen-lockfile
+        fi
+
+    - name: Restore Turborepo cache
+      if: inputs.restore-turbo-cache == 'true'
+      uses: actions/download-artifact@v6
+      continue-on-error: true
+      with:
+        name: turbo-cache
+        path: .turbo
+
