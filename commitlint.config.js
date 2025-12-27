@@ -36,6 +36,7 @@ export default {
         // ESLint configs
         'eslint-config-base',
         'eslint-config-base-js',
+        'eslint-config-astro',
         'eslint-config-node',
         'eslint-config-react',
         // Prettier configs

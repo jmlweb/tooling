@@ -1,0 +1,7 @@
+{
+  "extends": "@jmlweb/tsconfig-internal",
+  "compilerOptions": {
+    "jsx": "preserve"
+  },
+  "include": ["src"]
+}
