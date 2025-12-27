@@ -222,9 +222,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-        with:
-          # Full history needed for filtering in PRs (if artifacts not found)
-          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -241,31 +238,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download build artifacts
-        id: download-artifacts
         uses: actions/download-artifact@v6
-        continue-on-error: true
         with:
           name: build-artifacts
           path: packages
-
-      - name: Build packages if artifacts not found
-        if: steps.download-artifacts.outcome == 'failure'
-        run: |
-          echo "⚠️  No artifacts found, building packages..."
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "🔍 PR detected - Building only changed packages..."
-            git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
-            BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
-            FILTER="[$BASE...HEAD]"
-            echo "Using filter: $FILTER"
-            pnpm build --filter="$FILTER" || pnpm build
-          else
-            echo "📦 Building all packages..."
-            pnpm build
-          fi
-        env:
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
       - name: Pack and validate packages
         run: |
