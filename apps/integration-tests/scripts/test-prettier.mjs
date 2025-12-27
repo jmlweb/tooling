@@ -5,6 +5,7 @@ import { format } from 'prettier';
 
 import {
   createTestFile,
+  importFromTestEnv,
   initTestProject,
   installDependencies,
 } from './utils.mjs';
@@ -50,8 +51,8 @@ async function testPrettierPackage(pkg, allPackages) {
 
     // Test 1: Can import the config
     log.info('Test 1: Importing config...');
-    const configModule = await import(`${pkg.packageJson.name}`);
-    if (!configModule.default) {
+    const config = await importFromTestEnv(pkg.packageJson.name);
+    if (!config) {
       throw new Error('Config does not export a default export');
     }
     log.success('Config imported successfully');
@@ -60,7 +61,7 @@ async function testPrettierPackage(pkg, allPackages) {
     log.info('Test 2: Testing formatting with Prettier...');
     const testCode = 'const x=1;const y=2;';
     const formatted = await format(testCode, {
-      ...configModule.default,
+      ...config,
       parser: 'typescript',
     });
 
@@ -77,7 +78,6 @@ async function testPrettierPackage(pkg, allPackages) {
 
     // Test 3: Verify config has expected properties
     log.info('Test 3: Verifying config properties...');
-    const config = configModule.default;
     const expectedProps = ['singleQuote', 'tabWidth'];
     const missingProps = expectedProps.filter((prop) => !(prop in config));
 

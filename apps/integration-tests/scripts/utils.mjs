@@ -9,6 +9,7 @@ import {
   rmSync,
   writeFileSync,
 } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,7 +17,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
 const rootDir = resolve(__dirname, '../../..');
 const packagesDir = join(rootDir, 'packages');
-const testDir = join(__dirname, '../test-env');
+// Use system temp directory to avoid workspace interference
+const testDir = join(tmpdir(), 'jmlweb-integration-tests');
 const packedDir = join(rootDir, 'packed');
 
 /**
@@ -159,19 +161,21 @@ export function initTestProject(packages = []) {
   if (packages.length > 0) {
     packageJson.dependencies = {};
     for (const pkg of packages) {
-      // Use relative path from testDir (apps/integration-tests/test-env) to packed dir (root/packed)
-      // testDir is: apps/integration-tests/test-env
-      // packed dir is: root/packed
-      // So relative path is: ../../packed/<tarball-name>
-      const tarballName = pkg.path.split('/').pop();
-      const relativePath = `../../packed/${tarballName}`;
-      packageJson.dependencies[pkg.name] = `file:${relativePath}`;
+      // Use absolute path to packed tarball since test dir is in system temp
+      packageJson.dependencies[pkg.name] = `file:${pkg.path}`;
     }
   }
 
   writeFileSync(
     join(testDir, 'package.json'),
     JSON.stringify(packageJson, null, 2),
+  );
+
+  // Create pnpm-workspace.yaml to isolate test environment from parent workspace
+  // This prevents pnpm from treating test-env as part of the monorepo workspace
+  writeFileSync(
+    join(testDir, 'pnpm-workspace.yaml'),
+    'packages:\n  # No packages - this is an isolated test environment\n',
   );
 }
 
@@ -216,6 +220,36 @@ export function createTestFile(filename, content) {
   }
   writeFileSync(filePath, content);
   return filePath;
+}
+
+/**
+ * Import a module from the test environment
+ * This runs the import from within the test directory context to resolve from test node_modules
+ */
+export async function importFromTestEnv(packageName) {
+  // Create a temporary script in the test directory that imports and outputs the module
+  const scriptPath = join(testDir, '__import-helper.mjs');
+  const script = `
+import pkg from '${packageName}';
+console.log(JSON.stringify(pkg, null, 2));
+  `.trim();
+
+  writeFileSync(scriptPath, script);
+
+  try {
+    const output = execSync(`node __import-helper.mjs`, {
+      cwd: testDir,
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    rmSync(scriptPath);
+    return JSON.parse(output);
+  } catch (error) {
+    if (existsSync(scriptPath)) {
+      rmSync(scriptPath);
+    }
+    throw error;
+  }
 }
 
 /**
