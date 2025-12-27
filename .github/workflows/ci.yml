@@ -37,6 +37,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Restore Turborepo cache
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: turbo-cache
+          path: .turbo
+
       - name: Build prettier configs (required for format check)
         run: pnpm build --filter='@jmlweb/prettier-config-*'
 
@@ -64,6 +71,13 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Restore Turborepo cache
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: turbo-cache
+          path: .turbo
 
       - name: Build eslint configs (required for lint check)
         run: pnpm build --filter='@jmlweb/eslint-config-*'
@@ -137,6 +151,13 @@ jobs:
             pnpm install --no-frozen-lockfile
             echo "::warning::Please merge main into your PR branch and commit the updated pnpm-lock.yaml file."
           fi
+
+      - name: Restore Turborepo cache
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: turbo-cache
+          path: .turbo
 
       - name: Build packages
         run: |
@@ -213,6 +234,15 @@ jobs:
           retention-days: 7
         if: always()
 
+      - name: Upload Turborepo cache
+        uses: actions/upload-artifact@v6
+        continue-on-error: true
+        with:
+          name: turbo-cache
+          path: .turbo
+          retention-days: 7
+        if: always()
+
   # Test pack using artifacts instead of rebuilding
   test-pack:
     name: Test Package Publishing
@@ -236,6 +266,13 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Restore Turborepo cache
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: turbo-cache
+          path: .turbo
 
       - name: Download build artifacts
         uses: actions/download-artifact@v6
@@ -335,6 +372,13 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Restore Turborepo cache
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: turbo-cache
+          path: .turbo
 
       - name: Download build artifacts
         id: download-artifacts
