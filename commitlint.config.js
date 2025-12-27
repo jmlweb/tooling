@@ -42,6 +42,7 @@ export default {
         'prettier-config-base',
         'prettier-config-tailwind',
         // TypeScript configs
+        'tsconfig-astro',
         'tsconfig-base',
         'tsconfig-internal',
         'tsconfig-nextjs',
