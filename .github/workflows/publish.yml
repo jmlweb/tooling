@@ -54,14 +54,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           if [ "${{ steps.changesets.outputs.has-changesets }}" == "true" ]; then
             pnpm changeset version
-            
+
             # Regenerate lockfile after version bumps to sync with updated package.json files
-            # This is needed because version bumps may change internal package dependencies
-            # Since dependencies are already cached, this should be fast
-            pnpm install
+            # Must use --no-frozen-lockfile since CI defaults to frozen mode
+            pnpm install --no-frozen-lockfile
             
             if [ -n "$(git status --porcelain)" ]; then
               echo "Packages versioned"
