@@ -6,20 +6,20 @@
 
 > PostCSS configuration for Tailwind CSS projects. Includes Tailwind CSS and Autoprefixer plugins with sensible defaults.
 
-## Features
+## ✨ Features
 
-- Tailwind CSS plugin for utility-first CSS
-- Autoprefixer for automatic vendor prefixes
-- Zero configuration needed
-- Works with PostCSS 8+
+- 🎨 **Tailwind CSS**: Utility-first CSS framework integration
+- 🔧 **Autoprefixer**: Automatic vendor prefixes for cross-browser compatibility
+- ⚡ **Zero Config**: Works out of the box with sensible defaults
+- 📦 **PostCSS 8+**: Compatible with the latest PostCSS version
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install --save-dev @jmlweb/postcss-config postcss tailwindcss autoprefixer
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Option 1: Using `postcss.config.js` (Recommended)
 
@@ -44,7 +44,41 @@ import config from '@jmlweb/postcss-config';
 export default config;
 ```
 
-## Configuration
+## 💡 Examples
+
+### Basic Tailwind CSS Project
+
+```javascript
+// postcss.config.js
+export { default } from '@jmlweb/postcss-config';
+```
+
+```css
+/* src/styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+### With Vite
+
+```javascript
+// postcss.config.js
+export { default } from '@jmlweb/postcss-config';
+```
+
+Vite automatically detects the PostCSS config.
+
+### With Next.js
+
+```javascript
+// postcss.config.js
+module.exports = require('@jmlweb/postcss-config').default;
+```
+
+Next.js uses CommonJS by default for PostCSS config.
+
+## 📋 Configuration Details
 
 This package provides a PostCSS configuration with the following plugins:
 
@@ -53,9 +87,29 @@ This package provides a PostCSS configuration with the following plugins:
 | `tailwindcss`  | Utility-first CSS framework       |
 | `autoprefixer` | Adds vendor prefixes to CSS rules |
 
-## Extending the Configuration
+### Plugin Order
+
+Plugins are applied in the following order:
+
+1. **Tailwind CSS** - Processes Tailwind directives and utilities
+2. **Autoprefixer** - Adds vendor prefixes to the generated CSS
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Tailwind CSS with automatic vendor prefixing
+- ✅ Consistent PostCSS setup across projects
+- ✅ Zero-configuration Tailwind CSS integration
+- ✅ Modern CSS with cross-browser compatibility
+
+**For projects without Tailwind CSS**, you may want to create a custom PostCSS config with only the plugins you need.
+
+## 🔧 Extending the Configuration
 
 You can extend this config for project-specific needs:
+
+### Adding Additional Plugins
 
 ```javascript
 // postcss.config.js
@@ -67,18 +121,56 @@ export default {
     ...config.plugins,
     // Add additional plugins
     'postcss-import': {},
+    'postcss-nesting': {},
   },
 };
 ```
 
-## Requirements
+### Custom Plugin Order
+
+```javascript
+// postcss.config.js
+import config from '@jmlweb/postcss-config';
+
+export default {
+  plugins: {
+    'postcss-import': {},
+    ...config.plugins,
+    cssnano: { preset: 'default' },
+  },
+};
+```
+
+## 📝 Usage with Scripts
+
+Add build scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "build:css": "postcss src/styles.css -o dist/styles.css",
+    "watch:css": "postcss src/styles.css -o dist/styles.css --watch"
+  }
+}
+```
+
+Then run:
+
+```bash
+npm run build:css    # Build CSS
+npm run watch:css    # Watch for changes
+```
+
+**Note**: Most bundlers (Vite, Next.js, Webpack) handle PostCSS automatically.
+
+## 📋 Requirements
 
 - **Node.js** >= 18.0.0
 - **PostCSS** >= 8.0.0
 - **Tailwind CSS** >= 3.0.0
 - **Autoprefixer** >= 10.0.0
 
-## Peer Dependencies
+## 📦 Peer Dependencies
 
 This package requires the following peer dependencies:
 
@@ -86,17 +178,12 @@ This package requires the following peer dependencies:
 - `tailwindcss` (>= 3.0.0 or >= 4.0.0)
 - `autoprefixer` (>= 10.0.0)
 
-## Examples
-
-See real-world usage examples:
-
-- [`example-react-typescript-app`](../../apps/example-react-typescript-app) - React TypeScript app with Tailwind CSS
-
-## Related Packages
+## 🔗 Related Packages
 
 - [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) - Prettier config with Tailwind class sorting
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint config for React projects
+- [`@jmlweb/vite-config`](../vite-config) - Vite configuration for frontend projects
 
-## License
+## 📄 License
 
 MIT

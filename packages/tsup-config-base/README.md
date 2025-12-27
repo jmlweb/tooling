@@ -7,23 +7,23 @@
 
 > Base tsup configuration for jmlweb projects. Provides sensible defaults and a clean API for creating consistent build configurations.
 
-## Features
+## ✨ Features
 
-- **Sensible Defaults**: Pre-configured with common settings for TypeScript libraries
-- **Dual Format**: Generates both CommonJS and ESM outputs by default
-- **TypeScript Declarations**: Automatic `.d.ts` generation enabled
-- **Clean API**: Simple function to create configurations with external dependencies
-- **Zero Config**: Works out of the box with minimal setup
-- **Fully Typed**: Complete TypeScript support with exported types
-- **CLI Preset**: Specialized configuration for CLI packages with shebang support
+- 🎯 **Sensible Defaults**: Pre-configured with common settings for TypeScript libraries
+- 📦 **Dual Format**: Generates both CommonJS and ESM outputs by default
+- 📝 **TypeScript Declarations**: Automatic `.d.ts` generation enabled
+- 🔧 **Clean API**: Simple function to create configurations with external dependencies
+- ⚡ **Zero Config**: Works out of the box with minimal setup
+- 🛠️ **Fully Typed**: Complete TypeScript support with exported types
+- 🖥️ **CLI Preset**: Specialized configuration for CLI packages with shebang support
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install --save-dev @jmlweb/tsup-config-base tsup
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 Create a `tsup.config.ts` file in your project root:
 
@@ -33,7 +33,7 @@ import { createTsupConfig } from '@jmlweb/tsup-config-base';
 export default createTsupConfig();
 ```
 
-## Examples
+## 💡 Examples
 
 ### Basic Setup (No Externals)
 
@@ -128,11 +128,9 @@ export default createTsupConfig({
 });
 ```
 
-## CLI Package Configuration
+### CLI Package Configuration
 
 For CLI packages that need shebang injection, use `createTsupCliConfig`:
-
-### Simple CLI
 
 ```typescript
 // tsup.config.ts
@@ -170,35 +168,7 @@ export default createTsupCliConfig({
 });
 ```
 
-### CLI Targeting Specific Node.js Version
-
-```typescript
-// tsup.config.ts
-import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupCliConfig({
-  target: 'node22',
-  external: ['commander', 'chalk'],
-});
-```
-
-### CLI Package.json Setup
-
-```json
-{
-  "name": "my-cli",
-  "type": "module",
-  "bin": {
-    "my-cli": "./dist/cli.js"
-  },
-  "files": ["dist"],
-  "scripts": {
-    "build": "tsup"
-  }
-}
-```
-
-## Configuration Details
+## 📋 Configuration Details
 
 ### Default Settings
 
@@ -251,17 +221,11 @@ Creates a CLI-specific tsup configuration with shebang support.
 
 **Returns:** A tsup `Options` object, or an array of `Options` when selective shebang is used.
 
-#### `BASE_DEFAULTS`
+#### Exported Constants
 
-Exported constant containing the default library configuration values.
-
-#### `CLI_DEFAULTS`
-
-Exported constant containing the default CLI configuration values.
-
-#### `Options` (re-exported from tsup)
-
-The tsup Options type is re-exported for convenience when extending configurations.
+- `BASE_DEFAULTS` - Default library configuration values
+- `CLI_DEFAULTS` - Default CLI configuration values
+- `Options` - Re-exported from tsup
 
 #### Type Exports
 
@@ -270,17 +234,52 @@ The tsup Options type is re-exported for convenience when extending configuratio
 - `TsupConfigOptions` - Options for `createTsupConfig`
 - `TsupCliConfigOptions` - Options for `createTsupCliConfig`
 
-## When to Use
+## 🎯 When to Use
 
 Use this configuration when you want:
 
-- Consistent build configuration across multiple packages
-- Dual-format output (CommonJS + ESM) for maximum compatibility
-- Automatic TypeScript declaration generation
-- A clean, simple API for specifying externals
-- Easy customization without repeating boilerplate
+- ✅ Consistent build configuration across multiple packages
+- ✅ Dual-format output (CommonJS + ESM) for maximum compatibility
+- ✅ Automatic TypeScript declaration generation
+- ✅ A clean, simple API for specifying externals
+- ✅ Easy customization without repeating boilerplate
+- ✅ CLI packages with proper shebang injection
 
-## Externals Strategy
+## 🔧 Extending the Configuration
+
+You can extend the configuration for your specific needs:
+
+### Adding Custom Options
+
+```typescript
+// tsup.config.ts
+import { createTsupConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupConfig({
+  external: ['vitest'],
+  options: {
+    minify: true,
+    sourcemap: true,
+    splitting: true,
+    target: 'es2022',
+  },
+});
+```
+
+### Overriding Defaults
+
+```typescript
+// tsup.config.ts
+import { createTsupConfig } from '@jmlweb/tsup-config-base';
+
+export default createTsupConfig({
+  format: ['esm'], // ESM only
+  dts: false, // Disable type declarations
+  outDir: 'build', // Custom output directory
+});
+```
+
+### Externals Strategy
 
 When configuring `external`, include:
 
@@ -304,7 +303,7 @@ export default createTsupConfig({
 });
 ```
 
-## Usage with Scripts
+## 📝 Usage with Scripts
 
 Add build scripts to your `package.json`:
 
@@ -325,24 +324,24 @@ npm run build    # Build the package
 npm run clean    # Clean build output
 ```
 
-## Requirements
+## 📋 Requirements
 
 - **Node.js** >= 18.0.0
 - **tsup** >= 8.0.0
 
-## Peer Dependencies
+## 📦 Peer Dependencies
 
 This package requires the following peer dependency:
 
 - `tsup` (>=8.0.0)
 
-## Related Packages
+## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
 
-## License
+## 📄 License
 
 MIT

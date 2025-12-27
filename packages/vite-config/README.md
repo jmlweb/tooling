@@ -7,16 +7,16 @@
 
 > Base Vite configuration for jmlweb projects. Provides sensible defaults for TypeScript support, build optimization, and development server settings.
 
-## Features
+## ✨ Features
 
-- **Sensible Defaults**: Pre-configured with optimized build and dev server settings
-- **TypeScript Support**: Works seamlessly with TypeScript projects
-- **React Ready**: Optional React integration via plugin injection
-- **Path Aliases**: Easy configuration for module path resolution
-- **Clean API**: Simple functions to create configurations
-- **Fully Typed**: Complete TypeScript support with exported types
+- 🎯 **Sensible Defaults**: Pre-configured with optimized build and dev server settings
+- 📦 **TypeScript Support**: Works seamlessly with TypeScript projects
+- ⚛️ **React Ready**: Optional React integration via plugin injection
+- 📁 **Path Aliases**: Easy configuration for module path resolution
+- 🔧 **Clean API**: Simple functions to create configurations
+- 🛠️ **Fully Typed**: Complete TypeScript support with exported types
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install --save-dev @jmlweb/vite-config vite
@@ -28,7 +28,7 @@ For React projects, also install the React plugin:
 npm install --save-dev @vitejs/plugin-react
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 Create a `vite.config.ts` file in your project root:
 
@@ -38,7 +38,7 @@ import { createViteConfig } from '@jmlweb/vite-config';
 export default createViteConfig();
 ```
 
-## Examples
+## 💡 Examples
 
 ### Basic Setup
 
@@ -179,7 +179,7 @@ export default createViteConfig({
 });
 ```
 
-## Configuration Details
+## 📋 Configuration Details
 
 ### Default Settings
 
@@ -227,30 +227,109 @@ Creates a Vite configuration optimized for React applications.
 
 **Returns:** A complete Vite `UserConfig` object with React plugin included.
 
-#### `BASE_DEFAULTS`
+#### Exported Constants
 
-Exported constant containing the default configuration values for reference.
+- `BASE_DEFAULTS` - Default configuration values for reference
+- `UserConfig`, `Plugin` - Re-exported from Vite
 
-#### `UserConfig`, `Plugin` (re-exported from Vite)
-
-Vite types are re-exported for convenience when extending configurations.
-
-## When to Use
+## 🎯 When to Use
 
 Use this configuration when you want:
 
-- Consistent Vite configuration across multiple projects
-- Optimized build settings out of the box
-- Easy integration with React and other plugins
-- Type-safe configuration with full TypeScript support
-- A clean, simple API for customization
+- ✅ Consistent Vite configuration across multiple projects
+- ✅ Optimized build settings out of the box
+- ✅ Easy integration with React and other plugins
+- ✅ Type-safe configuration with full TypeScript support
+- ✅ A clean, simple API for customization
 
-## Requirements
+## 🔧 Extending the Configuration
+
+You can extend the configuration for your specific needs:
+
+### Adding Custom Plugins
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
+import { visualizer } from 'rollup-plugin-visualizer';
+
+export default createViteConfig({
+  plugins: [react(), svgr(), visualizer({ open: true })],
+});
+```
+
+### Overriding Build Settings
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+
+export default createViteConfig({
+  build: {
+    sourcemap: true,
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
+});
+```
+
+### Environment-Specific Configuration
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+
+export default createViteConfig({
+  plugins: [react()],
+  build: {
+    sourcemap: process.env.NODE_ENV !== 'production',
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3001',
+    },
+  },
+});
+```
+
+## 📝 Usage with Scripts
+
+Add build scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+Then run:
+
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run preview  # Preview production build
+```
+
+## 📋 Requirements
 
 - **Node.js** >= 18.0.0
 - **Vite** >= 5.0.0
 
-## Peer Dependencies
+## 📦 Peer Dependencies
 
 This package requires the following peer dependency:
 
@@ -260,13 +339,13 @@ Optional peer dependency for React projects:
 
 - `@vitejs/plugin-react` (for React integration)
 
-## Related Packages
+## 🔗 Related Packages
 
 - [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript config for React projects
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint config for React projects
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
-## License
+## 📄 License
 
 MIT

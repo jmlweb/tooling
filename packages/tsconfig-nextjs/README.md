@@ -237,7 +237,7 @@ Override the default path alias:
 }
 ```
 
-## 📝 Usage with Next.js
+## 📝 Usage with Scripts
 
 Next.js handles TypeScript compilation automatically. You typically don't need to run `tsc` manually, but you can add type checking scripts:
 

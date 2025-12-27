@@ -189,7 +189,7 @@ Follow the configurations defined in these packages. Do not override or modify f
 
 This is a Turborepo monorepo with the following structure:
 
-```
+```text
 jmlweb-tooling/
 ├── packages/          # Publishable configuration packages
 ├── apps/              # Test applications (e.g., test-app)

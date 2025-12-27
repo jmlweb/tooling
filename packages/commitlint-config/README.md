@@ -7,15 +7,15 @@
 
 > Shared commitlint configuration for enforcing Conventional Commits across projects. Flexible design works out-of-the-box for any project, with optional scope restrictions.
 
-## Features
+## ✨ Features
 
-- Enforces [Conventional Commits](https://conventionalcommits.org) specification
-- **No scope restrictions by default** - works with any project structure
-- Configurable scopes when you need them
-- Custom ignore functions for merge commits, dependabot, etc.
-- TypeScript support with full type definitions
+- 📝 **Conventional Commits**: Enforces [Conventional Commits](https://conventionalcommits.org) specification
+- 🎯 **Flexible Scopes**: No scope restrictions by default - works with any project structure
+- ⚙️ **Configurable**: Customizable scopes when you need them
+- 🚫 **Custom Ignores**: Ignore functions for merge commits, dependabot, etc.
+- 📦 **TypeScript Support**: Full type definitions included
 
-## Installation
+## 📦 Installation
 
 ```bash
 npm install --save-dev @jmlweb/commitlint-config @commitlint/cli @commitlint/config-conventional
@@ -27,7 +27,7 @@ Or with pnpm:
 pnpm add -D @jmlweb/commitlint-config @commitlint/cli @commitlint/config-conventional
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 Create a `commitlint.config.js` file in your project root:
 
@@ -39,7 +39,7 @@ export default commitlintConfig;
 
 That's it! Any commit type/scope following Conventional Commits is allowed.
 
-## Usage Examples
+## 💡 Examples
 
 ### No Scope Restrictions (Default)
 
@@ -94,7 +94,9 @@ export default createCommitlintConfig({
 });
 ```
 
-## Commit Message Format
+## 📋 Configuration Details
+
+### Commit Message Format
 
 This configuration enforces the Conventional Commits format:
 
@@ -118,7 +120,7 @@ test: add unit tests for utils
 ci: add GitHub Actions workflow
 ```
 
-## Allowed Types
+### Allowed Types
 
 | Type       | Description                           |
 | ---------- | ------------------------------------- |
@@ -134,7 +136,7 @@ ci: add GitHub Actions workflow
 | `build`    | Build system changes                  |
 | `revert`   | Reverting previous commits            |
 
-## Configuration Options
+### Configuration Options
 
 | Option             | Type                              | Default     | Description                                    |
 | ------------------ | --------------------------------- | ----------- | ---------------------------------------------- |
@@ -146,7 +148,7 @@ ci: add GitHub Actions workflow
 | `bodyRequired`     | `boolean`                         | `false`     | Whether to require a commit body               |
 | `ignores`          | `((commit: string) => boolean)[]` | `undefined` | Functions to ignore certain commits            |
 
-## Exports
+### Exports
 
 ```typescript
 // Default config - no scope restrictions
@@ -159,21 +161,63 @@ import { createCommitlintConfig } from '@jmlweb/commitlint-config';
 import { COMMIT_TYPES } from '@jmlweb/commitlint-config';
 ```
 
-## Integration with Husky
+## 🎯 When to Use
 
-### Step 1 - Install husky
+Use this configuration when you want:
+
+- ✅ Enforce Conventional Commits specification across your project
+- ✅ Automatic changelog generation from commit messages
+- ✅ Consistent commit message format across team members
+- ✅ Optional scope restrictions for monorepos
+- ✅ Integration with semantic-release or standard-version
+
+**For projects without commitlint**, consider starting with this package to improve commit quality and enable automated versioning.
+
+## 🔧 Extending the Configuration
+
+You can extend the configuration for your specific needs:
+
+### Adding Custom Scopes
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['frontend', 'backend', 'shared', 'docs'],
+  additionalTypes: ['wip'], // Add work-in-progress type
+});
+```
+
+### Stricter Rules
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['core', 'api', 'ui'],
+  scopeRequired: true,
+  bodyRequired: true,
+  headerMaxLength: 72,
+});
+```
+
+## 📝 Usage with Scripts
+
+### Integration with Husky
+
+#### Step 1 - Install husky
 
 ```bash
 pnpm add -D husky
 ```
 
-### Step 2 - Initialize husky
+#### Step 2 - Initialize husky
 
 ```bash
 pnpm exec husky init
 ```
 
-### Step 3 - Add commit-msg hook
+#### Step 3 - Add commit-msg hook
 
 Create or edit `.husky/commit-msg`:
 
@@ -181,7 +225,7 @@ Create or edit `.husky/commit-msg`:
 pnpm exec commitlint --edit $1
 ```
 
-### Step 4 - Test your setup
+#### Step 4 - Test your setup
 
 ```bash
 # This should fail
@@ -191,18 +235,36 @@ git commit -m "bad commit message"
 git commit -m "feat: add new feature"
 ```
 
-## Requirements
+### Package.json Scripts
+
+```json
+{
+  "scripts": {
+    "commitlint": "commitlint --edit",
+    "commitlint:all": "commitlint --from HEAD~10"
+  }
+}
+```
+
+## 📋 Requirements
 
 - **Node.js** >= 18.0.0
 - **@commitlint/cli** >= 19.0.0
 - **@commitlint/config-conventional** >= 19.0.0
 
-## Related Packages
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `@commitlint/cli` (>=19.0.0)
+- `@commitlint/config-conventional` (>=19.0.0)
+
+## 🔗 Related Packages
 
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint configuration for TypeScript
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier configuration
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 
-## License
+## 📄 License
 
 MIT

@@ -76,7 +76,7 @@ After setting up remote caching:
 
 Example log output:
 
-```
+```text
 • Packages in scope: 15
 • Running build in 15 packages
 • Remote caching enabled

@@ -10,7 +10,7 @@ Turborepo can detect which packages have changed and only run tasks on those pac
 
 When you run `pnpm build`, Turborepo builds **all packages**:
 
-```
+```text
 packages/
 ├── eslint-config-base/     ← Built
 ├── prettier-config-base/   ← Built
@@ -24,7 +24,7 @@ packages/
 
 If you only changed `eslint-config-base`, Turborepo builds:
 
-```
+```text
 packages/
 ├── eslint-config-base/     ← Built (changed)
 └── (dependencies if needed) ← Built only if required
