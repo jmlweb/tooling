@@ -258,7 +258,19 @@ jobs:
             BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
             FILTER="[$BASE...HEAD]"
             echo "Using filter: $FILTER"
-            pnpm build --filter="$FILTER" || pnpm build
+            # Try to build changed packages, but if no packages were built, build all
+            # Capture output to check if any tasks were executed
+            BUILD_OUTPUT=$(pnpm build --filter="$FILTER" 2>&1)
+            BUILD_EXIT=$?
+            echo "$BUILD_OUTPUT"
+            
+            if [ $BUILD_EXIT -ne 0 ]; then
+              echo "⚠️  Filter build failed, falling back to building all packages..."
+              pnpm build
+            elif echo "$BUILD_OUTPUT" | grep -q "No tasks were executed"; then
+              echo "⚠️  No packages were built with filter, building all packages..."
+              pnpm build
+            fi
           else
             echo "📦 Building all packages..."
             pnpm build
@@ -378,7 +390,19 @@ jobs:
             BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
             FILTER="[$BASE...HEAD]"
             echo "Using filter: $FILTER"
-            pnpm build --filter="$FILTER" || pnpm build
+            # Try to build changed packages, but if no packages were built, build all
+            # Capture output to check if any tasks were executed
+            BUILD_OUTPUT=$(pnpm build --filter="$FILTER" 2>&1)
+            BUILD_EXIT=$?
+            echo "$BUILD_OUTPUT"
+            
+            if [ $BUILD_EXIT -ne 0 ]; then
+              echo "⚠️  Filter build failed, falling back to building all packages..."
+              pnpm build
+            elif echo "$BUILD_OUTPUT" | grep -q "No tasks were executed"; then
+              echo "⚠️  No packages were built with filter, building all packages..."
+              pnpm build
+            fi
           else
             echo "📦 Building all packages..."
             pnpm build
