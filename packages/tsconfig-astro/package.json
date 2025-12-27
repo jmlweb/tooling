@@ -38,7 +38,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@jmlweb/tsconfig-base": "^1.0.1",
+    "@jmlweb/tsconfig-base": "workspace:*",
     "astro": ">=4.0.0",
     "typescript": ">=5.0.0"
   }

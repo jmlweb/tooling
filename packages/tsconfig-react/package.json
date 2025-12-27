@@ -38,6 +38,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@jmlweb/tsconfig-base": "^1.0.2"
+    "@jmlweb/tsconfig-base": "workspace:*"
   }
 }

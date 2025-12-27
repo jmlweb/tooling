@@ -39,7 +39,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@jmlweb/tsconfig-react": "^1.0.3",
+    "@jmlweb/tsconfig-react": "workspace:*",
     "next": ">=13.0.0",
     "typescript": ">=5.0.0"
   }

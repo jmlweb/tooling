@@ -53,7 +53,7 @@
   },
   "peerDependencies": {
     "@eslint/js": "^9.0.0",
-    "@jmlweb/eslint-config-base": "^2.0.2",
+    "@jmlweb/eslint-config-base": "workspace:*",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.37.0",
