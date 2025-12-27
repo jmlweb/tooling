@@ -18,6 +18,7 @@ This document contains ideas extracted from excellent README files across popula
 ## Visual Enhancements
 
 ### 1. Logo/Banner at Top
+
 **From:** Prettier, Turborepo
 
 - **Prettier**: Uses a banner image with logo
@@ -35,6 +36,7 @@ This document contains ideas extracted from excellent README files across popula
 ```
 
 ### 2. Centered Title with Badges
+
 **From:** Turborepo
 
 - Centered title creates visual hierarchy
@@ -42,6 +44,7 @@ This document contains ideas extracted from excellent README files across popula
 - **Idea**: Consider centering the main title in root README
 
 ### 3. Visual Separators
+
 **From:** Prettier
 
 - Uses horizontal rules (`---`) to separate major sections
@@ -49,6 +52,7 @@ This document contains ideas extracted from excellent README files across popula
 - **Idea**: Add horizontal rules between major sections in root README
 
 ### 4. Emoji Usage
+
 **From:** Our current READMEs (already good!)
 
 - We already use emojis effectively in package READMEs
@@ -57,6 +61,7 @@ This document contains ideas extracted from excellent README files across popula
 ## Structure & Organization
 
 ### 1. Table of Contents
+
 **From:** ESLint, Airbnb JavaScript Style Guide
 
 - **ESLint**: Comprehensive TOC with numbered sections
@@ -77,6 +82,7 @@ This document contains ideas extracted from excellent README files across popula
 ```
 
 ### 2. "Back to Top" Links
+
 **From:** Airbnb JavaScript Style Guide
 
 - Each section ends with `**[⬆ back to top](#table-of-contents)**`
@@ -84,6 +90,7 @@ This document contains ideas extracted from excellent README files across popula
 - **Idea**: Add to root README if it becomes longer
 
 ### 3. Clear Section Hierarchy
+
 **From:** React, ESLint
 
 - Major sections are clearly separated
@@ -93,6 +100,7 @@ This document contains ideas extracted from excellent README files across popula
 ## Content Ideas
 
 ### 1. "What is X?" Section
+
 **From:** React
 
 - React includes bullet points explaining key concepts:
@@ -106,6 +114,7 @@ This document contains ideas extracted from excellent README files across popula
   - One Source of Truth
 
 ### 2. Input/Output Examples
+
 **From:** Prettier
 
 - Shows "Before" and "After" code examples
@@ -113,12 +122,14 @@ This document contains ideas extracted from excellent README files across popula
 - **Idea**: We already do this in package READMEs, could add to root README showing transformation examples
 
 ### 3. Feature Highlights with Icons
+
 **From:** Prettier
 
 - Lists supported languages/formats with visual separators
 - **Idea**: Could add a "Supported Tools" section showing all tools we configure
 
 ### 4. Quick Links Section
+
 **From:** ESLint, React
 
 - ESLint has quick links at the top:
@@ -131,6 +142,7 @@ This document contains ideas extracted from excellent README files across popula
   - Support
 
 ### 5. Prerequisites Section
+
 **From:** ESLint
 
 - Clear prerequisites section before installation
@@ -139,6 +151,7 @@ This document contains ideas extracted from excellent README files across popula
 ## Badge & Status Indicators
 
 ### 1. CI/CD Status Badges
+
 **From:** React, ESLint, TypeScript
 
 - Multiple CI badges showing different workflows
@@ -148,30 +161,35 @@ This document contains ideas extracted from excellent README files across popula
   - Lint Status
 
 ### 2. Download Statistics
+
 **From:** ESLint, TypeScript
 
 - Weekly/monthly download badges
 - **Idea**: We already have this! Could add aggregate stats for all packages
 
 ### 3. Security Badges
+
 **From:** TypeScript
 
 - OpenSSF Scorecard badge
 - **Idea**: Add security-related badges
 
 ### 4. Community Badges
+
 **From:** ESLint
 
 - Open Collective backers/sponsors
 - **Idea**: If we get sponsors, add badges
 
 ### 5. "PRs Welcome" Badge
+
 **From:** React
 
 - Encourages contributions
 - **Idea**: Add to root README to encourage contributions
 
 ### 6. Code Style Badge
+
 **From:** Prettier
 
 - "code style: prettier" badge
@@ -180,18 +198,21 @@ This document contains ideas extracted from excellent README files across popula
 ## Examples & Demos
 
 ### 1. Live Code Example
+
 **From:** React
 
 - Shows a complete, runnable example right in README
 - **Idea**: Add a complete example showing multiple packages working together
 
 ### 2. Multiple Example Types
+
 **From:** React
 
 - Links to different types of examples
 - **Idea**: We already have this with apps/README.md, but could expand
 
 ### 3. Before/After Comparisons
+
 **From:** Prettier
 
 - Visual before/after code examples
@@ -200,6 +221,7 @@ This document contains ideas extracted from excellent README files across popula
 ## Community & Contribution
 
 ### 1. Contributing Section
+
 **From:** React, ESLint, TypeScript
 
 - Clear contributing guidelines
@@ -207,12 +229,14 @@ This document contains ideas extracted from excellent README files across popula
 - **Idea**: Expand our Support section with more contribution details
 
 ### 2. Code of Conduct
+
 **From:** React, ESLint
 
 - Links to Code of Conduct
 - **Idea**: If we add one, link it prominently
 
 ### 3. Good First Issues
+
 **From:** React
 
 - Links to "good first issue" label
@@ -220,12 +244,14 @@ This document contains ideas extracted from excellent README files across popula
 - **Idea**: Add if we use GitHub issues with labels
 
 ### 4. Community Links
+
 **From:** ESLint, Turborepo
 
 - Discord, Twitter, Discussions links
 - **Idea**: Add community links if we have them
 
 ### 5. Sponsors Section
+
 **From:** ESLint
 
 - Lists sponsors and backers
@@ -234,6 +260,7 @@ This document contains ideas extracted from excellent README files across popula
 ## Documentation Links
 
 ### 1. Quick Links to Documentation
+
 **From:** Prettier, ESLint
 
 - Prettier has a "Documentation" section with quick links
@@ -245,12 +272,14 @@ This document contains ideas extracted from excellent README files across popula
   - CI Documentation
 
 ### 2. External Documentation
+
 **From:** React, TypeScript
 
 - Links to external documentation sites
 - **Idea**: If we create a docs site, link it prominently
 
 ### 3. Playground/Examples Links
+
 **From:** Prettier, TypeScript
 
 - Links to interactive playgrounds
@@ -259,24 +288,28 @@ This document contains ideas extracted from excellent README files across popula
 ## Quick Reference Sections
 
 ### 1. Installation Quick Reference
+
 **From:** TypeScript
 
 - Shows both stable and nightly versions
 - **Idea**: Could show different installation methods more prominently
 
 ### 2. Version Support Policy
+
 **From:** ESLint
 
 - Clear version support policy
 - **Idea**: We have Node.js compatibility, could add version support policy
 
 ### 3. Semantic Versioning Policy
+
 **From:** ESLint
 
 - Detailed semver policy
 - **Idea**: Could add our versioning approach (we use Changesets)
 
 ### 4. FAQ Section
+
 **From:** ESLint
 
 - Frequently Asked Questions
@@ -288,27 +321,31 @@ This document contains ideas extracted from excellent README files across popula
 ## Specific Ideas for Root README
 
 ### 1. Add Visual Hierarchy
+
 - Center the title
 - Add logo/banner (if available)
 - Better badge organization
 
 ### 2. Add Table of Contents
+
 - Especially useful as README grows
 - Makes navigation easier
 
 ### 3. Add "What is jmlweb-tooling?" Section
+
 ```markdown
 ## What is jmlweb-tooling?
 
 jmlweb-tooling is a collection of centralized configuration packages for development tools. It provides:
 
-* **One Source of Truth**: Maintain consistent code style across all projects
-* **Zero Configuration**: Works out of the box with sensible defaults
-* **Easy to Extend**: Build framework-specific configs on top of base configs
-* **Modern Standards**: Optimized for modern JavaScript/TypeScript development
+- **One Source of Truth**: Maintain consistent code style across all projects
+- **Zero Configuration**: Works out of the box with sensible defaults
+- **Easy to Extend**: Build framework-specific configs on top of base configs
+- **Modern Standards**: Optimized for modern JavaScript/TypeScript development
 ```
 
 ### 4. Add Quick Links Section
+
 ```markdown
 ## Quick Links
 
@@ -320,26 +357,32 @@ jmlweb-tooling is a collection of centralized configuration packages for develop
 ```
 
 ### 5. Add FAQ Section
+
 ```markdown
 ## Frequently Asked Questions
 
 ### Can I use multiple configs together?
+
 Yes! Configs are designed to work together. For example, you can use `@jmlweb/prettier-config-base` with `@jmlweb/eslint-config-base`.
 
 ### How do I extend a config?
+
 See the [Extending the Configuration](#extending-the-configuration) section in each package's README.
 
 ### What's the difference between base and framework-specific configs?
+
 Base configs provide foundational rules. Framework-specific configs (like `eslint-config-react`) extend base configs with framework-specific rules.
 ```
 
 ### 6. Add CI/CD Badges
+
 ```markdown
 [![CI Status](https://github.com/jmlweb/tooling/actions/workflows/ci.yml/badge.svg)](https://github.com/jmlweb/tooling/actions/workflows/ci.yml)
 [![Publish Status](https://github.com/jmlweb/tooling/actions/workflows/publish.yml/badge.svg)](https://github.com/jmlweb/tooling/actions/workflows/publish.yml)
 ```
 
 ### 7. Add "Contributing" Section
+
 ```markdown
 ## Contributing
 
@@ -352,16 +395,19 @@ Contributions are welcome! Please see our [Contributing Guide](./CONTRIBUTING.md
 ```
 
 ### 8. Add Visual Package Hierarchy
+
 - Could add a visual diagram showing package relationships
 - Use Mermaid diagrams or ASCII art (we already have ASCII art, but could enhance)
 
 ### 9. Add "Who Uses This?" Section
+
 **From:** Turborepo
 
 - Showcase section
 - **Idea**: If we have users, add a showcase section
 
 ### 10. Add "Updates" Section
+
 **From:** Turborepo
 
 - Link to Twitter/X for updates
@@ -370,42 +416,49 @@ Contributions are welcome! Please see our [Contributing Guide](./CONTRIBUTING.md
 ## Specific Ideas for Package READMEs
 
 ### 1. Add "Why Use This?" Section
+
 **From:** Airbnb Style Guide
 
 - Explains the "why" behind decisions
 - **Idea**: Add reasoning sections explaining why certain configs are chosen
 
 ### 2. Add Migration Guides More Prominently
+
 **From:** ESLint
 
 - Clear migration paths
 - **Idea**: We have migration guides, but could make them more prominent
 
 ### 3. Add "Common Issues" Section
+
 **From:** Various
 
 - Troubleshooting common problems
 - **Idea**: Add to packages that might have common setup issues
 
 ### 4. Add "Alternatives" Section
+
 **From:** Various
 
 - When NOT to use this package
 - **Idea**: We have "When to Use", could add "When NOT to Use"
 
 ### 5. Add "Performance" Notes
+
 **From:** Airbnb Style Guide
 
 - Performance considerations
 - **Idea**: Add if relevant (e.g., for build tools)
 
 ### 6. Add "Changelog" Link
+
 **From:** Various
 
 - Link to changelog
 - **Idea**: Link to Changesets-generated changelogs
 
 ### 7. Add "Related Tools" Section
+
 **From:** Various
 
 - Tools that work well together
@@ -414,6 +467,7 @@ Contributions are welcome! Please see our [Contributing Guide](./CONTRIBUTING.md
 ## Implementation Priority
 
 ### High Priority (Quick Wins)
+
 1. ✅ Add Table of Contents to root README
 2. ✅ Add "What is jmlweb-tooling?" section
 3. ✅ Add Quick Links section
@@ -421,12 +475,14 @@ Contributions are welcome! Please see our [Contributing Guide](./CONTRIBUTING.md
 5. ✅ Add FAQ section
 
 ### Medium Priority (Nice to Have)
+
 1. Add visual hierarchy improvements (centered title, better badge layout)
 2. Add "Contributing" section expansion
 3. Add "Back to Top" links if README gets longer
 4. Add visual separators between major sections
 
 ### Low Priority (Future Enhancements)
+
 1. Add logo/banner (if we create one)
 2. Add community links (if we create them)
 3. Add showcase section (if we have users)
@@ -443,6 +499,7 @@ Contributions are welcome! Please see our [Contributing Guide](./CONTRIBUTING.md
 ## References
 
 Repositories analyzed:
+
 - [React](https://github.com/facebook/react)
 - [ESLint](https://github.com/eslint/eslint)
 - [Prettier](https://github.com/prettier/prettier)
