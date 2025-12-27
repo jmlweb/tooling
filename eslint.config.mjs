@@ -19,7 +19,11 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.mjs', 'apps/test-app/scripts/**/*.mjs'],
+    files: [
+      'scripts/**/*.mjs',
+      'apps/test-app/scripts/**/*.mjs',
+      'apps/integration-tests/scripts/**/*.mjs',
+    ],
     languageOptions: {
       globals: {
         ...globals.node,

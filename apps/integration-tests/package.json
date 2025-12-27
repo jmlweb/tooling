@@ -1,0 +1,25 @@
+{
+  "name": "@jmlweb/integration-tests",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Integration tests for verifying packages work when installed and consumed",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint scripts/ --ext .mjs",
+    "test": "node scripts/run-tests.mjs"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@jmlweb/eslint-config-base-js": "workspace:*",
+    "@jmlweb/prettier-config-base": "workspace:*",
+    "chalk": "^5.3.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.3.3"
+  }
+}

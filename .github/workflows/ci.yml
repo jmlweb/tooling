@@ -337,11 +337,64 @@ jobs:
 
           echo "✅ Validated $PACKAGES_VALIDATED package(s) successfully"
 
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download build artifacts
+        id: download-artifacts
+        uses: actions/download-artifact@v6
+        continue-on-error: true
+        with:
+          name: build-artifacts
+          path: packages
+
+      - name: Build packages if artifacts not found
+        if: steps.download-artifacts.outcome == 'failure'
+        run: |
+          echo "⚠️  No artifacts found, building packages..."
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "🔍 PR detected - Building only changed packages..."
+            git fetch origin ${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
+            BASE=$(git merge-base HEAD origin/${{ github.base_ref }})
+            FILTER="[$BASE...HEAD]"
+            echo "Using filter: $FILTER"
+            pnpm build --filter="$FILTER" || pnpm build
+          else
+            echo "📦 Building all packages..."
+            pnpm build
+          fi
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+      - name: Run integration tests
+        run: pnpm integration:test
+
   status-check:
     name: CI Status Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [validate-format, validate-lint, validate-deps, build, test-pack]
+    needs: [validate-format, validate-lint, validate-deps, build, test-pack, integration-test]
     if: always()
     steps:
       - name: Check job results
@@ -350,7 +403,8 @@ jobs:
              [ "${{ needs.validate-lint.result }}" != "success" ] || \
              [ "${{ needs.validate-deps.result }}" != "success" ] || \
              [ "${{ needs.build.result }}" != "success" ] || \
-             [ "${{ needs.test-pack.result }}" != "success" ]; then
+             [ "${{ needs.test-pack.result }}" != "success" ] || \
+             [ "${{ needs.integration-test.result }}" != "success" ]; then
             echo "One or more CI jobs failed"
             exit 1
           fi
