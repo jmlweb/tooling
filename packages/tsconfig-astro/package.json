@@ -15,8 +15,8 @@
     "prepublishOnly": "node ../../scripts/validate-package.mjs"
   },
   "keywords": [
-    "config",
     "astro",
+    "config",
     "jsx",
     "strict",
     "tsconfig",

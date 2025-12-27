@@ -29,11 +29,11 @@
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
   "keywords": [
+    "astro",
     "code-quality",
     "eslint",
     "eslint-config",
     "linting",
-    "astro",
     "typescript"
   ],
   "author": "jmlweb",
