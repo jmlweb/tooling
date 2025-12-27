@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/postcss-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PostCSS configuration for jmlweb projects with Tailwind CSS and Autoprefixer",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/vite-config",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Base Vite configuration for jmlweb projects with TypeScript support, build optimization, and optional React integration",
   "type": "module",
   "main": "./dist/index.cjs",

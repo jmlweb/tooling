@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-base
 
+## 2.0.2
+
+### Patch Changes
+
+- 21918eb: Standardize repository field format to object format across all packages and configure syncpack to preserve it.
+- Updated dependencies [21918eb]
+  - @jmlweb/eslint-config-base-js@1.0.2
+
 ## 2.0.1
 
 ### Patch Changes
