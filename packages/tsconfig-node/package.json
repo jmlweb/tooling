@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-node",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TypeScript configuration for Node.js and CLI projects. Extends @jmlweb/tsconfig-base with Node.js-specific settings excluding DOM types.",
   "main": "tsconfig.json",
   "exports": {
@@ -39,7 +39,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@jmlweb/tsconfig-base": "^1.0.1",
+    "@jmlweb/tsconfig-base": "^1.0.2",
     "typescript": ">=5.0.0"
   }
 }

@@ -1,5 +1,11 @@
 # @jmlweb/jest-config
 
+## 0.1.0
+
+### Minor Changes
+
+- 183bd3f: Add Jest configuration package with TypeScript support and coverage settings
+
 ## 0.0.0
 
 ### Added

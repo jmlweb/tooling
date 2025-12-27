@@ -1,5 +1,11 @@
 # @jmlweb/tsup-config-base
 
+## 1.1.1
+
+### Patch Changes
+
+- 21918eb: Standardize repository field format to object format across all packages and configure syncpack to preserve it.
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @jmlweb/vite-config
 
+## 0.1.2
+
+### Patch Changes
+
+- 21918eb: Standardize repository field format to object format across all packages and configure syncpack to preserve it.
+
 ## 0.1.1
 
 ### Patch Changes
