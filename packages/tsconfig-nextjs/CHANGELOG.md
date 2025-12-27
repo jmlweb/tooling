@@ -1,5 +1,11 @@
 # @jmlweb/tsconfig-nextjs
 
+## 1.1.3
+
+### Patch Changes
+
+- Fix peer dependency version to match published @jmlweb/tsconfig-react version (1.0.1)
+
 ## 1.1.2
 
 ### Patch Changes
