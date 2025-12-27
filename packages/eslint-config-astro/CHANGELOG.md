@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-astro
 
+## 1.0.2
+
+### Patch Changes
+
+- beae5ae: Add trailing newlines to source files for consistency.
+
 ## 1.0.1
 
 ### Patch Changes

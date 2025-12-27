@@ -1,5 +1,11 @@
 # @jmlweb/jest-config
 
+## 0.1.1
+
+### Patch Changes
+
+- beae5ae: Add trailing newlines to source files for consistency.
+
 ## 0.1.0
 
 ### Minor Changes

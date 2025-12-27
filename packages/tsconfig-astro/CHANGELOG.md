@@ -1,5 +1,11 @@
 # @jmlweb/tsconfig-astro
 
+## 1.1.2
+
+### Patch Changes
+
+- beae5ae: Add trailing newlines to source files for consistency.
+
 ## 1.1.1
 
 ### Patch Changes

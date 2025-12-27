@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-react
 
+## 2.0.3
+
+### Patch Changes
+
+- beae5ae: Add trailing newlines to source files for consistency.
+
 ## 2.0.2
 
 ### Patch Changes
