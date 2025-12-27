@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-astro
 
+## 1.0.1
+
+### Patch Changes
+
+- 9553ece: Fix package.json formatting by sorting keywords alphabetically to comply with syncpack rules.
+
 ## 1.0.0
 
 ### Added
