@@ -22,6 +22,11 @@ jobs:
     outputs:
       versioned: ${{ steps.version.outputs.versioned }}
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -83,6 +88,11 @@ jobs:
       packages: ${{ steps.detect.outputs.packages }}
       has-changes: ${{ steps.detect.outputs.has-changes }}
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -139,6 +149,11 @@ jobs:
       matrix:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
 

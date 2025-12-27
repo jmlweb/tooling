@@ -20,6 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -36,6 +41,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -61,6 +71,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
 
@@ -73,6 +88,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -171,6 +191,11 @@ jobs:
     timeout-minutes: 10
     needs: build
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -258,6 +283,11 @@ jobs:
     timeout-minutes: 15
     needs: build
     steps:
+      - name: Checkout repository (for action)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
