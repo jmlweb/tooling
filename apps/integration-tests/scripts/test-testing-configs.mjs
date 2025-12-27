@@ -32,16 +32,16 @@ export async function testTestingConfigs(packages) {
   }
 
   for (const pkg of testingPackages) {
-    await testTestingPackage(pkg);
+    await testTestingPackage(pkg, packages);
   }
 }
 
-async function testTestingPackage(pkg) {
+async function testTestingPackage(pkg, allPackages) {
   log.section(`Testing ${pkg.name}`);
 
   try {
-    // Initialize test project
-    initTestProject([pkg]);
+    // Initialize test project with all packages to resolve internal dependencies
+    initTestProject(allPackages);
 
     // Determine dependencies based on package type
     const deps = {

@@ -32,16 +32,16 @@ export async function testPrettierConfigs(packages) {
   }
 
   for (const pkg of prettierPackages) {
-    await testPrettierPackage(pkg);
+    await testPrettierPackage(pkg, packages);
   }
 }
 
-async function testPrettierPackage(pkg) {
+async function testPrettierPackage(pkg, allPackages) {
   log.section(`Testing ${pkg.name}`);
 
   try {
-    // Initialize test project
-    initTestProject([pkg]);
+    // Initialize test project with all packages to resolve internal dependencies
+    initTestProject(allPackages);
 
     // Install prettier and the config package
     installDependencies({

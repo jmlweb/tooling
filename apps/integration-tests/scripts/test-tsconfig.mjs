@@ -33,16 +33,16 @@ export async function testTSConfigs(packages) {
   }
 
   for (const pkg of tsconfigPackages) {
-    await testTSConfigPackage(pkg);
+    await testTSConfigPackage(pkg, packages);
   }
 }
 
-async function testTSConfigPackage(pkg) {
+async function testTSConfigPackage(pkg, allPackages) {
   log.section(`Testing ${pkg.name}`);
 
   try {
-    // Initialize test project
-    initTestProject([pkg]);
+    // Initialize test project with all packages to resolve internal dependencies
+    initTestProject(allPackages);
 
     // Install TypeScript
     installDependencies({

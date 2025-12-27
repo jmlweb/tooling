@@ -34,16 +34,16 @@ export async function testBuildToolConfigs(packages) {
   }
 
   for (const pkg of buildToolPackages) {
-    await testBuildToolPackage(pkg);
+    await testBuildToolPackage(pkg, packages);
   }
 }
 
-async function testBuildToolPackage(pkg) {
+async function testBuildToolPackage(pkg, allPackages) {
   log.section(`Testing ${pkg.name}`);
 
   try {
-    // Initialize test project
-    initTestProject([pkg]);
+    // Initialize test project with all packages to resolve internal dependencies
+    initTestProject(allPackages);
 
     // Determine dependencies based on package type
     const deps = {

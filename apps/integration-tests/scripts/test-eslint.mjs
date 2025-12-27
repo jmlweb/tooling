@@ -32,16 +32,16 @@ export async function testESLintConfigs(packages) {
   }
 
   for (const pkg of eslintPackages) {
-    await testESLintPackage(pkg);
+    await testESLintPackage(pkg, packages);
   }
 }
 
-async function testESLintPackage(pkg) {
+async function testESLintPackage(pkg, allPackages) {
   log.section(`Testing ${pkg.name}`);
 
   try {
-    // Initialize test project
-    initTestProject([pkg]);
+    // Initialize test project with all packages to resolve internal dependencies
+    initTestProject(allPackages);
 
     // Determine peer dependencies based on package
     const peerDeps = {

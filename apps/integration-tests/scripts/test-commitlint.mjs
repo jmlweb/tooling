@@ -31,16 +31,16 @@ export async function testCommitlintConfig(packages) {
   }
 
   for (const pkg of commitlintPackages) {
-    await testCommitlintPackage(pkg);
+    await testCommitlintPackage(pkg, packages);
   }
 }
 
-async function testCommitlintPackage(pkg) {
+async function testCommitlintPackage(pkg, allPackages) {
   log.section(`Testing ${pkg.name}`);
 
   try {
-    // Initialize test project
-    initTestProject([pkg]);
+    // Initialize test project with all packages to resolve internal dependencies
+    initTestProject(allPackages);
 
     // Install commitlint
     installDependencies({
