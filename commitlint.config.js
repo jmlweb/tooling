@@ -52,6 +52,7 @@ export default {
         'vite-config',
         'postcss-config',
         // Test configs
+        'jest-config',
         'vitest-config',
         // Commitlint config
         'commitlint-config',
