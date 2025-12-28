@@ -4,7 +4,6 @@
   "scripts": {
     "build": "turbo run build",
     "changeset": "changeset",
-    "check": "turbo run check",
     "ci": "pnpm validate && pnpm build",
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{js,json,md}\"",

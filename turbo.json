@@ -4,14 +4,26 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
-      "inputs": ["src/**", "tsup.config.ts", "package.json"]
+      "inputs": ["src/**", "tsup.config.ts", "tsconfig.json", "package.json"]
     },
     "lint": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": [],
+      "inputs": [
+        "src/**",
+        "*.{js,mjs,cjs,ts,tsx,jsx}",
+        "eslint.config.*",
+        "package.json"
+      ]
     },
     "format": {
-      "outputs": []
+      "outputs": [],
+      "inputs": [
+        "**/*.{js,json,md}",
+        ".prettierrc*",
+        "prettier.config.*",
+        "package.json"
+      ]
     },
     "clean": {
       "cache": false
@@ -19,7 +31,16 @@
     "test": {
       "dependsOn": ["^build"],
       "outputs": [],
-      "inputs": ["fixtures/**", "scripts/**", "package.json"]
+      "inputs": [
+        "src/**",
+        "fixtures/**",
+        "scripts/**",
+        "*.test.*",
+        "*.spec.*",
+        "vitest.config.*",
+        "jest.config.*",
+        "package.json"
+      ]
     }
   }
 }
