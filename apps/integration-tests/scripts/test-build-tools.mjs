@@ -75,12 +75,18 @@ async function testBuildToolPackage(pkg, allPackages) {
     log.info('Test 2: Verifying config structure...');
 
     if (pkg.name.includes('tsup-config')) {
-      // tsup config should have entry, format, etc.
-      if (!config.entry && typeof config.entry !== 'object') {
-        // Some configs might export a factory function
-        if (typeof config !== 'function') {
-          throw new Error('tsup config should have entry or be a function');
-        }
+      // tsup config can be: a config object, a function, or export factory functions
+      // Note: importFromTestEnv serializes functions as '[Function]' strings
+      const hasFactoryFunctions =
+        config.createTsupConfig === '[Function]' ||
+        config.createTsupCliConfig === '[Function]';
+      const isConfigObject = config.entry || typeof config.entry === 'object';
+      const isFunction = config === '[Function]';
+
+      if (!hasFactoryFunctions && !isConfigObject && !isFunction) {
+        throw new Error(
+          'tsup config should have entry, be a function, or export factory functions',
+        );
       }
       log.success('tsup config structure is valid');
     } else if (pkg.name.includes('vite-config')) {
@@ -94,8 +100,12 @@ async function testBuildToolPackage(pkg, allPackages) {
       if (typeof config !== 'object') {
         throw new Error('PostCSS config should be an object');
       }
-      if (!config.plugins || !Array.isArray(config.plugins)) {
-        throw new Error('PostCSS config should have a plugins array');
+      // PostCSS plugins can be an array or an object
+      if (
+        !config.plugins ||
+        (typeof config.plugins !== 'object' && !Array.isArray(config.plugins))
+      ) {
+        throw new Error('PostCSS config should have a plugins property');
       }
       log.success('postcss config structure is valid');
     }
@@ -103,9 +113,27 @@ async function testBuildToolPackage(pkg, allPackages) {
     // Test 3: Create a test config file that uses the package
     log.info('Test 3: Testing config file usage...');
     if (pkg.name.includes('tsup-config')) {
-      createTestFile(
-        'tsup.config.ts',
-        `import { defineConfig } from 'tsup';
+      // Check if package exports factory functions (serialized as '[Function]')
+      const hasFactoryFunctions =
+        config.createTsupConfig === '[Function]' ||
+        config.createTsupCliConfig === '[Function]';
+
+      if (hasFactoryFunctions) {
+        // For factory function exports, create a config that calls the factory
+        createTestFile(
+          'tsup.config.ts',
+          `import { createTsupConfig } from '${pkg.name}';
+
+export default createTsupConfig({
+  entry: ['src/index.ts'],
+});
+`,
+        );
+      } else {
+        // For direct config exports, spread the config
+        createTestFile(
+          'tsup.config.ts',
+          `import { defineConfig } from 'tsup';
 import baseConfig from '${pkg.name}';
 
 export default defineConfig({
@@ -113,7 +141,8 @@ export default defineConfig({
   entry: ['src/index.ts'],
 });
 `,
-      );
+        );
+      }
     } else if (pkg.name.includes('vite-config')) {
       createTestFile(
         'vite.config.ts',

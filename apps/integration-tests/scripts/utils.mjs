@@ -230,7 +230,8 @@ export async function importFromTestEnv(packageName) {
   // Create a temporary script in the test directory that imports and outputs the module
   const scriptPath = join(testDir, '__import-helper.mjs');
   const script = `
-import pkg from '${packageName}';
+import * as pkgNs from '${packageName}';
+const pkg = pkgNs.default || pkgNs;
 
 // Custom JSON serializer that handles functions and symbols
 function serialize(obj, seen = new WeakSet()) {
