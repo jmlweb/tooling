@@ -51,9 +51,90 @@ This rule applies to:
 
 1. **Check for Updates**: Before adding or updating dependencies, check for the latest stable version
 2. **Stable Versions Only**: Use stable releases, avoid beta, alpha, or release candidate versions unless specifically required
-3. **Version Pinning**: While using latest stable versions, pin exact versions in `package.json` for reproducibility
-4. **Regular Updates**: Periodically review and update dependencies to maintain current stable versions
+3. **Version Consistency**: Use syncpack to enforce consistent versions across the monorepo (see Version Syntax and Automation Tools below)
+4. **Regular Updates**: Periodically review and update dependencies to maintain current stable versions (see Update Cadence below)
 5. **Security**: Latest stable versions often include security patches, so staying current is important
+
+#### Version Syntax
+
+This project uses **syncpack** to enforce consistent versioning across the monorepo. The following rules are configured in `.syncpackrc.json`:
+
+- **Caret ranges** (enforced by syncpack): `"dependency": "^1.2.3"`
+  - Allows patch and minor updates (`>=1.2.3 <2.0.0`)
+  - Used for all dev and prod dependencies
+  - Provides automatic security patches and bug fixes
+  - Maintains consistency across all packages in the monorepo
+
+- **Workspace protocol**: `"dependency": "workspace:*"`
+  - Used for internal package references (e.g., `@jmlweb/*` packages)
+  - Automatically resolves to local workspace versions
+  - Ignored by syncpack version checks
+
+- **Peer dependencies**: `"peerDependency": "^1.2.3"` (broader ranges allowed)
+  - Intentionally more flexible for compatibility with consumers
+  - Ignored by syncpack to allow package-specific compatibility requirements
+
+**Important**: Do not manually set version ranges. Syncpack automatically enforces the correct format when you run `pnpm syncpack:fix`.
+
+#### Update Cadence
+
+Maintain dependencies on a regular schedule to avoid large, risky updates:
+
+- **Monthly**: Check for and apply patch version updates
+  - Low risk, often security fixes
+  - Run `pnpm outdated` and update patch versions
+
+- **Quarterly**: Review and apply minor version updates
+  - Medium risk, may include new features and deprecations
+  - Test thoroughly before merging
+
+- **As needed**: Evaluate major version updates
+  - High risk, likely breaking changes
+  - Plan dedicated time for testing and migration
+  - Review changelog and migration guides
+
+- **Immediately**: Apply critical security updates
+  - Monitor security advisories
+  - Use automated tools for vulnerability scanning
+
+#### Automation Tools
+
+This project uses **syncpack** to maintain version consistency across the monorepo. Use these commands:
+
+```bash
+# Check for version mismatches (runs in CI)
+pnpm syncpack:check
+
+# Fix version mismatches and format package.json files
+pnpm syncpack:fix
+
+# List all dependency mismatches
+pnpm exec syncpack list-mismatches
+
+# Update all dependencies to latest versions
+pnpm exec syncpack update
+
+# Check for outdated packages (fallback to pnpm)
+pnpm outdated
+
+# Check for security vulnerabilities
+pnpm audit
+
+# Fix security vulnerabilities automatically
+pnpm audit --fix
+```
+
+**Recommended workflow for updating dependencies**:
+
+1. Run `pnpm outdated` to see available updates
+2. Review changelogs for major version changes
+3. Update versions in package.json files manually or use `pnpm exec syncpack update`
+4. Run `pnpm syncpack:fix` to ensure consistency across all packages
+5. Run `pnpm build` and `pnpm test` to verify nothing broke
+6. Run `pnpm validate` to ensure all checks pass
+7. Commit changes with descriptive message
+
+**Important**: Always run `pnpm syncpack:fix` after manually updating dependencies to ensure version consistency across the monorepo.
 
 #### Published Packages Node.js Compatibility
 
