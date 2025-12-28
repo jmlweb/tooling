@@ -1,4 +1,0 @@
-{
-  "extends": "@jmlweb/tsconfig-internal",
-  "include": ["src"]
-}

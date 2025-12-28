@@ -157,14 +157,6 @@ Base Vite configuration for frontend projects:
 - Development server settings
 - Optional React integration via helper function
 
-### `@jmlweb/postcss-config`
-
-PostCSS configuration for Tailwind CSS projects:
-
-- Tailwind CSS plugin
-- Autoprefixer for vendor prefixes
-- Zero configuration needed
-
 ### `@jmlweb/commitlint-config`
 
 Commitlint configuration for enforcing Conventional Commits:
@@ -193,7 +185,6 @@ jmlweb-tooling/
 │   ├── vitest-config/
 │   ├── tsup-config-base/
 │   ├── vite-config/
-│   ├── postcss-config/
 │   └── commitlint-config/
 ├── apps/
 │   ├── test-app/ (testing and validation)
@@ -275,7 +266,6 @@ This monorepo is designed to grow over time. Current progress and future package
 
 - ~~`@jmlweb/tsup-config-base`: tsup bundler configuration~~ ✅
 - ~~`@jmlweb/vite-config`: Vite build configuration~~ ✅
-- ~~`@jmlweb/postcss-config`: PostCSS configuration~~ ✅
 
 ### Git & Workflow
 

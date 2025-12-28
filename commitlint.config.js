@@ -52,7 +52,6 @@ export default {
         // Build configs
         'tsup-config-base',
         'vite-config',
-        'postcss-config',
         // Test configs
         'jest-config',
         'vitest-config',

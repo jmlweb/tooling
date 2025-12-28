@@ -24,9 +24,7 @@ export async function testBuildToolConfigs(packages) {
 
   const buildToolPackages = packages.filter(
     (pkg) =>
-      pkg.name.includes('tsup-config') ||
-      pkg.name.includes('vite-config') ||
-      pkg.name.includes('postcss-config'),
+      pkg.name.includes('tsup-config') || pkg.name.includes('vite-config'),
   );
 
   if (buildToolPackages.length === 0) {
@@ -55,10 +53,6 @@ async function testBuildToolPackage(pkg, allPackages) {
       deps.tsup = '^8.5.1';
     } else if (pkg.name.includes('vite-config')) {
       deps.vite = '^6.0.0';
-    } else if (pkg.name.includes('postcss-config')) {
-      deps.postcss = '^8.4.49';
-      deps['tailwindcss'] = '^3.4.17';
-      deps.autoprefixer = '^10.4.20';
     }
 
     installDependencies(deps);
@@ -95,19 +89,6 @@ async function testBuildToolPackage(pkg, allPackages) {
         throw new Error('Vite config should be an object or function');
       }
       log.success('vite config structure is valid');
-    } else if (pkg.name.includes('postcss-config')) {
-      // PostCSS config should be an object with plugins
-      if (typeof config !== 'object') {
-        throw new Error('PostCSS config should be an object');
-      }
-      // PostCSS plugins can be an array or an object
-      if (
-        !config.plugins ||
-        (typeof config.plugins !== 'object' && !Array.isArray(config.plugins))
-      ) {
-        throw new Error('PostCSS config should have a plugins property');
-      }
-      log.success('postcss config structure is valid');
     }
 
     // Test 3: Create a test config file that uses the package
@@ -152,14 +133,6 @@ import baseConfig from '${pkg.name}';
 export default defineConfig({
   ...baseConfig,
 });
-`,
-      );
-    } else if (pkg.name.includes('postcss-config')) {
-      createTestFile(
-        'postcss.config.js',
-        `import baseConfig from '${pkg.name}';
-
-export default baseConfig;
 `,
       );
     }
