@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-base
 
+## 2.0.6
+
+### Patch Changes
+
+- 0c32641: Update dependencies to latest stable versions
+
 ## 2.0.5
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-react
 
+## 2.0.7
+
+### Patch Changes
+
+- 0c32641: Update dependencies to latest stable versions
+- Updated dependencies [0c32641]
+  - @jmlweb/eslint-config-base@2.0.6
+
 ## 2.0.6
 
 ### Patch Changes
