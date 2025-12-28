@@ -160,9 +160,18 @@ export function initTestProject(packages = []) {
   // Add dependencies from packed packages
   if (packages.length > 0) {
     packageJson.dependencies = {};
+    packageJson.pnpm = {
+      overrides: {},
+    };
+
     for (const pkg of packages) {
       // Use absolute path to packed tarball since test dir is in system temp
       packageJson.dependencies[pkg.name] = `file:${pkg.path}`;
+
+      // Add pnpm override to force this package version to use local file
+      // This ensures nested dependencies also resolve to local packages
+      packageJson.pnpm.overrides[`${pkg.name}@${pkg.packageJson.version}`] =
+        `file:${pkg.path}`;
     }
   }
 

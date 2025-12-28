@@ -1,7 +1,10 @@
 name: Publish Packages
 
 on:
-  push:
+  # Only run after CI workflow completes successfully
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
     inputs:
@@ -19,6 +22,8 @@ jobs:
     name: Version Packages
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Only run if CI succeeded or if manually triggered
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     outputs:
       versioned: ${{ steps.version.outputs.versioned }}
     steps:
