@@ -1,5 +1,11 @@
 # @jmlweb/postcss-config
 
+## 0.0.3
+
+### Patch Changes
+
+- 6b73301: Add changelog section with link to CHANGELOG.md in package READMEs
+
 ## 0.0.2
 
 ### Patch Changes

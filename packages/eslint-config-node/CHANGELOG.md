@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-node
 
+## 2.0.4
+
+### Patch Changes
+
+- 6b73301: Add changelog section with link to CHANGELOG.md in package READMEs
+- Updated dependencies [6b73301]
+  - @jmlweb/eslint-config-base@2.0.3
+
 ## 2.0.3
 
 ### Patch Changes

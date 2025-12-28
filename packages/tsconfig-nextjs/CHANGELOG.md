@@ -1,5 +1,13 @@
 # @jmlweb/tsconfig-nextjs
 
+## 1.1.5
+
+### Patch Changes
+
+- 6b73301: Add changelog section with link to CHANGELOG.md in package READMEs
+- Updated dependencies [6b73301]
+  - @jmlweb/tsconfig-react@1.0.4
+
 ## 1.1.4
 
 ### Patch Changes
