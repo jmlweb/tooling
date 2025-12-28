@@ -243,6 +243,10 @@ See real-world usage examples:
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint configuration for TypeScript projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

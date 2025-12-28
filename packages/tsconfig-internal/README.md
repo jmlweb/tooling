@@ -23,6 +23,10 @@ This config is optimized for:
 
 **Note:** This is a private package, not published to npm. For consuming projects, use `@jmlweb/tsconfig-base` instead.
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

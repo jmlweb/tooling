@@ -265,6 +265,10 @@ See real-world usage examples:
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

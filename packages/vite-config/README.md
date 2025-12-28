@@ -346,6 +346,10 @@ Optional peer dependency for React projects:
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

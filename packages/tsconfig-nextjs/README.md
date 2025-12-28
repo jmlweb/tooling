@@ -292,6 +292,10 @@ This package requires the following peer dependencies:
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint configuration for React/Next.js projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

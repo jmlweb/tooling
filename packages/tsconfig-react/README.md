@@ -243,6 +243,10 @@ See real-world usage examples:
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint configuration for React libraries
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

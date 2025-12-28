@@ -122,6 +122,10 @@ This package requires the following peer dependencies:
 2. Step 2
 3. Step 3
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

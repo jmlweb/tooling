@@ -153,6 +153,10 @@ See real-world usage examples:
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Base Prettier configuration (extended by this package)
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

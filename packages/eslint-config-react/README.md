@@ -248,6 +248,10 @@ See real-world usage examples:
 - [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript configuration for React libraries
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

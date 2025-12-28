@@ -184,6 +184,10 @@ This package requires the following peer dependencies:
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint config for React projects
 - [`@jmlweb/vite-config`](../vite-config) - Vite configuration for frontend projects
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

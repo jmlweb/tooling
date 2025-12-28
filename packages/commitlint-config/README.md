@@ -265,6 +265,10 @@ This package requires the following peer dependencies:
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier configuration
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

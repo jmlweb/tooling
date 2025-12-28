@@ -253,6 +253,10 @@ See real-world usage examples:
 - [`@jmlweb/tsconfig-node`](../tsconfig-node) - TypeScript configuration for Node.js libraries
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

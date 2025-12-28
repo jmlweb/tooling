@@ -231,6 +231,10 @@ This package requires the following peer dependencies:
 - [`@jmlweb/tsconfig-astro`](../tsconfig-astro) - TypeScript configuration for Astro projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT

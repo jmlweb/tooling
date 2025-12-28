@@ -342,6 +342,10 @@ This package requires the following peer dependency:
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
 ## 📄 License
 
 MIT
