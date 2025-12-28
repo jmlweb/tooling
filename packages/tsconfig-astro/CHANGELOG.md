@@ -1,5 +1,13 @@
 # @jmlweb/tsconfig-astro
 
+## 1.1.3
+
+### Patch Changes
+
+- 6b73301: Add changelog section with link to CHANGELOG.md in package READMEs
+- Updated dependencies [6b73301]
+  - @jmlweb/tsconfig-base@1.0.3
+
 ## 1.1.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @jmlweb/tsup-config-base
 
+## 1.1.2
+
+### Patch Changes
+
+- 6b73301: Add changelog section with link to CHANGELOG.md in package READMEs
+
 ## 1.1.1
 
 ### Patch Changes

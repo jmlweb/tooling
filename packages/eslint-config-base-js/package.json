@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-base-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Base ESLint configuration for JavaScript-only projects - foundation extended by @jmlweb/eslint-config-base",
   "type": "module",
   "main": "./dist/index.cjs",
