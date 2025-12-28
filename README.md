@@ -310,6 +310,54 @@ If you discover a security vulnerability:
 2. Email the maintainer directly or use GitHub's private vulnerability reporting
 3. Include a detailed description and reproduction steps
 
+## Contributing
+
+Contributions are welcome! This project thrives on community involvement, whether you're fixing bugs, proposing features, improving documentation, or helping others.
+
+### Ways to Contribute
+
+- **🐛 Report Bugs**: [Open a bug report](https://github.com/jmlweb/tooling/issues/new?labels=bug) with detailed reproduction steps
+- **💡 Request Features**: [Open a feature request](https://github.com/jmlweb/tooling/issues/new?labels=enhancement) describing your use case
+- **📖 Improve Documentation**: [Open a documentation issue](https://github.com/jmlweb/tooling/issues/new?labels=documentation) or submit a PR
+- **🔧 Submit Pull Requests**: [View open PRs](https://github.com/jmlweb/tooling/pulls) or create your own
+
+### Getting Started
+
+1. **Fork the repository** and clone your fork
+2. **Install dependencies**: `pnpm install`
+3. **Create a branch**: `git checkout -b feature/your-feature-name`
+4. **Make your changes** following our [development guidelines](#development)
+5. **Test your changes**: `pnpm validate` (runs format, lint, and tests)
+6. **Commit your changes** using [Conventional Commits](https://www.conventionalcommits.org/)
+7. **Push to your fork** and submit a pull request
+
+### Pull Request Guidelines
+
+- **Clear description**: Explain what changes you made and why
+- **Reference issues**: Link related issues with `Fixes #123` or `Relates to #456`
+- **Follow conventions**: Use Conventional Commits format for commit messages
+- **Ensure CI passes**: All tests, linting, and format checks must pass
+- **Keep it focused**: One feature or fix per PR when possible
+- **Update documentation**: If your changes affect usage, update relevant READMEs
+
+### Development Workflow
+
+See the [Development](#development) section for available commands. Key commands:
+
+```bash
+pnpm validate    # Run all checks (format, lint, syncpack)
+pnpm format      # Format code with Prettier
+pnpm lint        # Run ESLint checks
+pnpm test        # Run all tests
+```
+
+### Questions or Need Help?
+
+- Browse [existing issues](https://github.com/jmlweb/tooling/issues) to see if your question has been answered
+- [Open a question issue](https://github.com/jmlweb/tooling/issues/new?labels=question) for support
+
+This is an open-source project maintained in spare time. We appreciate your patience and understanding.
+
 ## License
 
 MIT
