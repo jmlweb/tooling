@@ -18,7 +18,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/tsconfig-base typescript
+pnpm add -D @jmlweb/tsconfig-base typescript
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.

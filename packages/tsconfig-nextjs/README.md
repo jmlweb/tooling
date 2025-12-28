@@ -21,7 +21,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/tsconfig-nextjs typescript next @jmlweb/tsconfig-react @jmlweb/tsconfig-base
+pnpm add -D @jmlweb/tsconfig-nextjs typescript next @jmlweb/tsconfig-react @jmlweb/tsconfig-base
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.

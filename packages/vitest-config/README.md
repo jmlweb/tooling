@@ -19,7 +19,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/vitest-config vitest
+pnpm add -D @jmlweb/vitest-config vitest
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -223,11 +223,11 @@ Add test scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run test           # Run tests in watch mode
-npm run test:run       # Run tests once
-npm run test:coverage # Run tests with coverage
-npm run test:ui       # Open Vitest UI
-npm run test:typecheck # Run TypeScript type checking
+pnpm test           # Run tests in watch mode
+pnpm test:run       # Run tests once
+pnpm test:coverage  # Run tests with coverage
+pnpm test:ui        # Open Vitest UI
+pnpm test:typecheck # Run TypeScript type checking
 ```
 
 ### TypeScript Type Checking
@@ -236,10 +236,10 @@ Type checking is performed separately using the `vitest typecheck` command for b
 
 ```bash
 # Run type checking only
-npm run test:typecheck
+pnpm test:typecheck
 
 # Or run tests and type checking together
-npm run test && npm run test:typecheck
+pnpm test && pnpm test:typecheck
 ```
 
 ## 📋 Requirements
@@ -331,10 +331,10 @@ Install the DOM environment package:
 
 ```bash
 # For jsdom (more compatible, slower)
-npm install --save-dev jsdom
+pnpm add -D jsdom
 
 # Or for happy-dom (faster, less compatible)
-npm install --save-dev happy-dom
+pnpm add -D happy-dom
 ```
 
 Then specify in your config if different from default:
@@ -370,7 +370,7 @@ export default defineConfig({
 Install the coverage provider:
 
 ```bash
-npm install --save-dev @vitest/coverage-v8
+pnpm add -D @vitest/coverage-v8
 ```
 
 Run tests with coverage flag:

@@ -16,7 +16,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/prettier-config-tailwind prettier prettier-plugin-tailwindcss
+pnpm add -D @jmlweb/prettier-config-tailwind prettier prettier-plugin-tailwindcss
 ```
 
 **Note**: The `prettier-plugin-tailwindcss` plugin must be installed as a dev dependency.
@@ -126,8 +126,8 @@ Add formatting scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run format        # Format all files
-npm run format:check  # Check formatting without modifying files
+pnpm format        # Format all files
+pnpm format:check  # Check formatting without modifying files
 ```
 
 ## 📋 Requirements

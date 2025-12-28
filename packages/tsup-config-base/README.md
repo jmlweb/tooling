@@ -20,7 +20,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/tsup-config-base tsup
+pnpm add -D @jmlweb/tsup-config-base tsup
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -322,8 +322,8 @@ Add build scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run build    # Build the package
-npm run clean    # Clean build output
+pnpm build    # Build the package
+pnpm clean    # Clean build output
 ```
 
 ## 📋 Requirements

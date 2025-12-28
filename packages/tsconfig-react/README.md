@@ -20,7 +20,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/tsconfig-react typescript @jmlweb/tsconfig-base
+pnpm add -D @jmlweb/tsconfig-react typescript @jmlweb/tsconfig-base
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.

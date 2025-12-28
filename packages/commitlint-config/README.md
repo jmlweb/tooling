@@ -18,12 +18,6 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/commitlint-config @commitlint/cli @commitlint/config-conventional
-```
-
-Or with pnpm:
-
-```bash
 pnpm add -D @jmlweb/commitlint-config @commitlint/cli @commitlint/config-conventional
 ```
 

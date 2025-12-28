@@ -23,7 +23,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/eslint-config-react eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
+pnpm add -D @jmlweb/eslint-config-react eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -156,7 +156,7 @@ import { Component } from './component';
 Fix import order automatically:
 
 ```bash
-npx eslint --fix .
+pnpm exec eslint --fix .
 ```
 
 ## 🎯 When to Use
@@ -213,8 +213,8 @@ Add linting scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run lint      # Lint all files
-npm run lint:fix  # Fix auto-fixable issues
+pnpm lint      # Lint all files
+pnpm lint:fix  # Fix auto-fixable issues
 ```
 
 ## 📋 Requirements
@@ -319,7 +319,7 @@ useEffect(() => {
 Ensure React is installed:
 
 ```bash
-npm install react
+pnpm add react
 ```
 
 Or explicitly specify the React version:
@@ -360,7 +360,7 @@ This config should handle `.tsx` files automatically. If you're having issues:
 2. Verify TypeScript is installed:
 
 ```bash
-npm install --save-dev typescript
+pnpm add -D typescript
 ```
 
 3. Check that your tsconfig.json is in the project root
@@ -378,10 +378,7 @@ npm install --save-dev typescript
 **Solution:**
 
 ```bash
-# Use --legacy-peer-deps during installation
-npm install --legacy-peer-deps
-
-# Or use pnpm which handles peer deps automatically
+# pnpm automatically handles peer dependencies
 pnpm install
 ```
 

@@ -18,7 +18,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/tsconfig-node typescript @jmlweb/tsconfig-base
+pnpm add -D @jmlweb/tsconfig-node typescript @jmlweb/tsconfig-base
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -228,7 +228,7 @@ This package requires the following peer dependencies:
 For Node.js projects, you should also install:
 
 ```bash
-npm install --save-dev @types/node
+pnpm add -D @types/node
 ```
 
 This provides Node.js-specific type definitions like `Buffer`, `process`, `fs`, etc.

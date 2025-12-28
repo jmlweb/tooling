@@ -16,7 +16,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/prettier-config-base prettier
+pnpm add -D @jmlweb/prettier-config-base prettier
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -131,8 +131,8 @@ Add formatting scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run format        # Format all files
-npm run format:check  # Check formatting without modifying files
+pnpm format        # Format all files
+pnpm format:check  # Check formatting without modifying files
 ```
 
 ## 📋 Requirements
@@ -187,7 +187,7 @@ See real-world usage examples:
 Install `eslint-config-prettier` to disable conflicting ESLint rules:
 
 ```bash
-npm install --save-dev eslint-config-prettier
+pnpm add -D eslint-config-prettier
 ```
 
 Then add it to your ESLint config (must be last):
@@ -255,7 +255,7 @@ For VS Code, install the Prettier extension and add to `.vscode/settings.json`:
 To verify Prettier finds your config:
 
 ```bash
-npx prettier --find-config-path src/index.ts
+pnpm exec prettier --find-config-path src/index.ts
 ```
 
 ## 🔄 Migration Guide

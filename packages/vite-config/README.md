@@ -19,13 +19,13 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/vite-config vite
+pnpm add -D @jmlweb/vite-config vite
 ```
 
 For React projects, also install the React plugin:
 
 ```bash
-npm install --save-dev @vitejs/plugin-react
+pnpm add -D @vitejs/plugin-react
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -321,9 +321,9 @@ Add build scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run dev      # Start development server
-npm run build    # Build for production
-npm run preview  # Preview production build
+pnpm dev      # Start development server
+pnpm build    # Build for production
+pnpm preview  # Preview production build
 ```
 
 ## 📋 Requirements

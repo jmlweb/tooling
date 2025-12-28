@@ -20,7 +20,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/jest-config jest ts-jest @types/jest
+pnpm add -D @jmlweb/jest-config jest ts-jest @types/jest
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -222,10 +222,10 @@ Add test scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run test           # Run tests once
-npm run test:watch     # Run tests in watch mode
-npm run test:coverage  # Run tests with coverage
-npm run test:ci        # Run tests in CI mode
+pnpm test           # Run tests once
+pnpm test:watch     # Run tests in watch mode
+pnpm test:coverage  # Run tests with coverage
+pnpm test:ci        # Run tests in CI mode
 ```
 
 ### TypeScript Configuration
