@@ -36,7 +36,7 @@ Centralized configuration packages for development tools. One source of truth fo
 ### Prettier
 
 ```bash
-npm install --save-dev @jmlweb/prettier-config-base prettier
+pnpm add -D @jmlweb/prettier-config-base prettier
 ```
 
 ```json
@@ -48,7 +48,7 @@ npm install --save-dev @jmlweb/prettier-config-base prettier
 ### ESLint (TypeScript)
 
 ```bash
-npm install --save-dev @jmlweb/eslint-config-base eslint typescript-eslint
+pnpm add -D @jmlweb/eslint-config-base eslint typescript-eslint
 ```
 
 ```javascript
@@ -92,19 +92,19 @@ Standalone packages (no inheritance):
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Format code
-npm run format
+pnpm format
 
 # Run linting
-npm run lint
+pnpm lint
 
 # Run tests (validates all packages)
-npm run test
+pnpm test
 
 # Validate everything (format + lint + syncpack)
-npm run validate
+pnpm validate
 
 # Check dependency version consistency
 pnpm syncpack:check
@@ -294,7 +294,7 @@ This project uses multiple layers of security monitoring:
 
 1. **Dependabot**: Automatically monitors dependencies for known vulnerabilities and creates PRs to update affected packages (see [Dependency Updates](#dependency-updates))
 
-2. **npm audit**: Run locally to check for vulnerabilities:
+2. **pnpm audit**: Run locally to check for vulnerabilities:
 
    ```bash
    pnpm audit
