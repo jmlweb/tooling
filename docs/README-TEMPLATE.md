@@ -124,6 +124,52 @@ This package requires the following peer dependencies:
 - Keep descriptions brief (one line)
 - Link to official documentation
 
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Issue 1: Brief description of the issue
+
+**Symptoms:**
+
+- What the user sees or experiences
+
+**Cause:**
+
+- Why this happens
+
+**Solution:**
+
+```bash
+# Commands or code to fix the issue
+```
+
+### Issue 2: Brief description of the issue
+
+**Symptoms:**
+
+- What the user sees or experiences
+
+**Cause:**
+
+- Why this happens
+
+**Solution:**
+
+```bash
+# Commands or code to fix the issue
+```
+
+**Guidelines for Common Issues:**
+
+- Only include issues that have actually been reported or are known to occur
+- Start with the most common/impactful issues first
+- Keep solutions concise and actionable
+- Include specific error messages when relevant
+- Link to related GitHub issues for complex problems
+- Update this section as new issues are discovered
+- Remove outdated issues as they're resolved in new versions
+
 ## 🔄 Migration Guide
 
 ### Upgrading from Version X to Version Y

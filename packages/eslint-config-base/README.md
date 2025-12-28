@@ -318,6 +318,118 @@ See real-world usage examples:
 - [Prettier](https://prettier.io/) - Opinionated code formatter (pairs with eslint-config-prettier)
 - [eslint-plugin-simple-import-sort](https://github.com/lydell/eslint-plugin-simple-import-sort) - Auto-sorts imports
 
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Peer Dependency Warnings
+
+**Symptoms:**
+
+- `npm WARN` messages about unmet peer dependencies during installation
+- Messages like "requires a peer of eslint@^8.0.0 but none is installed"
+
+**Cause:**
+
+- Some ESLint plugins haven't updated their peer dependencies to support ESLint 9.x
+- This is a transitional issue as the ecosystem adapts to ESLint's flat config
+
+**Solution:**
+
+```bash
+# Use --legacy-peer-deps flag during installation
+npm install --legacy-peer-deps
+
+# Or with pnpm (automatically handles peer dependencies)
+pnpm install
+```
+
+The warnings are usually safe to ignore if your linting works correctly. The plugins typically work fine with ESLint 9.x despite the warnings.
+
+### ESLint Not Picking Up Configuration
+
+**Symptoms:**
+
+- ESLint rules not being applied
+- IDE showing no linting errors
+- Files outside `src/` directory not being linted
+
+**Cause:**
+
+- Missing TypeScript project service configuration
+- `tsconfig.json` not in the correct location
+- IDE ESLint extension not configured for flat config
+
+**Solution:**
+
+1. Ensure your `tsconfig.json` is in your project root
+2. Verify your `eslint.config.js` is using flat config format
+3. For VS Code, update `.vscode/settings.json`:
+
+```json
+{
+  "eslint.experimental.useFlatConfig": true
+}
+```
+
+4. Restart your IDE/ESLint server
+
+### Type-Aware Linting Not Working
+
+**Symptoms:**
+
+- Type-aware rules like `@typescript-eslint/no-unnecessary-condition` not triggering
+- "Parsing error: Cannot read file" messages
+
+**Cause:**
+
+- TypeScript project service not finding your `tsconfig.json`
+- Multiple `tsconfig.json` files causing confusion
+
+**Solution:**
+
+Check your project structure:
+
+```bash
+# Your tsconfig.json should be in the root
+project/
+├── tsconfig.json
+├── eslint.config.js
+└── src/
+```
+
+If you have multiple tsconfig files, this config uses TypeScript project service which automatically detects them.
+
+### Conflicts with Prettier
+
+**Symptoms:**
+
+- ESLint auto-fix and Prettier format fighting each other
+- Code gets reformatted back and forth
+
+**Cause:**
+
+- ESLint formatting rules conflicting with Prettier
+- Running both tools without proper integration
+
+**Solution:**
+
+This config already includes `eslint-config-prettier` to disable conflicting rules. Ensure you:
+
+1. Run Prettier before ESLint:
+
+```json
+{
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "check": "prettier --check . && eslint ."
+  }
+}
+```
+
+2. Configure your IDE to format with Prettier first, then lint with ESLint
+
 ## 🔄 Migration Guide
 
 ### Upgrading to a New Version

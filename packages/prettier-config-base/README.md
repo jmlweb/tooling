@@ -166,6 +166,98 @@ See real-world usage examples:
 - [ESLint](https://eslint.org/) - Pluggable linting utility (use with eslint-config-prettier to avoid conflicts)
 - [Editor Plugins](https://prettier.io/docs/en/editors.html) - Format on save in VS Code, IntelliJ, and more
 
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Conflicts with ESLint
+
+**Symptoms:**
+
+- Code gets formatted by Prettier then changed back by ESLint auto-fix
+- Linting errors about formatting (quotes, semicolons, etc.)
+
+**Cause:**
+
+- ESLint has formatting rules that conflict with Prettier
+- Both tools trying to format the same code
+
+**Solution:**
+
+Install `eslint-config-prettier` to disable conflicting ESLint rules:
+
+```bash
+npm install --save-dev eslint-config-prettier
+```
+
+Then add it to your ESLint config (must be last):
+
+```javascript
+// eslint.config.js (flat config)
+import prettier from 'eslint-config-prettier';
+
+export default [
+  // ... other configs
+  prettier, // Must be last!
+];
+```
+
+Or use [`@jmlweb/eslint-config-base`](../eslint-config-base) which already includes this integration.
+
+### IDE Not Formatting on Save
+
+**Symptoms:**
+
+- Files don't format automatically when saving
+- Manual format command works but auto-format doesn't
+
+**Cause:**
+
+- IDE Prettier extension not installed or configured
+- Wrong formatter selected as default
+
+**Solution:**
+
+For VS Code, install the Prettier extension and add to `.vscode/settings.json`:
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
+
+### Configuration Not Being Picked Up
+
+**Symptoms:**
+
+- Prettier uses default settings instead of your config
+- Custom options not applied
+
+**Cause:**
+
+- Configuration file not in the correct location
+- Multiple config files conflicting
+
+**Solution:**
+
+1. Ensure config is in project root (not nested directories)
+2. Use only one configuration method (package.json OR .prettierrc)
+3. Check for conflicting configs in parent directories
+4. Restart your IDE/editor
+
+To verify Prettier finds your config:
+
+```bash
+npx prettier --find-config-path src/index.ts
+```
+
 ## 🔄 Migration Guide
 
 ### Upgrading to a New Version

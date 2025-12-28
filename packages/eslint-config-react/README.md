@@ -261,6 +261,132 @@ See real-world usage examples:
 - [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) - Enforces Rules of Hooks
 - [Prettier](https://prettier.io/) - Opinionated code formatter
 
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### React Hooks Exhaustive Dependencies Warning
+
+**Symptoms:**
+
+- Warning: "React Hook useEffect has a missing dependency"
+- ESLint suggests adding dependencies to the dependency array
+
+**Cause:**
+
+- `eslint-plugin-react-hooks` enforces the Rules of Hooks
+- Missing dependencies can cause stale closures and bugs
+
+**Solution:**
+
+Add the missing dependencies:
+
+```typescript
+// Before
+useEffect(() => {
+  fetchData(userId);
+}, []); // Missing dependency: userId
+
+// After
+useEffect(() => {
+  fetchData(userId);
+}, [userId]); // Include all dependencies
+```
+
+If you intentionally want to omit a dependency (use sparingly):
+
+```typescript
+useEffect(() => {
+  fetchData(userId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []); // Explicitly disable the rule with a comment
+```
+
+### React Version Not Detected
+
+**Symptoms:**
+
+- Warning: "Warning: React version not specified in eslint-plugin-react settings"
+- Or incorrect React version being used
+
+**Cause:**
+
+- This config uses `detect` to auto-detect React version from package.json
+- May fail if React is not installed or in an unexpected location
+
+**Solution:**
+
+Ensure React is installed:
+
+```bash
+npm install react
+```
+
+Or explicitly specify the React version:
+
+```javascript
+// eslint.config.js
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [
+  ...reactConfig,
+  {
+    settings: {
+      react: {
+        version: '18.2', // Specify your React version
+      },
+    },
+  },
+];
+```
+
+### JSX Not Recognized in .tsx Files
+
+**Symptoms:**
+
+- Parsing errors in `.tsx` files with JSX
+- "Unexpected token <" errors
+
+**Cause:**
+
+- TypeScript parser not configured correctly
+- File extension not recognized
+
+**Solution:**
+
+This config should handle `.tsx` files automatically. If you're having issues:
+
+1. Ensure your file has the `.tsx` extension (not `.ts`)
+2. Verify TypeScript is installed:
+
+```bash
+npm install --save-dev typescript
+```
+
+3. Check that your tsconfig.json is in the project root
+
+### Peer Dependency Warnings
+
+**Symptoms:**
+
+- npm warnings about unmet peer dependencies for `eslint-plugin-react` or `eslint-plugin-react-hooks`
+
+**Cause:**
+
+- These plugins may not have updated peer dependencies for ESLint 9.x yet
+
+**Solution:**
+
+```bash
+# Use --legacy-peer-deps during installation
+npm install --legacy-peer-deps
+
+# Or use pnpm which handles peer deps automatically
+pnpm install
+```
+
+The warnings are usually safe to ignore if linting works correctly.
+
 ## 🔄 Migration Guide
 
 ### Upgrading to a New Version

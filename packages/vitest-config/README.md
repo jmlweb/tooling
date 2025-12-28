@@ -277,6 +277,142 @@ See real-world usage examples:
 - [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) - React testing utilities (for React projects)
 - [@vitest/ui](https://vitest.dev/guide/ui.html) - Visual UI for Vitest test results
 
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Module Resolution Issues
+
+**Symptoms:**
+
+- Error: "Cannot find module" when running tests
+- Import paths work in the app but fail in tests
+
+**Cause:**
+
+- Vitest uses Vite's module resolution which may differ from TypeScript
+- Path aliases or special imports not configured for tests
+
+**Solution:**
+
+If you're using path aliases in `tsconfig.json`, configure them in your Vitest config:
+
+```typescript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import vitestConfig from '@jmlweb/vitest-config';
+
+export default defineConfig({
+  ...vitestConfig,
+  resolve: {
+    alias: {
+      '@': '/src',
+      '@components': '/src/components',
+    },
+  },
+});
+```
+
+### jsdom or happy-dom Not Found
+
+**Symptoms:**
+
+- Error: "Environment 'jsdom' not found" or "Environment 'happy-dom' not found"
+- Tests fail to run with DOM-related errors
+
+**Cause:**
+
+- The test environment package is not installed
+- This config specifies the environment but doesn't install it (peer dependency)
+
+**Solution:**
+
+Install the DOM environment package:
+
+```bash
+# For jsdom (more compatible, slower)
+npm install --save-dev jsdom
+
+# Or for happy-dom (faster, less compatible)
+npm install --save-dev happy-dom
+```
+
+Then specify in your config if different from default:
+
+```typescript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import vitestConfig from '@jmlweb/vitest-config';
+
+export default defineConfig({
+  ...vitestConfig,
+  test: {
+    ...vitestConfig.test,
+    environment: 'jsdom', // or 'happy-dom'
+  },
+});
+```
+
+### Coverage Not Working
+
+**Symptoms:**
+
+- No coverage reports generated
+- Coverage command runs but shows no output
+
+**Cause:**
+
+- Coverage provider not installed
+- Coverage not enabled in configuration
+
+**Solution:**
+
+Install the coverage provider:
+
+```bash
+npm install --save-dev @vitest/coverage-v8
+```
+
+Run tests with coverage flag:
+
+```bash
+vitest --coverage
+```
+
+### Test Files Not Found
+
+**Symptoms:**
+
+- "No test files found" even though test files exist
+- Vitest doesn't pick up `*.test.ts` or `*.spec.ts` files
+
+**Cause:**
+
+- Test file pattern mismatch
+- Files in excluded directories
+
+**Solution:**
+
+This config includes common patterns. If your tests aren't found, check:
+
+1. File naming: Use `.test.ts`, `.spec.ts`, `.test.tsx`, or `.spec.tsx`
+2. Location: Ensure tests aren't in `node_modules` or `dist`
+3. Explicitly include test patterns:
+
+```typescript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import vitestConfig from '@jmlweb/vitest-config';
+
+export default defineConfig({
+  ...vitestConfig,
+  test: {
+    ...vitestConfig.test,
+    include: ['**/*.{test,spec}.{ts,tsx}'],
+  },
+});
+```
+
 ## 🔄 Migration Guide
 
 ### Upgrading to a New Version

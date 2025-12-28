@@ -256,6 +256,151 @@ See real-world usage examples:
 - [tsx](https://github.com/privatenumber/tsx) - Fast TypeScript/ESM execution (alternative to ts-node)
 - [ESLint](https://eslint.org/) - Linter for TypeScript (use with @jmlweb/eslint-config-base)
 
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Missing File Extensions Error
+
+**Symptoms:**
+
+- Error: "Relative import paths need explicit file extensions in ECMAScript imports"
+- Import statements like `import { foo } from './bar'` fail
+
+**Cause:**
+
+- This config uses `moduleResolution: "NodeNext"` which follows Node.js ESM rules
+- Node.js requires explicit `.js` extensions in import statements (even for `.ts` files)
+
+**Solution:**
+
+Add `.js` extensions to your imports (TypeScript will resolve to `.ts` files):
+
+```typescript
+// Before
+import { foo } from './bar';
+
+// After
+import { foo } from './bar.js';
+```
+
+Or switch to a bundler-based module resolution:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-base",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  }
+}
+```
+
+### Module and ModuleResolution Mismatch
+
+**Symptoms:**
+
+- Error: "Option 'module' must be set to 'NodeNext' when 'moduleResolution' is 'NodeNext'"
+- Type errors related to module resolution
+
+**Cause:**
+
+- Both `module` and `moduleResolution` must be set to compatible values
+- This config uses `NodeNext` for both
+
+**Solution:**
+
+If you need to override the module system, update both options together:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-base",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler"
+  }
+}
+```
+
+### CommonJS vs ESM Mismatch
+
+**Symptoms:**
+
+- Code runs but module resolution is incorrect
+- `require` statements in output when you expected `import`
+
+**Cause:**
+
+- Your `package.json` has `"type": "module"` but your build uses CommonJS
+- Or vice versa
+
+**Solution:**
+
+Match your `package.json` to your build output:
+
+```json
+// package.json
+{
+  "type": "module" // For ESM output (this config's default)
+}
+```
+
+Or override to CommonJS:
+
+```json
+// tsconfig.json
+{
+  "extends": "@jmlweb/tsconfig-base",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node"
+  }
+}
+```
+
+### Index Signature Type Errors
+
+**Symptoms:**
+
+- Error: "Object is possibly 'undefined'" when accessing object properties
+- Example: `obj[key]` shows type `T | undefined`
+
+**Cause:**
+
+- This config enables `noUncheckedIndexedAccess` for extra safety
+- TypeScript correctly adds `undefined` to index access types
+
+**Solution:**
+
+Use optional chaining or explicit checks:
+
+```typescript
+// Before
+const value = obj[key].toString();
+
+// After - option 1: optional chaining
+const value = obj[key]?.toString();
+
+// After - option 2: explicit check
+if (obj[key] !== undefined) {
+  const value = obj[key].toString();
+}
+
+// After - option 3: type assertion (use sparingly)
+const value = obj[key]!.toString();
+```
+
+Or disable this strict check:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-base",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": false
+  }
+}
+```
+
 ## 🔄 Migration Guide
 
 ### Upgrading to a New Version
