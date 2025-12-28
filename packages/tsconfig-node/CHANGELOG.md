@@ -1,5 +1,13 @@
 # @jmlweb/tsconfig-node
 
+## 1.0.5
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+- Updated dependencies [4a9ece1]
+  - @jmlweb/tsconfig-base@1.0.4
+
 ## 1.0.4
 
 ### Patch Changes

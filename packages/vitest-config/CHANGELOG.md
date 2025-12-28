@@ -1,5 +1,11 @@
 # @jmlweb/vitest-config
 
+## 1.0.6
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+
 ## 1.0.5
 
 ### Patch Changes

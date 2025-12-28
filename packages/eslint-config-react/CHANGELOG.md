@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-react
 
+## 2.0.5
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+- Updated dependencies [4a9ece1]
+  - @jmlweb/eslint-config-base@2.0.4
+
 ## 2.0.4
 
 ### Patch Changes

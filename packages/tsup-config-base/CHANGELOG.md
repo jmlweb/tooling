@@ -1,5 +1,11 @@
 # @jmlweb/tsup-config-base
 
+## 1.1.3
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+
 ## 1.1.2
 
 ### Patch Changes
