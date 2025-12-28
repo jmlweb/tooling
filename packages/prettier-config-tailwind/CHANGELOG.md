@@ -1,5 +1,13 @@
 # @jmlweb/prettier-config-tailwind
 
+## 1.0.4
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+- Updated dependencies [4a9ece1]
+  - @jmlweb/prettier-config-base@1.0.4
+
 ## 1.0.3
 
 ### Patch Changes

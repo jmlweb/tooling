@@ -1,5 +1,11 @@
 # @jmlweb/commitlint-config
 
+## 2.0.2
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+
 ## 2.0.1
 
 ### Patch Changes

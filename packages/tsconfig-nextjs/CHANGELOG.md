@@ -1,5 +1,13 @@
 # @jmlweb/tsconfig-nextjs
 
+## 1.1.6
+
+### Patch Changes
+
+- 4a9ece1: Update documentation to use pnpm commands instead of npm
+- Updated dependencies [4a9ece1]
+  - @jmlweb/tsconfig-react@1.0.5
+
 ## 1.1.5
 
 ### Patch Changes
