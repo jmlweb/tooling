@@ -1,5 +1,13 @@
 # @jmlweb/tsconfig-nextjs
 
+## 1.1.7
+
+### Patch Changes
+
+- 30f8ffb: Add "Why Use This?" sections to package READMEs explaining configuration philosophy and design decisions
+- Updated dependencies [30f8ffb]
+  - @jmlweb/tsconfig-react@1.0.6
+
 ## 1.1.6
 
 ### Patch Changes

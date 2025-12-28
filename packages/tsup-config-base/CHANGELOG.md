@@ -1,5 +1,11 @@
 # @jmlweb/tsup-config-base
 
+## 1.1.4
+
+### Patch Changes
+
+- 30f8ffb: Add "Why Use This?" sections to package READMEs explaining configuration philosophy and design decisions
+
 ## 1.1.3
 
 ### Patch Changes

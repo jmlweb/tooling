@@ -1,5 +1,11 @@
 # @jmlweb/jest-config
 
+## 0.1.4
+
+### Patch Changes
+
+- 30f8ffb: Add "Why Use This?" sections to package READMEs explaining configuration philosophy and design decisions
+
 ## 0.1.3
 
 ### Patch Changes

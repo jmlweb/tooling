@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-node
 
+## 2.0.6
+
+### Patch Changes
+
+- 30f8ffb: Add "Why Use This?" sections to package READMEs explaining configuration philosophy and design decisions
+- Updated dependencies [30f8ffb]
+  - @jmlweb/eslint-config-base@2.0.5
+
 ## 2.0.5
 
 ### Patch Changes
