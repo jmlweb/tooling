@@ -1,5 +1,11 @@
 # @jmlweb/commitlint-config
 
+## 2.0.3
+
+### Patch Changes
+
+- 30f8ffb: Add "Why Use This?" sections to package READMEs explaining configuration philosophy and design decisions
+
 ## 2.0.2
 
 ### Patch Changes
