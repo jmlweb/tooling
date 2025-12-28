@@ -168,6 +168,44 @@ This configuration disables all ESLint rules that conflict with Prettier, allowi
 
 **Recommended**: Use [`@jmlweb/prettier-config-base`](../prettier-config-base) for consistent formatting.
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Code quality and consistency through simple, battle-tested rules. Foundation for specialized configs.
+
+This package provides the JavaScript linting foundation used across all other configs in the `@jmlweb` ecosystem. It focuses on code quality and best practices while delegating formatting to Prettier.
+
+### Design Decisions
+
+**ESLint Recommended Rules Only**: Uses `@eslint/js` recommended config without additional opinionated rules
+
+- **Why**: Provides a solid baseline of best practices without being overly strict. Allows specialized configs to add their own rules based on context (TypeScript, React, etc.)
+- **Trade-off**: Less opinionated than configs like Airbnb, but more flexible and maintainable as a foundation
+- **When to override**: When you need stricter or more specific rules for your project (consider using specialized configs instead)
+
+**Automatic Import Sorting**: Uses `eslint-plugin-simple-import-sort` for consistent import organization
+
+- **Why**: Manual import organization is tedious and inconsistent. Automatic sorting ensures a predictable order that's easy to scan (built-ins → external → internal → relative)
+- **Trade-off**: Initial formatting may reorder your manually organized imports, but consistency across the codebase is worth it
+- **When to override**: Rarely needed - the default order works well for most projects
+
+**Prettier Integration**: Includes `eslint-config-prettier` to disable conflicting rules
+
+- **Why**: ESLint handles code quality, Prettier handles formatting. Trying to use both for formatting causes conflicts and frustration
+- **Trade-off**: None - this is the recommended approach by both ESLint and Prettier teams
+- **When to override**: Never - this prevents tooling conflicts
+
+**Environment Agnostic**: No browser or Node.js globals by default
+
+- **Why**: Projects should explicitly declare their runtime environment. This config is used as a foundation for both browser and Node.js projects
+- **Trade-off**: Requires you to add globals in your config, but makes the base config more portable and explicit
+- **When to override**: Always override by adding the globals your project needs (browser, Node.js, etc.)
+
+**Flat Config Format**: Uses ESLint 9+ flat config (not legacy `.eslintrc`)
+
+- **Why**: Flat config is the future of ESLint, offering better composition, clearer configuration, and improved performance
+- **Trade-off**: Not compatible with older ESLint plugins that haven't migrated (rare)
+- **When to override**: If you're on an older ESLint version (but you should upgrade)
+
 ## 🎯 When to Use
 
 Use this package when you want:

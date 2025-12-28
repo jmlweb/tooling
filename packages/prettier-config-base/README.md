@@ -88,6 +88,38 @@ function greet(user) {
 }
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Stop arguing about code style. Let Prettier handle formatting so you can focus on writing code.
+
+This package provides an opinionated Prettier configuration that prioritizes readability and modern JavaScript conventions. The goal is to eliminate formatting debates and establish consistent code style across all projects.
+
+### Design Decisions
+
+**Semicolons (`semi: true`)**: Always use semicolons
+
+- **Why**: Prevents ASI (Automatic Semicolon Insertion) edge cases and ambiguity
+- **Trade-off**: Slightly more verbose, but eliminates an entire class of potential bugs
+- **When to override**: If your team strongly prefers semicolon-free style and understands ASI rules
+
+**Single Quotes (`singleQuote: true`)**: Use single quotes for strings
+
+- **Why**: Consistent with most modern JavaScript codebases and requires less escaping in JSX
+- **Trade-off**: None significant - purely stylistic choice for consistency
+- **When to override**: If working in a codebase that already uses double quotes
+
+**Trailing Commas (`trailingComma: 'all'`)**: Add trailing commas everywhere possible
+
+- **Why**: Cleaner git diffs (changes only affect modified lines) and easier to add items without modifying previous line
+- **Trade-off**: Slightly unusual for developers from other languages, but widely adopted in modern JS
+- **When to override**: If targeting older environments that don't support trailing commas (rare with modern transpilation)
+
+**2 Spaces Indentation (`tabWidth: 2`)**: Use 2 spaces for indentation
+
+- **Why**: Balances readability with horizontal space, standard in JavaScript ecosystem
+- **Trade-off**: May feel cramped compared to 4 spaces, but prevents excessive nesting visibility
+- **When to override**: If your team or organization has standardized on 4 spaces
+
 ## 🎯 When to Use
 
 Use this package when you want:

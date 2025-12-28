@@ -94,6 +94,32 @@ Create a `tsconfig.json` file in your Next.js project root:
 }
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Next.js projects need TypeScript configured for both server and client code with incremental builds and framework-specific optimizations.
+
+This package provides a TypeScript configuration specifically optimized for Next.js applications. It extends the React configuration while adding Next.js-specific settings like incremental compilation, the Next.js TypeScript plugin, and sensible path aliases that work with Next.js's file-based routing.
+
+### Design Decisions
+
+**Incremental Compilation (`incremental: true`)**: Faster rebuilds for development
+
+- **Why**: Next.js projects are often large with many files. Incremental compilation dramatically speeds up subsequent builds by only recompiling changed files and their dependents. This makes the development experience much faster
+- **Trade-off**: Creates a `.tsbuildinfo` file that needs to be gitignored. But the build speed improvement is worth it
+- **When to override**: Never - there's no downside to incremental compilation in Next.js projects
+
+**Next.js TypeScript Plugin**: Framework-specific type checking
+
+- **Why**: Next.js has special conventions (Server Components, Route Handlers, Metadata API, etc.) that benefit from enhanced type checking. The plugin provides better autocomplete and catches Next.js-specific errors that generic TypeScript can't detect
+- **Trade-off**: Adds a dependency on Next.js being installed. But if you're using this config, you're already using Next.js
+- **When to override**: Only if the plugin causes issues (rare), but report bugs to Next.js if found
+
+**Path Aliases (`@/*` → project root)**: Clean imports for Next.js file structure
+
+- **Why**: Next.js projects have deep file structures (app/components/ui/button/index.tsx). Path aliases like `@/components/ui/button` are more readable and easier to refactor than `../../../components/ui/button`. The `@/*` convention is standard in Next.js projects
+- **Trade-off**: Need to configure the same alias in next.config.js for runtime (though Next.js 13+ does this automatically from tsconfig.json)
+- **When to override**: If your team prefers a different alias convention (like `~/*`), but `@/*` is the Next.js convention
+
 ## 📋 Configuration Details
 
 ### What's Included

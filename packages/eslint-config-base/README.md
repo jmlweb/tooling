@@ -220,6 +220,56 @@ Fix import order automatically:
 pnpm exec eslint --fix .
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Maximize type safety. Catch bugs at compile time, not runtime. Make invalid states unrepresentable.
+
+This package enforces strict TypeScript practices inspired by the principle that "if it compiles, it works." The configuration choices reflect a philosophy of using TypeScript's type system to its fullest potential to prevent bugs before they happen.
+
+### Design Decisions
+
+**Strict Type Checking (`strictTypeChecked`)**: Enables all strict type-aware rules
+
+- **Why**: TypeScript's power comes from its type system. Strict checking catches errors like unreachable code, unnecessary conditions, and type mismatches that would otherwise cause runtime bugs
+- **Trade-off**: More initial errors when adopting this config, and requires explicit typing. However, the bugs caught far outweigh the extra effort
+- **When to override**: If migrating a large JavaScript codebase and need a gradual transition (consider using `@jmlweb/eslint-config-base-js` with recommended TypeScript rules instead)
+
+**Explicit Return Types (`@typescript-eslint/explicit-function-return-type`)**: Requires explicit return types on functions
+
+- **Why**: Explicit return types prevent accidental type changes and make code easier to reason about. They serve as inline documentation and catch errors where functions return unexpected types
+- **Trade-off**: More verbose code, but improved clarity and safety. Inference can hide bugs
+- **When to override**: For simple, obvious functions where the return type is trivial (but be conservative - explicit is usually better)
+
+**No `any` Type (`@typescript-eslint/no-explicit-any`)**: Prohibits using `any`
+
+- **Why**: `any` defeats the purpose of TypeScript by disabling type checking. It's a common escape hatch that creates type holes and runtime bugs
+- **Trade-off**: Forces you to properly type external libraries or complex types. Requires more upfront work but prevents bugs
+- **When to override**: Only when dealing with truly dynamic data that can't be typed (rare). Consider `unknown` first
+
+**Type-Only Imports (`@typescript-eslint/consistent-type-imports`)**: Enforces `import type` for type-only imports
+
+- **Why**: Separates runtime imports from type imports, improving tree-shaking and build performance. Makes it clear what's used at runtime vs. compile time
+- **Trade-off**: More explicit imports, but clearer code and better build optimization
+- **When to override**: Never - this is a best practice with no real downsides
+
+**No Enums (`no-restricted-syntax`)**: Prevents TypeScript enum usage
+
+- **Why**: TypeScript enums have surprising runtime behavior, bundling issues, and const vs. regular enum confusion. Const maps with `as const` provide the same benefits without the pitfalls
+- **Trade-off**: Slightly more verbose syntax (`const Status = { ... } as const`), but more predictable and type-safe
+- **When to override**: If you're comfortable with enum limitations or maintaining legacy code
+
+**No Default Exports (`no-restricted-exports`)**: Enforces named exports only
+
+- **Why**: Named exports enable better tree-shaking, clearer imports, easier refactoring, and better IDE autocomplete. Default exports hide what's being imported
+- **Trade-off**: Can't use `import Foo from './foo'` syntax. Requires `import { Foo } from './foo'`
+- **When to override**: For compatibility with libraries that require default exports (Next.js pages, etc.) - override per-file
+
+**Naming Conventions (`@typescript-eslint/naming-convention`)**: Enforces consistent naming patterns
+
+- **Why**: Consistent naming improves readability and prevents bugs. For example, booleans starting with `is/has/can` are self-documenting
+- **Trade-off**: May conflict with legacy code or third-party APIs
+- **When to override**: When integrating with external APIs that use different conventions
+
 ## 🎯 When to Use
 
 Use this configuration when you want:

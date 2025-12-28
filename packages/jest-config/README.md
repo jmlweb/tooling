@@ -123,6 +123,38 @@ export default createJestConfig({
 });
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Tests should run reliably with meaningful coverage metrics that enforce code quality without being overly strict.
+
+This package provides a Jest configuration optimized for TypeScript projects with sensible coverage thresholds and test isolation. It balances strictness with practicality, enforcing coverage standards while keeping tests fast and maintainable.
+
+### Design Decisions
+
+**80% Coverage Thresholds**: Requires 80% coverage across all metrics
+
+- **Why**: 80% coverage strikes a good balance - it's high enough to ensure most code paths are tested but not so high that you waste time testing trivial code or struggle to reach unrealistic goals. It catches most bugs while allowing flexibility for edge cases that are hard to test
+- **Trade-off**: Some projects may want higher coverage (90%+) or lower (60%). This is easily adjustable per project
+- **When to override**: Increase for critical systems (financial, healthcare), decrease for experimental projects or when initially adding tests to legacy code
+
+**Automatic Mock Clearing (`clearMocks: true, restoreMocks: true`)**: Resets mocks between tests
+
+- **Why**: Test isolation is crucial for reliable tests. Automatically clearing and restoring mocks prevents test interdependence and the dreaded "works in isolation but fails in suite" problem. This eliminates an entire class of flaky tests
+- **Trade-off**: Can't rely on mock state persisting between tests. But tests shouldn't share state anyway
+- **When to override**: Rarely needed - test isolation is a best practice
+
+**Node Environment by Default (`testEnvironment: 'node'`)**: Server-side testing environment
+
+- **Why**: Most TypeScript projects tested with Jest are Node.js backends or libraries. The Node environment is lighter and faster than jsdom. For React/browser code, developers can override to jsdom per project
+- **Trade-off**: Need to explicitly set jsdom for browser/React testing
+- **When to override**: For React components or browser-specific code - set `testEnvironment: 'jsdom'` in your project config
+
+**5 Second Test Timeout**: Reasonable default for most tests
+
+- **Why**: Most unit tests should complete in milliseconds. 5 seconds is generous for integration tests while preventing truly hung tests from blocking CI indefinitely. It catches accidentally synchronous code or missing mocks
+- **Trade-off**: Some integration tests with real databases might need longer timeouts
+- **When to override**: For slow integration tests - increase per test suite or project-wide
+
 ## 📋 Configuration Details
 
 ### Default Settings

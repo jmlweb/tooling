@@ -90,6 +90,38 @@ export default createCommitlintConfig({
 });
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Structured commit messages enable automation, improve collaboration, and make project history meaningful and navigable.
+
+This package enforces Conventional Commits to standardize commit messages across teams. Structured commits aren't just about consistency - they enable automated versioning, changelog generation, and make your git history actually useful for understanding project evolution.
+
+### Design Decisions
+
+**Conventional Commits Format**: Structured commit messages with types
+
+- **Why**: The Conventional Commits specification enables powerful automation like semantic-release (automatic versioning), automatic changelog generation, and better git history navigation. It forces developers to think about what their change actually does (feat vs fix vs refactor), which improves code review quality
+- **Trade-off**: Slightly more overhead when committing - must categorize changes. But the automation benefits and improved history are worth it
+- **When to override**: For personal projects where automation isn't needed. But even solo developers benefit from clear commit history
+
+**No Scope Restrictions by Default**: Works for any project structure
+
+- **Why**: Different projects have different scopes (monorepo packages, feature areas, components). Not enforcing scopes makes this config flexible and zero-configuration for most projects. Teams can add scope restrictions when needed
+- **Trade-off**: No validation that scopes make sense for your project. But this prevents the config from being opinionated about project structure
+- **When to override**: For monorepos or large projects, define allowed scopes to ensure consistency (e.g., `['api', 'ui', 'docs']`)
+
+**100 Character Header Limit**: Readable in all tools
+
+- **Why**: 100 characters fits comfortably in GitHub's UI, terminal output, and git GUIs without wrapping. It's long enough for descriptive messages but short enough to enforce conciseness. This makes git log and GitHub history readable
+- **Trade-off**: Sometimes you want longer descriptions. But that's what the body is for
+- **When to override**: For teams that prefer shorter (72 chars) or longer headers. But 100 is a good standard
+
+**Flexible Scope Requirement**: Optional by default
+
+- **Why**: Not all changes fit neatly into scopes. Making scopes optional allows quick commits while still enabling teams to enforce scopes when structure is important (like in monorepos where scope = package name)
+- **Trade-off**: Scopes aren't enforced unless explicitly enabled
+- **When to override**: Set `scopeRequired: true` for monorepos or projects where scope categorization is important
+
 ## 📋 Configuration Details
 
 ### Commit Message Format

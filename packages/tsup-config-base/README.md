@@ -170,6 +170,38 @@ export default createTsupCliConfig({
 });
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: TypeScript libraries should publish both CommonJS and ESM formats with type declarations for maximum compatibility across all consuming projects.
+
+This package provides a tsup configuration optimized for building TypeScript libraries with dual-format output. It handles the complexity of generating both CommonJS and ESM builds while maintaining proper type definitions and ensuring external dependencies aren't bundled.
+
+### Design Decisions
+
+**Dual Format Output (`format: ['cjs', 'esm']`)**: Support both module systems
+
+- **Why**: The JavaScript ecosystem is in transition from CommonJS to ESM. Publishing both formats ensures your library works in all environments - legacy Node.js projects using require(), modern ESM projects using import, and bundlers that optimize based on format. This maximizes compatibility
+- **Trade-off**: Slightly larger published package size (two builds). But consumers only use one format, and the compatibility benefit is essential
+- **When to override**: For internal packages consumed only by ESM projects, you can use `['esm']` only. But dual publishing is safer for public libraries
+
+**Type Declaration Generation (`dts: true`)**: Automatic .d.ts files
+
+- **Why**: TypeScript consumers need type definitions for intellisense, type checking, and developer experience. Generating declarations automatically ensures your library provides first-class TypeScript support without manual maintenance
+- **Trade-off**: Slightly slower builds due to declaration generation. But type safety for consumers is non-negotiable
+- **When to override**: Never for libraries meant to be consumed - types are essential for modern JavaScript development
+
+**External Dependencies (`external` array)**: Control bundling
+
+- **Why**: Libraries shouldn't bundle their dependencies - this leads to duplicate code, version conflicts, and bloated packages. The `external` parameter lets you specify which dependencies should remain as imports, letting consumers manage versions
+- **Trade-off**: Must carefully specify which dependencies are external (typically all dependencies and peerDependencies)
+- **When to override**: For standalone CLI tools, you might bundle all dependencies. But for libraries, externals are crucial
+
+**Clean Builds (`clean: true`)**: Fresh output on every build
+
+- **Why**: Cleaning the output directory prevents stale files from previous builds causing issues. Ensures deterministic builds and prevents shipping renamed or deleted files
+- **Trade-off**: Very slightly slower builds (must delete files first). But the reliability is worth it
+- **When to override**: Rarely - clean builds prevent an entire class of mysterious bugs
+
 ## 📋 Configuration Details
 
 ### Default Settings

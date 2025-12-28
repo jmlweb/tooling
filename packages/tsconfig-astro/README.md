@@ -94,6 +94,38 @@ Create a `tsconfig.json` file in your Astro project root:
 }
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Astro projects need TypeScript configured to preserve JSX for Astro's compiler while supporting framework components in islands.
+
+This package provides a TypeScript configuration specifically for Astro projects. It extends the strict base configuration while setting up JSX in preserve mode, allowing Astro's compiler to handle the transformation while maintaining full type safety for both Astro components and framework components used in islands.
+
+### Design Decisions
+
+**JSX Preserve Mode (`jsx: "preserve"`)**: Let Astro handle JSX transformation
+
+- **Why**: Astro has its own JSX/TSX transformation pipeline that's optimized for its component model and islands architecture. Preserve mode tells TypeScript to check types but leave the JSX syntax untouched for Astro to process. This enables proper handling of both .astro components and framework components (React, Vue, etc.) in islands
+- **Trade-off**: Can't run TypeScript output directly without Astro's build step. But Astro projects always use Astro's build system anyway
+- **When to override**: Never for Astro projects - Astro requires preserve mode to function correctly
+
+**Bundler Module Resolution (`moduleResolution: "bundler"`)**: Optimized for Vite
+
+- **Why**: Astro uses Vite as its build tool. Bundler resolution is specifically designed for Vite and other modern bundlers, providing better module resolution that matches how Vite actually resolves imports. This prevents TypeScript/runtime mismatches
+- **Trade-off**: Not suitable for direct Node.js execution. But Astro projects always use Vite for building
+- **When to override**: Never for Astro - bundler resolution is optimal for Vite-based frameworks
+
+**DOM Type Definitions (`lib: ["ES2022", "DOM", "DOM.Iterable"]`)**: Browser API support
+
+- **Why**: Astro generates static sites and SPAs that run in browsers. Your components interact with browser APIs through client-side scripts and framework islands. DOM types are essential for type-safe browser API usage
+- **Trade-off**: Includes browser types even for static content. But most Astro sites have some client-side interactivity
+- **When to override**: For purely static sites with zero client-side JavaScript (rare in practice)
+
+**ESNext Modules (`module: "ESNext"`)**: Modern module syntax for Vite
+
+- **Why**: Vite works best with ESNext modules and handles all transpilation to the target environment. Using ESNext modules enables Vite's advanced optimizations like dependency pre-bundling and fast HMR
+- **Trade-off**: TypeScript output isn't directly executable. But Astro handles the build
+- **When to override**: Never for Astro projects - let Vite handle module transformation
+
 ## 📋 Configuration Details
 
 ### What's Included

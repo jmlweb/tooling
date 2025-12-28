@@ -181,6 +181,38 @@ export default createViteConfig({
 });
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Modern build tools should provide instant feedback during development and optimized production builds with zero configuration.
+
+This package provides a Vite configuration that balances development speed with production optimization. It leverages Vite's native ESM dev server for instant HMR and esbuild for ultra-fast production builds, while remaining flexible enough for any project type.
+
+### Design Decisions
+
+**ESBuild Minification (`minify: 'esbuild'`)**: Fast production builds
+
+- **Why**: esbuild is orders of magnitude faster than terser while producing comparably small bundles. For most projects, the speed improvement far outweighs the minimal size difference. This keeps build times fast even for large applications
+- **Trade-off**: Terser can sometimes achieve slightly smaller bundles (1-3%). But esbuild's speed is almost always worth it
+- **When to override**: For bundle size-critical applications where every byte matters, consider terser. But try esbuild first
+
+**ESNext Target (`target: 'esnext'`)**: Modern JavaScript output
+
+- **Why**: Vite assumes modern browsers by default. Using esnext target produces the smallest, most performant code because it doesn't transpile modern features browsers already support. Your bundler only polyfills what's actually needed
+- **Trade-off**: Won't work in older browsers without additional configuration. But Vite is designed for modern development
+- **When to override**: For projects supporting older browsers - set specific targets like `['es2020', 'chrome87', 'firefox78']`
+
+**No Source Maps by Default (`sourcemap: false`)**: Faster production builds
+
+- **Why**: Source maps are valuable for debugging but significantly increase build time and bundle size. Most production deployments don't need them. Enable per-project when needed for production debugging or error tracking services
+- **Trade-off**: Harder to debug production issues. But you can enable source maps easily when needed
+- **When to override**: For production debugging or when using error tracking services (Sentry, etc.) - set `sourcemap: true`
+
+**Port Flexibility (`strictPort: false`)**: Development convenience
+
+- **Why**: If the default port is in use, Vite automatically finds an available port instead of failing. This is convenient when running multiple projects or when the port is already taken
+- **Trade-off**: Port might change between runs if default is busy. But Vite tells you the actual port
+- **When to override**: For projects that must run on a specific port (e.g., configured in OAuth callbacks) - set `strictPort: true`
+
 ## 📋 Configuration Details
 
 ### Default Settings

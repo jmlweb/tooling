@@ -99,6 +99,38 @@ Create a `tsconfig.json` file in your project root:
 }
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: React development should leverage modern JSX transforms and bundler optimizations for the best developer experience and runtime performance.
+
+This package provides a TypeScript configuration specifically optimized for React library and application development. It extends the strict base configuration while adding React-specific settings that work seamlessly with modern build tools and the latest React features.
+
+### Design Decisions
+
+**Modern JSX Transform (`jsx: "react-jsx"`)**: Uses the new JSX runtime from React 17+
+
+- **Why**: Eliminates the need to import React in every file, reduces bundle size, and improves build performance. The automatic JSX runtime is the recommended approach for all modern React projects
+- **Trade-off**: Requires React 17+ (which is several years old at this point). Older projects need to upgrade
+- **When to override**: Only if you're stuck on React 16 or need the classic `React.createElement` transform for legacy compatibility
+
+**Bundler Module Resolution (`moduleResolution: "bundler"`)**: Optimized for modern build tools
+
+- **Why**: Modern bundlers like Vite, Webpack 5+, and esbuild benefit from bundler resolution, which enables better tree-shaking and handles modern module features. This matches how your build tool actually resolves modules
+- **Trade-off**: Not suitable for direct Node.js execution without a build step. But React projects always use bundlers anyway
+- **When to override**: Never for React libraries - this is the optimal choice. Use `@jmlweb/tsconfig-node` for Node.js projects instead
+
+**DOM Type Definitions (`lib: ["ES2022", "DOM", "DOM.Iterable"]`)**: Includes browser APIs
+
+- **Why**: React components interact with the DOM. Including DOM types prevents type errors when using `window`, `document`, event handlers, and other browser APIs that are fundamental to React development
+- **Trade-off**: Includes types you won't use in server-side code. But React Server Components and SSR still need DOM types for shared components
+- **When to override**: For purely server-side React code (rare). But even Next.js server components often need DOM types for shared code
+
+**ESNext Modules (`module: "ESNext"`)**: Modern module syntax for optimal bundling
+
+- **Why**: Bundlers work best with ESNext modules. They can perform advanced optimizations like scope hoisting and dead code elimination. Your bundler transpiles to the target environment anyway
+- **Trade-off**: Can't run the TypeScript output directly in Node.js without a bundler. But React projects always use bundlers
+- **When to override**: Never for React projects - let your bundler handle the final module format
+
 ## 📋 Configuration Details
 
 ### What's Included

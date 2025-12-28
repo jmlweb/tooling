@@ -159,6 +159,44 @@ This base config intentionally omits `include` and `exclude` patterns because:
 - ✅ Prevents conflicts with project-specific patterns
 - ✅ More flexible for various project types
 
+## 🤔 Why Use This?
+
+> **Philosophy**: TypeScript should catch bugs at compile time through strict type checking. If it compiles without errors, it should work correctly.
+
+This package provides an opinionated TypeScript configuration that enables all strict flags and additional safety checks. It's designed to prevent common JavaScript pitfalls through TypeScript's type system while remaining flexible enough for any project type.
+
+### Design Decisions
+
+**All Strict Flags Enabled (`strict: true` + extras)**: Enables strict null checks, no implicit any, strict function types, etc.
+
+- **Why**: TypeScript's strict mode catches entire classes of bugs (null/undefined errors, implicit any holes, binding issues). Additional flags like `noUncheckedIndexedAccess` catch even more edge cases
+- **Trade-off**: More initial type errors when adopting, requires explicit null handling. But this prevents runtime crashes
+- **When to override**: For gradual migration from JavaScript (but aim to enable all flags eventually)
+
+**Modern Target (ES2022)**: Compiles to ES2022 with modern JavaScript features
+
+- **Why**: Modern Node.js and browsers support ES2022. Using modern features provides better performance and cleaner output. Let your runtime handle the code
+- **Trade-off**: Requires Node.js 18+ or modern browsers. If targeting older environments, override with `ES2020` or lower
+- **When to override**: When supporting legacy environments (but consider transpiling separately)
+
+**NodeNext Module Resolution**: Uses Node.js ESM resolution algorithm
+
+- **Why**: Matches how Node.js resolves modules in real projects. Prevents module resolution mismatches between TypeScript and runtime
+- **Trade-off**: Requires proper package.json exports and file extensions in imports. But this matches modern JavaScript standards
+- **When to override**: For legacy projects using CommonJS exclusively (but you should migrate to ESM)
+
+**No File Inclusion**: Doesn't specify `include` or `exclude` patterns
+
+- **Why**: Different projects have different structures (src/, lib/, packages/). Config shouldn't impose opinions about project layout
+- **Trade-off**: Must define your own `include`/`exclude` in project tsconfig.json (but you'd do this anyway for custom needs)
+- **When to override**: Never - add include/exclude in your project's tsconfig.json
+
+**Source Maps Enabled**: Generates source maps for debugging
+
+- **Why**: Source maps enable debugging TypeScript source in Node.js and browsers. Essential for production debugging
+- **Trade-off**: Slightly larger build output, but negligible compared to debugging benefits
+- **When to override**: If you're absolutely certain you don't need debugging (rare)
+
 ## 🎯 When to Use
 
 Use this configuration when you want:

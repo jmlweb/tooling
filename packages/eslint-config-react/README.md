@@ -159,6 +159,44 @@ Fix import order automatically:
 pnpm exec eslint --fix .
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: React components should be predictable, composable, and easy to reason about. Strict linting catches bugs before they reach production.
+
+This package extends the base TypeScript config with React-specific rules that enforce best practices, prevent common pitfalls, and ensure proper Hook usage. React's declarative nature requires different patterns than traditional imperative code.
+
+### Design Decisions
+
+**React Hooks Rules (`eslint-plugin-react-hooks`)**: Enforces Rules of Hooks and exhaustive dependencies
+
+- **Why**: Hooks rely on call order and closure capture. Violating Hook rules causes subtle bugs that are hard to debug. Exhaustive dependencies prevent stale closures and missing reactive updates
+- **Trade-off**: May require adding dependencies you think are unnecessary, but this prevents bugs from stale values
+- **When to override**: Never for rules of hooks. For exhaustive deps, only when you understand the implications (use `eslint-disable-next-line` with a comment explaining why)
+
+**JSX Accessibility (`eslint-plugin-jsx-a11y`)**: Enforces accessibility best practices (included via recommended)
+
+- **Why**: Accessibility is not optional. Many common React patterns create inaccessible UIs by default. These rules catch issues early
+- **Trade-off**: May require more verbose markup (explicit labels, ARIA attributes), but creates inclusive applications
+- **When to override**: Rarely. If you must, document why the pattern is accessible despite the warning
+
+**Modern JSX Transform**: Configured for React 17+ (no `React` import needed)
+
+- **Why**: The new JSX transform is more efficient and doesn't require importing React in every file. It's the modern standard
+- **Trade-off**: None - this is the recommended approach for React 17+
+- **When to override**: If stuck on React 16 or earlier (but you should upgrade)
+
+**Component Display Names**: Enforces display names for debugging
+
+- **Why**: Display names improve debugging in React DevTools and error messages. Anonymous components are harder to track down
+- **Trade-off**: Requires naming arrow function components or adding explicit displayName
+- **When to override**: For simple, obvious components where the name is clear from context (rare)
+
+**Extends Base TypeScript Config**: Inherits all strict type checking rules
+
+- **Why**: React components benefit from strict typing. Props, state, and event handlers should all be explicitly typed
+- **Trade-off**: More verbose component definitions, but prevents prop drilling bugs and refactoring issues
+- **When to override**: Follow the same guidelines as the base TypeScript config
+
 ## 🎯 When to Use
 
 Use this configuration when you want:

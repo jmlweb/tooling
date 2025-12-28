@@ -84,6 +84,32 @@ This package extends `@jmlweb/prettier-config-base` and adds:
   - And all other base settings
 - ✅ `prettier-plugin-tailwindcss` - Automatically sorts Tailwind CSS classes
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Tailwind class order should be consistent and automatic. Don't waste time manually organizing utility classes.
+
+This package extends the base Prettier config with Tailwind-specific class sorting. Following Tailwind's recommended class order improves readability and makes it easier to scan markup quickly.
+
+### Design Decisions
+
+**Automatic Class Sorting**: Uses the official `prettier-plugin-tailwindcss`
+
+- **Why**: Tailwind's recommended order groups related utilities together (layout → spacing → typography → visual effects), making classes easier to read and understand at a glance
+- **Trade-off**: Initial formatting may reorder classes you've manually organized, but consistency across the codebase outweighs individual preferences
+- **When to override**: If you have a strong reason to deviate from Tailwind's official recommendations (rare)
+
+**Plugin Load Order**: The Tailwind plugin is loaded last in Prettier's plugin chain
+
+- **Why**: Ensures Tailwind class sorting doesn't conflict with other Prettier plugins and runs after all other formatting
+- **Trade-off**: None - this is the recommended approach by Tailwind Labs
+- **When to override**: Never - this is a technical requirement, not a stylistic choice
+
+**Extends Base Config**: Inherits all settings from `@jmlweb/prettier-config-base`
+
+- **Why**: Maintains consistency with non-Tailwind projects while adding Tailwind-specific features
+- **Trade-off**: If you need to change base formatting rules, you must override the base config settings
+- **When to override**: When you need different base Prettier settings than the standard config
+
 ## 🎯 When to Use
 
 Use this package when:

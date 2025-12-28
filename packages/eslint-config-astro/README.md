@@ -151,6 +151,32 @@ Fix import order automatically:
 pnpm exec eslint --fix .
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Astro components should follow Astro's mental model - islands of interactivity with server-first rendering.
+
+This package extends the base TypeScript config with Astro-specific rules that enforce best practices for `.astro` files, prevent common pitfalls with Astro's unique component model, and ensure proper usage of Astro directives.
+
+### Design Decisions
+
+**Astro Plugin (`eslint-plugin-astro`)**: Enforces Astro-specific rules and patterns
+
+- **Why**: Astro has a unique component format that blends frontmatter, markup, and optional client-side interactivity. The plugin catches misuse of directives, style conflicts, and component structure issues
+- **Trade-off**: Additional rules specific to Astro, but prevents framework-specific bugs
+- **When to override**: When you have a legitimate reason to deviate from Astro conventions (rare)
+
+**Astro File Support**: Properly lints `.astro` files with awareness of their structure
+
+- **Why**: `.astro` files have three sections (frontmatter, template, style) that need different parsing. Standard linters don't understand this format
+- **Trade-off**: None - this is essential for Astro development
+- **When to override**: Never - Astro files require Astro-aware linting
+
+**Extends Base TypeScript Config**: Inherits all strict type checking rules for TypeScript in frontmatter
+
+- **Why**: Astro components often contain complex TypeScript logic in frontmatter. Strict typing catches bugs early
+- **Trade-off**: More verbose frontmatter code, but prevents runtime errors
+- **When to override**: Follow the same guidelines as the base TypeScript config
+
 ## 🎯 When to Use
 
 Use this configuration when you want:

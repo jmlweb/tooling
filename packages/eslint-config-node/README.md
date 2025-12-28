@@ -165,6 +165,32 @@ Fix import order automatically:
 pnpm exec eslint --fix .
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Node.js applications should follow Node.js best practices and leverage the platform's capabilities correctly.
+
+This package extends the base TypeScript config with Node.js-specific rules that prevent common Node.js pitfalls, enforce best practices for the platform, and provide proper global variable handling for the Node.js runtime.
+
+### Design Decisions
+
+**Node.js Plugin (`eslint-plugin-n`)**: Enforces Node.js best practices and catches platform-specific issues
+
+- **Why**: Node.js has unique patterns (async I/O, modules, process management) that require specific rules. The plugin catches deprecated APIs, improper module usage, and process handling issues
+- **Trade-off**: Additional rules to learn, but prevents Node.js-specific bugs
+- **When to override**: When you know you're using a pattern correctly despite the warning (rare)
+
+**Node.js Globals**: Automatically includes Node.js global variables (`process`, `__dirname`, `Buffer`, etc.)
+
+- **Why**: Node.js applications need access to platform globals. Explicitly declaring them prevents "undefined variable" errors
+- **Trade-off**: None - this is required for Node.js development
+- **When to override**: Never - Node.js code needs these globals
+
+**Extends Base TypeScript Config**: Inherits all strict type checking rules
+
+- **Why**: Node.js applications benefit from strict typing, especially for API contracts, database models, and configuration
+- **Trade-off**: More verbose code, but prevents runtime errors in production
+- **When to override**: Follow the same guidelines as the base TypeScript config
+
 ## 🎯 When to Use
 
 Use this configuration when you want:

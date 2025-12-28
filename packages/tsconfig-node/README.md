@@ -103,6 +103,32 @@ Create a `tsconfig.json` file in your project root:
 }
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Node.js projects should use only Node.js and ES types, avoiding browser APIs that don't exist in the runtime.
+
+This package provides a TypeScript configuration specifically for Node.js server-side development and CLI tools. It extends the strict base configuration while carefully excluding browser/DOM types that would allow you to accidentally use APIs that don't exist in Node.js.
+
+### Design Decisions
+
+**ES-Only Library Types (`lib: ["ES2022"]`)**: Excludes DOM and browser APIs
+
+- **Why**: Node.js doesn't have browser APIs like `window`, `document`, or DOM event types. Including DOM types in a Node.js project allows you to accidentally write code that compiles but crashes at runtime. This config prevents that entire class of bugs
+- **Trade-off**: Must install `@types/node` separately for Node.js-specific types. But you need that anyway for Node.js development
+- **When to override**: If building a universal library that runs in both Node.js and browsers (but consider having separate tsconfigs for each environment)
+
+**NodeNext Module Resolution (`moduleResolution: "NodeNext"`)**: Matches Node.js module behavior
+
+- **Why**: Node.js has specific module resolution rules, especially with ESM. `NodeNext` resolution matches exactly how Node.js resolves modules, preventing mismatches between TypeScript compilation and runtime behavior
+- **Trade-off**: Requires following Node.js ESM rules (explicit file extensions, package.json exports). But these are Node.js requirements anyway
+- **When to override**: For legacy CommonJS-only projects, you might use `node` resolution, but `NodeNext` works for both CommonJS and ESM
+
+**Dual Module Support**: Works with both CommonJS and ESM
+
+- **Why**: Node.js supports both module systems through package.json `type` field and file extensions. This config respects those conventions, making it work seamlessly whether you're using CommonJS, ESM, or gradually migrating
+- **Trade-off**: Must be deliberate about module format choices in your package.json
+- **When to override**: Never - this flexibility is essential for modern Node.js development
+
 ## 📋 Configuration Details
 
 ### What's Included

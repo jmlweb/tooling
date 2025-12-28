@@ -122,6 +122,38 @@ export default defineConfig({
 });
 ```
 
+## 🤔 Why Use This?
+
+> **Philosophy**: Modern testing should be fast, have excellent DX, and enforce meaningful coverage without slowing down development.
+
+This package provides a Vitest configuration optimized for speed and developer experience while maintaining high code quality standards. It leverages Vitest's Vite-powered architecture for extremely fast test execution and hot module replacement during test development.
+
+### Design Decisions
+
+**80% Coverage Thresholds**: Balanced quality enforcement
+
+- **Why**: 80% coverage ensures most code is tested without creating unrealistic goals that lead to testing trivial code just to hit metrics. It's high enough to catch bugs but low enough to remain practical for real-world development
+- **Trade-off**: Some projects need higher (90%+) or lower (60%) thresholds depending on criticality
+- **When to override**: Increase for safety-critical code, decrease for rapid prototyping or legacy code being brought under test
+
+**Global Test Functions (`globals: true`)**: Familiar testing API
+
+- **Why**: Enables the familiar `describe`, `it`, `expect` globals without imports, matching Jest's API. This makes migration easier and reduces boilerplate in every test file. Most developers expect this API
+- **Trade-off**: Technically pollutes global scope, but this is standard in testing and expected behavior
+- **When to override**: If you prefer explicit imports (`import { describe, it, expect } from 'vitest'`) for stricter code style
+
+**Thread Pool (`pool: 'threads'`)**: Parallel test execution
+
+- **Why**: Vitest's thread pool runs tests in parallel using worker threads, dramatically speeding up large test suites. Much faster than Jest's default process-based isolation while maintaining proper isolation
+- **Trade-off**: Minimal memory overhead from worker threads. But the speed improvement is significant
+- **When to override**: For tests with native modules that don't work in workers - use `forks` pool instead
+
+**V8 Coverage Provider**: Fast native coverage
+
+- **Why**: V8's built-in coverage is significantly faster than instrumentation-based coverage (like Istanbul). For Vitest projects, it's the best choice for speed while maintaining accuracy
+- **Trade-off**: Less configurable than Istanbul, but coverage accuracy is equivalent for modern code
+- **When to override**: Rarely needed - V8 coverage works well for all modern JavaScript/TypeScript
+
 ## 📋 Configuration Details
 
 ### Default Settings
