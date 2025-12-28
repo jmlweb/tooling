@@ -27,6 +27,8 @@ Or with pnpm:
 pnpm add -D @jmlweb/commitlint-config @commitlint/cli @commitlint/config-conventional
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `commitlint.config.js` file in your project root:
@@ -261,9 +263,30 @@ This package requires the following peer dependencies:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint configuration for TypeScript
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier configuration
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
+
+### External Tools
+
+- [commitlint](https://commitlint.js.org/) - Lint commit messages according to conventional commits
+- [Conventional Commits](https://www.conventionalcommits.org/) - A specification for adding meaning to commit messages
+- [Husky](https://typicode.github.io/husky/) - Git hooks made easy (recommended for pre-commit integration)
+- [semantic-release](https://semantic-release.gitbook.io/) - Automated versioning and changelog generation
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

@@ -24,6 +24,8 @@
 npm install --save-dev @jmlweb/tsconfig-nextjs typescript next @jmlweb/tsconfig-react @jmlweb/tsconfig-base
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `tsconfig.json` file in your Next.js project root:
@@ -287,10 +289,31 @@ This package requires the following peer dependencies:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript configuration for React (extended by this package)
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - Base TypeScript configuration
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint configuration for React/Next.js projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [TypeScript](https://www.typescriptlang.org/) - Strongly typed programming language that builds on JavaScript
+- [Next.js](https://nextjs.org/) - The React framework for production
+- [React](https://react.dev/) - JavaScript library for building user interfaces
+- [Turbopack](https://turbo.build/pack) - Incremental bundler optimized for JavaScript and TypeScript
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

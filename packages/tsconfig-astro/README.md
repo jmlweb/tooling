@@ -23,6 +23,8 @@
 npm install --save-dev @jmlweb/tsconfig-astro typescript astro @jmlweb/tsconfig-base
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `tsconfig.json` file in your Astro project root:
@@ -227,9 +229,30 @@ This package requires the following peer dependencies:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - Base TypeScript configuration (extended by this package)
-- [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint configuration for TypeScript projects
+- [`@jmlweb/eslint-config-astro`](../eslint-config-astro) - ESLint configuration for Astro projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [TypeScript](https://www.typescriptlang.org/) - Strongly typed programming language that builds on JavaScript
+- [Astro](https://astro.build/) - The web framework for content-driven websites
+- [Astro integrations](https://astro.build/integrations/) - Official and community integrations
+- [Vite](https://vite.dev/) - Build tool used by Astro
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

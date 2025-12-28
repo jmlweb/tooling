@@ -19,6 +19,8 @@
 npm install --save-dev @jmlweb/postcss-config postcss tailwindcss autoprefixer
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 ### Option 1: Using `postcss.config.js` (Recommended)
@@ -180,9 +182,30 @@ This package requires the following peer dependencies:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) - Prettier config with Tailwind class sorting
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint config for React projects
 - [`@jmlweb/vite-config`](../vite-config) - Vite configuration for frontend projects
+
+### External Tools
+
+- [PostCSS](https://postcss.org/) - A tool for transforming CSS with JavaScript
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Autoprefixer](https://github.com/postcss/autoprefixer) - Parse CSS and add vendor prefixes
+- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) - VS Code extension for Tailwind
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

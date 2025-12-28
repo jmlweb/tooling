@@ -22,6 +22,8 @@
 npm install --save-dev @jmlweb/eslint-config-base-js eslint @eslint/js eslint-config-prettier eslint-plugin-simple-import-sort
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create an `eslint.config.js` file in your project root:
@@ -243,8 +245,28 @@ See real-world usage examples:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - TypeScript ESLint config (extends this package)
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript
+- [Prettier](https://prettier.io/) - Opinionated code formatter (pairs with eslint-config-prettier)
+- [eslint-plugin-simple-import-sort](https://github.com/lydell/eslint-plugin-simple-import-sort) - Auto-sorts imports
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

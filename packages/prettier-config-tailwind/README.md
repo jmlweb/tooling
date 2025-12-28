@@ -21,6 +21,8 @@ npm install --save-dev @jmlweb/prettier-config-tailwind prettier prettier-plugin
 
 **Note**: The `prettier-plugin-tailwindcss` plugin must be installed as a dev dependency.
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 ### Option 1: Using `package.json` (Recommended)
@@ -150,8 +152,28 @@ See real-world usage examples:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Base Prettier configuration (extended by this package)
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
+
+### External Tools
+
+- [Prettier](https://prettier.io/) - Opinionated code formatter
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) - Official Tailwind class sorting plugin
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

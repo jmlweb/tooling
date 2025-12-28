@@ -22,6 +22,8 @@
 npm install --save-dev @jmlweb/vitest-config vitest
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `vitest.config.ts` file in your project root:
@@ -261,9 +263,31 @@ See real-world usage examples:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
+- [`@jmlweb/jest-config`](../jest-config) - Jest configuration (alternative test runner)
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
+
+### External Tools
+
+- [Vitest](https://vitest.dev/) - Blazing-fast unit test framework powered by Vite
+- [@testing-library/jest-dom](https://testing-library.com/docs/ecosystem-jest-dom/) - Custom matchers for the DOM (works with Vitest)
+- [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) - React testing utilities (for React projects)
+- [@vitest/ui](https://vitest.dev/guide/ui.html) - Visual UI for Vitest test results
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

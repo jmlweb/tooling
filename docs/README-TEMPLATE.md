@@ -18,6 +18,8 @@
 npm install --save-dev @jmlweb/package-name [peer-dependencies]
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 ### Basic Setup
@@ -104,23 +106,50 @@ This package requires the following peer dependencies:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/related-package-1`](../related-package-1) - Description
 - [`@jmlweb/related-package-2`](../related-package-2) - Description
 
+### External Tools
+
+- [Tool Name](https://example.com/) - Brief description of the tool
+- [Another Tool](https://example.com/) - Brief description of the tool
+
+**Guidelines for External Tools:**
+
+- List tools that directly complement or integrate with this package
+- Include the official/primary tool (e.g., ESLint for eslint-config packages)
+- Add popular ecosystem tools that users commonly need
+- Keep descriptions brief (one line)
+- Link to official documentation
+
 ## 🔄 Migration Guide
 
-### From Version X to Version Y
+### Upgrading from Version X to Version Y
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
 
 **Breaking Changes:**
 
-- Change 1: Description and migration steps
-- Change 2: Description and migration steps
+- **Change 1**: Description of what changed and why
+  - **Before:** Code example showing old usage
+  - **After:** Code example showing new usage
+  - **Action Required:** What users need to do to migrate
+
+- **Change 2**: Description of what changed and why
+  - **Before:** Code example showing old usage
+  - **After:** Code example showing new usage
+  - **Action Required:** What users need to do to migrate
 
 **Migration Steps:**
 
-1. Step 1
-2. Step 2
-3. Step 3
+1. Update the package version in `package.json`
+2. Review the breaking changes above
+3. Update your code according to the "Action Required" sections
+4. Run your tests to ensure everything works as expected
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

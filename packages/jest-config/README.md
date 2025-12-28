@@ -23,6 +23,8 @@
 npm install --save-dev @jmlweb/jest-config jest ts-jest @types/jest
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `jest.config.ts` file in your project root:
@@ -253,10 +255,31 @@ This package requires the following peer dependencies:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for modern testing
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
+
+### External Tools
+
+- [Jest](https://jestjs.io/) - Delightful JavaScript testing framework
+- [ts-jest](https://kulshekhar.github.io/ts-jest/) - TypeScript preprocessor for Jest
+- [@testing-library/jest-dom](https://testing-library.com/docs/ecosystem-jest-dom/) - Custom Jest matchers for the DOM
+- [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) - React testing utilities (for React projects)
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

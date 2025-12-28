@@ -28,6 +28,8 @@ For React projects, also install the React plugin:
 npm install --save-dev @vitejs/plugin-react
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `vite.config.ts` file in your project root:
@@ -341,10 +343,31 @@ Optional peer dependency for React projects:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript config for React projects
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint config for React projects
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [Vite](https://vite.dev/) - Next-generation frontend tooling
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) - Official React plugin for Vite
+- [vite-plugin-svgr](https://github.com/pd4d10/vite-plugin-svgr) - SVG to React component transform
+- [rollup-plugin-visualizer](https://github.com/btd/rollup-plugin-visualizer) - Visualize bundle size
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

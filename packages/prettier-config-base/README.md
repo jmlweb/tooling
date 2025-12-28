@@ -19,6 +19,8 @@
 npm install --save-dev @jmlweb/prettier-config-base prettier
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 ### Option 1: Using `package.json` (Recommended)
@@ -153,8 +155,28 @@ See real-world usage examples:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) - Adds Tailwind CSS class sorting
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config that works seamlessly with this Prettier config
+
+### External Tools
+
+- [Prettier](https://prettier.io/) - Opinionated code formatter
+- [ESLint](https://eslint.org/) - Pluggable linting utility (use with eslint-config-prettier to avoid conflicts)
+- [Editor Plugins](https://prettier.io/docs/en/editors.html) - Format on save in VS Code, IntelliJ, and more
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

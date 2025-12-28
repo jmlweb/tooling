@@ -23,6 +23,8 @@
 npm install --save-dev @jmlweb/tsconfig-react typescript @jmlweb/tsconfig-base
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create a `tsconfig.json` file in your project root:
@@ -239,9 +241,31 @@ See real-world usage examples:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - Base TypeScript configuration (extended by this package)
 - [`@jmlweb/eslint-config-react`](../eslint-config-react) - ESLint configuration for React libraries
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+- [`@jmlweb/vite-config`](../vite-config) - Vite configuration for React projects
+
+### External Tools
+
+- [TypeScript](https://www.typescriptlang.org/) - Strongly typed programming language that builds on JavaScript
+- [React](https://react.dev/) - JavaScript library for building user interfaces
+- [Vite](https://vite.dev/) - Build tool with first-class TypeScript support
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) - Official React plugin for Vite
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 

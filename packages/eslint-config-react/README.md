@@ -26,6 +26,8 @@
 npm install --save-dev @jmlweb/eslint-config-react eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
 ```
 
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
 ## 🚀 Quick Start
 
 Create an `eslint.config.js` file in your project root:
@@ -244,9 +246,32 @@ See real-world usage examples:
 
 ## 🔗 Related Packages
 
+### Internal Packages
+
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - Base TypeScript ESLint config (extended by this package)
 - [`@jmlweb/tsconfig-react`](../tsconfig-react) - TypeScript configuration for React libraries
 - [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript and TypeScript
+- [TypeScript ESLint](https://typescript-eslint.io/) - TypeScript tooling for ESLint
+- [React](https://react.dev/) - JavaScript library for building user interfaces
+- [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) - React-specific linting rules
+- [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) - Enforces Rules of Hooks
+- [Prettier](https://prettier.io/) - Opinionated code formatter
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
 
 ## 📜 Changelog
 
