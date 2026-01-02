@@ -43,7 +43,7 @@ npm run lint
 
 ## Project Structure
 
-```
+```text
 react-typescript-app/
 ├── src/
 │   ├── App.tsx          # Main React component
