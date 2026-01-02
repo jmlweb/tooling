@@ -43,7 +43,7 @@ runs:
 
     - name: Restore Turborepo cache
       if: inputs.restore-turbo-cache == 'true'
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       continue-on-error: true
       with:
         name: turbo-cache
