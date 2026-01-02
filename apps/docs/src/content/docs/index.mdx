@@ -1,0 +1,65 @@
+---
+title: jmlweb-tooling
+description: Shared configuration packages for modern JavaScript and TypeScript projects
+tableOfContents: false
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# jmlweb-tooling
+
+A collection of shared configuration packages for modern JavaScript and TypeScript projects. These packages provide consistent, opinionated configurations for popular development tools.
+
+## Package Categories
+
+<CardGrid>
+  <Card title="Prettier" icon="seti:prettier">
+    Code formatting configurations with sensible defaults and Tailwind CSS support.
+  </Card>
+  <Card title="ESLint" icon="seti:eslint">
+    Linting configurations for JavaScript, TypeScript, React, Node.js, and Astro projects.
+  </Card>
+  <Card title="TypeScript" icon="seti:typescript">
+    Strict TypeScript configurations for various project types including React, Next.js, and Node.js.
+  </Card>
+  <Card title="Testing" icon="seti:jest">
+    Pre-configured setups for Vitest and Jest testing frameworks.
+  </Card>
+  <Card title="Build Tools" icon="seti:config">
+    Build configurations for tsup and Vite with optimized defaults.
+  </Card>
+  <Card title="Commit" icon="approve-check-mark">
+    Commitlint configuration following Conventional Commits specification.
+  </Card>
+</CardGrid>
+
+## Features
+
+- **Zero Configuration**: Drop-in configurations that work out of the box
+- **Opinionated**: Sensible defaults based on industry best practices
+- **Extensible**: Easy to override and customize for your specific needs
+- **Type-Safe**: Full TypeScript support across all packages
+- **Monorepo Friendly**: Designed to work seamlessly in monorepo setups
+
+## Quick Start
+
+All packages are published to npm under the `@jmlweb` scope. Install the configurations you need:
+
+```bash
+# Prettier configuration
+pnpm add -D @jmlweb/prettier-config-base
+
+# ESLint configuration
+pnpm add -D @jmlweb/eslint-config-base
+
+# TypeScript configuration
+pnpm add -D @jmlweb/tsconfig-base
+```
+
+See individual package documentation for detailed usage instructions.
+
+## Repository
+
+All packages are maintained in a single monorepo: [github.com/jmlweb/tooling](https://github.com/jmlweb/tooling)
+
+Report issues and contribute at: [github.com/jmlweb/tooling/issues](https://github.com/jmlweb/tooling/issues)
