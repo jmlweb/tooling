@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-react
 
+## 3.0.0
+
+### Major Changes
+
+- b2e7aa5: Update to eslint-plugin-react-hooks v7 for React 19 support
+
 ## 2.0.7
 
 ### Patch Changes

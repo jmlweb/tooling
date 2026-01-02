@@ -1,5 +1,11 @@
 # @jmlweb/vite-config
 
+## 1.0.0
+
+### Major Changes
+
+- b2e7aa5: Update to Vite v7 and @vitejs/plugin-react v5
+
 ## 0.1.5
 
 ### Patch Changes

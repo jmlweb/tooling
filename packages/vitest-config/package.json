@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/vitest-config",
-  "version": "1.0.7",
+  "version": "2.0.0",
   "description": "Base Vitest configuration for jmlweb projects with TypeScript support and coverage settings",
   "type": "module",
   "main": "./dist/index.cjs",
