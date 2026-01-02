@@ -20,6 +20,8 @@
     "validate": "pnpm format --check && pnpm lint:root && pnpm lint && pnpm syncpack:check",
     "validate:docs": "node scripts/validate-docs.mjs",
     "validate:docs:fix": "node scripts/fix-markdown-code-blocks.mjs",
+    "validate:code-blocks": "node scripts/validate-markdown-code-blocks.mjs",
+    "validate:code-blocks:fix": "node scripts/validate-markdown-code-blocks.mjs --fix",
     "validate:packages": "node scripts/validate-all-packages.mjs",
     "version": "changeset version",
     "version:prerelease": "changeset version --snapshot prerelease",

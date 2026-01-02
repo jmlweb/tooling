@@ -71,6 +71,13 @@ importers:
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
+    devDependencies:
+      '@jmlweb/tsconfig-astro':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig-astro
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   apps/example-nodejs-javascript:
     dependencies:
