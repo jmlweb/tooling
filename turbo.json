@@ -42,6 +42,11 @@
         "jest.config.*",
         "package.json"
       ]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
     }
   }
 }
