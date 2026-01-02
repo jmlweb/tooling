@@ -17,12 +17,7 @@ export default defineConfig({
           href: 'https://github.com/jmlweb/tooling',
         },
       ],
-      sidebar: [
-        {
-          label: 'Start Here',
-          items: [{ label: 'Introduction', slug: 'index' }],
-        },
-      ],
+      sidebar: [],
       customCss: [],
     }),
   ],
