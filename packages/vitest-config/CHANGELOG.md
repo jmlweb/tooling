@@ -1,5 +1,11 @@
 # @jmlweb/vitest-config
 
+## 2.0.0
+
+### Major Changes
+
+- b2e7aa5: Update to Vitest v4 with automatic thread pool management
+
 ## 1.0.7
 
 ### Patch Changes

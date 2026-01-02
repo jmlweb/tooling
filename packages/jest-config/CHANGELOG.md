@@ -1,5 +1,11 @@
 # @jmlweb/jest-config
 
+## 1.0.0
+
+### Major Changes
+
+- b2e7aa5: Update to Jest v30 with removed deprecated matcher aliases
+
 ## 0.1.4
 
 ### Patch Changes
