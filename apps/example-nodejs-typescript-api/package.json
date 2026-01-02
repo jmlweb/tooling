@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -25,7 +25,7 @@
     "@jmlweb/prettier-config-base": "workspace:*",
     "@jmlweb/tsconfig-base": "workspace:*",
     "@jmlweb/vitest-config": "workspace:*",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.6",
     "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^4.0.16",
     "eslint": "^9.39.2",
