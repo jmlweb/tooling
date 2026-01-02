@@ -166,7 +166,7 @@ jobs:
           echo "All packages validated successfully"
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: build-artifacts
@@ -175,7 +175,7 @@ jobs:
         if: always()
 
       - name: Upload Turborepo cache
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: turbo-cache
