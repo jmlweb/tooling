@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-base
 
+## 2.0.8
+
+### Patch Changes
+
+- c1cbae0: Support eslint-config-prettier v9 and v10 in peer dependencies
+
 ## 2.0.7
 
 ### Patch Changes
