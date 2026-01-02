@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-node",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "ESLint configuration for Node.js projects with TypeScript, extending base config with Node.js-specific rules",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -73,9 +73,9 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^17.0.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^16.5.0",
+    "globals": "^17.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.1"
+    "typescript-eslint": "^8.51.0"
   }
 }

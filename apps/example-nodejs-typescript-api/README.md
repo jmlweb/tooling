@@ -43,7 +43,7 @@ npm run lint
 
 ## Project Structure
 
-```
+```text
 nodejs-typescript-api/
 ├── src/
 │   ├── index.ts          # Main API server

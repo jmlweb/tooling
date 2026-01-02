@@ -1,5 +1,17 @@
 # @jmlweb/commitlint-config
 
+## 3.0.1
+
+### Patch Changes
+
+- ecb3620: Update dev dependencies to latest stable versions
+
+## 3.0.0
+
+### Major Changes
+
+- b2e7aa5: Update to Commitlint v20 with ESM support
+
 ## 2.0.3
 
 ### Patch Changes

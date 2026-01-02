@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-node
 
+## 2.0.8
+
+### Patch Changes
+
+- ecb3620: Update dev dependencies to latest stable versions
+- Updated dependencies [ecb3620]
+  - @jmlweb/eslint-config-base@2.0.7
+
 ## 2.0.7
 
 ### Patch Changes

@@ -95,14 +95,8 @@ const config = defineConfig({
     // Use threads by default for better performance
     pool: 'threads',
 
-    // Pool options for better performance
-    poolOptions: {
-      threads: {
-        // Use all available CPUs minus 1 to leave one for the system
-        minThreads: 1,
-        maxThreads: undefined, // Let Vitest decide based on available CPUs
-      },
-    },
+    // Note: poolOptions.threads.minThreads and maxThreads were removed in Vitest 4
+    // Vitest now automatically manages thread pool based on available CPUs
   },
 });
 

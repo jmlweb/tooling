@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-astro",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "ESLint configuration for Astro projects with TypeScript. Extends @jmlweb/eslint-config-base with Astro-specific rules.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -73,6 +73,6 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.1"
+    "typescript-eslint": "^8.51.0"
   }
 }

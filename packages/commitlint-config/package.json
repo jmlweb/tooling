@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/commitlint-config",
-  "version": "2.0.3",
+  "version": "3.0.1",
   "description": "Shared commitlint configuration for enforcing Conventional Commits",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -54,9 +54,9 @@
     "@commitlint/config-conventional": ">=19.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "@commitlint/types": "^19.8.1",
+    "@commitlint/cli": "^20.3.0",
+    "@commitlint/config-conventional": "^20.3.0",
+    "@commitlint/types": "^20.2.0",
     "@jmlweb/tsconfig-internal": "workspace:*",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"

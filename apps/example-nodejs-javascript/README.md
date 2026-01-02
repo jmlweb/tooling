@@ -35,7 +35,7 @@ npm run lint
 
 ## Project Structure
 
-```
+```text
 nodejs-javascript/
 ├── src/
 │   └── index.js         # Main API server

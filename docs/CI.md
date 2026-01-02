@@ -7,9 +7,18 @@ This document describes the CI/CD configuration for the jmlweb-tooling monorepo,
 The project uses GitHub Actions for continuous integration and deployment. The CI pipeline includes:
 
 - **Validation**: Code quality checks (formatting, linting, dependency checks)
-- **Build**: Package builds and validation
+- **Build**: Package builds with PR filtering and validation
 - **Test Pack**: Package publishing validation
 - **Publish**: Automated npm publishing via Changesets
+
+### CI Scripts
+
+The CI workflow uses dedicated scripts for complex operations, making them testable locally and easier to maintain:
+
+- **`scripts/validate-all-packages.mjs`**: Validates all package.json files in the monorepo
+- **`scripts/ci-build.mjs`**: Handles PR filtering and build strategy (filtered builds for PRs, full builds for main)
+- **`scripts/test-pack.mjs`**: Validates package tarballs for publishing readiness
+- **`scripts/validate-package.mjs`**: Validates individual package.json files (with GitHub Actions annotations support)
 
 ## Turborepo Remote Caching
 
@@ -110,9 +119,15 @@ Example log output:
 
 Main CI workflow that runs on every push and pull request:
 
-- **validate**: Code quality checks
-- **build**: Package builds
+- **validate-format**: Formatting checks with Prettier
+- **validate-lint**: ESLint validation for root and packages
+- **validate-deps**: Dependency version consistency checks
+- **build**: Package builds with intelligent PR filtering
+  - Uses `scripts/ci-build.mjs` for PR filtering logic
+  - Validates packages using `scripts/validate-all-packages.mjs`
 - **test-pack**: Package publishing validation
+  - Uses `scripts/test-pack.mjs` to pack and validate tarballs
+- **integration-test**: Runs integration tests
 - **status-check**: Final status aggregation
 
 ### `.github/workflows/publish.yml`
@@ -153,8 +168,10 @@ The workflows use GitHub Actions' built-in caching for:
 Build outputs are uploaded as artifacts for:
 
 - Debugging failed builds
-- Sharing between jobs
+- Sharing between jobs (test-pack downloads build artifacts)
 - Manual inspection when needed
+
+Note: Turborepo cache artifacts are no longer uploaded separately as Turborepo remote caching (via `TURBO_TOKEN` and `TURBO_TEAM`) handles cache persistence across workflow runs.
 
 ## Best Practices
 
@@ -165,6 +182,25 @@ Build outputs are uploaded as artifacts for:
 3. **Clean up old caches**: Vercel automatically manages cache retention, but monitor usage
 
 4. **Use appropriate cache scopes**: Configure cache scopes in `turbo.json` to avoid unnecessary cache invalidations
+
+5. **Test CI scripts locally**: All CI scripts can be run locally for faster debugging:
+
+   ```bash
+   # Validate all packages
+   node scripts/validate-all-packages.mjs
+
+   # Test build (push scenario)
+   GITHUB_EVENT_NAME=push node scripts/ci-build.mjs
+
+   # Test build (PR scenario - requires git history)
+   GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main node scripts/ci-build.mjs
+
+   # Test package packing (requires build first)
+   pnpm build && node scripts/test-pack.mjs
+
+   # Validate single package
+   node scripts/validate-package.mjs packages/your-package
+   ```
 
 ## Troubleshooting
 
@@ -222,6 +258,8 @@ Build outputs are uploaded as artifacts for:
 2. Check token hasn't expired
 3. Ensure token has correct permissions
 4. Review Turborepo output for cache hit/miss messages
+
+Note: Turborepo cache artifacts are no longer uploaded to GitHub Actions artifacts. All caching is handled via Turborepo remote cache (Vercel).
 
 **Problem**: Cache hits not occurring when expected
 
@@ -284,7 +322,7 @@ Build outputs are uploaded as artifacts for:
 1. Check `files` array in `package.json`
 2. Ensure build ran before publish
 3. Verify `.npmignore` isn't excluding needed files
-4. Test locally: `pnpm pack` and inspect tarball
+4. Test locally: `node scripts/test-pack.mjs` or `pnpm pack` and inspect tarball
 
 **Problem**: Version already exists on npm
 
@@ -325,6 +363,15 @@ Build outputs are uploaded as artifacts for:
 1. Run locally: `pnpm format --check`
 2. Fix formatting: `pnpm format`
 3. Commit changes and push
+
+**Problem**: `build` job fails with package validation errors
+
+**Solutions**:
+
+1. Run locally: `node scripts/validate-all-packages.mjs`
+2. Fix reported errors in package.json files
+3. Common issues: missing required fields (name, version, description, author, license, repository)
+4. For detailed validation of a single package: `node scripts/validate-package.mjs packages/your-package`
 
 **Problem**: `validate-lint` job fails
 
@@ -381,9 +428,18 @@ If you encounter an issue not covered here:
    - Expected vs actual behavior
    - Environment details (Node.js version, etc.)
 
+## GitHub Actions Annotations
+
+When validation errors occur in CI, GitHub Actions annotations are automatically added to the workflow output and appear inline in pull request diffs. This makes it easier to identify and fix issues without having to dig through logs.
+
+The following scripts support annotations:
+
+- `validate-package.mjs`: Errors and warnings appear on the relevant package.json file
+- `ci-build.mjs`: Build failures are annotated with helpful error messages
+- `test-pack.mjs`: Package validation failures are annotated on the package.json file
+
 ## Related Documentation
 
 - [Turborepo Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Vercel Remote Caching](https://vercel.com/docs/monorepos/remote-caching)
-- [CI Optimization: Package Filtering](./CI-OPTIMIZATION.md)

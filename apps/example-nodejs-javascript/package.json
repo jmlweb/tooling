@@ -12,16 +12,16 @@
     "format:check": "prettier --check \"**/*.{js,json,md}\""
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^5.2.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@jmlweb/eslint-config-base-js": "workspace:*",
     "@jmlweb/prettier-config-base": "workspace:*",
     "eslint": "^9.39.2",
-    "@eslint/js": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^16.2.0",
+    "globals": "^17.0.0",
     "prettier": "^3.3.3"
   },
   "prettier": "@jmlweb/prettier-config-base",

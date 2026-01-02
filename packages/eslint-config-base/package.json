@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-base",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Base ESLint configuration for TypeScript projects with strict type checking and best practices",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -69,6 +69,6 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.1"
+    "typescript-eslint": "^8.51.0"
   }
 }
