@@ -21,6 +21,7 @@
       "inputs": [
         "**/*.{js,json,md}",
         ".prettierrc*",
+        ".prettierignore",
         "prettier.config.*",
         "package.json"
       ]
