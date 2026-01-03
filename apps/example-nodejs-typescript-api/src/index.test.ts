@@ -10,4 +10,3 @@ describe('Example API', () => {
     expect(result).toBe(4);
   });
 });
-

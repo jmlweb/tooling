@@ -8,7 +8,3 @@ export default defineConfig({
   outDir: 'dist',
   external: ['jest', 'ts-jest', '@types/jest'],
 });
-
-
-
-

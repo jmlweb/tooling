@@ -167,10 +167,12 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
     coverageReporters,
 
     // Setup files
-    setupFilesAfterEnv: setupFilesAfterEnv.length > 0 ? setupFilesAfterEnv : undefined,
+    setupFilesAfterEnv:
+      setupFilesAfterEnv.length > 0 ? setupFilesAfterEnv : undefined,
 
     // Module name mapping for path aliases
-    moduleNameMapper: Object.keys(moduleNameMapper).length > 0 ? moduleNameMapper : undefined,
+    moduleNameMapper:
+      Object.keys(moduleNameMapper).length > 0 ? moduleNameMapper : undefined,
 
     // Transform configuration for TypeScript
     transform,
@@ -233,4 +235,3 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
 const config: Config = createJestConfig();
 
 export default config;
-

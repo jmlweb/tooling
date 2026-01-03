@@ -56,4 +56,3 @@ const config = [
 ] as Linter.Config[];
 
 export default config;
-

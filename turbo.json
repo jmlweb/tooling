@@ -16,6 +16,7 @@
         "package.json"
       ]
     },
+    "//#lint:root": {},
     "format": {
       "outputs": [],
       "inputs": [

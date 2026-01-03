@@ -90,7 +90,10 @@ export interface ViteConfigOptions {
   /**
    * Additional Vite configuration to merge
    */
-  options?: Omit<UserConfig, 'plugins' | 'resolve' | 'build' | 'server' | 'preview'>;
+  options?: Omit<
+    UserConfig,
+    'plugins' | 'resolve' | 'build' | 'server' | 'preview'
+  >;
 }
 
 /**
@@ -172,7 +175,9 @@ const BASE_DEFAULTS = {
  * });
  * ```
  */
-export const createViteConfig = (config: ViteConfigOptions = {}): UserConfig => {
+export const createViteConfig = (
+  config: ViteConfigOptions = {},
+): UserConfig => {
   const {
     plugins = [],
     resolve,
@@ -241,7 +246,7 @@ export const createViteConfig = (config: ViteConfigOptions = {}): UserConfig => 
  * ```
  */
 export const createReactViteConfig = (
-  config: ViteConfigOptions & { reactPlugin: Plugin }
+  config: ViteConfigOptions & { reactPlugin: Plugin },
 ): UserConfig => {
   const { reactPlugin, plugins = [], ...rest } = config;
 

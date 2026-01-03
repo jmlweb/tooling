@@ -8,14 +8,3 @@ export default defineConfig({
   outDir: 'dist',
   external: ['vitest'],
 });
-
-
-
-
-
-
-
-
-
-
-

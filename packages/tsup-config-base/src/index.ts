@@ -176,13 +176,16 @@ const BASE_DEFAULTS = {
  */
 const CLI_DEFAULTS = {
   entry: { cli: 'src/cli.ts' } as EntryConfig,
-  format: ['esm'] as ('esm')[],
+  format: ['esm'] as 'esm'[],
   dts: true,
   clean: true,
   outDir: 'dist',
   target: 'node18' as NodeTarget,
   shebang: true as boolean | string | string[],
-} satisfies Partial<Options> & { target: NodeTarget; shebang: boolean | string | string[] };
+} satisfies Partial<Options> & {
+  target: NodeTarget;
+  shebang: boolean | string | string[];
+};
 
 /**
  * Creates a base tsup configuration with sensible defaults

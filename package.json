@@ -17,7 +17,7 @@
     "syncpack:check": "syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches && syncpack format",
     "test": "turbo run test",
-    "validate": "prettier --check \"**/*.{js,ts,tsx,json,md}\" && pnpm lint:root && pnpm lint && pnpm syncpack:check",
+    "validate": "prettier --check \"**/*.{js,ts,tsx,json,md}\" && turbo run lint:root lint && pnpm syncpack:check",
     "validate:code-blocks": "node scripts/validate-markdown-code-blocks.mjs",
     "validate:code-blocks:fix": "node scripts/validate-markdown-code-blocks.mjs --fix",
     "validate:docs": "node scripts/validate-docs.mjs",
