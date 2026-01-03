@@ -23,7 +23,7 @@ pnpm add -D @jmlweb/prettier-config-base prettier
 
 ## 🚀 Quick Start
 
-### Option 1: Using `package.json` (Recommended)
+### Option 1: Using `package.json`
 
 Add to your `package.json`:
 
@@ -33,7 +33,19 @@ Add to your `package.json`:
 }
 ```
 
-### Option 2: Using `.prettierrc.js`
+> ⚠️ **Note for ES Module projects**: If your project has `"type": "module"` in `package.json`, use [Option 2: `.prettierrc.mjs`](#option-2-using-prettierrcmjs-recommended-for-es-modules) instead to avoid configuration loading issues.
+
+### Option 2: Using `.prettierrc.mjs` (Recommended for ES Modules)
+
+Create a `.prettierrc.mjs` file in your project root:
+
+```javascript
+export { default } from '@jmlweb/prettier-config-base';
+```
+
+> ✅ **Recommended for ES Module projects**: Use this option if your project has `"type": "module"` in `package.json` to ensure Prettier loads the configuration correctly.
+
+### Option 3: Using `.prettierrc.js`
 
 Create a `.prettierrc.js` file in your project root:
 
@@ -41,7 +53,7 @@ Create a `.prettierrc.js` file in your project root:
 module.exports = require('@jmlweb/prettier-config-base');
 ```
 
-### Option 3: Using `.prettierrc.json`
+### Option 4: Using `.prettierrc.json`
 
 Create a `.prettierrc.json` file:
 
@@ -134,6 +146,20 @@ Use this package when you want:
 ## 🔧 Extending the Configuration
 
 You can extend this config for project-specific needs:
+
+```javascript
+// .prettierrc.mjs (for ES modules)
+import baseConfig from '@jmlweb/prettier-config-base';
+
+export default {
+  ...baseConfig,
+  // Override or add specific options
+  printWidth: 100,
+  arrowParens: 'always',
+};
+```
+
+Or using CommonJS:
 
 ```javascript
 // .prettierrc.js
@@ -289,6 +315,34 @@ To verify Prettier finds your config:
 ```bash
 pnpm exec prettier --find-config-path src/index.ts
 ```
+
+### Warning: "Ignored unknown option" with ES Modules
+
+**Symptoms:**
+
+- Warning: `Ignored unknown option { default: { ... } }`
+- Configuration not applied (Prettier uses default settings)
+- Project has `"type": "module"` in `package.json`
+
+**Cause:**
+
+- This package has `"type": "module"` and exports ES modules
+- When Prettier loads config from the `"prettier"` field in `package.json`, it uses `require()` which receives the config wrapped in a `default` property
+- Prettier expects the configuration object directly, not wrapped
+
+**Solution:**
+
+Use `.prettierrc.mjs` instead of the `"prettier"` field in `package.json`:
+
+1. Create `.prettierrc.mjs` in your project root:
+
+```javascript
+export { default } from '@jmlweb/prettier-config-base';
+```
+
+2. Remove the `"prettier"` field from your `package.json`
+
+This allows Prettier to execute the ES module code correctly and load the configuration as expected.
 
 ## 🔄 Migration Guide
 

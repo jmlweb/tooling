@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 type User = {
   id: number;
@@ -7,8 +7,8 @@ type User = {
 };
 
 const initialUsers: User[] = [
-  { id: 1, name: "Alice", email: "alice@example.com" },
-  { id: 2, name: "Bob", email: "bob@example.com" },
+  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 2, name: 'Bob', email: 'bob@example.com' },
 ];
 
 function App(): React.JSX.Element {

@@ -1,3 +1,1 @@
-import config from '@jmlweb/prettier-config-base';
-
-export default config;
+export { default } from '@jmlweb/prettier-config-base';
