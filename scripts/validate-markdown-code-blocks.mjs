@@ -14,12 +14,27 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 
 const OLLAMA_API = 'http://localhost:11434/api/generate';
-const MODEL = 'gemma3:4b';
+// Model recommendations (in order of accuracy, best to good):
+// - codellama:7b or codellama:13b - Best for code, slower but very accurate (default)
+// - qwen2.5-coder:7b - Excellent for code tasks, good balance
+// - deepseek-coder:6.7b - Great for code understanding
+// - gemma2:9b - Better than gemma3:4b, good balance
+// - gemma3:4b - Fast but less accurate
+const MODEL = process.env.OLLAMA_MODEL || 'codellama:7b';
 
 // Parse command line arguments
 const args = process.argv.slice(2);
 const shouldFix = args.includes('--fix') || args.includes('-f');
 const skipOllama = args.includes('--skip-ollama') || args.includes('-s');
+
+// Parse model from --model or -m flag, or use env var, or default
+let selectedModel = MODEL;
+const modelIndex = args.findIndex((arg) => arg === '--model' || arg === '-m');
+if (modelIndex !== -1 && args[modelIndex + 1]) {
+  selectedModel = args[modelIndex + 1];
+} else if (process.env.OLLAMA_MODEL) {
+  selectedModel = process.env.OLLAMA_MODEL;
+}
 
 // Colors for terminal output
 const colors = {
@@ -38,6 +53,9 @@ console.log(
 if (shouldFix) {
   console.log(`${colors.cyan}   Mode: Fix mode enabled${colors.reset}`);
 }
+console.log(
+  `${colors.cyan}   Model: ${selectedModel}${colors.reset} (use --model <name> to change)`,
+);
 console.log();
 
 // Validation issue types
@@ -216,40 +234,137 @@ async function classifyCodeBlock(content, ollamaAvailable) {
     return detectLanguageFallback(content);
   }
 
-  const prompt = `Analyze this code block and respond with ONLY ONE WORD - the language identifier for a markdown code fence.
+  const prompt = `You are a code language classifier. Analyze the code block below and identify its programming language.
 
-CRITICAL RULES (in priority order):
-1. If it starts with a shell command (gh, git, npm, pnpm, curl, cd, ls, etc.) OR contains shell syntax (\\, $(, <<EOF, <<'EOF', $VAR, etc.) → respond: bash
-   - Even if it contains markdown/text inside heredocs or quotes, it's still bash
-   - Shell commands with embedded content are still bash
-2. If it's JSON (starts with { or [, contains "key": "value") → respond: json
-3. If it's JavaScript (has require, module.exports, import/export, but NO types) → respond: javascript
-4. If it's TypeScript (has type annotations, interface, : string, type, enum) → respond: typescript
-5. If it's a directory tree (contains ├──, └──, │) → respond: text
-6. If it's plain text output (example output, terminal output, error messages) → respond: text
-7. If it's markdown content (starts with #, contains [links], etc.) → respond: markdown
-8. If uncertain or mixed → respond: text
+TASK: Return ONLY the language identifier (one word) for a markdown code fence.
 
-IMPORTANT: Shell commands with embedded markdown/text content are still bash, not text!
+CLASSIFICATION RULES (check in this order - be strict about what is actual code vs text):
 
-Code block:
+1. BASH/SHELL - Return "bash" if ANY of these are true:
+   - Contains shell commands (even after comments): gh, git, npm, pnpm, curl, wget, cd, ls, mkdir, echo, cat, grep, sed, awk, find, chmod, sudo, docker, kubectl, etc.
+   - Contains shell syntax: line continuation (\\), command substitution ($(...)), variable expansion ($VAR or $VARIABLE), heredoc (<<EOF, <<'EOF', <<"EOF"), shebang (#!/bin/bash), pipes (|), redirects (>, >>, <)
+   - Has shell operators: &&, ||, ;, |, >, <
+   - Has command flags/options: --repo, --label, --state, --json, --limit, etc. (common in gh, git, npm commands)
+   - CRITICAL: Even if the block starts with comments (#) or contains markdown/text inside heredocs, quotes, or command arguments, it's still bash if it has shell commands or syntax
+   - IMPORTANT: Blocks with multiple shell commands (even with comments between them) are bash, not text
+
+2. JSON - Return "json" if:
+   - Starts with { or [
+   - Contains valid JSON structure with "key": "value" pairs
+   - Looks like package.json, tsconfig.json, etc.
+   - IMPORTANT: Even if JSON contains command strings in "scripts" fields, it's still JSON, not bash
+   - JSON with npm/pnpm commands in scripts is still JSON
+
+3. TYPESCRIPT - Return "typescript" if it contains TypeScript code:
+   - Type annotations: variable: string, param: number, etc.
+   - TypeScript keywords: interface Name { }, type Name =, enum Name { }
+   - Generic syntax: <T>, Array<T>, Promise<T>
+   - TypeScript operators: as, satisfies, !
+   - TypeScript config files: defineConfig, createCommitlintConfig, vitest/config, vite.config, tsup, tsconfig patterns
+   - Import/export statements with TypeScript tooling (vitest, vite, tsup, @vitejs, @jmlweb/commitlint-config, etc.) are TypeScript
+   - IMPORTANT: Config files like vitest.config.ts, vite.config.ts, tsup.config.ts, commitlint.config.ts are TypeScript even without visible type annotations
+   - IMPORTANT: Just mentioning "TypeScript" as a word does NOT make it TypeScript code
+   - Must have executable TypeScript syntax, not just text describing TypeScript
+   - TSX/JSX: If it contains JSX syntax (<Component />), it's typescript/tsx (both are equivalent)
+
+4. JAVASCRIPT - Return "javascript" if:
+   - Has require(), module.exports, import/export statements
+   - Contains executable code: const, let, var, function, class, async/await
+   - Code blocks with comments (// or /* */) that indicate code structure
+   - NO type annotations (if types present, it's TypeScript)
+   - IMPORTANT: Even short code blocks with just comments are javascript if marked as such
+   - Must be actual code, not text describing JavaScript
+
+5. TEXT - Return "text" if:
+   - Directory tree structure (├──, └──, │)
+   - Plain text output, terminal output, error messages
+   - Descriptive text, documentation, or examples (even if they mention code languages)
+   - No executable code syntax detected
+   - Text that describes code but isn't code itself
+
+6. MARKDOWN - Return "markdown" if:
+   - Contains markdown syntax: [links], ![links](url), ![images](url), **bold**, *italic*, inline code, # headers
+   - Has markdown link syntax: [text](#anchor) or [text](url)
+   - Pure markdown content without executable code
+   - Examples or documentation showing markdown syntax
+
+7. DEFAULT - Return "text" if uncertain
+
+EXAMPLES:
+Input: "gh issue create --title 'Test'"
+Output: bash
+
+Input: "const x: string = 'test';"
+Output: typescript
+
+Input: "const x = 'test';"
+Output: javascript
+
+Input: "{ 'name': 'test' }"
+Output: json
+
+Input: "## Header\n\nSome text"
+Output: markdown
+
+Input: "├── src\n└── dist"
+Output: text
+
+Input: "Issue #15: Generate TypeScript types from JSON schemas\n\nDescription:\nAdd a CLI command that reads JSON Schema files and generates\ncorresponding TypeScript type definitions..."
+Output: text
+
+Input: "This is a text description that mentions TypeScript, JavaScript, and other programming languages but contains no actual code."
+Output: text
+
+Input: "# All ideas\ngh issue list --repo jmlweb/tooling --label 'idea' --state all --json number,title\n\n# Pending only\ngh issue list --repo jmlweb/tooling --label 'idea:pending' --json number,title"
+Output: bash
+
+Input: "# Install dependencies\npnpm install\n\n# Format code\npnpm format\n\n# Run linting\npnpm lint"
+Output: bash
+
+Input: "For details, see [File Organization Rules](#file-organization-rules)"
+Output: markdown
+
+Input: "[text](#anchor) or [text](url)"
+Output: markdown
+
+Input: "Issue #15: 💡 [IDEA] Generate TypeScript types\n\nLabels: idea, idea:pending\n\nDescription:\nAdd a CLI command..."
+Output: text
+
+Input: "/suggest-idea\n\nAnalyzing jmlweb-tooling project...\n\nChecked:\n- 5 existing packages\n\n## Suggested Idea: Add shared Vitest configuration\n\n**Category:** feature\n\n**Description:**\nCreate a new package..."
+Output: text
+
+Input: "import { defineConfig } from 'vitest/config';\nexport default defineConfig({ plugins: [react()] });"
+Output: typescript
+
+Input: "<button className='rounded-lg bg-blue-500'>Click me</button>"
+Output: typescript
+
+Input: "// Configuration example"
+Output: javascript
+
+Input: "{ 'scripts': { 'build': 'tsup', 'clean': 'rm -rf dist' } }"
+Output: json
+
+Now classify this code block:
+
 \`\`\`
-${content.substring(0, 500)}
+${content.substring(0, 800)}
 \`\`\`
 
-Respond with ONE WORD ONLY:`;
+Language:`;
 
   try {
     const response = await fetch(OLLAMA_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: MODEL,
+        model: selectedModel,
         prompt: prompt,
         stream: false,
         options: {
-          temperature: 0.1,
-          num_predict: 10,
+          temperature: 0.0, // Lower temperature for more deterministic results
+          num_predict: 15, // Slightly more tokens for better response
+          top_p: 0.9,
         },
       }),
     });
@@ -281,12 +396,102 @@ Respond with ONE WORD ONLY:`;
     // Normalize sh to bash
     if (language === 'sh') language = 'bash';
 
-    // Validate against fallback - if they disagree on bash vs text, prefer fallback
-    // This helps catch cases where Ollama misclassifies shell commands with embedded content
+    // Validate against fallback - if they disagree, prefer fallback in certain cases
+    // This helps catch cases where Ollama misclassifies content
     const fallbackLanguage = detectLanguageFallback(content);
+
+    // If fallback says bash but Ollama says text - trust fallback for shell commands
+    // This catches cases where bash blocks start with comments or have mixed content
     if (fallbackLanguage === 'bash' && language === 'text') {
-      // Fallback detected bash but Ollama said text - trust fallback for shell commands
       return 'bash';
+    }
+
+    // If fallback says json but Ollama says bash - trust fallback for JSON
+    // JSON with commands in scripts is still JSON, not bash
+    if (fallbackLanguage === 'json' && language === 'bash') {
+      return 'json';
+    }
+
+    // If fallback says javascript but Ollama says text - trust fallback for short code blocks
+    // Short blocks with just comments are still javascript
+    if (
+      fallbackLanguage === 'javascript' &&
+      language === 'text' &&
+      content.length < 100
+    ) {
+      return 'javascript';
+    }
+
+    // If fallback says typescript but Ollama says javascript - check for config files or TSX
+    // TypeScript config files (defineConfig, tsup, etc.) are TypeScript even without type annotations
+    if (fallbackLanguage === 'typescript' && language === 'javascript') {
+      if (
+        (content.match(
+          /defineConfig|createCommitlintConfig|tsup|vitest\/config|vite\.config/,
+        ) &&
+          content.match(/^(import|export)/)) || // Has import/export
+        content.match(/<[A-Z]\w+[^>]*>/) || // TSX
+        content.match(/className|onClick/) // TSX patterns
+      ) {
+        return 'typescript';
+      }
+    }
+
+    // If fallback says text but Ollama says typescript - check if it's descriptive text
+    // Text mentioning TypeScript/configs is text, not TypeScript code
+    if (
+      fallbackLanguage === 'text' &&
+      language === 'typescript' &&
+      (content.match(
+        /^(Issue|Description|Labels|Created|This|Add|Generate|Reads|Corresponding|Analyzing|Checked|Suggested|Category|Motivation|Proposed|Estimated|Create this)/i,
+      ) ||
+        content.match(/^[A-Z][^:]*:\s/) || // Lines starting with capital and colon
+        (content.match(/tsconfig|vitest-config|tsup/) &&
+          !content.match(/^(import|export|const|let|var|function)/) &&
+          content.split('\n').length > 3 &&
+          !content.match(/[{}();=]/))) // Mentions configs but no code syntax
+    ) {
+      // Looks like descriptive text mentioning TypeScript/configs, not actual code
+      return 'text';
+    }
+
+    // If fallback says markdown but Ollama says text - trust fallback for markdown
+    // This catches simple markdown blocks with just links
+    if (fallbackLanguage === 'markdown' && language === 'text') {
+      return 'markdown';
+    }
+
+    // If fallback says text but Ollama says markdown - check if it's descriptive text
+    // Text describing issues/examples is text, not markdown
+    if (
+      fallbackLanguage === 'text' &&
+      language === 'markdown' &&
+      (content.match(
+        /^(Issue|Description|Labels|Created|This|Add|Generate|Reads|Corresponding|Analyzing|Checked|Suggested|Category|Motivation|Proposed|Estimated|Create this)/i,
+      ) ||
+        content.match(/^[A-Z][^:]*:\s/) || // Lines starting with capital letter and colon
+        content.match(/Issue\s+#\d+/) || // Issue #N pattern
+        content.match(/\/\w+/) || // Command patterns like /suggest-idea
+        content.match(/^##\s+Suggested/) || // Suggested headers in examples
+        (content.match(/\[Yes\/No\]/) && content.match(/Create this/)) || // Interactive prompts
+        (content.split('\n').length > 3 && !content.match(/\[.*\]\(.*\)/))) // Multiple lines without markdown links
+    ) {
+      // Looks like descriptive text, not markdown
+      return 'text';
+    }
+
+    // If fallback says text but Ollama says typescript/javascript - check if it's descriptive text
+    // This prevents false positives when text mentions code languages
+    if (
+      fallbackLanguage === 'text' &&
+      (language === 'typescript' || language === 'javascript') &&
+      (content.match(
+        /^(Issue|Description|Labels|Created|This|Add|Generate|Reads|Corresponding)/i,
+      ) ||
+        (content.split('\n').length > 3 && !content.match(/[{}();=]/)))
+    ) {
+      // Looks like descriptive text mentioning code, not actual code
+      return 'text';
     }
 
     return language;
@@ -326,23 +531,41 @@ function detectLanguageFallback(content) {
     return 'bash';
   }
 
+  // Shell commands anywhere in the content (even after comments)
+  // Look for command patterns: command --flag value or command subcommand
+  const shellCommandPattern =
+    /\b(gh|git|npm|pnpm|curl|wget|cd|ls|mkdir|echo|cat|grep|sed|awk|find|chmod|chown|sudo|docker|kubectl)\s+(issue|list|create|add|install|run|exec|build|test|syncpack|outdated|audit|check|fix)/i;
+  if (trimmed.match(shellCommandPattern)) {
+    return 'bash';
+  }
+
+  // Check for command flags (--repo, --label, --state, --json, etc.) which indicate shell commands
+  if (
+    trimmed.match(
+      /--(repo|label|state|json|limit|title|body|fix|check|update|outdated|audit)/,
+    )
+  ) {
+    return 'bash';
+  }
+
   // Shell commands anywhere (weaker signal, but still valid)
   if (
     trimmed.match(
       /\b(npm|pnpm|git|gh|cd|ls|mkdir|echo|curl|wget|cat|grep|sed|awk|find|chmod|chown|sudo|docker|kubectl)\b/,
     )
   ) {
-    // Only if it looks like a command, not just text mentioning these words
+    // Check if it's followed by command-like syntax (flags, subcommands, etc.)
     if (
-      trimmed.match(
-        /^[a-z]+\s+(run|install|create|add|remove|exec|build|test)/i,
-      )
+      trimmed.match(/\b(gh|git|npm|pnpm)\s+\w+/) ||
+      trimmed.match(/--\w+/) ||
+      trimmed.match(/\$\w+/) ||
+      trimmed.match(/`[^`]+`/) // Backticks often indicate commands
     ) {
       return 'bash';
     }
   }
 
-  // Check for JSON
+  // Check for JSON - prioritize JSON detection even if it contains command strings
   if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
     try {
       JSON.parse(trimmed);
@@ -351,24 +574,169 @@ function detectLanguageFallback(content) {
       // Not valid JSON, continue
     }
   }
-  if (trimmed.includes('"scripts"') || trimmed.includes('"dependencies"'))
-    return 'json';
+  // JSON indicators (even if scripts contain commands like "tsup", "rm -rf dist", etc.)
+  if (
+    trimmed.includes('"scripts"') ||
+    trimmed.includes('"dependencies"') ||
+    trimmed.includes('"devDependencies"') ||
+    (trimmed.includes('"name"') && trimmed.includes('"version"')) ||
+    (trimmed.includes('"build"') &&
+      trimmed.includes('"clean"') &&
+      trimmed.match(/["{]/))
+  ) {
+    // Make sure it's not just text mentioning these words - must have JSON structure
+    if (
+      trimmed.match(/["{]/) &&
+      (trimmed.startsWith('{') || trimmed.match(/\{[^}]*"scripts"/))
+    ) {
+      return 'json';
+    }
+  }
 
-  // Check for JavaScript
+  // Check for TypeScript config files and patterns BEFORE JavaScript
+  // TypeScript files often don't have visible type annotations but are still TypeScript
+  // IMPORTANT: Only detect if it's actual code, not text describing TypeScript
+  const hasTypeScriptConfigPatterns =
+    trimmed.includes('defineConfig') || // Vite/Vitest/tsup config
+    trimmed.includes('createCommitlintConfig') || // Commitlint config
+    trimmed.match(/from\s+['"]vitest\/config['"]/) || // Vitest imports
+    trimmed.match(/from\s+['"]vite\.config['"]/) || // Vite config
+    trimmed.match(/from\s+['"]tsup['"]/) || // tsup imports
+    trimmed.match(/from\s+['"]@jmlweb\/commitlint-config['"]/) || // Commitlint imports
+    (trimmed.match(/from\s+['"]@vitejs|from\s+['"]vitest|from\s+['"]vite/) &&
+      trimmed.match(/import.*from/)); // Vite/Vitest imports
+
+  // Only classify as TypeScript if it has actual code syntax (import/export, function calls, etc.)
+  // Not just text mentioning these words
+  if (
+    hasTypeScriptConfigPatterns &&
+    (trimmed.match(/^(import|export)/) || // Has import/export statements
+      trimmed.match(/defineConfig\(|createCommitlintConfig\(/) || // Has function calls
+      trimmed.match(/export\s+default/)) // Has export default
+  ) {
+    // These are TypeScript config files, even without visible type annotations
+    return 'typescript';
+  }
+
+  // Additional check: if it mentions TypeScript-related words but looks like descriptive text, it's text
+  if (
+    (trimmed.includes('tsconfig') ||
+      trimmed.includes('vitest-config') ||
+      trimmed.includes('tsup')) &&
+    !trimmed.match(/^(import|export|const|let|var|function)/) &&
+    (trimmed.match(
+      /^(Issue|Description|Labels|Created|This|Add|Generate|Reads|Corresponding|Analyzing|Checked|Suggested|Category|Motivation|Proposed|Estimated|Create this)/i,
+    ) ||
+      trimmed.match(/^[A-Z][^:]*:\s/) || // Lines starting with capital and colon
+      (trimmed.split('\n').length > 3 && !trimmed.match(/[{}();=]/))) // Multiple lines without code syntax
+  ) {
+    // Text describing TypeScript/configs, not actual TypeScript code
+    return 'text';
+  }
+
+  // Check for JavaScript - even short blocks with just comments are javascript
   if (trimmed.includes('require(') || trimmed.includes('module.exports'))
     return 'javascript';
   if (trimmed.match(/^(import|export|const|let|var|function)/m))
     return 'javascript';
+  // JavaScript comments indicate code blocks
+  if (trimmed.match(/^\/\/.*/) && trimmed.length < 100) {
+    // Short block with just a comment - likely javascript if specified
+    return 'javascript';
+  }
 
-  // Check for TypeScript
+  // Check for TypeScript - must have actual TypeScript syntax, not just the word
+  // Look for type annotations in actual code context
+  const hasTypeAnnotation = trimmed.match(
+    /:\s*(string|number|boolean|any|void|object|Array|Promise|Record|Map|Set)\b/,
+  );
+  const hasInterfaceKeyword = trimmed.match(/\binterface\s+\w+\s*[<{]/);
+  const hasTypeKeyword = trimmed.match(/\btype\s+\w+\s*=/);
+  const hasEnumKeyword = trimmed.match(/\benum\s+\w+\s*{/);
+  const hasGenericSyntax = trimmed.match(/<[A-Z]\w*>/);
+
+  // Check for TSX/JSX syntax
+  const hasJSX =
+    trimmed.match(/<[A-Z]\w+[^>]*>/) || trimmed.match(/<[a-z]+\s+[^>]*>/);
+
+  // Only classify as TypeScript if it has actual code syntax, not just mentions
   if (
-    trimmed.includes('interface ') ||
-    trimmed.includes(': string') ||
-    trimmed.includes(': number') ||
-    trimmed.includes('type ') ||
-    trimmed.includes('enum ')
+    hasTypeAnnotation ||
+    hasInterfaceKeyword ||
+    hasTypeKeyword ||
+    hasEnumKeyword ||
+    hasGenericSyntax ||
+    hasJSX
   ) {
+    // Additional check: make sure it's not just text describing TypeScript
+    // If it looks like prose/description, prefer text
+    if (
+      trimmed.match(
+        /^(Issue|Description|Labels|Created|This|Add|Generate|Reads|Corresponding)/i,
+      ) ||
+      (trimmed.split('\n').length > 3 && !trimmed.match(/[{}();=<>]/))
+    ) {
+      // Looks like descriptive text, not code
+      return 'text';
+    }
+    // If it has JSX and TypeScript features, it's typescript/tsx
+    if (hasJSX) {
+      return 'typescript';
+    }
     return 'typescript';
+  }
+
+  // Check for JSX/TSX even without TypeScript features
+  if (hasJSX && trimmed.match(/className|onClick|import.*from/)) {
+    return 'typescript'; // TSX
+  }
+
+  // Check for markdown syntax
+  // But exclude text that looks like descriptive content, examples, or command output
+  const isDescriptiveText =
+    trimmed.match(
+      /^(Issue|Labels|Description|Created|This|Add|Generate|Reads|Corresponding|Analyzing|Checked|Suggested|Category|Motivation|Proposed|Estimated|Create this)/i,
+    ) ||
+    trimmed.match(/^[A-Z][^:]*:\s/) || // Lines starting with capital and colon
+    trimmed.match(/Issue\s+#\d+/) || // Issue #N pattern
+    trimmed.match(/\/\w+/) || // Command patterns like /suggest-idea
+    trimmed.match(/^##\s+Suggested/) || // Suggested headers in examples
+    (trimmed.match(/\[Yes\/No\]/) && trimmed.match(/Create this/)); // Interactive prompts
+
+  // Additional check: if it has multiple descriptive patterns, it's likely text
+  const descriptivePatternCount =
+    (trimmed.match(/##\s+[A-Z]/g) || []).length +
+    (trimmed.match(/\*\*[A-Z][^:]*:\*\*/g) || []).length +
+    (trimmed.match(/^-\s+[A-Z]/gm) || []).length;
+
+  // If it has markdown syntax but looks like descriptive/example text, prefer text
+  if (
+    isDescriptiveText ||
+    (descriptivePatternCount >= 3 &&
+      trimmed.match(/Analyzing|Checked|Suggested|Category/))
+  ) {
+    // Has markdown syntax but is descriptive text/example output
+    return 'text';
+  }
+
+  // Check for markdown syntax - badges, links, headers, etc.
+  if (
+    trimmed.match(/\[!\[.*\]\(.*\)\]\(.*\)/) || // Badge syntax [![text](url)](url)
+    trimmed.match(/\[.*\]\(.*\)/) || // Links [text](url)
+    trimmed.match(/\[.*\]\(#.*\)/) || // Anchor links [text](#anchor)
+    trimmed.match(/^#+\s+/) || // Headers #, ##, ###
+    trimmed.match(/\*\*.*\*\*/) || // Bold **text**
+    trimmed.match(/\*.*\*/) || // Italic *text*
+    (trimmed.match(/`[^`]+`/) && trimmed.match(/\[.*\]/)) // Code + links
+  ) {
+    // Make sure it's not code that happens to have these characters
+    if (
+      !trimmed.match(
+        /^(import|export|const|let|var|function|interface|type|enum)/,
+      )
+    ) {
+      return 'markdown';
+    }
   }
 
   // Default to text
@@ -383,6 +751,7 @@ function normalizeLanguage(lang) {
   if (normalized === 'sh') return 'bash';
   if (normalized === 'js') return 'javascript';
   if (normalized === 'ts') return 'typescript';
+  if (normalized === 'tsx') return 'typescript'; // TSX is TypeScript
   return normalized;
 }
 
@@ -407,6 +776,32 @@ async function validateBlockLanguage(block, ollamaAvailable) {
 
   // Check if languages match
   if (specifiedLanguage !== normalizedDetected) {
+    // Special cases: accept certain valid combinations
+    // Bash blocks with only comments are still valid bash
+    if (
+      specifiedLanguage === 'bash' &&
+      normalizedDetected === 'text' &&
+      block.content.trim().match(/^#.*$/) &&
+      block.content
+        .split('\n')
+        .every((line) => line.trim().startsWith('#') || line.trim() === '')
+    ) {
+      // Bash block with only comments - valid
+      return null;
+    }
+
+    // Markdown with badges/links should be accepted even if detected as text
+    if (
+      specifiedLanguage === 'markdown' &&
+      normalizedDetected === 'text' &&
+      (block.content.match(/\[!\[.*\]\(.*\)\]\(.*\)/) || // Badges
+        block.content.match(/\[.*\]\(.*\)/) || // Links
+        block.content.match(/^#+\s+/)) // Headers
+    ) {
+      // Markdown with syntax - valid
+      return null;
+    }
+
     return {
       type: IssueType.INCORRECT_LANGUAGE,
       file: block.file,
@@ -499,19 +894,44 @@ async function main() {
 
   console.log(`  Found ${allBlocks.length} code block(s) to validate\n`);
 
+  // Show structural issues immediately
   if (structuralIssues.length > 0) {
     console.log(
-      `${colors.yellow}⚠${colors.reset} Found ${structuralIssues.length} structural issue(s) (missing language, unclosed blocks, etc.)\n`,
+      `${colors.yellow}⚠${colors.reset} Found ${structuralIssues.length} structural issue(s):${colors.reset}\n`,
     );
+    const structuralByFile = new Map();
+    for (const issue of structuralIssues) {
+      if (!structuralByFile.has(issue.file)) {
+        structuralByFile.set(issue.file, []);
+      }
+      structuralByFile.get(issue.file).push(issue);
+    }
+    for (const [file, issues] of structuralByFile.entries()) {
+      console.log(`${colors.yellow}${file}${colors.reset}`);
+      for (const issue of issues) {
+        console.log(formatIssue(issue));
+      }
+      console.log();
+    }
   }
 
   console.log(
     `${colors.blue}Step 4:${colors.reset} Validating language specifiers...\n`,
   );
 
-  // Second pass: validate language correctness
+  // Track issues and blocks to fix
   const languageIssues = [];
   const blocksToFix = [];
+  let totalIssues = structuralIssues.length;
+  const filesWithIssues = new Map();
+
+  // Initialize files map with structural issues
+  for (const issue of structuralIssues) {
+    if (!filesWithIssues.has(issue.file)) {
+      filesWithIssues.set(issue.file, []);
+    }
+    filesWithIssues.get(issue.file).push(issue);
+  }
 
   let processed = 0;
   for (const block of allBlocks) {
@@ -522,14 +942,24 @@ async function main() {
 
     // Check for missing language (structural issue)
     if (!block.specifiedLanguage) {
-      languageIssues.push({
+      const issue = {
         type: IssueType.MISSING_LANGUAGE,
         file: block.file,
         line: block.startLineNumber,
         endLine: block.endLineNumber,
         content: block.content,
         startLineIndex: block.startLine,
-      });
+      };
+      languageIssues.push(issue);
+      totalIssues++;
+
+      // Show immediately
+      if (!filesWithIssues.has(block.file)) {
+        filesWithIssues.set(block.file, []);
+        console.log(`\n${colors.yellow}${block.file}${colors.reset}`);
+      }
+      console.log(formatIssue(issue));
+
       if (shouldFix) {
         blocksToFix.push(block);
       }
@@ -540,6 +970,15 @@ async function main() {
     const issue = await validateBlockLanguage(block, ollamaAvailable);
     if (issue) {
       languageIssues.push(issue);
+      totalIssues++;
+
+      // Show immediately
+      if (!filesWithIssues.has(issue.file)) {
+        filesWithIssues.set(issue.file, []);
+        console.log(`\n${colors.yellow}${issue.file}${colors.reset}`);
+      }
+      console.log(formatIssue(issue));
+
       if (shouldFix) {
         blocksToFix.push(block);
       }
@@ -548,31 +987,15 @@ async function main() {
 
   process.stdout.write(' '.repeat(50) + '\r'); // Clear progress line
 
-  // Combine all issues
-  const allIssues = [...structuralIssues, ...languageIssues];
-  const filesWithIssues = new Map();
-
-  // Group issues by file
-  for (const issue of allIssues) {
-    if (!filesWithIssues.has(issue.file)) {
-      filesWithIssues.set(issue.file, []);
-    }
-    filesWithIssues.get(issue.file).push(issue);
-  }
-
-  // Report issues
-  if (filesWithIssues.size > 0) {
+  // Show summary
+  if (totalIssues > 0) {
+    const uniqueFiles = new Set([
+      ...structuralIssues.map((i) => i.file),
+      ...languageIssues.map((i) => i.file),
+    ]);
     console.log(
-      `\n${colors.bright}Found ${allIssues.length} issue(s) in ${filesWithIssues.size} file(s):${colors.reset}\n`,
+      `\n${colors.bright}Summary: Found ${totalIssues} issue(s) in ${uniqueFiles.size} file(s)${colors.reset}\n`,
     );
-
-    for (const [file, issues] of filesWithIssues.entries()) {
-      console.log(`${colors.yellow}${file}${colors.reset}`);
-      for (const issue of issues) {
-        console.log(formatIssue(issue));
-      }
-      console.log();
-    }
   } else {
     console.log(
       `\n${colors.green}✓${colors.reset} No issues found! All code blocks are valid.`,
