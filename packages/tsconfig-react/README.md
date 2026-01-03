@@ -154,7 +154,7 @@ Uses the modern `react-jsx` transform (React 17+), which means:
 
 **Example:**
 
-```typescript
+```tsx
 // No React import needed!
 export function Button() {
   return <button>Click me</button>;

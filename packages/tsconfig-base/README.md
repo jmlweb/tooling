@@ -376,7 +376,7 @@ If you need to override the module system, update both options together:
 
 Match your `package.json` to your build output:
 
-```json
+```javascript
 // package.json
 {
   "type": "module" // For ESM output (this config's default)
