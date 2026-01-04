@@ -1,13 +1,15 @@
-import reactConfig from "@jmlweb/eslint-config-react";
+import reactConfig from '@jmlweb/eslint-config-react';
 
 export default [
   {
     ignores: [
-      "dist/",
-      "node_modules/",
-      "coverage/",
-      "*.config.js",
-      "*.config.ts",
+      'dist/',
+      'node_modules/',
+      'coverage/',
+      '*.config.js',
+      '*.config.ts',
+      '*.config.mjs',
+      '.prettierrc.*',
     ],
   },
   ...reactConfig,
