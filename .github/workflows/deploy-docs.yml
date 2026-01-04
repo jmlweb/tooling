@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'apps/docs/**'
+      - 'packages/*/README.md'
+      - 'packages/*/package.json'
       - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
@@ -27,8 +29,28 @@ jobs:
       - name: Setup workspace
         uses: ./.github/actions/setup
 
-      - name: Build documentation
-        run: pnpm --filter=docs build
+      - name: Build config packages
+        run: pnpm build
+
+      - name: Generate documentation
+        run: pnpm docs:generate
+
+      - name: Validate documentation
+        run: |
+          # Count generated MDX files (excluding index.mdx)
+          GENERATED_COUNT=$(find apps/docs/src/content/docs -name "*.mdx" -not -name "index.mdx" | wc -l | xargs)
+          echo "Generated $GENERATED_COUNT package documentation pages"
+
+          # We expect 17 packages (all published packages)
+          if [ "$GENERATED_COUNT" -ne 17 ]; then
+            echo "Error: Expected 17 package pages, but found $GENERATED_COUNT"
+            exit 1
+          fi
+
+          echo "✅ All 17 package documentation pages generated successfully"
+
+      - name: Build documentation site
+        run: pnpm docs:build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

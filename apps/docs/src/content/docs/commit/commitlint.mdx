@@ -1,0 +1,329 @@
+---
+title: commitlint
+description: Shared commitlint configuration for enforcing Conventional Commits
+editUrl: https://github.com/jmlweb/tooling/blob/main/packages/commitlint-config/README.md
+sidebar:
+  order: 1
+---
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/commitlint-config)](https://www.npmjs.com/package/@jmlweb/commitlint-config)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
+&gt; Shared commitlint configuration for enforcing Conventional Commits across projects. Flexible design works out-of-the-box for any project, with optional scope restrictions.
+
+## ✨ Features
+
+- 📝 **Conventional Commits**: Enforces [Conventional Commits](https://conventionalcommits.org) specification
+- 🎯 **Flexible Scopes**: No scope restrictions by default - works with any project structure
+- ⚙️ **Configurable**: Customizable scopes when you need them
+- 🚫 **Custom Ignores**: Ignore functions for merge commits, dependabot, etc.
+- 📦 **TypeScript Support**: Full type definitions included
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/commitlint-config @commitlint/cli @commitlint/config-conventional
+```
+
+&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
+## 🚀 Quick Start
+
+Create a `commitlint.config.js` file in your project root:
+
+```javascript
+import commitlintConfig from '@jmlweb/commitlint-config';
+
+export default commitlintConfig;
+```
+
+That's it! Any commit type/scope following Conventional Commits is allowed.
+
+## 💡 Examples
+
+### No Scope Restrictions (Default)
+
+```javascript
+// commitlint.config.js
+import commitlintConfig from '@jmlweb/commitlint-config';
+
+export default commitlintConfig;
+```
+
+Valid commits:
+
+```text
+feat: add new feature
+fix(auth): resolve login issue
+chore(whatever-you-want): update deps
+```
+
+### Define Your Own Scopes
+
+```typescript
+// commitlint.config.ts
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['api', 'ui', 'database', 'auth', 'deps'],
+});
+```
+
+### Strict Configuration
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['core', 'utils', 'config'],
+  scopeRequired: true,
+  headerMaxLength: 72,
+});
+```
+
+### Ignore Specific Commits
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  ignores: [
+    (commit) => commit.startsWith('Merge'),
+    (commit) => /^\[dependabot\]/.test(commit),
+  ],
+});
+```
+
+## 🤔 Why Use This?
+
+&gt; **Philosophy**: Structured commit messages enable automation, improve collaboration, and make project history meaningful and navigable.
+
+This package enforces Conventional Commits to standardize commit messages across teams. Structured commits aren't just about consistency - they enable automated versioning, changelog generation, and make your git history actually useful for understanding project evolution.
+
+### Design Decisions
+
+**Conventional Commits Format**: Structured commit messages with types
+
+- **Why**: The Conventional Commits specification enables powerful automation like semantic-release (automatic versioning), automatic changelog generation, and better git history navigation. It forces developers to think about what their change actually does (feat vs fix vs refactor), which improves code review quality
+- **Trade-off**: Slightly more overhead when committing - must categorize changes. But the automation benefits and improved history are worth it
+- **When to override**: For personal projects where automation isn't needed. But even solo developers benefit from clear commit history
+
+**No Scope Restrictions by Default**: Works for any project structure
+
+- **Why**: Different projects have different scopes (monorepo packages, feature areas, components). Not enforcing scopes makes this config flexible and zero-configuration for most projects. Teams can add scope restrictions when needed
+- **Trade-off**: No validation that scopes make sense for your project. But this prevents the config from being opinionated about project structure
+- **When to override**: For monorepos or large projects, define allowed scopes to ensure consistency (e.g., `['api', 'ui', 'docs']`)
+
+**100 Character Header Limit**: Readable in all tools
+
+- **Why**: 100 characters fits comfortably in GitHub's UI, terminal output, and git GUIs without wrapping. It's long enough for descriptive messages but short enough to enforce conciseness. This makes git log and GitHub history readable
+- **Trade-off**: Sometimes you want longer descriptions. But that's what the body is for
+- **When to override**: For teams that prefer shorter (72 chars) or longer headers. But 100 is a good standard
+
+**Flexible Scope Requirement**: Optional by default
+
+- **Why**: Not all changes fit neatly into scopes. Making scopes optional allows quick commits while still enabling teams to enforce scopes when structure is important (like in monorepos where scope = package name)
+- **Trade-off**: Scopes aren't enforced unless explicitly enabled
+- **When to override**: Set `scopeRequired: true` for monorepos or projects where scope categorization is important
+
+## 📋 Configuration Details
+
+### Commit Message Format
+
+This configuration enforces the Conventional Commits format:
+
+```text
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Example Commits
+
+```text
+feat(api): add user authentication endpoint
+fix: correct date parsing logic
+docs: update README with examples
+chore(deps): update dependencies
+refactor(ui): simplify form validation
+test: add unit tests for utils
+ci: add GitHub Actions workflow
+```
+
+### Allowed Types
+
+| Type       | Description                           |
+| ---------- | ------------------------------------- |
+| `feat`     | New feature                           |
+| `fix`      | Bug fix                               |
+| `docs`     | Documentation changes                 |
+| `chore`    | Maintenance tasks                     |
+| `refactor` | Code refactoring                      |
+| `test`     | Adding or updating tests              |
+| `ci`       | CI/CD configuration                   |
+| `perf`     | Performance improvements              |
+| `style`    | Code style changes (formatting, etc.) |
+| `build`    | Build system changes                  |
+| `revert`   | Reverting previous commits            |
+
+### Configuration Options
+
+| Option             | Type                              | Default     | Description                                    |
+| ------------------ | --------------------------------- | ----------- | ---------------------------------------------- |
+| `scopes`           | `string[]`                        | `undefined` | Define allowed scopes (enables scope checking) |
+| `additionalScopes` | `string[]`                        | `[]`        | Add scopes when extending base configs         |
+| `additionalTypes`  | `string[]`                        | `[]`        | Additional commit types to allow               |
+| `headerMaxLength`  | `number`                          | `100`       | Maximum length for the header line             |
+| `scopeRequired`    | `boolean`                         | `false`     | Whether to require a scope                     |
+| `bodyRequired`     | `boolean`                         | `false`     | Whether to require a commit body               |
+| `ignores`          | `((commit: string) => boolean)[]` | `undefined` | Functions to ignore certain commits            |
+
+### Exports
+
+```typescript
+// Default config - no scope restrictions
+import config from '@jmlweb/commitlint-config';
+
+// Factory function for custom configs
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+// Commit types constant
+import { COMMIT_TYPES } from '@jmlweb/commitlint-config';
+```
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Enforce Conventional Commits specification across your project
+- ✅ Automatic changelog generation from commit messages
+- ✅ Consistent commit message format across team members
+- ✅ Optional scope restrictions for monorepos
+- ✅ Integration with semantic-release or standard-version
+
+**For projects without commitlint**, consider starting with this package to improve commit quality and enable automated versioning.
+
+## 🔧 Extending the Configuration
+
+You can extend the configuration for your specific needs:
+
+### Adding Custom Scopes
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['frontend', 'backend', 'shared', 'docs'],
+  additionalTypes: ['wip'], // Add work-in-progress type
+});
+```
+
+### Stricter Rules
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+export default createCommitlintConfig({
+  scopes: ['core', 'api', 'ui'],
+  scopeRequired: true,
+  bodyRequired: true,
+  headerMaxLength: 72,
+});
+```
+
+## 📝 Usage with Scripts
+
+### Integration with Husky
+
+#### Step 1 - Install husky
+
+```bash
+pnpm add -D husky
+```
+
+#### Step 2 - Initialize husky
+
+```bash
+pnpm exec husky init
+```
+
+#### Step 3 - Add commit-msg hook
+
+Create or edit `.husky/commit-msg`:
+
+```bash
+pnpm exec commitlint --edit $1
+```
+
+#### Step 4 - Test your setup
+
+```bash
+# This should fail
+git commit -m "bad commit message"
+
+# This should pass
+git commit -m "feat: add new feature"
+```
+
+### Package.json Scripts
+
+```json
+{
+  "scripts": {
+    "commitlint": "commitlint --edit",
+    "commitlint:all": "commitlint --from HEAD~10"
+  }
+}
+```
+
+## 📋 Requirements
+
+- **Node.js** &gt;= 18.0.0
+- **@commitlint/cli** &gt;= 19.0.0
+- **@commitlint/config-conventional** &gt;= 19.0.0
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `@commitlint/cli` (&gt;=19.0.0)
+- `@commitlint/config-conventional` (&gt;=19.0.0)
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/eslint-config-base`](/eslint/base) - ESLint configuration for TypeScript
+- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier configuration
+- [`@jmlweb/tsconfig-base`](/typescript/base) - TypeScript configuration
+
+### External Tools
+
+- [commitlint](https://commitlint.js.org/) - Lint commit messages according to conventional commits
+- [Conventional Commits](https://www.conventionalcommits.org/) - A specification for adding meaning to commit messages
+- [Husky](https://typicode.github.io/husky/) - Git hooks made easy (recommended for pre-commit integration)
+- [semantic-release](https://semantic-release.gitbook.io/) - Automated versioning and changelog generation
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/commitlint-config/CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/commitlint-config/CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT

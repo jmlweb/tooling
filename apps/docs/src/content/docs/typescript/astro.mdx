@@ -1,0 +1,301 @@
+---
+title: astro
+description: TypeScript configuration for Astro projects with JSX support and modern defaults
+editUrl: https://github.com/jmlweb/tooling/blob/main/packages/tsconfig-astro/README.md
+sidebar:
+  order: 1
+---
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/tsconfig-astro)](https://www.npmjs.com/package/@jmlweb/tsconfig-astro)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
+[![Astro](https://img.shields.io/badge/Astro-4%2B-FF5D01.svg)](https://astro.build/)
+
+&gt; TypeScript configuration for Astro projects. Extends `@jmlweb/tsconfig-base` with JSX support (preserve mode), DOM types, and bundler-optimized module resolution.
+
+## ✨ Features
+
+- 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
+- ⚛️ **JSX Support**: JSX preserve mode for Astro's component system
+- 🌐 **DOM Types**: Includes DOM and DOM.Iterable libs for browser APIs
+- 📦 **Bundler Resolution**: Optimized `moduleResolution: "bundler"` for Astro's build system
+- 🎯 **Modern Modules**: Uses ESNext modules for optimal bundling
+- 🚀 **Extensible**: Extends base config, easy to customize
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/tsconfig-astro typescript astro @jmlweb/tsconfig-base
+```
+
+&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
+## 🚀 Quick Start
+
+Create a `tsconfig.json` file in your Astro project root:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## 💡 Examples
+
+### Basic Astro Setup
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+### With Custom Output Directory
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+### With Path Mapping
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+### With Additional Compiler Options
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "noEmit": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## 🤔 Why Use This?
+
+&gt; **Philosophy**: Astro projects need TypeScript configured to preserve JSX for Astro's compiler while supporting framework components in islands.
+
+This package provides a TypeScript configuration specifically for Astro projects. It extends the strict base configuration while setting up JSX in preserve mode, allowing Astro's compiler to handle the transformation while maintaining full type safety for both Astro components and framework components used in islands.
+
+### Design Decisions
+
+**JSX Preserve Mode (`jsx: "preserve"`)**: Let Astro handle JSX transformation
+
+- **Why**: Astro has its own JSX/TSX transformation pipeline that's optimized for its component model and islands architecture. Preserve mode tells TypeScript to check types but leave the JSX syntax untouched for Astro to process. This enables proper handling of both .astro components and framework components (React, Vue, etc.) in islands
+- **Trade-off**: Can't run TypeScript output directly without Astro's build step. But Astro projects always use Astro's build system anyway
+- **When to override**: Never for Astro projects - Astro requires preserve mode to function correctly
+
+**Bundler Module Resolution (`moduleResolution: "bundler"`)**: Optimized for Vite
+
+- **Why**: Astro uses Vite as its build tool. Bundler resolution is specifically designed for Vite and other modern bundlers, providing better module resolution that matches how Vite actually resolves imports. This prevents TypeScript/runtime mismatches
+- **Trade-off**: Not suitable for direct Node.js execution. But Astro projects always use Vite for building
+- **When to override**: Never for Astro - bundler resolution is optimal for Vite-based frameworks
+
+**DOM Type Definitions (`lib: ["ES2022", "DOM", "DOM.Iterable"]`)**: Browser API support
+
+- **Why**: Astro generates static sites and SPAs that run in browsers. Your components interact with browser APIs through client-side scripts and framework islands. DOM types are essential for type-safe browser API usage
+- **Trade-off**: Includes browser types even for static content. But most Astro sites have some client-side interactivity
+- **When to override**: For purely static sites with zero client-side JavaScript (rare in practice)
+
+**ESNext Modules (`module: "ESNext"`)**: Modern module syntax for Vite
+
+- **Why**: Vite works best with ESNext modules and handles all transpilation to the target environment. Using ESNext modules enables Vite's advanced optimizations like dependency pre-bundling and fast HMR
+- **Trade-off**: TypeScript output isn't directly executable. But Astro handles the build
+- **When to override**: Never for Astro projects - let Vite handle module transformation
+
+## 📋 Configuration Details
+
+### What's Included
+
+This configuration extends `@jmlweb/tsconfig-base` and adds:
+
+- ✅ **JSX Support**: `jsx: "preserve"` for Astro's component system (Astro handles JSX transformation)
+- ✅ **DOM Types**: Includes `DOM` and `DOM.Iterable` libs
+- ✅ **Bundler Resolution**: `moduleResolution: "bundler"` optimized for Astro's Vite-based build system
+- ✅ **ESNext Modules**: `module: "ESNext"` for optimal bundling
+- ✅ **All Base Config**: Inherits strict type checking and best practices
+
+### JSX Preserve Mode
+
+Uses `jsx: "preserve"` mode, which means:
+
+- ✅ TypeScript preserves JSX syntax as-is
+- ✅ Astro handles JSX transformation during build
+- ✅ Works seamlessly with Astro components (`.astro` files)
+- ✅ Supports JSX in `.tsx` files when using Astro's component islands
+
+**Example:**
+
+```typescript
+// src/components/Counter.tsx
+export function Counter() {
+  return <button>Click me</button>;
+}
+```
+
+### Module Resolution
+
+Uses `bundler` resolution, which is optimized for:
+
+- ✅ Astro's Vite-based build system
+- ✅ Modern bundlers (Vite, esbuild, Rollup)
+- ✅ Better tree-shaking and modern module features
+- ✅ Optimal performance with Astro's build pipeline
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Astro project development
+- ✅ TypeScript support in Astro components
+- ✅ JSX support in Astro component islands
+- ✅ Strict type checking for Astro code
+- ✅ DOM API type support
+- ✅ Modern bundler-optimized configuration
+
+**For React projects**, use [`@jmlweb/tsconfig-react`](/typescript/react) instead.
+
+**For Next.js projects**, use [`@jmlweb/tsconfig-nextjs`](/typescript/nextjs) instead.
+
+**For non-React TypeScript projects**, use [`@jmlweb/tsconfig-base`](/typescript/base) instead.
+
+## 🔧 Extending the Configuration
+
+You can extend or override the configuration for your specific needs:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/layouts/*": ["./src/layouts/*"]
+    },
+    "noEmit": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+### Astro-specific Options
+
+Astro projects typically set `noEmit: true` since Astro handles the build process:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-astro",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## 📝 Usage with Scripts
+
+TypeScript compilation is typically handled by Astro's build system. For type checking:
+
+```json
+{
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "astro build",
+    "dev": "astro dev"
+  }
+}
+```
+
+### Usage with Astro
+
+Astro automatically uses your `tsconfig.json` for type checking. Your Astro config doesn't need TypeScript-specific settings:
+
+```typescript
+// astro.config.mjs
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  // Astro config...
+});
+```
+
+## 📋 Requirements
+
+- **Node.js** &gt;= 18.0.0
+- **TypeScript** &gt;= 5.0.0
+- **Astro** &gt;= 4.0.0
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `typescript` (&gt;= 5.0.0)
+- `astro` (&gt;= 4.0.0)
+- `@jmlweb/tsconfig-base` (^1.0.1)
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/tsconfig-base`](/typescript/base) - Base TypeScript configuration (extended by this package)
+- [`@jmlweb/eslint-config-astro`](/eslint/astro) - ESLint configuration for Astro projects
+- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [TypeScript](https://www.typescriptlang.org/) - Strongly typed programming language that builds on JavaScript
+- [Astro](https://astro.build/) - The web framework for content-driven websites
+- [Astro integrations](https://astro.build/integrations/) - Official and community integrations
+- [Vite](https://vite.dev/) - Build tool used by Astro
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/tsconfig-astro/CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/tsconfig-astro/CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT

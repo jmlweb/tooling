@@ -6,6 +6,12 @@
 
 Centralized configuration packages for development tools. One source of truth for consistent formatting, linting, and code quality across all projects.
 
+## 📚 Documentation
+
+**[View the full documentation →](https://jmlweb.github.io/tooling/)**
+
+Complete guides, usage examples, and API references for all packages.
+
 ## Packages
 
 | Package                                                                   | Description                                                             | Version                                                                      |

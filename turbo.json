@@ -47,6 +47,15 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "generate:docs": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/content/docs/**/*.mdx"],
+      "inputs": [
+        "../../packages/*/README.md",
+        "../../packages/*/package.json",
+        "scripts/generate-docs.mjs"
+      ]
     }
   }
 }

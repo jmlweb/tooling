@@ -1,0 +1,504 @@
+---
+title: base
+description: Base ESLint configuration for TypeScript projects with strict type checking and best practices
+editUrl: https://github.com/jmlweb/tooling/blob/main/packages/eslint-config-base/README.md
+sidebar:
+  order: 1
+---
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-base)](https://www.npmjs.com/package/@jmlweb/eslint-config-base)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
+[![ESLint](https://img.shields.io/badge/ESLint-9.0%2B-4B32C3.svg)](https://eslint.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
+
+&gt; Strict ESLint configuration for TypeScript projects. Maximum type safety, best practices, and consistent code quality. Extends `@jmlweb/eslint-config-base-js` with strict type checking.
+
+## ✨ Features
+
+- 🔒 **Strict Type Checking**: Enables `strictTypeChecked` and `stylisticTypeChecked` configs
+- 🛡️ **Type Safety**: Enforces explicit return types and prevents `any` usage
+- 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
+- 🎯 **Best Practices**: Prevents enum usage, encourages immutability, enforces naming conventions
+- 🚫 **No Default Exports**: Enforces named exports for better tree-shaking and clearer imports
+- 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
+- 🚀 **Flat Config**: Uses ESLint 9+ flat config format (latest stable)
+- 🔧 **Extensible**: Built on `@jmlweb/eslint-config-base-js` foundation
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/eslint-config-base eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-simple-import-sort @jmlweb/eslint-config-base-js
+```
+
+&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
+## 🚀 Quick Start
+
+Create an `eslint.config.js` file in your project root:
+
+```javascript
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  // Add your project-specific overrides here
+];
+```
+
+## 💡 Examples
+
+### Basic Setup
+
+```javascript
+// eslint.config.js
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [...baseConfig];
+```
+
+### With Project-Specific Overrides
+
+```javascript
+// eslint.config.js
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    files: ['**/*.test.ts', '**/*.test.tsx'],
+    rules: {
+      // Allow any in tests
+      '@typescript-eslint/no-explicit-any': 'off',
+      // Allow console in tests
+      'no-console': 'off',
+    },
+  },
+  {
+    ignores: ['dist/', 'build/', 'node_modules/', '*.config.ts'],
+  },
+];
+```
+
+### React Project Example
+
+```javascript
+// eslint.config.js
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    files: ['**/*.tsx'],
+    rules: {
+      // React-specific overrides if needed
+    },
+  },
+];
+```
+
+### Allowing Default Exports
+
+This config forbids default exports by default for better tree-shaking and clearer imports. If you need default exports (e.g., for config files or specific libraries):
+
+```javascript
+// eslint.config.js
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    files: ['*.config.ts', '*.config.js'],
+    rules: {
+      'no-restricted-exports': 'off',
+    },
+  },
+];
+```
+
+### Less Strict Configuration
+
+This config uses strict type checking by default. If you need non-strict rules, you have two options:
+
+**Option 1: Use base-js config and add only recommended TypeScript rules**
+
+```javascript
+import baseJsConfig from '@jmlweb/eslint-config-base-js';
+import tseslint from 'typescript-eslint';
+import prettierConfig from 'eslint-config-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+
+export default [
+  ...baseJsConfig,
+  // Use only recommended TypeScript rules (non-strict)
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      ...config.plugins,
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      ...config.rules,
+      ...prettierConfig.rules,
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+    },
+  })),
+];
+```
+
+**Option 2: Override specific strict rules**
+
+```javascript
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      // Override strict rules to be less strict
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/consistent-type-imports': 'off',
+    },
+  },
+];
+```
+
+## 📋 Configuration Details
+
+### TypeScript Files
+
+This configuration applies strict TypeScript rules to:
+
+- `**/*.ts` - TypeScript files
+- `**/*.tsx` - TypeScript React files
+
+### Key Rules Enforced
+
+| Rule                                               | Level   | Description                                   |
+| -------------------------------------------------- | ------- | --------------------------------------------- |
+| `@typescript-eslint/no-explicit-any`               | `error` | Prevents `any` type usage                     |
+| `@typescript-eslint/explicit-function-return-type` | `error` | Requires explicit return types                |
+| `@typescript-eslint/consistent-type-imports`       | `error` | Enforces `import type` for type-only imports  |
+| `@typescript-eslint/consistent-type-definitions`   | `error` | Prefers `type` over `interface`               |
+| `no-restricted-syntax` (TSEnumDeclaration)         | `error` | Prevents enum usage (prefer const maps)       |
+| `no-restricted-exports`                            | `error` | Prevents default exports (named exports only) |
+| `@typescript-eslint/naming-convention`             | `error` | Enforces naming conventions                   |
+
+### What's Included
+
+- ✅ TypeScript ESLint recommended rules
+- ✅ Strict type checking (`strictTypeChecked`)
+- ✅ Stylistic type checking (`stylisticTypeChecked`)
+- ✅ TypeScript parser configuration with project service
+- ✅ Automatic import/export sorting
+- ✅ Prettier conflict resolution
+- ✅ All JavaScript rules from `@jmlweb/eslint-config-base-js`
+
+## 🔄 Import Sorting
+
+The configuration automatically sorts imports and enforces type-only imports:
+
+**Before:**
+
+```typescript
+import { Component } from './component';
+import React, { useState } from 'react';
+import { User } from './types';
+import fs from 'fs';
+```
+
+**After auto-fix:**
+
+```typescript
+import fs from 'fs';
+import React, { useState } from 'react';
+import type { User } from './types';
+import { Component } from './component';
+```
+
+Fix import order automatically:
+
+```bash
+pnpm exec eslint --fix .
+```
+
+## 🤔 Why Use This?
+
+&gt; **Philosophy**: Maximize type safety. Catch bugs at compile time, not runtime. Make invalid states unrepresentable.
+
+This package enforces strict TypeScript practices inspired by the principle that "if it compiles, it works." The configuration choices reflect a philosophy of using TypeScript's type system to its fullest potential to prevent bugs before they happen.
+
+### Design Decisions
+
+**Strict Type Checking (`strictTypeChecked`)**: Enables all strict type-aware rules
+
+- **Why**: TypeScript's power comes from its type system. Strict checking catches errors like unreachable code, unnecessary conditions, and type mismatches that would otherwise cause runtime bugs
+- **Trade-off**: More initial errors when adopting this config, and requires explicit typing. However, the bugs caught far outweigh the extra effort
+- **When to override**: If migrating a large JavaScript codebase and need a gradual transition (consider using `@jmlweb/eslint-config-base-js` with recommended TypeScript rules instead)
+
+**Explicit Return Types (`@typescript-eslint/explicit-function-return-type`)**: Requires explicit return types on functions
+
+- **Why**: Explicit return types prevent accidental type changes and make code easier to reason about. They serve as inline documentation and catch errors where functions return unexpected types
+- **Trade-off**: More verbose code, but improved clarity and safety. Inference can hide bugs
+- **When to override**: For simple, obvious functions where the return type is trivial (but be conservative - explicit is usually better)
+
+**No `any` Type (`@typescript-eslint/no-explicit-any`)**: Prohibits using `any`
+
+- **Why**: `any` defeats the purpose of TypeScript by disabling type checking. It's a common escape hatch that creates type holes and runtime bugs
+- **Trade-off**: Forces you to properly type external libraries or complex types. Requires more upfront work but prevents bugs
+- **When to override**: Only when dealing with truly dynamic data that can't be typed (rare). Consider `unknown` first
+
+**Type-Only Imports (`@typescript-eslint/consistent-type-imports`)**: Enforces `import type` for type-only imports
+
+- **Why**: Separates runtime imports from type imports, improving tree-shaking and build performance. Makes it clear what's used at runtime vs. compile time
+- **Trade-off**: More explicit imports, but clearer code and better build optimization
+- **When to override**: Never - this is a best practice with no real downsides
+
+**No Enums (`no-restricted-syntax`)**: Prevents TypeScript enum usage
+
+- **Why**: TypeScript enums have surprising runtime behavior, bundling issues, and const vs. regular enum confusion. Const maps with `as const` provide the same benefits without the pitfalls
+- **Trade-off**: Slightly more verbose syntax (`const Status = { ... } as const`), but more predictable and type-safe
+- **When to override**: If you're comfortable with enum limitations or maintaining legacy code
+
+**No Default Exports (`no-restricted-exports`)**: Enforces named exports only
+
+- **Why**: Named exports enable better tree-shaking, clearer imports, easier refactoring, and better IDE autocomplete. Default exports hide what's being imported
+- **Trade-off**: Can't use `import Foo from './foo'` syntax. Requires `import { Foo } from './foo'`
+- **When to override**: For compatibility with libraries that require default exports (Next.js pages, etc.) - override per-file
+
+**Naming Conventions (`@typescript-eslint/naming-convention`)**: Enforces consistent naming patterns
+
+- **Why**: Consistent naming improves readability and prevents bugs. For example, booleans starting with `is/has/can` are self-documenting
+- **Trade-off**: May conflict with legacy code or third-party APIs
+- **When to override**: When integrating with external APIs that use different conventions
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Maximum type safety with strict TypeScript rules
+- ✅ Strict code quality standards
+- ✅ Consistent code style across the team
+- ✅ Prevention of common TypeScript pitfalls
+- ✅ Best practices enforcement
+
+**For JavaScript-only projects**, use [`@jmlweb/eslint-config-base-js`](/eslint/base-js) instead.
+
+**For React projects**, use [`@jmlweb/eslint-config-react`](/eslint/react) instead.
+
+**For less strict projects**, you can override the strict rules as shown in the examples above.
+
+## 🔧 Extending the Configuration
+
+You can extend or override the configuration for your specific needs:
+
+```javascript
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    files: ['**/*.test.ts', '**/*.test.tsx'],
+    rules: {
+      // Test-specific rules
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    ignores: ['dist/', 'build/', 'node_modules/'],
+  },
+];
+```
+
+## 📝 Usage with Scripts
+
+Add linting scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  }
+}
+```
+
+Then run:
+
+```bash
+pnpm lint      # Lint all files
+pnpm lint:fix  # Fix auto-fixable issues
+```
+
+## 📋 Requirements
+
+- **Node.js** &gt;= 20.11.0 (required for `import.meta.dirname` in config files)
+- **ESLint** &gt;= 9.0.0 (flat config format)
+- **TypeScript** project with `tsconfig.json`
+- **TypeScript project service** enabled (automatic with this config)
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `eslint` (^9.0.0)
+- `@eslint/js` (^9.0.0)
+- `typescript-eslint` (^8.0.0)
+- `eslint-config-prettier` (^9.1.0)
+- `eslint-plugin-simple-import-sort` (^12.0.0)
+- `@jmlweb/eslint-config-base-js` (workspace or published version)
+
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`example-nodejs-typescript-api`](https://github.com/jmlweb/tooling/tree/main/apps/example-nodejs-typescript-api) - Node.js TypeScript API example
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/eslint-config-base-js`](/eslint/base-js) - JavaScript ESLint config (extended by this package)
+- [`@jmlweb/eslint-config-react`](/eslint/react) - ESLint config for React projects
+- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier config for consistent formatting
+- [`@jmlweb/tsconfig-base`](/typescript/base) - TypeScript configuration
+
+### External Tools
+
+- [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript and TypeScript
+- [TypeScript ESLint](https://typescript-eslint.io/) - TypeScript tooling for ESLint
+- [Prettier](https://prettier.io/) - Opinionated code formatter (pairs with eslint-config-prettier)
+- [eslint-plugin-simple-import-sort](https://github.com/lydell/eslint-plugin-simple-import-sort) - Auto-sorts imports
+
+## ⚠️ Common Issues
+
+&gt; **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Peer Dependency Warnings
+
+**Symptoms:**
+
+- `npm WARN` messages about unmet peer dependencies during installation
+- Messages like "requires a peer of eslint@^8.0.0 but none is installed"
+
+**Cause:**
+
+- Some ESLint plugins haven't updated their peer dependencies to support ESLint 9.x
+- This is a transitional issue as the ecosystem adapts to ESLint's flat config
+
+**Solution:**
+
+```bash
+# pnpm automatically handles peer dependencies
+pnpm install
+```
+
+The warnings are usually safe to ignore if your linting works correctly. The plugins typically work fine with ESLint 9.x despite the warnings.
+
+### ESLint Not Picking Up Configuration
+
+**Symptoms:**
+
+- ESLint rules not being applied
+- IDE showing no linting errors
+- Files outside `src/` directory not being linted
+
+**Cause:**
+
+- Missing TypeScript project service configuration
+- `tsconfig.json` not in the correct location
+- IDE ESLint extension not configured for flat config
+
+**Solution:**
+
+1. Ensure your `tsconfig.json` is in your project root
+2. Verify your `eslint.config.js` is using flat config format
+3. For VS Code, update `.vscode/settings.json`:
+
+```json
+{
+  "eslint.experimental.useFlatConfig": true
+}
+```
+
+4. Restart your IDE/ESLint server
+
+### Type-Aware Linting Not Working
+
+**Symptoms:**
+
+- Type-aware rules like `@typescript-eslint/no-unnecessary-condition` not triggering
+- "Parsing error: Cannot read file" messages
+
+**Cause:**
+
+- TypeScript project service not finding your `tsconfig.json`
+- Multiple `tsconfig.json` files causing confusion
+
+**Solution:**
+
+Check your project structure:
+
+```bash
+# Your tsconfig.json should be in the root
+project/
+├── tsconfig.json
+├── eslint.config.js
+└── src/
+```
+
+If you have multiple tsconfig files, this config uses TypeScript project service which automatically detects them.
+
+### Conflicts with Prettier
+
+**Symptoms:**
+
+- ESLint auto-fix and Prettier format fighting each other
+- Code gets reformatted back and forth
+
+**Cause:**
+
+- ESLint formatting rules conflicting with Prettier
+- Running both tools without proper integration
+
+**Solution:**
+
+This config already includes `eslint-config-prettier` to disable conflicting rules. Ensure you:
+
+1. Run Prettier before ESLint:
+
+```json
+{
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "check": "prettier --check . && eslint ."
+  }
+}
+```
+
+2. Configure your IDE to format with Prettier first, then lint with ESLint
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/eslint-config-base/CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/eslint-config-base/CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT

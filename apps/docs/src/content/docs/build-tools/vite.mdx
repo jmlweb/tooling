@@ -1,0 +1,416 @@
+---
+title: vite
+description: Base Vite configuration for jmlweb projects with TypeScript support, build optimization, and optional React integration
+editUrl: https://github.com/jmlweb/tooling/blob/main/packages/vite-config/README.md
+sidebar:
+  order: 1
+---
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/vite-config)](https://www.npmjs.com/package/@jmlweb/vite-config)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.0%2B-646CFF.svg)](https://vite.dev/)
+
+&gt; Base Vite configuration for jmlweb projects. Provides sensible defaults for TypeScript support, build optimization, and development server settings.
+
+## ✨ Features
+
+- 🎯 **Sensible Defaults**: Pre-configured with optimized build and dev server settings
+- 📦 **TypeScript Support**: Works seamlessly with TypeScript projects
+- ⚛️ **React Ready**: Optional React integration via plugin injection
+- 📁 **Path Aliases**: Easy configuration for module path resolution
+- 🔧 **Clean API**: Simple functions to create configurations
+- 🛠️ **Fully Typed**: Complete TypeScript support with exported types
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/vite-config vite
+```
+
+For React projects, also install the React plugin:
+
+```bash
+pnpm add -D @vitejs/plugin-react
+```
+
+&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
+## 🚀 Quick Start
+
+Create a `vite.config.ts` file in your project root:
+
+```typescript
+import { createViteConfig } from '@jmlweb/vite-config';
+
+export default createViteConfig();
+```
+
+## 💡 Examples
+
+### Basic Setup
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+
+export default createViteConfig();
+```
+
+### With Path Aliases
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import { resolve } from 'path';
+
+export default createViteConfig({
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@components': resolve(__dirname, './src/components'),
+      '@utils': resolve(__dirname, './src/utils'),
+    },
+  },
+});
+```
+
+### With React Plugin
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+
+export default createViteConfig({
+  plugins: [react()],
+});
+```
+
+### Using the React-Specific Helper
+
+```typescript
+// vite.config.ts
+import { createReactViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+
+export default createReactViteConfig({
+  reactPlugin: react(),
+  resolve: {
+    alias: {
+      '@': './src',
+    },
+  },
+});
+```
+
+### With Custom Build Settings
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+
+export default createViteConfig({
+  build: {
+    sourcemap: true,
+    target: ['es2020', 'chrome87', 'firefox78', 'safari14'],
+    outDir: 'build',
+  },
+});
+```
+
+### With Custom Server Settings
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+
+export default createViteConfig({
+  server: {
+    port: 3000,
+    open: true,
+    host: true, // Listen on all addresses
+  },
+});
+```
+
+### With Multiple Plugins
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
+
+export default createViteConfig({
+  plugins: [react(), svgr()],
+  resolve: {
+    alias: {
+      '@': './src',
+    },
+  },
+});
+```
+
+### Full Configuration Example
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+
+export default createViteConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: ['@emotion/babel-plugin'],
+      },
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
+  build: {
+    sourcemap: true,
+    target: 'es2020',
+  },
+  server: {
+    port: 3000,
+    open: true,
+  },
+  preview: {
+    port: 4000,
+  },
+});
+```
+
+## 🤔 Why Use This?
+
+&gt; **Philosophy**: Modern build tools should provide instant feedback during development and optimized production builds with zero configuration.
+
+This package provides a Vite configuration that balances development speed with production optimization. It leverages Vite's native ESM dev server for instant HMR and esbuild for ultra-fast production builds, while remaining flexible enough for any project type.
+
+### Design Decisions
+
+**ESBuild Minification (`minify: 'esbuild'`)**: Fast production builds
+
+- **Why**: esbuild is orders of magnitude faster than terser while producing comparably small bundles. For most projects, the speed improvement far outweighs the minimal size difference. This keeps build times fast even for large applications
+- **Trade-off**: Terser can sometimes achieve slightly smaller bundles (1-3%). But esbuild's speed is almost always worth it
+- **When to override**: For bundle size-critical applications where every byte matters, consider terser. But try esbuild first
+
+**ESNext Target (`target: 'esnext'`)**: Modern JavaScript output
+
+- **Why**: Vite assumes modern browsers by default. Using esnext target produces the smallest, most performant code because it doesn't transpile modern features browsers already support. Your bundler only polyfills what's actually needed
+- **Trade-off**: Won't work in older browsers without additional configuration. But Vite is designed for modern development
+- **When to override**: For projects supporting older browsers - set specific targets like `['es2020', 'chrome87', 'firefox78']`
+
+**No Source Maps by Default (`sourcemap: false`)**: Faster production builds
+
+- **Why**: Source maps are valuable for debugging but significantly increase build time and bundle size. Most production deployments don't need them. Enable per-project when needed for production debugging or error tracking services
+- **Trade-off**: Harder to debug production issues. But you can enable source maps easily when needed
+- **When to override**: For production debugging or when using error tracking services (Sentry, etc.) - set `sourcemap: true`
+
+**Port Flexibility (`strictPort: false`)**: Development convenience
+
+- **Why**: If the default port is in use, Vite automatically finds an available port instead of failing. This is convenient when running multiple projects or when the port is already taken
+- **Trade-off**: Port might change between runs if default is busy. But Vite tells you the actual port
+- **When to override**: For projects that must run on a specific port (e.g., configured in OAuth callbacks) - set `strictPort: true`
+
+## 📋 Configuration Details
+
+### Default Settings
+
+| Category | Setting      | Default Value | Description                     |
+| -------- | ------------ | ------------- | ------------------------------- |
+| Build    | `outDir`     | `'dist'`      | Output directory for production |
+| Build    | `sourcemap`  | `false`       | Source map generation           |
+| Build    | `minify`     | `'esbuild'`   | Minification strategy           |
+| Build    | `target`     | `'esnext'`    | Build target environment        |
+| Server   | `port`       | `5173`        | Development server port         |
+| Server   | `strictPort` | `false`       | Fail if port is in use          |
+| Server   | `open`       | `false`       | Open browser on start           |
+| Server   | `host`       | `'localhost'` | Host to bind to                 |
+| Preview  | `port`       | `4173`        | Preview server port             |
+
+### API Reference
+
+#### `createViteConfig(options?: ViteConfigOptions): UserConfig`
+
+Creates a Vite configuration with sensible defaults.
+
+**Parameters:**
+
+| Option    | Type                      | Description                      |
+| --------- | ------------------------- | -------------------------------- |
+| `plugins` | `Plugin[]`                | Vite plugins to include          |
+| `resolve` | `{ alias?: Record<...> }` | Module resolution configuration  |
+| `build`   | `BuildOptions`            | Build configuration options      |
+| `server`  | `ServerOptions`           | Development server configuration |
+| `preview` | `PreviewOptions`          | Preview server configuration     |
+| `options` | `Partial<UserConfig>`     | Additional Vite options to merge |
+
+**Returns:** A complete Vite `UserConfig` object.
+
+#### `createReactViteConfig(options: ViteConfigOptions & { reactPlugin: Plugin }): UserConfig`
+
+Creates a Vite configuration optimized for React applications.
+
+**Parameters:**
+
+| Option        | Type                | Description                          |
+| ------------- | ------------------- | ------------------------------------ |
+| `reactPlugin` | `Plugin`            | The React plugin instance (required) |
+| ...           | `ViteConfigOptions` | All options from `createViteConfig`  |
+
+**Returns:** A complete Vite `UserConfig` object with React plugin included.
+
+#### Exported Constants
+
+- `BASE_DEFAULTS` - Default configuration values for reference
+- `UserConfig`, `Plugin` - Re-exported from Vite
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Consistent Vite configuration across multiple projects
+- ✅ Optimized build settings out of the box
+- ✅ Easy integration with React and other plugins
+- ✅ Type-safe configuration with full TypeScript support
+- ✅ A clean, simple API for customization
+
+## 🔧 Extending the Configuration
+
+You can extend the configuration for your specific needs:
+
+### Adding Custom Plugins
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
+import { visualizer } from 'rollup-plugin-visualizer';
+
+export default createViteConfig({
+  plugins: [react(), svgr(), visualizer({ open: true })],
+});
+```
+
+### Overriding Build Settings
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+
+export default createViteConfig({
+  build: {
+    sourcemap: true,
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
+});
+```
+
+### Environment-Specific Configuration
+
+```typescript
+// vite.config.ts
+import { createViteConfig } from '@jmlweb/vite-config';
+import react from '@vitejs/plugin-react';
+
+export default createViteConfig({
+  plugins: [react()],
+  build: {
+    sourcemap: process.env.NODE_ENV !== 'production',
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3001',
+    },
+  },
+});
+```
+
+## 📝 Usage with Scripts
+
+Add build scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+Then run:
+
+```bash
+pnpm dev      # Start development server
+pnpm build    # Build for production
+pnpm preview  # Preview production build
+```
+
+## 📋 Requirements
+
+- **Node.js** &gt;= 18.0.0
+- **Vite** &gt;= 5.0.0
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependency:
+
+- `vite` (&gt;=5.0.0)
+
+Optional peer dependency for React projects:
+
+- `@vitejs/plugin-react` (for React integration)
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/tsconfig-react`](/typescript/react) - TypeScript config for React projects
+- [`@jmlweb/eslint-config-react`](/eslint/react) - ESLint config for React projects
+- [`@jmlweb/vitest-config`](/testing/vitest) - Vitest configuration for testing
+- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier config for consistent formatting
+
+### External Tools
+
+- [Vite](https://vite.dev/) - Next-generation frontend tooling
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) - Official React plugin for Vite
+- [vite-plugin-svgr](https://github.com/pd4d10/vite-plugin-svgr) - SVG to React component transform
+- [rollup-plugin-visualizer](https://github.com/btd/rollup-plugin-visualizer) - Visualize bundle size
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/vite-config/CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/vite-config/CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT

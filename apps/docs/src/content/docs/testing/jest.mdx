@@ -1,0 +1,328 @@
+---
+title: jest
+description: Base Jest configuration for jmlweb projects with TypeScript support and coverage settings
+editUrl: https://github.com/jmlweb/tooling/blob/main/packages/jest-config/README.md
+sidebar:
+  order: 1
+---
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/jest-config)](https://www.npmjs.com/package/@jmlweb/jest-config)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
+[![Jest](https://img.shields.io/badge/Jest-29.0%2B-C21325.svg)](https://jestjs.io/)
+[![ts-jest](https://img.shields.io/badge/ts--jest-29.0%2B-C21325.svg)](https://kulshekhar.github.io/ts-jest/)
+
+&gt; Base Jest configuration for jmlweb projects. TypeScript support, coverage settings, and sensible defaults out of the box.
+
+## ✨ Features
+
+- 🔧 **TypeScript Support**: Configured for TypeScript projects with ts-jest
+- 📊 **Coverage Configuration**: Pre-configured with 80% coverage thresholds
+- 🎯 **Sensible Defaults**: Node.js environment, optimized test execution, clear mocks
+- ⚡ **Performance Optimized**: Efficient test execution with proper module isolation
+- 🚀 **Easy Extension**: Factory function for easy customization
+- 📦 **Zero Config**: Works out of the box with minimal setup
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/jest-config jest ts-jest @types/jest
+```
+
+&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
+## 🚀 Quick Start
+
+Create a `jest.config.ts` file in your project root:
+
+```typescript
+import jestConfig from '@jmlweb/jest-config';
+
+export default jestConfig;
+```
+
+Or use the factory function for customization:
+
+```typescript
+import { createJestConfig } from '@jmlweb/jest-config';
+
+export default createJestConfig({
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
+});
+```
+
+## 💡 Examples
+
+### Basic Setup
+
+```typescript
+// jest.config.ts
+import jestConfig from '@jmlweb/jest-config';
+
+export default jestConfig;
+```
+
+### With Project-Specific Overrides
+
+```typescript
+// jest.config.ts
+import { createJestConfig } from '@jmlweb/jest-config';
+
+export default createJestConfig({
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
+  testTimeout: 10000,
+  coverageThreshold: {
+    global: {
+      lines: 90,
+      functions: 90,
+      branches: 85,
+      statements: 90,
+    },
+  },
+});
+```
+
+### React/JSX Project Example
+
+```typescript
+// jest.config.ts
+import { createJestConfig } from '@jmlweb/jest-config';
+
+export default createJestConfig({
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+});
+```
+
+### Lower Coverage Thresholds
+
+```typescript
+// jest.config.ts
+import { createJestConfig } from '@jmlweb/jest-config';
+
+export default createJestConfig({
+  coverageThreshold: {
+    global: {
+      lines: 60,
+      functions: 60,
+      branches: 60,
+      statements: 60,
+    },
+  },
+});
+```
+
+### Custom Test Patterns
+
+```typescript
+// jest.config.ts
+import { createJestConfig } from '@jmlweb/jest-config';
+
+export default createJestConfig({
+  testMatch: ['**/__tests__/**/*.ts', '**/*.test.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts'],
+});
+```
+
+## 🤔 Why Use This?
+
+&gt; **Philosophy**: Tests should run reliably with meaningful coverage metrics that enforce code quality without being overly strict.
+
+This package provides a Jest configuration optimized for TypeScript projects with sensible coverage thresholds and test isolation. It balances strictness with practicality, enforcing coverage standards while keeping tests fast and maintainable.
+
+### Design Decisions
+
+**80% Coverage Thresholds**: Requires 80% coverage across all metrics
+
+- **Why**: 80% coverage strikes a good balance - it's high enough to ensure most code paths are tested but not so high that you waste time testing trivial code or struggle to reach unrealistic goals. It catches most bugs while allowing flexibility for edge cases that are hard to test
+- **Trade-off**: Some projects may want higher coverage (90%+) or lower (60%). This is easily adjustable per project
+- **When to override**: Increase for critical systems (financial, healthcare), decrease for experimental projects or when initially adding tests to legacy code
+
+**Automatic Mock Clearing (`clearMocks: true, restoreMocks: true`)**: Resets mocks between tests
+
+- **Why**: Test isolation is crucial for reliable tests. Automatically clearing and restoring mocks prevents test interdependence and the dreaded "works in isolation but fails in suite" problem. This eliminates an entire class of flaky tests
+- **Trade-off**: Can't rely on mock state persisting between tests. But tests shouldn't share state anyway
+- **When to override**: Rarely needed - test isolation is a best practice
+
+**Node Environment by Default (`testEnvironment: 'node'`)**: Server-side testing environment
+
+- **Why**: Most TypeScript projects tested with Jest are Node.js backends or libraries. The Node environment is lighter and faster than jsdom. For React/browser code, developers can override to jsdom per project
+- **Trade-off**: Need to explicitly set jsdom for browser/React testing
+- **When to override**: For React components or browser-specific code - set `testEnvironment: 'jsdom'` in your project config
+
+**5 Second Test Timeout**: Reasonable default for most tests
+
+- **Why**: Most unit tests should complete in milliseconds. 5 seconds is generous for integration tests while preventing truly hung tests from blocking CI indefinitely. It catches accidentally synchronous code or missing mocks
+- **Trade-off**: Some integration tests with real databases might need longer timeouts
+- **When to override**: For slow integration tests - increase per test suite or project-wide
+
+## 📋 Configuration Details
+
+### Default Settings
+
+| Setting                               | Value                                  | Description                              |
+| ------------------------------------- | -------------------------------------- | ---------------------------------------- |
+| `testEnvironment`                     | `node`                                 | Node.js environment by default           |
+| `moduleFileExtensions`                | `['ts', 'tsx', 'js', 'jsx', 'json']`   | Supported file extensions                |
+| `testMatch`                           | `['**/*.{test,spec}.{ts,tsx,js,jsx}']` | Test file patterns                       |
+| `testTimeout`                         | `5000`                                 | Test timeout in milliseconds (5 seconds) |
+| `coverageThreshold.global.lines`      | `80`                                   | Minimum line coverage                    |
+| `coverageThreshold.global.functions`  | `80`                                   | Minimum function coverage                |
+| `coverageThreshold.global.branches`   | `80`                                   | Minimum branch coverage                  |
+| `coverageThreshold.global.statements` | `80`                                   | Minimum statement coverage               |
+| `verbose`                             | `true`                                 | Detailed test output                     |
+| `clearMocks`                          | `true`                                 | Clear mocks between tests                |
+| `restoreMocks`                        | `true`                                 | Restore mocks after each test            |
+
+### Coverage Exclusions
+
+The following patterns are excluded from coverage by default:
+
+- `**/*.d.ts` - TypeScript declaration files
+- `**/*.config.{ts,js}` - Configuration files
+- `**/dist/**` - Build output
+- `**/build/**` - Build directories
+- `**/node_modules/**` - Dependencies
+- `**/coverage/**` - Coverage reports
+- `**/*.test.{ts,tsx,js,jsx}` - Test files
+- `**/*.spec.{ts,tsx,js,jsx}` - Spec files
+
+### Test File Patterns
+
+Tests are automatically discovered from:
+
+- `**/*.test.{ts,tsx,js,jsx}`
+- `**/*.spec.{ts,tsx,js,jsx}`
+
+### Coverage Reporters
+
+- `text` - Text summary in terminal
+- `json` - JSON format for CI/CD integration
+- `html` - HTML coverage report (generated in `coverage/` directory)
+
+## 🎯 When to Use
+
+Use this configuration when you want:
+
+- ✅ Consistent testing setup across projects using Jest
+- ✅ TypeScript support out of the box
+- ✅ Coverage thresholds enforced
+- ✅ Sensible defaults for Node.js and browser projects
+- ✅ Easy customization and extension
+
+**For projects using Vitest**, use [`@jmlweb/vitest-config`](/testing/vitest) instead.
+
+## 🔧 Extending the Configuration
+
+You can extend or override the configuration for your specific needs:
+
+```typescript
+import { createJestConfig } from '@jmlweb/jest-config';
+
+export default createJestConfig({
+  // Add custom setup files
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
+
+  // Custom test patterns
+  testMatch: ['**/*.test.ts', '**/__tests__/**/*.ts'],
+
+  // Custom environment
+  testEnvironment: 'jsdom',
+
+  // Path aliases
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^~/(.*)$': '<rootDir>/src/$1',
+  },
+});
+```
+
+## 📝 Usage with Scripts
+
+Add test scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
+  }
+}
+```
+
+Then run:
+
+```bash
+pnpm test           # Run tests once
+pnpm test:watch     # Run tests in watch mode
+pnpm test:coverage  # Run tests with coverage
+pnpm test:ci        # Run tests in CI mode
+```
+
+### TypeScript Configuration
+
+The configuration uses `ts-jest` for TypeScript support. The default transform configuration includes:
+
+- `esModuleInterop: true` - Allows default imports from CommonJS modules
+- `allowSyntheticDefaultImports: true` - Allows default imports from modules with no default export
+
+These settings ensure compatibility with modern TypeScript projects.
+
+## 📋 Requirements
+
+- **Node.js** &gt;= 20.11.0
+- **Jest** &gt;= 29.0.0
+- **ts-jest** &gt;= 29.0.0
+- **@types/jest** &gt;= 29.0.0
+- **TypeScript** project (recommended, but not required)
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `jest` (&gt;=29.0.0)
+- `ts-jest` (&gt;=29.0.0)
+- `@types/jest` (&gt;=29.0.0)
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/vitest-config`](/testing/vitest) - Vitest configuration for modern testing
+- [`@jmlweb/eslint-config-base`](/eslint/base) - ESLint config for TypeScript projects
+- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier config for consistent formatting
+- [`@jmlweb/tsconfig-base`](/typescript/base) - TypeScript configuration
+
+### External Tools
+
+- [Jest](https://jestjs.io/) - Delightful JavaScript testing framework
+- [ts-jest](https://kulshekhar.github.io/ts-jest/) - TypeScript preprocessor for Jest
+- [@testing-library/jest-dom](https://testing-library.com/docs/ecosystem-jest-dom/) - Custom Jest matchers for the DOM
+- [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) - React testing utilities (for React projects)
+
+## 🔄 Migration Guide
+
+### Upgrading to a New Version
+
+&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/jest-config/CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/jest-config/CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT
