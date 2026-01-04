@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-base",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Base ESLint configuration for TypeScript projects with strict type checking and best practices",
   "type": "module",
   "main": "./dist/index.cjs",

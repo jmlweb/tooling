@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-node
 
+## 2.0.10
+
+### Patch Changes
+
+- @jmlweb/eslint-config-base@2.0.9
+
 ## 2.0.9
 
 ### Patch Changes
