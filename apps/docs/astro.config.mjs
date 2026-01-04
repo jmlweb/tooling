@@ -23,6 +23,10 @@ export default defineConfig({
           link: '/',
         },
         {
+          label: 'Getting Started',
+          link: '/getting-started',
+        },
+        {
           label: 'Prettier',
           items: [
             {

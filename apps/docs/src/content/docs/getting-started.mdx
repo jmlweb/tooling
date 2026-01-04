@@ -1,0 +1,483 @@
+---
+title: Getting Started
+description: Learn how to install and use jmlweb-tooling configuration packages
+tableOfContents: true
+---
+
+Welcome to **jmlweb-tooling**! This guide will help you get started with our shared configuration packages for modern JavaScript and TypeScript projects.
+
+## What is jmlweb-tooling?
+
+jmlweb-tooling is a collection of shared configuration packages that provide consistent, opinionated settings for popular development tools:
+
+- **Prettier** - Code formatting with sensible defaults
+- **ESLint** - Linting for JavaScript, TypeScript, React, Node.js, and Astro
+- **TypeScript** - Strict TypeScript configurations for various project types
+- **Testing** - Pre-configured Vitest and Jest setups
+- **Build Tools** - Ready-to-use tsup and Vite configurations
+- **Commit Linting** - Conventional Commits enforcement
+
+### Why Use Shared Configurations?
+
+- **Consistency** - Same code style across all your projects
+- **Zero Configuration** - Works out of the box with sensible defaults
+- **Best Practices** - Based on industry standards and modern conventions
+- **Easy Updates** - Update one package to get improvements across all projects
+- **Monorepo Friendly** - Designed to work seamlessly in monorepo setups
+
+Browse all available packages in the [sidebar navigation](#) or explore specific categories below.
+
+## Prerequisites
+
+Before getting started, ensure you have:
+
+- **Node.js** >= 18.0.0 ([Download](https://nodejs.org/))
+- A package manager: **pnpm** (recommended), npm, or yarn
+
+Check your Node.js version:
+
+```bash
+node --version
+```
+
+If you don't have pnpm installed:
+
+```bash
+npm install -g pnpm
+```
+
+## Quick Start
+
+Let's set up a new project with Prettier, ESLint, and TypeScript configurations.
+
+### 1. Install Prettier Configuration
+
+First, install the Prettier configuration and its peer dependency:
+
+```bash
+pnpm add -D @jmlweb/prettier-config-base prettier
+```
+
+Add the configuration to your `package.json`:
+
+```json
+{
+  "prettier": "@jmlweb/prettier-config-base"
+}
+```
+
+Or create a `.prettierrc.mjs` file (recommended for ES modules):
+
+```javascript
+export { default } from '@jmlweb/prettier-config-base';
+```
+
+Test it by formatting your code:
+
+```bash
+pnpm exec prettier --write "**/*.{js,ts,tsx,json,md}"
+```
+
+### 2. Install ESLint Configuration
+
+Install ESLint configuration for TypeScript:
+
+```bash
+pnpm add -D @jmlweb/eslint-config-base eslint typescript-eslint
+```
+
+Create an `eslint.config.js` file:
+
+```javascript
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [...baseConfig];
+```
+
+Run ESLint:
+
+```bash
+pnpm exec eslint .
+```
+
+### 3. Install TypeScript Configuration
+
+Install the TypeScript configuration:
+
+```bash
+pnpm add -D @jmlweb/tsconfig-base typescript
+```
+
+Create a `tsconfig.json` file:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-base",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+Your project is now configured with Prettier, ESLint, and TypeScript!
+
+## Configuration Hierarchy
+
+jmlweb-tooling packages follow a **base → variant** pattern, allowing you to start with sensible defaults and extend for specific use cases.
+
+### Prettier Configurations
+
+```
+@jmlweb/prettier-config-base (base formatting rules)
+  └── @jmlweb/prettier-config-tailwind (adds Tailwind CSS class sorting)
+```
+
+**Example**: Start with `prettier-config-base`, then switch to `prettier-config-tailwind` when you add Tailwind CSS to your project.
+
+### ESLint Configurations
+
+```
+@jmlweb/eslint-config-base-js (JavaScript linting)
+  └── @jmlweb/eslint-config-base (adds TypeScript support)
+      ├── @jmlweb/eslint-config-react (adds React and JSX rules)
+      ├── @jmlweb/eslint-config-node (adds Node.js specific rules)
+      └── @jmlweb/eslint-config-astro (adds Astro framework rules)
+```
+
+**Example**: Use `eslint-config-base` for TypeScript projects, extend to `eslint-config-react` for React applications.
+
+### TypeScript Configurations
+
+```
+@jmlweb/tsconfig-base (strict base configuration)
+  ├── @jmlweb/tsconfig-node (Node.js projects)
+  ├── @jmlweb/tsconfig-react (React libraries)
+  ├── @jmlweb/tsconfig-nextjs (Next.js applications)
+  └── @jmlweb/tsconfig-astro (Astro projects)
+```
+
+**Example**: Extend `tsconfig-node` for backend services, `tsconfig-nextjs` for Next.js apps.
+
+### Testing Configurations
+
+```
+@jmlweb/vitest-config (Vitest with TypeScript and coverage)
+@jmlweb/jest-config (Jest with TypeScript support)
+```
+
+### Build Tool Configurations
+
+```
+@jmlweb/tsup-config-base (tsup for building TypeScript packages)
+@jmlweb/vite-config (Vite for frontend projects)
+```
+
+## Common Patterns
+
+### New TypeScript Project
+
+Setting up a basic TypeScript project from scratch:
+
+```bash
+# Initialize project
+mkdir my-project && cd my-project
+pnpm init
+
+# Install configurations
+pnpm add -D @jmlweb/prettier-config-base prettier
+pnpm add -D @jmlweb/eslint-config-base eslint typescript-eslint
+pnpm add -D @jmlweb/tsconfig-node typescript
+
+# Create source directory
+mkdir src
+```
+
+**package.json**:
+
+```json
+{
+  "name": "my-project",
+  "type": "module",
+  "prettier": "@jmlweb/prettier-config-base",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\""
+  }
+}
+```
+
+**eslint.config.js**:
+
+```javascript
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [...baseConfig];
+```
+
+**tsconfig.json**:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-node",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}
+```
+
+### React TypeScript Project
+
+For a React application with TypeScript:
+
+```bash
+# Install dependencies
+pnpm add -D @jmlweb/prettier-config-base prettier
+pnpm add -D @jmlweb/eslint-config-react eslint typescript-eslint
+pnpm add -D @jmlweb/tsconfig-react typescript
+
+# For Vite-based projects
+pnpm add -D @jmlweb/vite-config vite
+```
+
+**eslint.config.js**:
+
+```javascript
+import reactConfig from '@jmlweb/eslint-config-react';
+
+export default [...reactConfig];
+```
+
+**tsconfig.json**:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-react",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}
+```
+
+**vite.config.ts** (if using Vite):
+
+```typescript
+import { createReactViteConfig } from '@jmlweb/vite-config';
+
+export default createReactViteConfig();
+```
+
+### Next.js Project
+
+For a Next.js application:
+
+```bash
+# Install configurations
+pnpm add -D @jmlweb/prettier-config-base prettier
+pnpm add -D @jmlweb/eslint-config-react eslint typescript-eslint
+pnpm add -D @jmlweb/tsconfig-nextjs typescript
+```
+
+**tsconfig.json**:
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-nextjs",
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+```
+
+### Node.js API Project
+
+For a Node.js backend service:
+
+```bash
+# Install configurations
+pnpm add -D @jmlweb/prettier-config-base prettier
+pnpm add -D @jmlweb/eslint-config-node eslint typescript-eslint
+pnpm add -D @jmlweb/tsconfig-node typescript
+pnpm add -D @jmlweb/vitest-config vitest
+```
+
+**eslint.config.js**:
+
+```javascript
+import nodeConfig from '@jmlweb/eslint-config-node';
+
+export default [...nodeConfig];
+```
+
+**vitest.config.ts**:
+
+```typescript
+import { defineConfig } from 'vitest/config';
+import baseConfig from '@jmlweb/vitest-config';
+
+export default defineConfig({
+  test: {
+    ...baseConfig,
+  },
+});
+```
+
+### Monorepo Setup
+
+For workspace/monorepo dependencies, use the `workspace:*` protocol:
+
+**Root package.json**:
+
+```json
+{
+  "devDependencies": {
+    "@jmlweb/prettier-config-base": "workspace:*",
+    "@jmlweb/eslint-config-base": "workspace:*",
+    "@jmlweb/tsconfig-base": "workspace:*"
+  }
+}
+```
+
+This allows all packages in the monorepo to share the same configuration versions.
+
+## Extending Configurations
+
+All configurations can be extended to customize for your specific needs:
+
+### Extending Prettier
+
+```javascript
+// .prettierrc.mjs
+import baseConfig from '@jmlweb/prettier-config-base';
+
+export default {
+  ...baseConfig,
+  printWidth: 100, // Override specific options
+  semi: false,
+};
+```
+
+### Extending ESLint
+
+```javascript
+// eslint.config.js
+import baseConfig from '@jmlweb/eslint-config-base';
+
+export default [
+  ...baseConfig,
+  {
+    rules: {
+      // Override or add specific rules
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
+];
+```
+
+### Extending TypeScript
+
+```json
+{
+  "extends": "@jmlweb/tsconfig-base",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "outDir": "dist",
+    "rootDir": "src"
+  }
+}
+```
+
+## Package Manager Scripts
+
+Add these common scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\"",
+    "test": "vitest",
+    "type-check": "tsc --noEmit"
+  }
+}
+```
+
+Run them with:
+
+```bash
+pnpm lint        # Check for linting errors
+pnpm lint:fix    # Fix auto-fixable errors
+pnpm format      # Format all files
+pnpm test        # Run tests
+```
+
+## Troubleshooting
+
+### Conflicts Between Tools
+
+If ESLint and Prettier conflict on formatting rules:
+
+1. Ensure you're using compatible versions
+2. ESLint configs already include `eslint-config-prettier` to disable conflicting rules
+3. Run Prettier first, then ESLint: `pnpm format && pnpm lint`
+
+### IDE Integration
+
+For VS Code, install these extensions:
+
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+Add to `.vscode/settings.json`:
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+}
+```
+
+### Package Not Found
+
+If you see `Cannot find package '@jmlweb/...'`:
+
+1. Ensure you've installed the package: `pnpm add -D @jmlweb/package-name`
+2. Check the package name is correct (all lowercase, with hyphens)
+3. Run `pnpm install` to ensure dependencies are installed
+
+## Next Steps
+
+Now that you're set up, explore the documentation for specific packages:
+
+- **[Prettier](/prettier/base)** - Code formatting options and customization
+- **[ESLint](/eslint/base)** - Linting rules and configuration
+- **[TypeScript](/typescript/base)** - Type checking and compiler options
+- **[Testing](/testing/vitest)** - Test configuration and coverage
+- **[Build Tools](/build-tools/base)** - Building and bundling your code
+
+### Contributing
+
+Found an issue or have a suggestion? Contributions are welcome!
+
+- Report bugs or request features: [GitHub Issues](https://github.com/jmlweb/tooling/issues)
+- View source code: [GitHub Repository](https://github.com/jmlweb/tooling)
+
+### Stay Updated
+
+Follow semantic versioning for updates:
+
+- **Patch** (1.0.x) - Bug fixes, safe to update
+- **Minor** (1.x.0) - New features, backward compatible
+- **Major** (x.0.0) - Breaking changes, read migration guides
+
+Check changelogs in each package's documentation for version history.
