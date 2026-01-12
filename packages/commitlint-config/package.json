@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^20.3.0",
-    "@commitlint/config-conventional": "^20.3.0",
+    "@commitlint/config-conventional": "^20.3.1",
     "@commitlint/types": "^20.2.0",
     "@jmlweb/tsconfig-internal": "workspace:*",
     "tsup": "^8.5.1",
