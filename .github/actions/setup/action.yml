@@ -6,10 +6,6 @@ inputs:
     description: 'Install strategy: frozen (default) or update'
     required: false
     default: 'frozen'
-  restore-turbo-cache:
-    description: 'Whether to restore Turborepo cache'
-    required: false
-    default: 'false'
 
 runs:
   using: 'composite'
@@ -40,12 +36,3 @@ runs:
         else
           pnpm install --no-frozen-lockfile
         fi
-
-    - name: Restore Turborepo cache
-      if: inputs.restore-turbo-cache == 'true'
-      uses: actions/download-artifact@v7
-      continue-on-error: true
-      with:
-        name: turbo-cache
-        path: .turbo
-
