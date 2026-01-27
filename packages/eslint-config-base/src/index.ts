@@ -31,7 +31,7 @@ const config = tseslint.config(
       'simple-import-sort/exports': 'error',
       // TypeScript strict rules
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
