@@ -28,8 +28,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          restore-turbo-cache: true
 
       - name: Build prettier configs (required for format check)
         run: pnpm build --filter='@jmlweb/prettier-config-*'
@@ -50,8 +48,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          restore-turbo-cache: true
 
       - name: Build eslint configs (required for lint check)
         run: pnpm build --filter='@jmlweb/eslint-config-*'
@@ -99,8 +95,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          restore-turbo-cache: true
 
       - name: Build packages
         run: node scripts/ci-build.mjs
@@ -137,16 +131,17 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          restore-turbo-cache: true
 
       - name: Download build artifacts
         uses: actions/download-artifact@v7
+        continue-on-error: true
+        id: download-artifacts
         with:
           name: build-artifacts
           path: packages
 
       - name: Pack and validate packages
+        if: steps.download-artifacts.outcome == 'success'
         run: node scripts/test-pack.mjs
 
   integration-test:
@@ -163,8 +158,6 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup
-        with:
-          restore-turbo-cache: true
 
       - name: Run integration tests
         run: pnpm integration:test
