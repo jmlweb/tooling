@@ -61,7 +61,7 @@
     "@jmlweb/eslint-config-base-js": "workspace:*"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^9.39.4",
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@types/eslint": "^9.6.1",
     "eslint": "^9.39.2",

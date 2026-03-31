@@ -20,7 +20,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^9.39.4",
     "@jmlweb/eslint-config-base": "workspace:*",
     "@jmlweb/prettier-config-base": "workspace:*",
     "@jmlweb/tsconfig-base": "workspace:*",

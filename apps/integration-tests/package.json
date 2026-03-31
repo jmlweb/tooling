@@ -12,7 +12,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^9.39.4",
     "@jmlweb/eslint-config-base-js": "workspace:*",
     "@jmlweb/prettier-config-base": "workspace:*",
     "chalk": "^5.3.0",
