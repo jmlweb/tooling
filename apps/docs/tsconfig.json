@@ -1,3 +1,7 @@
 {
-  "extends": "@jmlweb/tsconfig-astro"
+  "extends": "@jmlweb/tsconfig-astro",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false
+  }
 }
