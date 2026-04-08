@@ -28,7 +28,7 @@
     "@types/express": "^5.0.6",
     "@vitest/coverage-v8": "^4.0.16",
     "@vitest/ui": "^4.1.2",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.4",
     "prettier": "^3.3.3",
     "tsx": "^4.19.2",
     "typescript": "^5.9.3",
