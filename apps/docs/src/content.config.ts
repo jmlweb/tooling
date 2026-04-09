@@ -1,7 +1,7 @@
 import { defineCollection } from 'astro:content';
+import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const collections: Record<string, any> = {
-  docs: defineCollection({ schema: docsSchema() }),
+export const collections = {
+  docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
 };
