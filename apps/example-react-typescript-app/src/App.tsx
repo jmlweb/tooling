@@ -12,7 +12,7 @@ const initialUsers: User[] = [
 ];
 
 function App(): React.JSX.Element {
-  const [users] = useState<User[]>(initialUsers);
+  const [users] = useState(initialUsers);
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
