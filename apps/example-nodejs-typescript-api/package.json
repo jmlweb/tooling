@@ -27,7 +27,7 @@
     "@jmlweb/vitest-config": "workspace:*",
     "@types/express": "^5.0.6",
     "@vitest/coverage-v8": "^4.1.6",
-    "@vitest/ui": "^4.1.6",
+    "@vitest/ui": "^4.1.7",
     "eslint": "^9.39.4",
     "prettier": "^3.8.3",
     "tsx": "^4.22.2",
