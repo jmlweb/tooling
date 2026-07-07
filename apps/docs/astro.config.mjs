@@ -1,5 +1,6 @@
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
+import starlightLlmsTxt from 'starlight-llms-txt';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,6 +17,11 @@ export default defineConfig({
           label: 'GitHub',
           href: 'https://github.com/jmlweb/tooling',
         },
+      ],
+      plugins: [
+        starlightLlmsTxt({
+          projectName: 'jmlweb-tooling',
+        }),
       ],
       sidebar: [
         {

@@ -389,6 +389,14 @@ When creating a new package, ensure these files are updated:
 - PR reviewers should check that documentation changes accompany code changes
 - Stale documentation creates confusion and maintenance burden
 
+## LLM Context Files (llms.txt)
+
+The docs site (`apps/docs/`) auto-generates `llms.txt`, `llms-full.txt`, and `llms-small.txt` at build time via the `starlight-llms-txt` plugin, configured in `apps/docs/astro.config.mjs`.
+
+- **Do not** hand-write or commit these files under `apps/docs/public/` or `src/content/docs/` — they are build output, not source.
+- To change their content, edit the actual docs pages (`src/content/docs/**`) or the plugin options in `astro.config.mjs` (`projectName`, `description`, `customSets`, `exclude`, etc.).
+- Output lands in `apps/docs/dist/` (gitignored) and is served at `https://jmlweb.github.io/tooling/llms.txt` after deploy.
+
 ## Additional Guidelines
 
 - Always check existing packages before creating new ones to avoid duplication

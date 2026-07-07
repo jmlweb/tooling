@@ -12,6 +12,8 @@ Centralized configuration packages for development tools. One source of truth fo
 
 Complete guides, usage examples, and API references for all packages.
 
+For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / [`llms-full.txt`](https://jmlweb.github.io/tooling/llms-full.txt) provide machine-readable context on this project's packages and conventions.
+
 ## Packages
 
 | Package                                                                   | Description                                                             | Version                                                                      |
