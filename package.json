@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^9.39.5",
     "@jmlweb/eslint-config-base-js": "workspace:*",
     "@jmlweb/prettier-config-base": "workspace:*",
     "eslint": "^9.39.4",
