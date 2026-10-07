@@ -28,7 +28,7 @@ jobs:
       versioned: ${{ steps.version.outputs.versioned }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Full history needed for versioning
           fetch-depth: 0
@@ -88,7 +88,7 @@ jobs:
       has-changes: ${{ steps.detect.outputs.has-changes }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Need recent history to detect changes
           fetch-depth: 2
@@ -148,7 +148,7 @@ jobs:
         package: ${{ fromJson(needs.detect-changes.outputs.packages) }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
