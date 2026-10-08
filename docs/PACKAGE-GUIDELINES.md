@@ -160,15 +160,17 @@ Add `@jmlweb/tsdown-config-base` (`workspace:*`) and `tsdown` as devDependencies
 import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
 
 export default createTsdownConfig({
-  external: [
-    // List all peer dependencies and workspace dependencies
-    '@jmlweb/related-package',
-    'peer-dependency',
-  ],
   // Same output contract as the other packages in this repo:
   // no sourcemaps, no syntax lowering and `exports.default` in CJS
   dts: { sourcemap: false },
   options: {
+    deps: {
+      neverBundle: [
+        // List all peer dependencies and workspace dependencies
+        '@jmlweb/related-package',
+        'peer-dependency',
+      ],
+    },
     sourcemap: false,
     target: false,
     cjsDefault: false,
@@ -179,7 +181,7 @@ export default createTsdownConfig({
 **Key Configuration Options:**
 
 - `entry`, `format`, `clean`, `outDir`: Defaults from the helper (`src/index.ts`, `['cjs', 'esm']`, `true`, `dist`)
-- `external`: Dependencies that should not be bundled (always include peer dependencies and workspace dependencies). Also list type-only devDependencies that the emitted declarations reference: tsdown bundles declarations with the same rules as JavaScript, so it would inline them
+- `options.deps.neverBundle`: Dependencies that should not be bundled (always include peer dependencies and workspace dependencies). Also list type-only devDependencies that the emitted declarations reference: tsdown bundles declarations with the same rules as JavaScript, so it would inline them
 - `dts: { sourcemap: false }` and `options.sourcemap: false`: No sourcemaps, even though `@jmlweb/tsconfig-internal` enables `declarationMap`
 - `options.target: false`: Emit the source syntax without lowering it
 - `options.cjsDefault: false`: A default export stays `exports.default` in the CommonJS build, matching the `.d.cts` declarations

@@ -17,29 +17,31 @@ export type NodeTarget =
 export type OutputFormat = 'cjs' | 'esm' | 'iife' | 'umd';
 
 /**
- * Dependency options that can be passed through `options.deps`.
- * `neverBundle` is owned by the `external` option to avoid two sources of truth.
+ * tsdown's dependency options, passed through `options.deps`
  */
-export type DepsOptions = Omit<DepsConfig, 'neverBundle'>;
+export type DepsOptions = DepsConfig;
 
 /**
  * Keys of tsdown's `UserConfig` controlled by the helpers' top-level options
  */
-type ManagedKeys = 'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'deps';
+type ManagedKeys = 'entry' | 'format' | 'dts' | 'clean' | 'outDir';
 
 /**
  * Additional tsdown options accepted by `createTsdownConfig`
  */
-export type AdditionalOptions = Omit<UserConfig, ManagedKeys> & {
-  deps?: DepsOptions;
-};
+export type AdditionalOptions = Omit<UserConfig, ManagedKeys>;
 
 /**
  * Additional tsdown options accepted by `createTsdownCliConfig`
  */
-export type AdditionalCliOptions = Omit<UserConfig, ManagedKeys | 'target'> & {
-  deps?: DepsOptions;
-};
+export type AdditionalCliOptions = Omit<UserConfig, ManagedKeys | 'target'>;
+
+/**
+ * Thrown when the helpers receive options that cannot be combined
+ */
+export class TsdownConfigError extends Error {
+  override name = 'TsdownConfigError';
+}
 
 /**
  * Options for creating a base tsdown configuration
@@ -87,8 +89,9 @@ export interface TsdownConfigOptions {
 
   /**
    * External packages to exclude from the bundle
-   * Typically includes peer dependencies and internal workspace packages.
-   * Mapped to tsdown's `deps.neverBundle`.
+   * Mapped to tsdown's `deps.neverBundle`. Cannot be combined with
+   * `options.deps.neverBundle`.
+   * @deprecated Use `options.deps.neverBundle`, tsdown's own option.
    * @default []
    */
   external?: (string | RegExp)[];
@@ -148,7 +151,9 @@ export interface TsdownCliConfigOptions {
 
   /**
    * External packages to exclude from the bundle
-   * Mapped to tsdown's `deps.neverBundle`.
+   * Mapped to tsdown's `deps.neverBundle`. Cannot be combined with
+   * `options.deps.neverBundle`.
+   * @deprecated Use `options.deps.neverBundle`, tsdown's own option.
    * @default []
    */
   external?: (string | RegExp)[];
@@ -214,7 +219,9 @@ const CLI_DEFAULTS = {
 };
 
 /**
- * Builds the `deps` option, mapping `external` to `deps.neverBundle`
+ * Builds the `deps` option, mapping the deprecated `external` to
+ * `deps.neverBundle`. Like tsdown with its own `external`, refuses to merge
+ * both sources silently.
  */
 const resolveDeps = (
   external: (string | RegExp)[],
@@ -222,6 +229,11 @@ const resolveDeps = (
 ): Pick<UserConfig, 'deps'> => {
   if (external.length === 0) {
     return deps ? { deps } : {};
+  }
+  if (deps?.neverBundle !== undefined) {
+    throw new TsdownConfigError(
+      '`external` and `options.deps.neverBundle` cannot be used together. Move the `external` entries to `options.deps.neverBundle`.',
+    );
   }
   return { deps: { ...deps, neverBundle: external } };
 };
@@ -252,7 +264,9 @@ const resolveChecks = (
  * // With external dependencies
  * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownConfig({
- *   external: ['eslint', 'typescript-eslint', '@eslint/js'],
+ *   options: {
+ *     deps: { neverBundle: ['eslint', 'typescript-eslint', '@eslint/js'] },
+ *   },
  * });
  * ```
  *
@@ -261,8 +275,8 @@ const resolveChecks = (
  * // With additional options
  * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownConfig({
- *   external: ['vitest'],
  *   options: {
+ *     deps: { neverBundle: ['vitest'] },
  *     minify: true,
  *     sourcemap: true,
  *   },
@@ -333,7 +347,7 @@ const SHEBANG = '#!/usr/bin/env node';
  * import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownCliConfig({
  *   target: 'node22',
- *   external: ['commander'],
+ *   options: { deps: { neverBundle: ['commander'] } },
  * });
  * ```
  */
