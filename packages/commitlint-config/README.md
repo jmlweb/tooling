@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/commitlint-config)](https://www.npmjs.com/package/@jmlweb/commitlint-config)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 > Shared commitlint configuration for enforcing Conventional Commits across projects. Flexible design works out-of-the-box for any project, with optional scope restrictions.
@@ -276,7 +276,7 @@ git commit -m "feat: add new feature"
 
 ## 📋 Requirements
 
-- **Node.js** >= 18.0.0
+- **Node.js** >= 22.12.0
 - **@commitlint/cli** >= 19.0.0
 - **@commitlint/config-conventional** >= 19.0.0
 

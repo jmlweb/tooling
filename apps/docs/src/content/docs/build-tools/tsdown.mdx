@@ -182,7 +182,7 @@ Entry names for `shebang` are the output names tsdown emits without extension (f
 | `splitting`, `bundle` | Available in `options`                                | Not available: code splitting is always on; use `unbundle: true` instead of `bundle: false` |
 | `noExternal`          | Available in `options`                                | Use `options.deps.alwaysBundle`                                                             |
 | Declarations          | rollup-plugin-dts on the TypeScript compiler API      | tsc, tsgo or Oxc, see below                                                                 |
-| Node.js               | &gt;= 18.0.0                                             | `^22.18.0 \|\| ^24.11.0 \|\| >=26.0.0` (tsdown's own requirement)                           |
+| Node.js               | &gt;= 22.12.0                                             | `^22.18.0 \|\| ^24.11.0 \|\| >=26.0.0` (tsdown's own requirement)                           |
 
 When a package targets a Node.js version that supports `require(esm)` (for example through `engines.node`), tsdown logs `We recommend using the ESM format instead of CommonJS.` for the default dual output. The build still succeeds; pass `options: { checks: { legacyCjs: false } }` to silence it, or `format: ['esm']` to drop CommonJS.
 

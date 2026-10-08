@@ -170,7 +170,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
 
-      # Node 22 bundles npm 10, and trusted publishing needs npm >= 11.5.1
+      # Trusted publishing needs npm >= 11.5.1; pin a recent npm instead of relying on the one bundled with Node
       - name: Install npm with trusted publishing support
         run: npm install -g npm@^11.21.0
 

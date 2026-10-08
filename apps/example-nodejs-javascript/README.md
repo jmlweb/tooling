@@ -112,4 +112,4 @@ npm run lint:fix
 
 ## Requirements
 
-- Node.js >= 18.0.0
+- Node.js >= 22.12.0

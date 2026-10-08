@@ -56,14 +56,14 @@ async function testESLintPackage(pkg, allPackages) {
     // Base JS config needs different deps
     if (pkg.name.includes('base-js')) {
       peerDeps['@eslint/js'] = eslintRange;
-      peerDeps.globals = '^16.5.0';
+      peerDeps.globals = '^17.13.0';
     } else {
       peerDeps['@eslint/js'] = eslintRange;
       peerDeps['eslint-config-prettier'] = '^10.1.8';
-      peerDeps['eslint-plugin-simple-import-sort'] = '^12.1.1';
-      peerDeps['typescript-eslint'] = '^8.34.1';
+      peerDeps['eslint-plugin-simple-import-sort'] = '^14.0.0';
+      peerDeps['typescript-eslint'] = '^8.71.1';
       // typescript-eslint does not support TypeScript 7 yet
-      peerDeps.typescript = '^5.9.3';
+      peerDeps.typescript = '~6.0.3';
     }
 
     // Install dependencies

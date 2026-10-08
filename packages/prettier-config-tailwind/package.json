@@ -44,7 +44,7 @@
   "bugs": "https://github.com/jmlweb/tooling/issues",
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/prettier-config-tailwind#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "publishConfig": {
     "access": "public"
@@ -54,13 +54,13 @@
   },
   "dependencies": {
     "@jmlweb/prettier-config-base": "workspace:*",
-    "prettier-plugin-tailwindcss": "^0.8.0"
+    "prettier-plugin-tailwindcss": "^0.8.1"
   },
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
     "prettier": "^3.9.9",
     "tsdown": "~0.23.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

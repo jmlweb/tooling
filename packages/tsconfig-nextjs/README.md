@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/tsconfig-nextjs)](https://www.npmjs.com/package/@jmlweb/tsconfig-nextjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-13%2B-000000.svg)](https://nextjs.org/)
 
@@ -300,7 +300,7 @@ This ensures VS Code uses the Next.js TypeScript plugin for enhanced type checki
 
 ## 📋 Requirements
 
-- **Node.js** >= 18.0.0
+- **Node.js** >= 22.12.0
 - **TypeScript** >= 5.0.0
 - **Next.js** >= 13.0.0 (for App Router support)
 - **React** >= 17.0.0 (for JSX runtime support)

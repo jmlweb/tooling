@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-astro)](https://www.npmjs.com/package/@jmlweb/eslint-config-astro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![Astro](https://img.shields.io/badge/Astro-4.0%2B-FF5D01.svg)](https://astro.build/)
@@ -235,7 +235,7 @@ pnpm lint:fix  # Fix auto-fixable issues
 
 ## 📋 Requirements
 
-- **Node.js** >= 20.11.0 (required for `import.meta.dirname` in config files)
+- **Node.js** >= 22.12.0
 - **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
 - **TypeScript** project with `tsconfig.json`
 - **Astro** >= 4.0.0
@@ -249,8 +249,8 @@ This package requires the following peer dependencies:
 - `@eslint/js` (^9.0.0 || ^10.0.0)
 - `typescript-eslint` (^8.0.0)
 - `eslint-config-prettier` (^9.1.0 || ^10.0.0)
-- `eslint-plugin-astro` (^1.5.0)
-- `eslint-plugin-simple-import-sort` (^12.0.0)
+- `eslint-plugin-astro` (^1.5.0 || ^2.0.0 || ^3.0.0)
+- `eslint-plugin-simple-import-sort` (^12.0.0 || ^13.0.0 || ^14.0.0)
 - `@jmlweb/eslint-config-base` (^2.0.2)
 
 ## 🔗 Related Packages

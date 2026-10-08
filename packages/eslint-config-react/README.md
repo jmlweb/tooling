@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-react)](https://www.npmjs.com/package/@jmlweb/eslint-config-react)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![ESLint](https://img.shields.io/badge/ESLint-9.0%2B-4B32C3.svg)](https://eslint.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18%2B-61DAFB.svg)](https://react.dev/)
@@ -257,7 +257,7 @@ pnpm lint:fix  # Fix auto-fixable issues
 
 ## 📋 Requirements
 
-- **Node.js** >= 20.11.0 (required for `import.meta.dirname` in config files)
+- **Node.js** >= 22.12.0
 - **ESLint** ^9.0.0 (flat config format). ESLint 10 is not supported yet, see [ESLint 10 support](#eslint-10-support)
 - **TypeScript** project with `tsconfig.json`
 - **React** >= 17.0.0 (for JSX runtime support)
@@ -273,7 +273,7 @@ This package requires the following peer dependencies:
 - `eslint-config-prettier` (^9.1.0 || ^10.0.0)
 - `eslint-plugin-react` (^7.37.0)
 - `eslint-plugin-react-hooks` (^7.0.0)
-- `eslint-plugin-simple-import-sort` (^12.0.0)
+- `eslint-plugin-simple-import-sort` (^12.0.0 || ^13.0.0 || ^14.0.0)
 - `@jmlweb/eslint-config-base` (^1.0.0)
 
 ## 📚 Examples

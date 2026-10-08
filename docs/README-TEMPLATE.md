@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/package-name)](https://www.npmjs.com/package/@jmlweb/package-name)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 
 > Brief description of what the package does and its main purpose.
 
@@ -123,7 +123,7 @@ Add scripts to your `package.json`:
 
 ## 📋 Requirements
 
-- **Node.js** >= 18.0.0
+- **Node.js** >= 22.12.0
 - **Dependency** >= 1.0.0
 
 ## 📦 Peer Dependencies
