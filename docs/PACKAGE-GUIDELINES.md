@@ -259,7 +259,7 @@ Use `peerDependencies` for:
 {
   "peerDependencies": {
     "prettier": "^3.0.0",
-    "eslint": "^9.0.0"
+    "eslint": "^9.0.0 || ^10.0.0"
   }
 }
 ```

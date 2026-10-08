@@ -140,7 +140,9 @@ function getPackageDirectories() {
       }
     }
   } catch (error) {
-    throw new Error(`Failed to read packages directory: ${error.message}`);
+    throw new Error(`Failed to read packages directory: ${error.message}`, {
+      cause: error,
+    });
   }
 
   return packageDirs;

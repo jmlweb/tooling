@@ -9,7 +9,7 @@ sidebar:
 [![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-base)](https://www.npmjs.com/package/@jmlweb/eslint-config-base)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
-[![ESLint](https://img.shields.io/badge/ESLint-9.0%2B-4B32C3.svg)](https://eslint.org/)
+[![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 
 &gt; Strict ESLint configuration for TypeScript projects. Maximum type safety, best practices, and consistent code quality. Extends `@jmlweb/eslint-config-base-js` with strict type checking.
@@ -22,7 +22,7 @@ sidebar:
 - 🎯 **Best Practices**: Prevents enum usage, encourages immutability, enforces naming conventions
 - 🚫 **No Default Exports**: Enforces named exports for better tree-shaking and clearer imports
 - 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
-- 🚀 **Flat Config**: Uses ESLint 9+ flat config format (latest stable)
+- 🚀 **Flat Config**: Uses ESLint 9 and 10 flat config format (latest stable)
 - 🔧 **Extensible**: Built on `@jmlweb/eslint-config-base-js` foundation
 
 ## 📦 Installation
@@ -337,7 +337,7 @@ pnpm lint:fix  # Fix auto-fixable issues
 ## 📋 Requirements
 
 - **Node.js** &gt;= 20.11.0 (required for `import.meta.dirname` in config files)
-- **ESLint** &gt;= 9.0.0 (flat config format)
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
 - **TypeScript** project with `tsconfig.json`
 - **TypeScript project service** enabled (automatic with this config)
 
@@ -345,10 +345,10 @@ pnpm lint:fix  # Fix auto-fixable issues
 
 This package requires the following peer dependencies:
 
-- `eslint` (^9.0.0)
-- `@eslint/js` (^9.0.0)
+- `eslint` (^9.0.0 || ^10.0.0)
+- `@eslint/js` (^9.0.0 || ^10.0.0)
 - `typescript-eslint` (^8.0.0)
-- `eslint-config-prettier` (^9.1.0)
+- `eslint-config-prettier` (^9.1.0 || ^10.0.0)
 - `eslint-plugin-simple-import-sort` (^12.0.0)
 - `@jmlweb/eslint-config-base-js` (workspace or published version)
 
