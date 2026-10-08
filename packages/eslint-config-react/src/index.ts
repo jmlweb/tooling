@@ -29,12 +29,14 @@ const config = [
   ...baseConfig,
   eslintReact.configs['recommended-typescript'],
   { rules: reactHooksPortsOff },
+  // Hooks and React Compiler rules from the official plugin, for every file
+  // (custom hooks usually live in .ts files)
+  reactHooks.configs.flat.recommended,
   {
     files: ['**/*.tsx', '**/*.jsx'],
     plugins: {
       '@stylistic': stylistic,
       perfectionist,
-      'react-hooks': reactHooks,
       'simple-import-sort': simpleImportSort,
     },
     languageOptions: {
@@ -65,10 +67,6 @@ const config = [
         // Allow PascalCase for functions (React components)
         { selector: 'function', format: ['camelCase', 'PascalCase'] },
       ],
-
-      // React Hooks rules
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
 
       // Not in @eslint-react's recommended set, or stricter than its default
       '@eslint-react/jsx-no-children-prop': 'error',
