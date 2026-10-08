@@ -383,6 +383,9 @@ importers:
       '@jmlweb/tsconfig-internal':
         specifier: workspace:*
         version: link:../tsconfig-internal
+      '@jmlweb/tsdown-config-base':
+        specifier: workspace:*
+        version: link:../tsdown-config-base
       eslint:
         specifier: ^10.12.0
         version: 10.12.0(jiti@2.6.1)
@@ -392,9 +395,9 @@ importers:
       eslint-plugin-simple-import-sort:
         specifier: ^12.1.1
         version: 12.1.1(eslint@10.12.0(jiti@2.6.1))
-      tsup:
-        specifier: ^8.5.1
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.28)(tsx@4.23.15)(typescript@5.9.3)(yaml@2.9.0)
+      tsdown:
+        specifier: ~0.23.0
+        version: 0.23.0(@volar/typescript@2.4.28)(tsx@4.23.15)(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
