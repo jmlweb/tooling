@@ -41,13 +41,14 @@ jobs:
           GENERATED_COUNT=$(find apps/docs/src/content/docs -name "*.mdx" -not -name "index.mdx" -not -name "getting-started.mdx" | wc -l | xargs)
           echo "Generated $GENERATED_COUNT package documentation pages"
 
-          # We expect 17 packages (all published packages)
-          if [ "$GENERATED_COUNT" -ne 17 ]; then
-            echo "Error: Expected 17 package pages, but found $GENERATED_COUNT"
+          # The generator emits one page per published (non-private) package
+          EXPECTED_COUNT=$(jq -s '[.[] | select(.private != true)] | length' packages/*/package.json)
+          if [ "$GENERATED_COUNT" -ne "$EXPECTED_COUNT" ]; then
+            echo "Error: Expected $EXPECTED_COUNT package pages, but found $GENERATED_COUNT"
             exit 1
           fi
 
-          echo "✅ All 17 package documentation pages generated successfully"
+          echo "✅ All $EXPECTED_COUNT package documentation pages generated successfully"
 
       - name: Build documentation site
         run: pnpm docs:build
