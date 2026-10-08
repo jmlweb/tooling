@@ -17,34 +17,46 @@ export type NodeTarget =
 export type OutputFormat = 'cjs' | 'esm' | 'iife' | 'umd';
 
 /**
- * Dependency options that can be passed through `options.deps`.
- * `neverBundle` is owned by the `external` option to avoid two sources of truth.
+ * tsdown's dependency options (`deps`)
  */
-export type DepsOptions = Omit<DepsConfig, 'neverBundle'>;
+export type DepsOptions = DepsConfig;
 
 /**
  * Keys of tsdown's `UserConfig` controlled by the helpers' top-level options
  */
-type ManagedKeys = 'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'deps';
+type ManagedKeys = 'entry' | 'format' | 'dts' | 'clean' | 'outDir';
 
 /**
  * Additional tsdown options accepted by `createTsdownConfig`
+ * @deprecated Pass tsdown options at the top level instead of in `options`.
  */
-export type AdditionalOptions = Omit<UserConfig, ManagedKeys> & {
-  deps?: DepsOptions;
-};
+export type AdditionalOptions = Omit<UserConfig, ManagedKeys>;
 
 /**
  * Additional tsdown options accepted by `createTsdownCliConfig`
+ * @deprecated Pass tsdown options at the top level instead of in `options`.
  */
-export type AdditionalCliOptions = Omit<UserConfig, ManagedKeys | 'target'> & {
-  deps?: DepsOptions;
-};
+export type AdditionalCliOptions = Omit<UserConfig, ManagedKeys | 'target'>;
 
 /**
- * Options for creating a base tsdown configuration
+ * tsdown options accepted at the top level, besides the ones the helpers
+ * document themselves. tsdown's own `external` is replaced by the helpers'
+ * deprecated alias
  */
-export interface TsdownConfigOptions {
+type TopLevelOptions = Omit<UserConfig, ManagedKeys | 'external'>;
+
+/**
+ * Thrown when the helpers receive options that cannot be combined
+ */
+export class TsdownConfigError extends Error {
+  override name = 'TsdownConfigError';
+}
+
+/**
+ * Options for creating a base tsdown configuration.
+ * Accepts every tsdown option at the top level; the ones below have preset defaults
+ */
+export interface TsdownConfigOptions extends TopLevelOptions {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -87,22 +99,29 @@ export interface TsdownConfigOptions {
 
   /**
    * External packages to exclude from the bundle
-   * Typically includes peer dependencies and internal workspace packages.
-   * Mapped to tsdown's `deps.neverBundle`.
+   * Mapped to tsdown's `deps.neverBundle`. Cannot be combined with
+   * `deps.neverBundle`.
+   * @deprecated Use `deps.neverBundle`, tsdown's own option.
    * @default []
    */
   external?: (string | RegExp)[];
 
   /**
-   * Additional tsdown options to merge with the base configuration
+   * Additional tsdown options to merge with the base configuration.
+   * A key cannot be set both here and at the top level.
+   * @deprecated Pass tsdown options at the top level instead.
    */
   options?: AdditionalOptions;
 }
 
 /**
- * Options for creating a CLI-specific tsdown configuration
+ * Options for creating a CLI-specific tsdown configuration.
+ * Accepts every tsdown option at the top level; the ones below have preset defaults
  */
-export interface TsdownCliConfigOptions {
+export interface TsdownCliConfigOptions extends Omit<
+  TopLevelOptions,
+  'target'
+> {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -148,16 +167,18 @@ export interface TsdownCliConfigOptions {
 
   /**
    * External packages to exclude from the bundle
-   * Mapped to tsdown's `deps.neverBundle`.
+   * Mapped to tsdown's `deps.neverBundle`. Cannot be combined with
+   * `deps.neverBundle`.
+   * @deprecated Use `deps.neverBundle`, tsdown's own option.
    * @default []
    */
   external?: (string | RegExp)[];
 
   /**
    * Node.js target version for the build
-   * @default 'node18'
+   * When omitted, tsdown infers it from `engines.node` in `package.json`
    */
-  target?: NodeTarget;
+  target?: NodeTarget | UserConfig['target'];
 
   /**
    * Add shebang (#!/usr/bin/env node) to the output
@@ -179,7 +200,9 @@ export interface TsdownCliConfigOptions {
   shebang?: boolean | string | string[];
 
   /**
-   * Additional tsdown options to merge with the base configuration
+   * Additional tsdown options to merge with the base configuration.
+   * A key cannot be set both here and at the top level.
+   * @deprecated Pass tsdown options at the top level instead.
    */
   options?: AdditionalCliOptions;
 }
@@ -208,15 +231,15 @@ const CLI_DEFAULTS = {
   clean: true,
   outDir: 'dist',
   fixedExtension: false,
-  target: 'node18' as NodeTarget,
   shebang: true as boolean | string | string[],
 } satisfies Partial<UserConfig> & {
-  target: NodeTarget;
   shebang: boolean | string | string[];
 };
 
 /**
- * Builds the `deps` option, mapping `external` to `deps.neverBundle`
+ * Builds the `deps` option, mapping the deprecated `external` to
+ * `deps.neverBundle`. Like tsdown with its own `external`, refuses to merge
+ * both sources silently.
  */
 const resolveDeps = (
   external: (string | RegExp)[],
@@ -225,7 +248,46 @@ const resolveDeps = (
   if (external.length === 0) {
     return deps ? { deps } : {};
   }
+  if (deps?.neverBundle !== undefined) {
+    throw new TsdownConfigError(
+      '`external` and `deps.neverBundle` cannot be used together. Move the `external` entries to `deps.neverBundle`.',
+    );
+  }
   return { deps: { ...deps, neverBundle: external } };
+};
+
+/**
+ * Builds the `checks` option. Dual CJS/ESM output is a deliberate choice of
+ * these presets, so tsdown's `legacyCjs` warning (emitted whenever the target
+ * supports `require(esm)`, i.e. every supported Node.js version) is noise
+ */
+const resolveChecks = (
+  checks: UserConfig['checks'],
+): Pick<UserConfig, 'checks'> => ({
+  checks: { legacyCjs: false, ...checks },
+});
+
+/**
+ * Merges the deprecated `options` bag with the top-level tsdown options.
+ * A key set in both places is ambiguous, so it throws instead of picking one.
+ * Undefined top-level keys are dropped so they don't override preset defaults
+ */
+const mergeTopLevel = <T extends object>(
+  topLevel: T,
+  options: object,
+): T & UserConfig => {
+  const definedTopLevel = Object.fromEntries(
+    Object.entries(topLevel).filter(([, value]) => value !== undefined),
+  ) as T;
+  const conflicts = Object.keys(options).filter(
+    (key) => key in definedTopLevel,
+  );
+  if (conflicts.length > 0) {
+    throw new TsdownConfigError(
+      `${conflicts.map((key) => `\`${key}\``).join(', ')} cannot be set both at the top level and in \`options\`. Move them to the top level.`,
+    );
+  }
+  return { ...options, ...definedTopLevel };
 };
 
 /**
@@ -243,7 +305,7 @@ const resolveDeps = (
  * // With external dependencies
  * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownConfig({
- *   external: ['eslint', 'typescript-eslint', '@eslint/js'],
+ *   deps: { neverBundle: ['eslint', 'typescript-eslint', '@eslint/js'] },
  * });
  * ```
  *
@@ -252,35 +314,21 @@ const resolveDeps = (
  * // With additional options
  * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownConfig({
- *   external: ['vitest'],
- *   options: {
- *     minify: true,
- *     sourcemap: true,
- *   },
+ *   deps: { neverBundle: ['vitest'] },
+ *   minify: true,
+ *   sourcemap: true,
  * });
  * ```
  */
 export const createTsdownConfig = (
   config: TsdownConfigOptions = {},
 ): UserConfig => {
-  const {
-    entry = BASE_DEFAULTS.entry,
-    format = BASE_DEFAULTS.format,
-    dts = BASE_DEFAULTS.dts,
-    clean = BASE_DEFAULTS.clean,
-    outDir = BASE_DEFAULTS.outDir,
-    external = [],
-    options = {},
-  } = config;
-  const { deps, ...rest } = options;
+  const { external = [], options = {}, ...topLevel } = config;
+  const { deps, checks, ...rest } = mergeTopLevel(topLevel, options);
 
   return {
-    entry,
-    format,
-    dts,
-    clean,
-    outDir,
-    fixedExtension: BASE_DEFAULTS.fixedExtension,
+    ...BASE_DEFAULTS,
+    ...resolveChecks(checks),
     ...resolveDeps(external, deps),
     ...rest,
   };
@@ -297,7 +345,7 @@ const SHEBANG = '#!/usr/bin/env node';
  * This preset is optimized for CLI packages with:
  * - ESM-only output by default
  * - Automatic shebang injection
- * - Node.js target specification
+ * - Node.js target inferred from `engines.node` (override with `target`)
  * - Support for object-style entry points
  *
  * @example
@@ -323,7 +371,7 @@ const SHEBANG = '#!/usr/bin/env node';
  * import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownCliConfig({
  *   target: 'node22',
- *   external: ['commander'],
+ *   deps: { neverBundle: ['commander'] },
  * });
  * ```
  */
@@ -331,26 +379,17 @@ export const createTsdownCliConfig = (
   config: TsdownCliConfigOptions = {},
 ): UserConfig => {
   const {
-    entry = CLI_DEFAULTS.entry,
-    format = CLI_DEFAULTS.format,
-    dts = CLI_DEFAULTS.dts,
-    clean = CLI_DEFAULTS.clean,
-    outDir = CLI_DEFAULTS.outDir,
     external = [],
-    target = CLI_DEFAULTS.target,
     shebang = CLI_DEFAULTS.shebang,
     options = {},
+    ...topLevel
   } = config;
-  const { deps, ...rest } = options;
+  const { deps, checks, ...rest } = mergeTopLevel(topLevel, options);
+  const { shebang: _shebang, ...defaults } = CLI_DEFAULTS;
 
   return {
-    entry,
-    format,
-    dts,
-    clean,
-    outDir,
-    fixedExtension: CLI_DEFAULTS.fixedExtension,
-    target,
+    ...defaults,
+    ...resolveChecks(checks),
     ...resolveBanner(shebang),
     ...resolveDeps(external, deps),
     ...rest,
