@@ -399,6 +399,20 @@ The warnings are usually safe to ignore if linting works correctly.
 
 > **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
 
+### From 5.x to 6.0
+
+Hooks rules now come from `eslint-plugin-react-hooks`' `recommended` preset instead of two hand-picked rules.
+
+**Breaking Changes:**
+
+- The React Compiler rules are enabled, most of them as errors (`purity`, `refs`, `immutability`, `set-state-in-effect`, `static-components`, ...). They report problems even if you don't use the React Compiler
+- Hooks rules now also apply to `.ts` files, so custom hooks outside `.tsx` are checked
+
+**Migration Steps:**
+
+1. Run `pnpm exec eslint .` and fix the new reports
+2. To migrate gradually, lower individual rules to warnings in your config, for example `'react-hooks/set-state-in-effect': 'warn'`
+
 ### From 4.x to 5.0
 
 `eslint-plugin-react` is replaced by `@eslint-react/eslint-plugin`, which adds ESLint 10 support.
@@ -408,7 +422,6 @@ The warnings are usually safe to ignore if linting works correctly.
 - Peer dependencies: remove `eslint-plugin-react`, add `@eslint-react/eslint-plugin`, `@stylistic/eslint-plugin` and `eslint-plugin-perfectionist`
 - Rule names change from `react/*` to `@eslint-react/*`, `@stylistic/*` and `perfectionist/sort-jsx-props`. Update any overrides and `eslint-disable` comments
 - `@eslint-react`'s recommended preset reports problems the old config did not (for example nested component definitions and leaked event listeners)
-- The React Compiler rules from `eslint-plugin-react-hooks`' `recommended` preset are enabled (`purity`, `refs`, `immutability`, `set-state-in-effect`, ...), and hooks rules now also apply to `.ts` files
 - `jsx-boolean-value`, `jsx-fragments` and `no-unescaped-entities` are no longer enforced
 - The React version setting moves from `settings.react.version` to `settings['react-x'].version`
 

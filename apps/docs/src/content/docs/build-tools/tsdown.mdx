@@ -179,6 +179,8 @@ Accepts the options above (with `format` defaulting to `['esm']` and `entry` to 
 
 Entry names for `shebang` are the output names tsdown emits without extension (for example `cli` for `dist/cli.js`).
 
+An entry whose source file already starts with a shebang (for example `#!/usr/bin/env node` at the top of `src/cli.ts`) keeps its own and does not get a second one. tsdown preserves source shebangs and marks those outputs executable.
+
 #### Exports
 
 - `BASE_DEFAULTS`, `CLI_DEFAULTS` - Default configuration values
