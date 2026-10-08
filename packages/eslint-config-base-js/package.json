@@ -24,7 +24,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "clean": "rm -rf dist",
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
@@ -58,10 +58,11 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@jmlweb/tsconfig-internal": "workspace:*",
+    "@jmlweb/tsdown-config-base": "workspace:*",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "tsup": "^8.5.1",
+    "tsdown": "~0.23.0",
     "typescript": "^5.9.3"
   }
 }
