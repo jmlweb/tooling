@@ -1,4 +1,4 @@
-import type { DepsConfig, UserConfig } from 'tsdown';
+import type { DepsConfig, Rolldown, UserConfig } from 'tsdown';
 
 /**
  * Entry points configuration - can be an array of paths or an object mapping names to paths
@@ -384,41 +384,89 @@ export const createTsdownCliConfig = (
     options = {},
     ...topLevel
   } = config;
-  const { deps, checks, ...rest } = mergeTopLevel(topLevel, options);
+  const { deps, checks, plugins, ...rest } = mergeTopLevel(topLevel, options);
   const { shebang: _shebang, ...defaults } = CLI_DEFAULTS;
 
   return {
     ...defaults,
     ...resolveChecks(checks),
-    ...resolveBanner(shebang),
+    ...resolveShebang(shebang, plugins),
     ...resolveDeps(external, deps),
     ...rest,
   };
 };
 
 /**
- * Builds the `banner` option for the requested shebang entries.
- * tsdown passes each chunk's file name to banner functions, so selective
- * shebangs fit in a single config instead of tsup's split configs.
+ * Reads the entry sources in `buildStart` and records which ones already
+ * start with a shebang. tsdown computes the banner before `renderChunk`, so
+ * the source is the only place to find out in time
  */
-const resolveBanner = (
-  shebang: boolean | string | string[],
-): Pick<UserConfig, 'banner'> => {
-  const shebangEntries = normalizeShebangConfig(shebang);
-
-  if (shebangEntries === 'all') {
-    return { banner: { js: SHEBANG } };
-  }
-
-  if (shebangEntries.length === 0) {
-    return {};
-  }
-
-  const shebangSet = new Set(shebangEntries);
+const createOwnShebangDetector = (): {
+  plugin: Rolldown.Plugin;
+  hasOwnShebang: (entryName: string) => boolean;
+} => {
+  const entriesWithShebang = new Set<string>();
 
   return {
-    banner: ({ fileName }) =>
-      shebangSet.has(toEntryName(fileName)) ? { js: SHEBANG } : undefined,
+    plugin: {
+      name: 'jmlweb:own-shebang',
+      async buildStart({ input }) {
+        entriesWithShebang.clear();
+        if (Array.isArray(input)) {
+          return;
+        }
+        await Promise.all(
+          Object.entries(input).map(async ([entryName, file]) => {
+            const resolved = await this.resolve(file, undefined, {
+              isEntry: true,
+            });
+            const source = resolved
+              ? await this.fs
+                  .readFile(resolved.id, { encoding: 'utf8' })
+                  .catch(() => '')
+              : '';
+            if (source.startsWith('#!')) {
+              entriesWithShebang.add(entryName);
+            }
+          }),
+        );
+      },
+    },
+    hasOwnShebang: (entryName) => entriesWithShebang.has(entryName),
+  };
+};
+
+/**
+ * Builds the `banner` option for the requested shebang entries, plus the
+ * plugin that detects entries whose source already has one: adding a second
+ * shebang would make the output a syntax error. tsdown passes each chunk's
+ * file name to banner functions, so selective shebangs fit in a single config
+ * instead of tsup's split configs.
+ */
+const resolveShebang = (
+  shebang: boolean | string | string[],
+  userPlugins: UserConfig['plugins'],
+): Pick<UserConfig, 'banner' | 'plugins'> => {
+  const shebangEntries = normalizeShebangConfig(shebang);
+  const pluginsOnly = userPlugins === undefined ? {} : { plugins: userPlugins };
+
+  if (shebangEntries !== 'all' && shebangEntries.length === 0) {
+    return pluginsOnly;
+  }
+
+  const targets =
+    shebangEntries === 'all' ? undefined : new Set(shebangEntries);
+  const { plugin, hasOwnShebang } = createOwnShebangDetector();
+
+  return {
+    banner: ({ fileName }) => {
+      const entryName = toEntryName(fileName);
+      const isTarget = targets === undefined || targets.has(entryName);
+      return isTarget && !hasOwnShebang(entryName)
+        ? { js: SHEBANG }
+        : undefined;
+    },
+    plugins: [plugin, userPlugins],
   };
 };
 
