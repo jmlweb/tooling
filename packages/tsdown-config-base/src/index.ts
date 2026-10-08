@@ -155,7 +155,7 @@ export interface TsdownCliConfigOptions {
 
   /**
    * Node.js target version for the build
-   * @default 'node18'
+   * When omitted, tsdown infers it from `engines.node` in `package.json`
    */
   target?: NodeTarget;
 
@@ -208,10 +208,8 @@ const CLI_DEFAULTS = {
   clean: true,
   outDir: 'dist',
   fixedExtension: false,
-  target: 'node18' as NodeTarget,
   shebang: true as boolean | string | string[],
 } satisfies Partial<UserConfig> & {
-  target: NodeTarget;
   shebang: boolean | string | string[];
 };
 
@@ -227,6 +225,17 @@ const resolveDeps = (
   }
   return { deps: { ...deps, neverBundle: external } };
 };
+
+/**
+ * Builds the `checks` option. Dual CJS/ESM output is a deliberate choice of
+ * these presets, so tsdown's `legacyCjs` warning (emitted whenever the target
+ * supports `require(esm)`, i.e. every supported Node.js version) is noise
+ */
+const resolveChecks = (
+  checks: UserConfig['checks'],
+): Pick<UserConfig, 'checks'> => ({
+  checks: { legacyCjs: false, ...checks },
+});
 
 /**
  * Creates a base tsdown configuration with sensible defaults
@@ -272,7 +281,7 @@ export const createTsdownConfig = (
     external = [],
     options = {},
   } = config;
-  const { deps, ...rest } = options;
+  const { deps, checks, ...rest } = options;
 
   return {
     entry,
@@ -281,6 +290,7 @@ export const createTsdownConfig = (
     clean,
     outDir,
     fixedExtension: BASE_DEFAULTS.fixedExtension,
+    ...resolveChecks(checks),
     ...resolveDeps(external, deps),
     ...rest,
   };
@@ -297,7 +307,7 @@ const SHEBANG = '#!/usr/bin/env node';
  * This preset is optimized for CLI packages with:
  * - ESM-only output by default
  * - Automatic shebang injection
- * - Node.js target specification
+ * - Node.js target inferred from `engines.node` (override with `target`)
  * - Support for object-style entry points
  *
  * @example
@@ -337,11 +347,11 @@ export const createTsdownCliConfig = (
     clean = CLI_DEFAULTS.clean,
     outDir = CLI_DEFAULTS.outDir,
     external = [],
-    target = CLI_DEFAULTS.target,
+    target,
     shebang = CLI_DEFAULTS.shebang,
     options = {},
   } = config;
-  const { deps, ...rest } = options;
+  const { deps, checks, ...rest } = options;
 
   return {
     entry,
@@ -350,7 +360,8 @@ export const createTsdownCliConfig = (
     clean,
     outDir,
     fixedExtension: CLI_DEFAULTS.fixedExtension,
-    target,
+    ...(target ? { target } : {}),
+    ...resolveChecks(checks),
     ...resolveBanner(shebang),
     ...resolveDeps(external, deps),
     ...rest,

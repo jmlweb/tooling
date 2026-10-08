@@ -121,19 +121,33 @@ The defaults and design decisions are the same as [`@jmlweb/tsup-config-base`](/
 - **Trade-off**: `options.deps.neverBundle` is not accepted (it would conflict with `external`). Other `deps` options such as `alwaysBundle` and `onlyBundle` pass through
 - **When to override**: Rarely. Like tsup, tsdown already externalizes `dependencies`, `peerDependencies` and `optionalDependencies` from `package.json`; `external` covers anything else
 
+**No `legacyCjs` warning (`checks.legacyCjs: false`)**: Dual output is intentional
+
+- **Why**: tsdown warns `We recommend using the ESM format instead of CommonJS.` whenever the output includes `cjs` and the target supports `require(esm)` (`^20.19.0 || >=22.12.0`). Every supported Node.js version does, so with the default dual format the warning would show on every build
+- **Trade-off**: You are not reminded that CommonJS output could be dropped. Consumers on supported Node.js versions can `require()` the ESM build, so `format: ['esm']` is a valid choice when you no longer need CommonJS
+- **When to override**: Pass `options: { checks: { legacyCjs: true } }` to get the warning back. Other `checks` options pass through
+
+**Node.js target from `engines.node`**: No hardcoded target
+
+- **Why**: tsdown infers the target from `engines.node` in `package.json` (for example `>=22.12.0` becomes `node22.12.0`), so the output syntax follows the Node.js versions the package actually supports. Both presets rely on this, including the CLI preset
+- **Trade-off**: Without an `engines.node` field, tsdown does not lower the syntax at all
+- **When to override**: Pass `target` (CLI preset) or `options.target` (base preset) to pin a version, or `target: false` to disable lowering explicitly
+
 ## 📋 Configuration Details
 
 ### Default Settings
 
-| Setting          | Default Value      | Description                                      |
-| ---------------- | ------------------ | ------------------------------------------------ |
-| `entry`          | `['src/index.ts']` | Entry point(s) for the build                     |
-| `format`         | `['cjs', 'esm']`   | Output formats (dual publishing)                 |
-| `dts`            | `true`             | Generate TypeScript declarations                 |
-| `clean`          | `true`             | Clean output directory before build              |
-| `outDir`         | `'dist'`           | Output directory                                 |
-| `fixedExtension` | `false`            | Use `.js`/`.cjs` based on `package.json` type    |
-| `external`       | `[]`               | Packages to exclude (sent to `deps.neverBundle`) |
+| Setting          | Default Value          | Description                                      |
+| ---------------- | ---------------------- | ------------------------------------------------ |
+| `entry`          | `['src/index.ts']`     | Entry point(s) for the build                     |
+| `format`         | `['cjs', 'esm']`       | Output formats (dual publishing)                 |
+| `dts`            | `true`                 | Generate TypeScript declarations                 |
+| `clean`          | `true`                 | Clean output directory before build              |
+| `outDir`         | `'dist'`               | Output directory                                 |
+| `fixedExtension` | `false`                | Use `.js`/`.cjs` based on `package.json` type    |
+| `external`       | `[]`                   | Packages to exclude (sent to `deps.neverBundle`) |
+| `checks`         | `{ legacyCjs: false }` | Silence the CommonJS deprecation warning         |
+| `target`         | From `engines.node`    | Inferred by tsdown, not set by the preset        |
 
 ### API Reference
 
@@ -153,10 +167,10 @@ The defaults and design decisions are the same as [`@jmlweb/tsup-config-base`](/
 
 Accepts the options above (with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/cli.ts' }`) plus:
 
-| Option    | Type                            | Default    | Description                                                      |
-| --------- | ------------------------------- | ---------- | ---------------------------------------------------------------- |
-| `target`  | `NodeTarget`                    | `'node18'` | Node.js target version                                           |
-| `shebang` | `boolean \| string \| string[]` | `true`     | Add shebang to all entries (`true`) or to the named entries only |
+| Option    | Type                            | Default             | Description                                                      |
+| --------- | ------------------------------- | ------------------- | ---------------------------------------------------------------- |
+| `target`  | `NodeTarget`                    | From `engines.node` | Node.js target version                                           |
+| `shebang` | `boolean \| string \| string[]` | `true`              | Add shebang to all entries (`true`) or to the named entries only |
 
 Entry names for `shebang` are the output names tsdown emits without extension (for example `cli` for `dist/cli.js`).
 
@@ -184,7 +198,7 @@ Entry names for `shebang` are the output names tsdown emits without extension (f
 | Declarations          | rollup-plugin-dts on the TypeScript compiler API      | tsc, tsgo or Oxc, see below                                                                 |
 | Node.js               | &gt;= 22.12.0                                            | `^22.18.0 \|\| ^24.11.0 \|\| >=26.0.0` (tsdown's own requirement)                           |
 
-When a package targets a Node.js version that supports `require(esm)` (for example through `engines.node`), tsdown logs `We recommend using the ESM format instead of CommonJS.` for the default dual output. The build still succeeds; pass `options: { checks: { legacyCjs: false } }` to silence it, or `format: ['esm']` to drop CommonJS.
+tsdown's `legacyCjs` warning is turned off by default (see [Design Decisions](#design-decisions)).
 
 ### Declaration Files and TypeScript 7
 
@@ -198,6 +212,8 @@ tsdown picks the declaration generator automatically. Verified with tsdown 0.23.
 | No `typescript` and no `isolatedDeclarations`   | -         | Build fails: `TypeScript is not installed`                |
 
 So `.d.ts`/`.d.cts` generation works without the TypeScript compiler API in two ways: with TypeScript 7 (through tsgo), or with `isolatedDeclarations` (through Oxc, which requires explicit types on exported declarations). To force a generator, pass `dts: { generator: 'oxc' }` (or `'tsc'` / `'tsgo'`).
+
+&gt; ⚠️ tsdown being ready for TypeScript 7 does not mean the rest of a typical toolchain is. As of this release, `typescript-eslint` (`typescript <6.1.0`), `ts-jest` (`<7`) and `@astrojs/check` (`^5 || ^6`) do not support TypeScript 7, so projects using them should stay on TypeScript 6.
 
 ## 🎯 When to Use
 
