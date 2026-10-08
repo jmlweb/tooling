@@ -1,5 +1,11 @@
 # @jmlweb/prettier-config-base
 
+## 1.0.7
+
+### Patch Changes
+
+- 4e175ad: Build with tsdown via `@jmlweb/tsdown-config-base` instead of tsup. The published output is equivalent: same files, exports and type declarations.
+
 ## 1.0.6
 
 ### Patch Changes

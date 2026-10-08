@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsdown-config-base",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Base tsdown configuration for jmlweb projects with sensible defaults",
   "type": "module",
   "main": "./dist/index.cjs",

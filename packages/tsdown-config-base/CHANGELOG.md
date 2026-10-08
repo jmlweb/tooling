@@ -1,5 +1,11 @@
 # @jmlweb/tsdown-config-base
 
+## 0.1.1
+
+### Patch Changes
+
+- 4e175ad: Build with tsdown via `@jmlweb/tsdown-config-base` instead of tsup. The published output is equivalent: same files, exports and type declarations.
+
 ## 0.1.0
 
 ### Minor Changes
