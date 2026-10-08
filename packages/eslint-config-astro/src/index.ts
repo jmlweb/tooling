@@ -4,6 +4,7 @@ import baseConfig from '@jmlweb/eslint-config-base';
 import prettierConfig from 'eslint-config-prettier';
 import astro from 'eslint-plugin-astro';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import tseslint from 'typescript-eslint';
 
 /**
  * Astro ESLint configuration that extends the base TypeScript config.
@@ -14,6 +15,12 @@ const config = [
   ...baseConfig,
   // Astro recommended config
   ...astro.configs.recommended,
+  // Base enables type-checked rules globally but only wires projectService for
+  // .ts/.tsx; astro-eslint-parser has no type info, so those rules would crash.
+  {
+    ...tseslint.configs.disableTypeChecked,
+    files: ['**/*.astro'],
+  },
   {
     files: ['**/*.astro'],
     plugins: {

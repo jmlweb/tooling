@@ -1,19 +1,47 @@
 #!/usr/bin/env node
 
-import { exec } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { execFile } from 'node:child_process';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 
 import chalk from 'chalk';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
+const tscBin = createRequire(import.meta.url).resolve('typescript/bin/tsc');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const appRoot = resolve(__dirname, '..');
 
 let hasErrors = false;
+
+// tsc rejects --project combined with file arguments, so check a single
+// fixture through a throwaway tsconfig that extends the app one.
+const runTsc = async (file) => {
+  const dir = mkdtempSync(resolve(tmpdir(), 'tsc-'));
+  const configPath = resolve(dir, 'tsconfig.json');
+  writeFileSync(
+    configPath,
+    JSON.stringify({
+      extends: resolve(appRoot, 'tsconfig.json'),
+      compilerOptions: { noEmit: true },
+      include: [],
+      files: [file],
+    }),
+  );
+  try {
+    return await execFileAsync(
+      process.execPath,
+      [tscBin, '--project', configPath],
+      { cwd: appRoot },
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+};
 
 const log = {
   info: (msg) => console.log(chalk.blue('ℹ'), msg),
@@ -65,26 +93,18 @@ try {
 log.info('Test 3: Testing TypeScript compilation of valid code...');
 try {
   const validTsPath = resolve(appRoot, 'fixtures/valid/typescript.ts');
-  const { stderr } = await execAsync(
-    `npx tsc --noEmit --project ${appRoot}/tsconfig.json ${validTsPath}`,
-    { cwd: appRoot },
-  );
-
-  if (!stderr || stderr.trim() === '') {
-    log.success('Valid TypeScript code compiles successfully');
-  } else {
-    log.error('Valid TypeScript code failed to compile');
-    console.log(chalk.yellow('\nCompiler output:'));
-    console.log(stderr);
-  }
+  // Direct tsc invocation (no npx) so npm env warnings never reach stderr.
+  // A zero exit code is the success signal; stderr content is irrelevant.
+  await runTsc(validTsPath);
+  log.success('Valid TypeScript code compiles successfully');
 } catch (error) {
   // tsc exits with code 1 on errors, so we need to check the error
-  if (error.stderr && error.stderr.includes('error TS')) {
+  if ((error.stdout ?? '').includes('error TS')) {
     log.error('Valid TypeScript code has compilation errors');
     console.log(chalk.yellow('\nCompiler errors:'));
-    console.log(error.stderr);
-  } else if (error.stderr) {
-    log.error(`Compilation failed: ${error.stderr}`);
+    console.log(error.stdout);
+  } else {
+    log.error(`Compilation failed: ${error.stdout || error.message}`);
   }
 }
 
@@ -92,10 +112,7 @@ try {
 log.info('Test 4: Testing that config detects type errors...');
 try {
   const typeErrorsPath = resolve(appRoot, 'fixtures/invalid/type-errors.ts');
-  const { stdout, stderr } = await execAsync(
-    `npx tsc --noEmit --project ${appRoot}/tsconfig.json ${typeErrorsPath}`,
-    { cwd: appRoot },
-  );
+  const { stdout, stderr } = await runTsc(typeErrorsPath);
 
   // TypeScript errors go to stdout, not stderr
   const output = stdout || stderr || '';
