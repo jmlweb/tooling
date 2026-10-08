@@ -38,12 +38,6 @@
       "isIgnored": true
     },
     {
-      "label": "eslint-plugin-react does not support ESLint 10 yet (its 'detect' version setting crashes), so the React example app runs ESLint 9. The React config package itself is built against ESLint 10 to share one plugin instance with the base config",
-      "dependencies": ["eslint", "@eslint/js"],
-      "packages": ["react-typescript-app-example"],
-      "pinVersion": "^9.39.4"
-    },
-    {
       "label": "Ensure consistent versions for all other dependencies",
       "dependencies": ["**"],
       "dependencyTypes": ["dev", "prod"]

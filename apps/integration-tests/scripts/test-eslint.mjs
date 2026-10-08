@@ -44,10 +44,7 @@ async function testESLintPackage(pkg, allPackages) {
 
     // Determine peer dependencies based on package.
     // ESLINT_MAJOR selects the ESLint major to test against (default: 10).
-    // eslint-plugin-react does not support ESLint 10 yet, so the React config
-    // is always tested against ESLint 9.
-    const requestedMajor = process.env.ESLINT_MAJOR ?? '10';
-    const eslintMajor = pkg.name.includes('react') ? '9' : requestedMajor;
+    const eslintMajor = process.env.ESLINT_MAJOR ?? '10';
     const eslintRange = `^${eslintMajor}.0.0`;
     const peerDeps = {
       eslint: eslintRange,

@@ -187,7 +187,7 @@ To install or update Node.js, visit [nodejs.org](https://nodejs.org/) or use a v
 ## Requirements
 
 - **Node.js** >= 22.12.0 (see [Node.js Compatibility](#nodejs-compatibility) for package-specific requirements)
-- **ESLint** ^9.0.0 || ^10.0.0 (flat config format, required for ESLint config packages). `@jmlweb/eslint-config-react` supports ESLint 9 only until `eslint-plugin-react` supports ESLint 10
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config format, required for ESLint config packages)
 - **Prettier** >= 3.0.0 (required for Prettier config packages)
 
 ## Dependency Version Consistency

@@ -289,6 +289,9 @@ console.log(JSON.stringify(serialize(pkg), null, 2));
       cwd: testDir,
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'inherit'], // Show stderr for debugging
+      // Configs embed whole plugins (rule sources included), which can exceed
+      // the default 1 MB buffer
+      maxBuffer: 64 * 1024 * 1024,
     });
     rmSync(scriptPath);
     return JSON.parse(output);

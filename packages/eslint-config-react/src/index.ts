@@ -1,10 +1,24 @@
 import type { Linter } from 'eslint';
 
+import eslintReact from '@eslint-react/eslint-plugin';
 import baseConfig from '@jmlweb/eslint-config-base';
+import stylistic from '@stylistic/eslint-plugin';
 import prettierConfig from 'eslint-config-prettier';
-import react from 'eslint-plugin-react';
+import perfectionist from 'eslint-plugin-perfectionist';
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+
+/**
+ * @eslint-react ships ports of eslint-plugin-react-hooks' rules. The official
+ * plugin owns those, so turn the ports off instead of running both. Derived
+ * from @eslint-react's own conflict list so it follows new releases.
+ */
+const reactHooksPortsOff = Object.fromEntries(
+  Object.keys(
+    eslintReact.configs['disable-conflict-eslint-plugin-react-hooks'].rules ??
+      {},
+  ).map((rule) => [rule.replace(/^react-hooks\//, '@eslint-react/'), 'off']),
+);
 
 /**
  * React ESLint configuration that extends the base TypeScript config.
@@ -13,16 +27,13 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
  */
 const config = [
   ...baseConfig,
-  // React recommended config
-  react.configs.flat.recommended,
-  // React JSX runtime config (for React 17+)
-  react.configs.flat['jsx-runtime'],
-  // Note: We don't spread reactHooks.configs.recommended directly as it uses
-  // legacy plugin format (array). Instead, we configure the plugin manually below.
+  eslintReact.configs['recommended-typescript'],
+  { rules: reactHooksPortsOff },
   {
     files: ['**/*.tsx', '**/*.jsx'],
     plugins: {
-      react,
+      '@stylistic': stylistic,
+      perfectionist,
       'react-hooks': reactHooks,
       'simple-import-sort': simpleImportSort,
     },
@@ -34,11 +45,6 @@ const config = [
       },
       globals: {
         JSX: 'readonly',
-      },
-    },
-    settings: {
-      react: {
-        version: 'detect',
       },
     },
     rules: {
@@ -60,49 +66,38 @@ const config = [
         { selector: 'function', format: ['camelCase', 'PascalCase'] },
       ],
 
-      // React plugin overrides
-      'react/react-in-jsx-scope': 'off', // Not needed with new JSX transform
-      'react/prop-types': 'off', // TypeScript handles prop validation
-      'react/display-name': 'off', // Not needed for libraries
-      'react/jsx-uses-react': 'off', // Not needed with new JSX transform
-      'react/jsx-uses-vars': 'error',
-
       // React Hooks rules
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
-      // React best practices
-      'react/jsx-key': 'error',
-      'react/jsx-no-duplicate-props': 'error',
-      'react/jsx-no-undef': 'error',
-      'react/jsx-pascal-case': 'error',
-      'react/no-array-index-key': 'warn',
-      'react/no-children-prop': 'error',
-      'react/no-danger-with-children': 'error',
-      'react/no-deprecated': 'warn',
-      'react/no-direct-mutation-state': 'error',
-      'react/no-find-dom-node': 'error',
-      'react/no-is-mounted': 'error',
-      'react/no-render-return-value': 'error',
-      'react/no-string-refs': 'error',
-      'react/no-unescaped-entities': 'error',
-      'react/no-unknown-property': 'error',
-      'react/require-render-return': 'error',
-      'react/self-closing-comp': 'error',
-      'react/jsx-boolean-value': ['error', 'never'],
-      'react/jsx-curly-brace-presence': [
+      // Not in @eslint-react's recommended set, or stricter than its default
+      '@eslint-react/jsx-no-children-prop': 'error',
+      '@eslint-react/dom-no-unknown-property': 'error',
+      '@eslint-react/dom-no-unsafe-target-blank': 'error',
+      '@eslint-react/jsx-no-useless-fragment': 'error',
+
+      // JSX style rules that @eslint-react leaves to other plugins
+      '@stylistic/jsx-pascal-case': 'error',
+      '@stylistic/jsx-self-closing-comp': 'error',
+      '@stylistic/jsx-curly-brace-presence': [
         'error',
         { props: 'never', children: 'never' },
       ],
-      'react/jsx-fragments': ['error', 'syntax'],
-      'react/jsx-no-useless-fragment': 'error',
-      'react/jsx-sort-props': [
+      // Reserved props first, then shorthand props, callbacks last
+      'perfectionist/sort-jsx-props': [
         'error',
         {
-          callbacksLast: true,
-          shorthandFirst: true,
+          type: 'alphabetical',
           ignoreCase: true,
-          reservedFirst: true,
+          groups: ['reserved', 'shorthand-prop', 'unknown', 'callback'],
+          customGroups: [
+            {
+              groupName: 'reserved',
+              elementNamePattern:
+                '^(children|dangerouslySetInnerHTML|key|ref)$',
+            },
+            { groupName: 'callback', elementNamePattern: '^on[A-Z]' },
+          ],
         },
       ],
     },
