@@ -33,7 +33,7 @@ jobs:
         run: pnpm build --filter='@jmlweb/prettier-config-*'
 
       - name: Check formatting
-        run: pnpm format --check
+        run: pnpm format:check
 
   validate-lint:
     name: Lint Code

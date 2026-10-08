@@ -360,7 +360,7 @@ Note: Turborepo cache artifacts are no longer uploaded to GitHub Actions artifac
 
 **Solutions**:
 
-1. Run locally: `pnpm format --check`
+1. Run locally: `pnpm format:check`
 2. Fix formatting: `pnpm format`
 3. Commit changes and push
 
