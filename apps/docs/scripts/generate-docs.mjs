@@ -76,6 +76,7 @@ function transformLinks(content, packageName) {
       if (fullPackageName === 'vitest-config') simplifiedName = 'vitest';
       if (fullPackageName === 'jest-config') simplifiedName = 'jest';
       if (fullPackageName === 'vite-config') simplifiedName = 'vite';
+      if (fullPackageName === 'tsdown-config-base') simplifiedName = 'tsdown';
       if (fullPackageName === 'commitlint-config')
         simplifiedName = 'commitlint';
 
@@ -98,6 +99,7 @@ function categorizePackage(packageName) {
   if (name === 'vitest-config') return 'testing';
   if (name === 'jest-config') return 'testing';
   if (name.startsWith('tsup-config-')) return 'build-tools';
+  if (name.startsWith('tsdown-config-')) return 'build-tools';
   if (name === 'vite-config') return 'build-tools';
   if (name === 'commitlint-config') return 'commit';
 
@@ -120,6 +122,7 @@ function generateFrontmatter(metadata, packageName) {
   if (name === 'vitest-config') title = 'vitest';
   if (name === 'jest-config') title = 'jest';
   if (name === 'vite-config') title = 'vite';
+  if (name === 'tsdown-config-base') title = 'tsdown';
   if (name === 'commitlint-config') title = 'commitlint';
 
   return `---
@@ -252,6 +255,7 @@ function generatePackageDoc(packageName) {
     if (name === 'vitest-config') fileName = 'vitest';
     if (name === 'jest-config') fileName = 'jest';
     if (name === 'vite-config') fileName = 'vite';
+    if (name === 'tsdown-config-base') fileName = 'tsdown';
     if (name === 'commitlint-config') fileName = 'commitlint';
 
     const outputDir = join(DOCS_CONTENT_DIR, category);

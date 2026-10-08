@@ -116,6 +116,10 @@ export default defineConfig({
               link: '/build-tools/base',
             },
             {
+              label: 'tsdown',
+              link: '/build-tools/tsdown',
+            },
+            {
               label: 'vite',
               link: '/build-tools/vite',
             },

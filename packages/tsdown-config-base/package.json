@@ -1,0 +1,63 @@
+{
+  "name": "@jmlweb/tsdown-config-base",
+  "version": "0.0.0",
+  "description": "Base tsdown configuration for jmlweb projects with sensible defaults",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+  },
+  "keywords": [
+    "build",
+    "bundler",
+    "config",
+    "rolldown",
+    "tsdown",
+    "tsdown-config",
+    "typescript"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": "https://github.com/jmlweb/tooling/issues",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsdown-config-base#readme",
+  "engines": {
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "tsdown": "~0.23.0"
+  },
+  "devDependencies": {
+    "@jmlweb/tsconfig-internal": "workspace:*",
+    "tsdown": "~0.23.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}

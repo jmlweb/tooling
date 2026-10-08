@@ -34,7 +34,7 @@ The integration tests are organized by package type:
 - **ESLint Configs** (`test-eslint.mjs`) - Tests ESLint configuration packages
 - **TypeScript Configs** (`test-tsconfig.mjs`) - Tests TypeScript configuration packages
 - **Testing Configs** (`test-testing-configs.mjs`) - Tests Vitest and Jest configuration packages
-- **Build Tool Configs** (`test-build-tools.mjs`) - Tests tsup, Vite, and PostCSS configuration packages
+- **Build Tool Configs** (`test-build-tools.mjs`) - Tests tsup, tsdown, Vite, and PostCSS configuration packages (tsdown also runs a real build)
 - **Commitlint Config** (`test-commitlint.mjs`) - Tests Commitlint configuration package
 
 ## How It Works

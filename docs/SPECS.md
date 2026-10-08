@@ -148,6 +148,15 @@ Base tsup configuration for building TypeScript packages:
 - External dependency handling
 - Clean output directory
 
+### `@jmlweb/tsdown-config-base`
+
+Base tsdown configuration, the successor to `@jmlweb/tsup-config-base` (tsup is maintenance-only):
+
+- Same helper API shape as the tsup package (`createTsdownConfig`, `createTsdownCliConfig`)
+- Dual CJS/ESM output with `.d.ts` and `.d.cts`, keeping tsup's file extensions
+- `external` mapped to tsdown's `deps.neverBundle`
+- Declarations via tsc, tsgo (TypeScript 7) or Oxc (`isolatedDeclarations`)
+
 ### `@jmlweb/vite-config`
 
 Base Vite configuration for frontend projects:
@@ -184,6 +193,7 @@ jmlweb-tooling/
 │   ├── tsconfig-internal/ (private, internal use only)
 │   ├── vitest-config/
 │   ├── tsup-config-base/
+│   ├── tsdown-config-base/
 │   ├── vite-config/
 │   └── commitlint-config/
 ├── apps/
@@ -265,6 +275,7 @@ This monorepo is designed to grow over time. Current progress and future package
 ### Build Tools
 
 - ~~`@jmlweb/tsup-config-base`: tsup bundler configuration~~ ✅
+- ~~`@jmlweb/tsdown-config-base`: tsdown bundler configuration~~ ✅
 - ~~`@jmlweb/vite-config`: Vite build configuration~~ ✅
 
 ### Git & Workflow

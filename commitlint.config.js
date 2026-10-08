@@ -50,6 +50,7 @@ export default {
         'tsconfig-node',
         'tsconfig-react',
         // Build configs
+        'tsdown-config-base',
         'tsup-config-base',
         'vite-config',
         // Test configs
