@@ -37,7 +37,7 @@ When creating a new configuration package:
    │   └── index.ts   # Configuration export (TypeScript)
    ├── package.json   # Package metadata
    ├── tsconfig.json # TypeScript configuration
-   ├── tsup.config.ts # Build configuration (if needed)
+   ├── tsdown.config.ts # Build configuration (if needed)
    └── README.md      # Usage documentation
    ```
 
@@ -117,7 +117,7 @@ The `files` field controls what gets published to npm. Always include:
 Do not include:
 
 - Source files (`src/`)
-- Build configuration (`tsup.config.ts`, `tsconfig.json`)
+- Build configuration (`tsdown.config.ts`, `tsconfig.json`)
 - Development dependencies
 - Test files
 
@@ -137,50 +137,52 @@ This ensures packages are published as public packages under the `@jmlweb` scope
 
 ## Build System
 
-Packages that require TypeScript compilation or bundling use `tsup` as the build tool.
+Packages that require TypeScript compilation or bundling use [`tsdown`](https://tsdown.dev) through the shared [`@jmlweb/tsdown-config-base`](../packages/tsdown-config-base) helper.
 
-### When to Use tsup
+### When to Use tsdown
 
-Use `tsup` when:
+Use `tsdown` when:
 
 - Package is written in TypeScript
 - Package needs to support both ESM and CommonJS
 - Package needs type definitions generated
 
-Do not use `tsup` when:
+Do not use `tsdown` when:
 
 - Package is pure JavaScript with no compilation needed
 - Package is a configuration file (e.g., `tsconfig.json`)
 
-### tsup Configuration
+### tsdown Configuration
 
-Create a `tsup.config.ts` file in the package root:
+Add `@jmlweb/tsdown-config-base` (`workspace:*`) and `tsdown` as devDependencies, then create a `tsdown.config.ts` file in the package root:
 
 ```typescript
-import { defineConfig } from 'tsup';
+import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
 
-export default defineConfig({
-  entry: ['src/index.ts'],
-  format: ['cjs', 'esm'],
-  dts: true,
-  clean: true,
-  outDir: 'dist',
+export default createTsdownConfig({
   external: [
     // List all peer dependencies and workspace dependencies
     '@jmlweb/related-package',
     'peer-dependency',
   ],
+  // Same output contract as the other packages in this repo:
+  // no sourcemaps, no syntax lowering and `exports.default` in CJS
+  dts: { sourcemap: false },
+  options: {
+    sourcemap: false,
+    target: false,
+    cjsDefault: false,
+  },
 });
 ```
 
 **Key Configuration Options:**
 
-- `entry`: Source file(s) to build
-- `format`: Output formats (`['cjs', 'esm']` for dual support)
-- `dts`: Generate TypeScript declaration files
-- `clean`: Clean output directory before building
-- `outDir`: Output directory (always `dist`)
-- `external`: Dependencies that should not be bundled (always include peer dependencies and workspace dependencies)
+- `entry`, `format`, `clean`, `outDir`: Defaults from the helper (`src/index.ts`, `['cjs', 'esm']`, `true`, `dist`)
+- `external`: Dependencies that should not be bundled (always include peer dependencies and workspace dependencies). Also list type-only devDependencies that the emitted declarations reference: tsdown bundles declarations with the same rules as JavaScript, so it would inline them
+- `dts: { sourcemap: false }` and `options.sourcemap: false`: No sourcemaps, even though `@jmlweb/tsconfig-internal` enables `declarationMap`
+- `options.target: false`: Emit the source syntax without lowering it
+- `options.cjsDefault: false`: A default export stays `exports.default` in the CommonJS build, matching the `.d.cts` declarations
 
 ### Build Scripts
 
@@ -189,7 +191,7 @@ All packages with a build step should include:
 ```json
 {
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "clean": "rm -rf dist",
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   }
@@ -227,7 +229,7 @@ Use `dependencies` for:
 
 Use `devDependencies` for:
 
-- **Build tools**: `tsup`, `typescript`
+- **Build tools**: `tsdown`, `@jmlweb/tsdown-config-base`, `typescript`
 - **Development tools**: `prettier`, `eslint` (when used for development)
 - **Type definitions**: `@types/*` packages
 - **Testing tools**: Test frameworks and utilities
@@ -239,7 +241,8 @@ Use `devDependencies` for:
 {
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
-    "tsup": "^8.5.1",
+    "@jmlweb/tsdown-config-base": "workspace:*",
+    "tsdown": "~0.23.0",
     "typescript": "^5.9.3",
     "eslint": "^9.0.0"
   }

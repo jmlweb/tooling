@@ -89,7 +89,7 @@ This base configuration provides a solid foundation for TypeScript projects with
 
 Internal TypeScript configuration for building packages within the monorepo. This is a private package (not published to npm) optimized for:
 
-- Building packages with tsup/esbuild
+- Building packages with tsdown/Rolldown
 - Dual CJS/ESM output
 - Type declaration generation
 

@@ -40,7 +40,7 @@ The main agent guidelines file contains comprehensive rules for AI agents workin
 5. **Package Development**
    - Creating New Packages
    - Package.json Structure
-   - Build System (tsup)
+   - Build System (tsdown)
    - Dependency Management
    - TypeScript Configuration
    - Pre-publish Validation
@@ -136,7 +136,7 @@ Main project documentation with package overview, quick start guides, compatibil
 - **Naming**: Follow `@jmlweb/{tool}-config-{variant}` pattern (see [`AGENTS.md`](../AGENTS.md#package-naming-convention))
 - **Structure**: Follow package.json structure guidelines (see [`AGENTS.md`](../AGENTS.md#packagejson-structure))
 - **Dependencies**: Understand dependencies vs devDependencies vs peerDependencies (see [`AGENTS.md`](../AGENTS.md#dependency-management))
-- **Build**: Use tsup for TypeScript packages (see [`AGENTS.md`](../AGENTS.md#build-system))
+- **Build**: Use tsdown via `@jmlweb/tsdown-config-base` for TypeScript packages (see [`AGENTS.md`](../AGENTS.md#build-system))
 - **TypeScript**: Extend `@jmlweb/tsconfig-internal` (see [`AGENTS.md`](../AGENTS.md#typescript-configuration))
 
 ### Versioning and Publishing Rules

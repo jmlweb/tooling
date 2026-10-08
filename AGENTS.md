@@ -303,7 +303,7 @@ For detailed guidelines on creating, developing, and maintaining packages, see [
 - Use semantic versioning (semver)
 - Extend base packages rather than duplicating
 - Follow package.json structure guidelines
-- Use tsup for TypeScript packages
+- Use tsdown via `@jmlweb/tsdown-config-base` for TypeScript packages
 - Extend `@jmlweb/tsconfig-internal` for TypeScript configs
 - Create README following standard structure (see [`packages/AGENTS.md`](packages/AGENTS.md))
 
