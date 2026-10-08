@@ -561,7 +561,7 @@ importers:
   packages/tsconfig-astro:
     dependencies:
       '@jmlweb/tsconfig-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tsconfig-base
       astro:
         specifier: '>=4.0.0'
@@ -577,7 +577,7 @@ importers:
   packages/tsconfig-nextjs:
     dependencies:
       '@jmlweb/tsconfig-react':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tsconfig-react
       next:
         specifier: '>=13.0.0'
@@ -589,7 +589,7 @@ importers:
   packages/tsconfig-node:
     dependencies:
       '@jmlweb/tsconfig-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tsconfig-base
       typescript:
         specifier: '>=5.0.0'
@@ -598,7 +598,7 @@ importers:
   packages/tsconfig-react:
     dependencies:
       '@jmlweb/tsconfig-base':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tsconfig-base
 
   packages/tsup-config-base:

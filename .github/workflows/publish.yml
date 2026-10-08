@@ -3,7 +3,7 @@ name: Publish Packages
 on:
   # Only run after CI workflow completes successfully
   workflow_run:
-    workflows: ["CI"]
+    workflows: ['CI']
     types: [completed]
     branches: [main]
   workflow_dispatch:
@@ -26,6 +26,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     outputs:
       versioned: ${{ steps.version.outputs.versioned }}
+      sha: ${{ steps.release-sha.outputs.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -78,6 +79,13 @@ jobs:
             echo "versioned=false" >> $GITHUB_OUTPUT
           fi
 
+      # Later jobs must check out the version commit pushed above. A plain
+      # checkout in a workflow_run job gets the triggering commit, which still
+      # has the old versions, so every package looked already published.
+      - name: Record release commit
+        id: release-sha
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
   detect-changes:
     name: Detect Package Changes
     runs-on: ubuntu-latest
@@ -90,6 +98,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
+          ref: ${{ needs.version.outputs.sha }}
           # Need recent history to detect changes
           fetch-depth: 2
 
@@ -140,7 +149,7 @@ jobs:
     name: Publish ${{ matrix.package }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: detect-changes
+    needs: [version, detect-changes]
     if: needs.detect-changes.outputs.has-changes == 'true'
     strategy:
       fail-fast: false
@@ -150,6 +159,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
+          ref: ${{ needs.version.outputs.sha }}
           fetch-depth: 1
 
       - name: Setup environment
