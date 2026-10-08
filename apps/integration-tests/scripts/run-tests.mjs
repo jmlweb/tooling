@@ -28,7 +28,7 @@ const log = {
 async function main() {
   console.log(chalk.bold.cyan('\n🧪 Integration Tests for @jmlweb Packages\n'));
 
-  let packedPackages = [];
+  let packedPackages;
   let hasErrors = false;
 
   try {

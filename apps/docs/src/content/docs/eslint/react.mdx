@@ -264,7 +264,7 @@ pnpm lint:fix  # Fix auto-fixable issues
 ## 📋 Requirements
 
 - **Node.js** &gt;= 20.11.0 (required for `import.meta.dirname` in config files)
-- **ESLint** &gt;= 9.0.0 (flat config format)
+- **ESLint** ^9.0.0 (flat config format). ESLint 10 is not supported yet, see [ESLint 10 support](#eslint-10-support)
 - **TypeScript** project with `tsconfig.json`
 - **React** &gt;= 17.0.0 (for JSX runtime support)
 - **TypeScript project service** enabled (automatic with this config)
@@ -276,9 +276,9 @@ This package requires the following peer dependencies:
 - `eslint` (^9.0.0)
 - `@eslint/js` (^9.0.0)
 - `typescript-eslint` (^8.0.0)
-- `eslint-config-prettier` (^9.1.0)
+- `eslint-config-prettier` (^9.1.0 || ^10.0.0)
 - `eslint-plugin-react` (^7.37.0)
-- `eslint-plugin-react-hooks` (^5.0.0)
+- `eslint-plugin-react-hooks` (^7.0.0)
 - `eslint-plugin-simple-import-sort` (^12.0.0)
 - `@jmlweb/eslint-config-base` (^1.0.0)
 
@@ -408,6 +408,10 @@ pnpm add -D typescript
 ```
 
 3. Check that your tsconfig.json is in the project root
+
+### ESLint 10 support
+
+This package supports ESLint 9 only. `eslint-plugin-react` (latest 7.37.5) does not declare ESLint 10 support, and with the `settings.react.version: 'detect'` used by this config it crashes on ESLint 10 (`contextOrFilename.getFilename is not a function`, because ESLint 10 removed the legacy `context.getFilename()`). The other ESLint configs in this repo (`base`, `base-js`, `node`, `astro`) support ESLint 9 and 10. Support for ESLint 10 will be added here once `eslint-plugin-react` ships a compatible release.
 
 ### Peer Dependency Warnings
 

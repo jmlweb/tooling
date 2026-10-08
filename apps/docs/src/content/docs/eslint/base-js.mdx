@@ -9,9 +9,9 @@ sidebar:
 [![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js)](https://www.npmjs.com/package/@jmlweb/eslint-config-base-js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
-[![ESLint](https://img.shields.io/badge/ESLint-9.0%2B-4B32C3.svg)](https://eslint.org/)
+[![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
 
-&gt; Base ESLint configuration for JavaScript projects. Foundation for JavaScript-only projects and extended by TypeScript configs. Uses ESLint 9+ flat config format.
+&gt; Base ESLint configuration for JavaScript projects. Foundation for JavaScript-only projects and extended by TypeScript configs. Uses ESLint 9 and 10 flat config format.
 
 ## ✨ Features
 
@@ -19,7 +19,7 @@ sidebar:
 - 📦 **Import Sorting**: Automatic import and export sorting via `eslint-plugin-simple-import-sort`
 - 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
 - 🌐 **Environment Agnostic**: Works for both Node.js and browser projects
-- 🚀 **Flat Config**: Uses ESLint 9+ flat config format (latest stable)
+- 🚀 **Flat Config**: Uses ESLint 9 and 10 flat config format (latest stable)
 - 🔧 **Modular Design**: Designed to be extended by other configs (e.g., TypeScript)
 
 ## 📦 Installation
@@ -206,7 +206,7 @@ This package provides the JavaScript linting foundation used across all other co
 - **Trade-off**: Requires you to add globals in your config, but makes the base config more portable and explicit
 - **When to override**: Always override by adding the globals your project needs (browser, Node.js, etc.)
 
-**Flat Config Format**: Uses ESLint 9+ flat config (not legacy `.eslintrc`)
+**Flat Config Format**: Uses ESLint 9 and 10 flat config (not legacy `.eslintrc`)
 
 - **Why**: Flat config is the future of ESLint, offering better composition, clearer configuration, and improved performance
 - **Trade-off**: Not compatible with older ESLint plugins that haven't migrated (rare)
@@ -217,7 +217,7 @@ This package provides the JavaScript linting foundation used across all other co
 Use this package when you want:
 
 - ✅ JavaScript-only projects (no TypeScript)
-- ✅ Modern JavaScript linting with ESLint 9+ flat config
+- ✅ Modern JavaScript linting with ESLint 9 and 10 flat config
 - ✅ Automatic import/export sorting
 - ✅ Foundation for extending with TypeScript or React configs
 
@@ -268,15 +268,15 @@ pnpm lint:fix  # Fix auto-fixable issues
 ## 📋 Requirements
 
 - **Node.js** &gt;= 18.0.0
-- **ESLint** &gt;= 9.0.0 (flat config format)
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
 
 ## 📦 Peer Dependencies
 
 This package requires the following peer dependencies:
 
-- `eslint` (^9.0.0)
-- `@eslint/js` (^9.0.0)
-- `eslint-config-prettier` (^9.1.0)
+- `eslint` (^9.0.0 || ^10.0.0)
+- `@eslint/js` (^9.0.0 || ^10.0.0)
+- `eslint-config-prettier` (^9.1.0 || ^10.0.0)
 - `eslint-plugin-simple-import-sort` (^12.0.0)
 
 **Note**: This package does NOT require `typescript-eslint` as it's for JavaScript-only projects.

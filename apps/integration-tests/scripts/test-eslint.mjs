@@ -42,20 +42,27 @@ async function testESLintPackage(pkg, allPackages) {
     // Initialize test project with all packages to resolve internal dependencies
     initTestProject(allPackages);
 
-    // Determine peer dependencies based on package
+    // Determine peer dependencies based on package.
+    // ESLINT_MAJOR selects the ESLint major to test against (default: 10).
+    // eslint-plugin-react does not support ESLint 10 yet, so the React config
+    // is always tested against ESLint 9.
+    const requestedMajor = process.env.ESLINT_MAJOR ?? '10';
+    const eslintMajor = pkg.name.includes('react') ? '9' : requestedMajor;
+    const eslintRange = `^${eslintMajor}.0.0`;
     const peerDeps = {
-      eslint: '^9.39.2',
+      eslint: eslintRange,
     };
 
     // Base JS config needs different deps
     if (pkg.name.includes('base-js')) {
-      peerDeps['@eslint/js'] = '^9.39.2';
+      peerDeps['@eslint/js'] = eslintRange;
       peerDeps.globals = '^16.5.0';
-    } else if (pkg.name.includes('base') || pkg.name.includes('react')) {
-      peerDeps['@eslint/js'] = '^9.39.2';
+    } else {
+      peerDeps['@eslint/js'] = eslintRange;
       peerDeps['eslint-config-prettier'] = '^10.1.8';
       peerDeps['eslint-plugin-simple-import-sort'] = '^12.1.1';
       peerDeps['typescript-eslint'] = '^8.34.1';
+      // typescript-eslint does not support TypeScript 7 yet
       peerDeps.typescript = '^5.9.3';
     }
 
