@@ -156,7 +156,7 @@ Base tsdown configuration, the successor to `@jmlweb/tsup-config-base` (tsup is 
 
 - Same helper API shape as the tsup package (`createTsdownConfig`, `createTsdownCliConfig`)
 - Dual CJS/ESM output with `.d.ts` and `.d.cts`, keeping tsup's file extensions
-- Externals through tsdown's own `deps.neverBundle` (`external` kept as a deprecated alias)
+- Every tsdown option accepted at the top level; externals through tsdown's own `deps.neverBundle` (`external` and `options` kept as deprecated aliases)
 - Declarations via tsc, tsgo (TypeScript 7) or Oxc (`isolatedDeclarations`)
 
 ### `@jmlweb/vite-config`

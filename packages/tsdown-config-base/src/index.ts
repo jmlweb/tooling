@@ -17,7 +17,7 @@ export type NodeTarget =
 export type OutputFormat = 'cjs' | 'esm' | 'iife' | 'umd';
 
 /**
- * tsdown's dependency options, passed through `options.deps`
+ * tsdown's dependency options (`deps`)
  */
 export type DepsOptions = DepsConfig;
 
@@ -28,13 +28,22 @@ type ManagedKeys = 'entry' | 'format' | 'dts' | 'clean' | 'outDir';
 
 /**
  * Additional tsdown options accepted by `createTsdownConfig`
+ * @deprecated Pass tsdown options at the top level instead of in `options`.
  */
 export type AdditionalOptions = Omit<UserConfig, ManagedKeys>;
 
 /**
  * Additional tsdown options accepted by `createTsdownCliConfig`
+ * @deprecated Pass tsdown options at the top level instead of in `options`.
  */
 export type AdditionalCliOptions = Omit<UserConfig, ManagedKeys | 'target'>;
+
+/**
+ * tsdown options accepted at the top level, besides the ones the helpers
+ * document themselves. tsdown's own `external` is replaced by the helpers'
+ * deprecated alias
+ */
+type TopLevelOptions = Omit<UserConfig, ManagedKeys | 'external'>;
 
 /**
  * Thrown when the helpers receive options that cannot be combined
@@ -44,9 +53,10 @@ export class TsdownConfigError extends Error {
 }
 
 /**
- * Options for creating a base tsdown configuration
+ * Options for creating a base tsdown configuration.
+ * Accepts every tsdown option at the top level; the ones below have preset defaults
  */
-export interface TsdownConfigOptions {
+export interface TsdownConfigOptions extends TopLevelOptions {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -90,22 +100,28 @@ export interface TsdownConfigOptions {
   /**
    * External packages to exclude from the bundle
    * Mapped to tsdown's `deps.neverBundle`. Cannot be combined with
-   * `options.deps.neverBundle`.
-   * @deprecated Use `options.deps.neverBundle`, tsdown's own option.
+   * `deps.neverBundle`.
+   * @deprecated Use `deps.neverBundle`, tsdown's own option.
    * @default []
    */
   external?: (string | RegExp)[];
 
   /**
-   * Additional tsdown options to merge with the base configuration
+   * Additional tsdown options to merge with the base configuration.
+   * A key cannot be set both here and at the top level.
+   * @deprecated Pass tsdown options at the top level instead.
    */
   options?: AdditionalOptions;
 }
 
 /**
- * Options for creating a CLI-specific tsdown configuration
+ * Options for creating a CLI-specific tsdown configuration.
+ * Accepts every tsdown option at the top level; the ones below have preset defaults
  */
-export interface TsdownCliConfigOptions {
+export interface TsdownCliConfigOptions extends Omit<
+  TopLevelOptions,
+  'target'
+> {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -152,8 +168,8 @@ export interface TsdownCliConfigOptions {
   /**
    * External packages to exclude from the bundle
    * Mapped to tsdown's `deps.neverBundle`. Cannot be combined with
-   * `options.deps.neverBundle`.
-   * @deprecated Use `options.deps.neverBundle`, tsdown's own option.
+   * `deps.neverBundle`.
+   * @deprecated Use `deps.neverBundle`, tsdown's own option.
    * @default []
    */
   external?: (string | RegExp)[];
@@ -162,7 +178,7 @@ export interface TsdownCliConfigOptions {
    * Node.js target version for the build
    * When omitted, tsdown infers it from `engines.node` in `package.json`
    */
-  target?: NodeTarget;
+  target?: NodeTarget | UserConfig['target'];
 
   /**
    * Add shebang (#!/usr/bin/env node) to the output
@@ -184,7 +200,9 @@ export interface TsdownCliConfigOptions {
   shebang?: boolean | string | string[];
 
   /**
-   * Additional tsdown options to merge with the base configuration
+   * Additional tsdown options to merge with the base configuration.
+   * A key cannot be set both here and at the top level.
+   * @deprecated Pass tsdown options at the top level instead.
    */
   options?: AdditionalCliOptions;
 }
@@ -232,7 +250,7 @@ const resolveDeps = (
   }
   if (deps?.neverBundle !== undefined) {
     throw new TsdownConfigError(
-      '`external` and `options.deps.neverBundle` cannot be used together. Move the `external` entries to `options.deps.neverBundle`.',
+      '`external` and `deps.neverBundle` cannot be used together. Move the `external` entries to `deps.neverBundle`.',
     );
   }
   return { deps: { ...deps, neverBundle: external } };
@@ -250,6 +268,29 @@ const resolveChecks = (
 });
 
 /**
+ * Merges the deprecated `options` bag with the top-level tsdown options.
+ * A key set in both places is ambiguous, so it throws instead of picking one.
+ * Undefined top-level keys are dropped so they don't override preset defaults
+ */
+const mergeTopLevel = <T extends object>(
+  topLevel: T,
+  options: object,
+): T & UserConfig => {
+  const definedTopLevel = Object.fromEntries(
+    Object.entries(topLevel).filter(([, value]) => value !== undefined),
+  ) as T;
+  const conflicts = Object.keys(options).filter(
+    (key) => key in definedTopLevel,
+  );
+  if (conflicts.length > 0) {
+    throw new TsdownConfigError(
+      `${conflicts.map((key) => `\`${key}\``).join(', ')} cannot be set both at the top level and in \`options\`. Move them to the top level.`,
+    );
+  }
+  return { ...options, ...definedTopLevel };
+};
+
+/**
  * Creates a base tsdown configuration with sensible defaults
  *
  * @example
@@ -264,9 +305,7 @@ const resolveChecks = (
  * // With external dependencies
  * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownConfig({
- *   options: {
- *     deps: { neverBundle: ['eslint', 'typescript-eslint', '@eslint/js'] },
- *   },
+ *   deps: { neverBundle: ['eslint', 'typescript-eslint', '@eslint/js'] },
  * });
  * ```
  *
@@ -275,35 +314,20 @@ const resolveChecks = (
  * // With additional options
  * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownConfig({
- *   options: {
- *     deps: { neverBundle: ['vitest'] },
- *     minify: true,
- *     sourcemap: true,
- *   },
+ *   deps: { neverBundle: ['vitest'] },
+ *   minify: true,
+ *   sourcemap: true,
  * });
  * ```
  */
 export const createTsdownConfig = (
   config: TsdownConfigOptions = {},
 ): UserConfig => {
-  const {
-    entry = BASE_DEFAULTS.entry,
-    format = BASE_DEFAULTS.format,
-    dts = BASE_DEFAULTS.dts,
-    clean = BASE_DEFAULTS.clean,
-    outDir = BASE_DEFAULTS.outDir,
-    external = [],
-    options = {},
-  } = config;
-  const { deps, checks, ...rest } = options;
+  const { external = [], options = {}, ...topLevel } = config;
+  const { deps, checks, ...rest } = mergeTopLevel(topLevel, options);
 
   return {
-    entry,
-    format,
-    dts,
-    clean,
-    outDir,
-    fixedExtension: BASE_DEFAULTS.fixedExtension,
+    ...BASE_DEFAULTS,
     ...resolveChecks(checks),
     ...resolveDeps(external, deps),
     ...rest,
@@ -347,7 +371,7 @@ const SHEBANG = '#!/usr/bin/env node';
  * import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
  * export default createTsdownCliConfig({
  *   target: 'node22',
- *   options: { deps: { neverBundle: ['commander'] } },
+ *   deps: { neverBundle: ['commander'] },
  * });
  * ```
  */
@@ -355,26 +379,16 @@ export const createTsdownCliConfig = (
   config: TsdownCliConfigOptions = {},
 ): UserConfig => {
   const {
-    entry = CLI_DEFAULTS.entry,
-    format = CLI_DEFAULTS.format,
-    dts = CLI_DEFAULTS.dts,
-    clean = CLI_DEFAULTS.clean,
-    outDir = CLI_DEFAULTS.outDir,
     external = [],
-    target,
     shebang = CLI_DEFAULTS.shebang,
     options = {},
+    ...topLevel
   } = config;
-  const { deps, checks, ...rest } = options;
+  const { deps, checks, ...rest } = mergeTopLevel(topLevel, options);
+  const { shebang: _shebang, ...defaults } = CLI_DEFAULTS;
 
   return {
-    entry,
-    format,
-    dts,
-    clean,
-    outDir,
-    fixedExtension: CLI_DEFAULTS.fixedExtension,
-    ...(target ? { target } : {}),
+    ...defaults,
     ...resolveChecks(checks),
     ...resolveBanner(shebang),
     ...resolveDeps(external, deps),
