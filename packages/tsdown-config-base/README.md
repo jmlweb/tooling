@@ -203,7 +203,7 @@ Use this configuration when you want:
 - ✅ Declaration generation that is ready for TypeScript 7
 - ✅ CLI packages with shebang injection
 
-**To stay on tsup**, use [`@jmlweb/tsup-config-base`](../tsup-config-base) instead.
+**To stay on tsup**, [`@jmlweb/tsup-config-base`](../tsup-config-base) still works but is deprecated and no longer maintained.
 
 ## 🔧 Extending the Configuration
 
@@ -276,7 +276,7 @@ This package requires the following peer dependency:
 
 ### Internal Packages
 
-- [`@jmlweb/tsup-config-base`](../tsup-config-base) - tsup equivalent of this package
+- [`@jmlweb/tsup-config-base`](../tsup-config-base) - Deprecated tsup equivalent of this package
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
 - [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing

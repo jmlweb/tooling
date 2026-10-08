@@ -141,6 +141,8 @@ Base Vitest configuration for testing:
 
 ### `@jmlweb/tsup-config-base`
 
+> **Deprecated**: superseded by [`@jmlweb/tsdown-config-base`](#jmlwebtsdown-config-base). The repo's own packages build with tsdown.
+
 Base tsup configuration for building TypeScript packages:
 
 - Dual CJS/ESM output
