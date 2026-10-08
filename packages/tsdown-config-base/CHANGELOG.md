@@ -1,5 +1,11 @@
 # @jmlweb/tsdown-config-base
 
+## 0.2.1
+
+### Patch Changes
+
+- 10953eb: Fix `createTsdownCliConfig` emitting two shebang lines (a syntax error) when an entry's source file already starts with one. Such entries now keep their own shebang and the preset no longer adds another.
+
 ## 0.2.0
 
 ### Minor Changes
