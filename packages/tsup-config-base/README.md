@@ -5,6 +5,9 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
 [![tsup](https://img.shields.io/badge/tsup-8.0%2B-yellow.svg)](https://tsup.egoist.dev/)
 
+> [!WARNING]
+> **Deprecated**: this package is no longer maintained. tsup itself is maintenance-only and recommends tsdown. Use [`@jmlweb/tsdown-config-base`](https://github.com/jmlweb/tooling/tree/main/packages/tsdown-config-base#readme) instead: it keeps the same helper API and published file names, and its README has a [migration guide](https://github.com/jmlweb/tooling/tree/main/packages/tsdown-config-base#from-jmlwebtsup-config-base).
+
 > Base tsup configuration for jmlweb projects. Provides sensible defaults and a clean API for creating consistent build configurations.
 
 ## ✨ Features

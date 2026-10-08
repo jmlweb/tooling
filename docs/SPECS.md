@@ -89,7 +89,7 @@ This base configuration provides a solid foundation for TypeScript projects with
 
 Internal TypeScript configuration for building packages within the monorepo. This is a private package (not published to npm) optimized for:
 
-- Building packages with tsup/esbuild
+- Building packages with tsdown/Rolldown
 - Dual CJS/ESM output
 - Type declaration generation
 
@@ -140,6 +140,8 @@ Base Vitest configuration for testing:
 - Factory function for customization
 
 ### `@jmlweb/tsup-config-base`
+
+> **Deprecated**: superseded by [`@jmlweb/tsdown-config-base`](#jmlwebtsdown-config-base). The repo's own packages build with tsdown.
 
 Base tsup configuration for building TypeScript packages:
 

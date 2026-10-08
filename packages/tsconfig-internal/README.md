@@ -17,13 +17,13 @@ In your package's `tsconfig.json`:
 
 > **Philosophy**: Internal monorepo packages need consistent build configuration optimized for dual CJS/ESM output and fast bundler-based compilation.
 
-This is a specialized internal configuration for building packages within this monorepo. It's designed specifically for packages that are compiled with tsup/esbuild and need to generate both CommonJS and ESM outputs with type declarations.
+This is a specialized internal configuration for building packages within this monorepo. It's designed specifically for packages that are compiled with tsdown/Rolldown and need to generate both CommonJS and ESM outputs with type declarations.
 
 ### Design Decisions
 
 **Bundler-Optimized (`moduleResolution: "bundler"`)**: Designed for build tools
 
-- **Why**: Internal packages are built with tsup (which uses esbuild), not executed directly by Node.js. Bundler resolution matches how esbuild resolves modules, preventing mismatches between TypeScript and the actual build output
+- **Why**: Internal packages are built with tsdown (which uses Rolldown), not executed directly by Node.js. Bundler resolution matches how Rolldown resolves modules, preventing mismatches between TypeScript and the actual build output
 - **Trade-off**: TypeScript output can't be run directly in Node.js. But internal packages are always compiled before use
 - **When to override**: Never for internal packages - they're always bundled before publishing or consumption
 
@@ -43,7 +43,7 @@ This is a specialized internal configuration for building packages within this m
 
 This config is optimized for:
 
-- Building packages with tsup/esbuild
+- Building packages with tsdown/Rolldown
 - Dual CJS/ESM output
 - Type declaration generation
 

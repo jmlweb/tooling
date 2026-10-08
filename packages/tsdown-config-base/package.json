@@ -24,7 +24,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "clean": "rm -rf dist",
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
@@ -57,7 +57,6 @@
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
     "tsdown": "~0.23.0",
-    "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   }
 }
