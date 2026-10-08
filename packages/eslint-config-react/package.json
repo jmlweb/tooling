@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-react",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "ESLint configuration for React libraries with TypeScript, extending base config with React-specific rules",
   "type": "module",
   "main": "./dist/index.cjs",
