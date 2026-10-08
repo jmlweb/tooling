@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@jmlweb/eslint-config-react)](https://www.npmjs.com/package/@jmlweb/eslint-config-react)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
-[![ESLint](https://img.shields.io/badge/ESLint-9.0%2B-4B32C3.svg)](https://eslint.org/)
+[![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18%2B-61DAFB.svg)](https://react.dev/)
 
@@ -12,18 +12,18 @@
 ## ✨ Features
 
 - 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
-- ⚛️ **React Best Practices**: Enforces React-specific rules and patterns
+- ⚛️ **React Best Practices**: React rules from `@eslint-react/eslint-plugin`, which supports ESLint 9 and 10
 - 🪝 **Hooks Validation**: Validates React Hooks rules and exhaustive dependencies
 - 🎨 **JSX Support**: Optimized for modern JSX transform (React 17+)
 - 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
 - 🎯 **Code Quality**: Prevents common React pitfalls and anti-patterns
 - 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
-- 🚀 **Flat Config**: Uses ESLint 9+ flat config format (latest stable)
+- 🚀 **Flat Config**: Uses ESLint 9 and 10 flat config format (latest stable)
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/eslint-config-react eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
+pnpm add -D @jmlweb/eslint-config-react eslint @eslint/js typescript-eslint eslint-config-prettier @eslint-react/eslint-plugin @stylistic/eslint-plugin eslint-plugin-perfectionist eslint-plugin-react-hooks eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
 ```
 
 > 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
@@ -68,7 +68,7 @@ export default [
       // Allow console in tests
       'no-console': 'off',
       // Relax React rules in tests
-      'react/display-name': 'off',
+      '@eslint-react/no-array-index-key': 'off',
     },
   },
   {
@@ -86,10 +86,9 @@ import reactConfig from '@jmlweb/eslint-config-react';
 export default [
   ...reactConfig,
   {
-    files: ['**/*.tsx', '**/*.jsx'],
     settings: {
-      react: {
-        version: '18.2', // Specify React version explicitly
+      'react-x': {
+        version: '19.2', // Specify React version explicitly (default: 'detect')
       },
     },
   },
@@ -107,29 +106,32 @@ This configuration applies React-specific rules to:
 
 ### Key Rules Enforced
 
-| Rule                             | Level   | Description                                |
-| -------------------------------- | ------- | ------------------------------------------ |
-| `react-hooks/rules-of-hooks`     | `error` | Enforces Rules of Hooks                    |
-| `react-hooks/exhaustive-deps`    | `warn`  | Validates exhaustive dependencies in hooks |
-| `react/jsx-key`                  | `error` | Prevents missing keys in lists             |
-| `react/jsx-no-duplicate-props`   | `error` | Prevents duplicate props                   |
-| `react/jsx-pascal-case`          | `error` | Enforces PascalCase for component names    |
-| `react/no-array-index-key`       | `warn`  | Warns against using array index as key     |
-| `react/jsx-boolean-value`        | `error` | Enforces `{prop}` over `prop={true}`       |
-| `react/jsx-curly-brace-presence` | `error` | Prevents unnecessary curly braces          |
-| `react/jsx-fragments`            | `error` | Enforces shorthand fragment syntax         |
-| `react/jsx-sort-props`           | `error` | Enforces consistent prop ordering          |
+| Rule                                       | Level   | Description                                          |
+| ------------------------------------------ | ------- | ---------------------------------------------------- |
+| `react-hooks/rules-of-hooks`               | `error` | Enforces Rules of Hooks                              |
+| `react-hooks/exhaustive-deps`              | `warn`  | Validates exhaustive dependencies in hooks           |
+| `@eslint-react/no-missing-key`             | `error` | Prevents missing keys in lists                       |
+| `@eslint-react/no-array-index-key`         | `warn`  | Warns against using array index as key               |
+| `@eslint-react/jsx-no-children-prop`       | `error` | Prevents passing `children` as a prop                |
+| `@eslint-react/jsx-no-useless-fragment`    | `error` | Prevents unnecessary fragments                       |
+| `@eslint-react/dom-no-unknown-property`    | `error` | Prevents unknown DOM properties (`class`, ...)       |
+| `@eslint-react/dom-no-unsafe-target-blank` | `error` | Requires `rel="noreferrer noopener"` on `_blank`     |
+| `@stylistic/jsx-pascal-case`               | `error` | Enforces PascalCase for component names              |
+| `@stylistic/jsx-self-closing-comp`         | `error` | Self-closes elements without children                |
+| `@stylistic/jsx-curly-brace-presence`      | `error` | Prevents unnecessary curly braces                    |
+| `perfectionist/sort-jsx-props`             | `error` | Reserved props first, then shorthand, callbacks last |
+
+Plus the rest of `@eslint-react`'s `recommended-typescript` preset (for example `no-nested-component-definitions`, `no-leaked-conditional-rendering` and the `web-api-no-leaked-*` rules).
 
 ### What's Included
 
 - ✅ All TypeScript ESLint rules from `@jmlweb/eslint-config-base`
-- ✅ React recommended rules
-- ✅ React JSX runtime rules (for React 17+)
-- ✅ React Hooks rules and exhaustive deps validation
+- ✅ `@eslint-react` recommended rules for TypeScript
+- ✅ React Hooks rules from the official `eslint-plugin-react-hooks`
 - ✅ JSX best practices and anti-pattern prevention
 - ✅ Automatic import/export sorting
 - ✅ Prettier conflict resolution
-- ✅ React version auto-detection
+- ✅ React version auto-detection (`settings['react-x'].version: 'detect'`)
 
 ## 🔄 Import Sorting
 
@@ -173,23 +175,23 @@ This package extends the base TypeScript config with React-specific rules that e
 - **Trade-off**: May require adding dependencies you think are unnecessary, but this prevents bugs from stale values
 - **When to override**: Never for rules of hooks. For exhaustive deps, only when you understand the implications (use `eslint-disable-next-line` with a comment explaining why)
 
-**JSX Accessibility (`eslint-plugin-jsx-a11y`)**: Enforces accessibility best practices (included via recommended)
+**`@eslint-react` instead of `eslint-plugin-react`**: Maintained React rules with ESLint 10 support
 
-- **Why**: Accessibility is not optional. Many common React patterns create inaccessible UIs by default. These rules catch issues early
-- **Trade-off**: May require more verbose markup (explicit labels, ARIA attributes), but creates inclusive applications
-- **When to override**: Rarely. If you must, document why the pattern is accessible despite the warning
+- **Why**: `eslint-plugin-react` has had no release since April 2025 and does not support ESLint 10. `@eslint-react/eslint-plugin` is actively maintained, supports ESLint 9 and 10, and covers the same problems
+- **Trade-off**: Rules that TypeScript already catches (duplicate props, undefined components, string refs, missing `render` return) have no counterpart, and `jsx-boolean-value`, `jsx-fragments` and `no-unescaped-entities` are no longer enforced. JSX style rules come from `@stylistic/eslint-plugin` and prop sorting from `eslint-plugin-perfectionist`
+- **When to override**: Turn individual `@eslint-react/*` rules off if a recommended rule does not fit your codebase
+
+**Official Hooks plugin**: `eslint-plugin-react-hooks` owns the hooks rules
+
+- **Why**: `@eslint-react` ships ports of the hooks and React Compiler rules. The official plugin is maintained by the React team, so the config turns the ports off instead of running both
+- **Trade-off**: None; each hooks problem is reported once, by `react-hooks/*`
+- **When to override**: Enable more `react-hooks/*` rules (such as the React Compiler ones) if you need them
 
 **Modern JSX Transform**: Configured for React 17+ (no `React` import needed)
 
 - **Why**: The new JSX transform is more efficient and doesn't require importing React in every file. It's the modern standard
 - **Trade-off**: None - this is the recommended approach for React 17+
 - **When to override**: If stuck on React 16 or earlier (but you should upgrade)
-
-**Component Display Names**: Enforces display names for debugging
-
-- **Why**: Display names improve debugging in React DevTools and error messages. Anonymous components are harder to track down
-- **Trade-off**: Requires naming arrow function components or adding explicit displayName
-- **When to override**: For simple, obvious components where the name is clear from context (rare)
 
 **Extends Base TypeScript Config**: Inherits all strict type checking rules
 
@@ -226,7 +228,7 @@ export default [
     rules: {
       // Test-specific rules
       '@typescript-eslint/no-explicit-any': 'off',
-      'react/display-name': 'off',
+      '@eslint-react/no-array-index-key': 'off',
     },
   },
   {
@@ -258,7 +260,7 @@ pnpm lint:fix  # Fix auto-fixable issues
 ## 📋 Requirements
 
 - **Node.js** >= 22.12.0
-- **ESLint** ^9.0.0 (flat config format). ESLint 10 is not supported yet, see [ESLint 10 support](#eslint-10-support)
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
 - **TypeScript** project with `tsconfig.json`
 - **React** >= 17.0.0 (for JSX runtime support)
 - **TypeScript project service** enabled (automatic with this config)
@@ -267,11 +269,13 @@ pnpm lint:fix  # Fix auto-fixable issues
 
 This package requires the following peer dependencies:
 
-- `eslint` (^9.0.0)
-- `@eslint/js` (^9.0.0)
+- `eslint` (^9.0.0 || ^10.0.0)
+- `@eslint/js` (^9.0.0 || ^10.0.0)
 - `typescript-eslint` (^8.0.0)
 - `eslint-config-prettier` (^9.1.0 || ^10.0.0)
-- `eslint-plugin-react` (^7.37.0)
+- `@eslint-react/eslint-plugin` (^5.0.0)
+- `@stylistic/eslint-plugin` (^5.0.0)
+- `eslint-plugin-perfectionist` (^5.0.0)
 - `eslint-plugin-react-hooks` (^7.0.0)
 - `eslint-plugin-simple-import-sort` (^12.0.0 || ^13.0.0 || ^14.0.0)
 - `@jmlweb/eslint-config-base` (^1.0.0)
@@ -295,7 +299,9 @@ See real-world usage examples:
 - [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript and TypeScript
 - [TypeScript ESLint](https://typescript-eslint.io/) - TypeScript tooling for ESLint
 - [React](https://react.dev/) - JavaScript library for building user interfaces
-- [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) - React-specific linting rules
+- [@eslint-react/eslint-plugin](https://eslint-react.xyz/) - React-specific linting rules
+- [@stylistic/eslint-plugin](https://eslint.style/) - JSX style rules
+- [eslint-plugin-perfectionist](https://perfectionist.dev/) - JSX prop sorting
 - [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks) - Enforces Rules of Hooks
 - [Prettier](https://prettier.io/) - Opinionated code formatter
 
@@ -340,44 +346,6 @@ useEffect(() => {
 }, []); // Explicitly disable the rule with a comment
 ```
 
-### React Version Not Detected
-
-**Symptoms:**
-
-- Warning: "Warning: React version not specified in eslint-plugin-react settings"
-- Or incorrect React version being used
-
-**Cause:**
-
-- This config uses `detect` to auto-detect React version from package.json
-- May fail if React is not installed or in an unexpected location
-
-**Solution:**
-
-Ensure React is installed:
-
-```bash
-pnpm add react
-```
-
-Or explicitly specify the React version:
-
-```javascript
-// eslint.config.js
-import reactConfig from '@jmlweb/eslint-config-react';
-
-export default [
-  ...reactConfig,
-  {
-    settings: {
-      react: {
-        version: '18.2', // Specify your React version
-      },
-    },
-  },
-];
-```
-
 ### JSX Not Recognized in .tsx Files
 
 **Symptoms:**
@@ -403,19 +371,15 @@ pnpm add -D typescript
 
 3. Check that your tsconfig.json is in the project root
 
-### ESLint 10 support
-
-This package supports ESLint 9 only. `eslint-plugin-react` (latest 7.37.5) does not declare ESLint 10 support, and with the `settings.react.version: 'detect'` used by this config it crashes on ESLint 10 (`contextOrFilename.getFilename is not a function`, because ESLint 10 removed the legacy `context.getFilename()`). The other ESLint configs in this repo (`base`, `base-js`, `node`, `astro`) support ESLint 9 and 10. Support for ESLint 10 will be added here once `eslint-plugin-react` ships a compatible release.
-
 ### Peer Dependency Warnings
 
 **Symptoms:**
 
-- npm warnings about unmet peer dependencies for `eslint-plugin-react` or `eslint-plugin-react-hooks`
+- npm warnings about unmet peer dependencies for one of the ESLint plugins
 
 **Cause:**
 
-- These plugins may not have updated peer dependencies for ESLint 9.x yet
+- A plugin may not have updated its peer dependencies for the latest ESLint release yet
 
 **Solution:**
 
@@ -432,7 +396,29 @@ The warnings are usually safe to ignore if linting works correctly.
 
 > **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+### From 4.x to 5.0
+
+`eslint-plugin-react` is replaced by `@eslint-react/eslint-plugin`, which adds ESLint 10 support.
+
+**Breaking Changes:**
+
+- Peer dependencies: remove `eslint-plugin-react`, add `@eslint-react/eslint-plugin`, `@stylistic/eslint-plugin` and `eslint-plugin-perfectionist`
+- Rule names change from `react/*` to `@eslint-react/*`, `@stylistic/*` and `perfectionist/sort-jsx-props`. Update any overrides and `eslint-disable` comments
+- `@eslint-react`'s recommended preset reports problems the old config did not (for example nested component definitions and leaked event listeners)
+- `jsx-boolean-value`, `jsx-fragments` and `no-unescaped-entities` are no longer enforced
+- The React version setting moves from `settings.react.version` to `settings['react-x'].version`
+
+**Migration Steps:**
+
+1. Update dependencies:
+
+   ```bash
+   pnpm remove eslint-plugin-react
+   pnpm add -D @eslint-react/eslint-plugin @stylistic/eslint-plugin eslint-plugin-perfectionist
+   ```
+
+2. Rename `react/*` rules in your overrides and `eslint-disable` comments (for example `react/no-array-index-key` becomes `@eslint-react/no-array-index-key`)
+3. Run `pnpm exec eslint --fix .` and review the remaining reports
 
 For version history, see the [Changelog](./CHANGELOG.md).
 
