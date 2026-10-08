@@ -306,14 +306,16 @@ Note: Turborepo cache artifacts are no longer uploaded to GitHub Actions artifac
 
 #### Publishing Issues
 
-**Problem**: Publishing fails with authentication error
+**Problem**: Publishing fails with `E404 Not Found - PUT` or another authentication error
+
+Publishing uses npm trusted publishing (OIDC), not an `NPM_TOKEN` secret. npm answers a rejected publish credential with a 404.
 
 **Solutions**:
 
-1. Verify `NPM_TOKEN` secret is set correctly
-2. Check token hasn't expired (tokens expire after certain period)
-3. Ensure token has publish permissions for the scope
-4. Test token locally: `npm whoami --registry=https://registry.npmjs.org`
+1. Check the package has a trusted publisher on npmjs.com (package **Settings** → **Trusted publishing**) for repository `jmlweb/tooling` and workflow `publish.yml`, with `npm publish` allowed
+2. Configure missing ones with `node scripts/setup-trusted-publishing.mjs` (needs `npm login`)
+3. A brand-new package must be published once by hand before a trusted publisher can be added to it
+4. Ensure the publish job keeps `id-token: write` and installs npm >= 11.5.1
 
 **Problem**: Package published but missing files
 

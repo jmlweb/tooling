@@ -151,6 +151,11 @@ jobs:
     timeout-minutes: 10
     needs: [version, detect-changes]
     if: needs.detect-changes.outputs.has-changes == 'true'
+    # Trusted publishing (OIDC): npm exchanges the job's GitHub ID token for a
+    # short-lived publish token, so no NPM_TOKEN secret is needed
+    permissions:
+      contents: write
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
@@ -165,13 +170,9 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
 
-      - name: Configure npm registry
-        uses: actions/setup-node@v6
-        with:
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Node 22 bundles npm 10, and trusted publishing needs npm >= 11.5.1
+      - name: Install npm with trusted publishing support
+        run: npm install -g npm@^11.21.0
 
       - name: Build package
         run: pnpm build --filter="./${{ matrix.package }}"
@@ -214,13 +215,16 @@ jobs:
           echo "✅ Dry-run successful! Package would publish correctly."
           echo "   Run workflow without dry-run to actually publish."
 
+      # pnpm pack rewrites workspace:* ranges; npm publish performs the OIDC
+      # token exchange and attaches provenance automatically
       - name: Publish to npm
         if: steps.check-version.outputs.exists == 'false' && inputs.dry-run != true
         run: |
+          PACK_DIR="$RUNNER_TEMP/pack"
+          mkdir -p "$PACK_DIR"
           cd "${{ matrix.package }}"
-          pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          pnpm pack --pack-destination "$PACK_DIR"
+          npm publish "$PACK_DIR"/*.tgz --access public
 
       - name: Create git tag
         if: steps.check-version.outputs.exists == 'false' && inputs.dry-run != true
