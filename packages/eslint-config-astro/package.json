@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/eslint-config-astro",
-  "version": "2.0.0",
+  "version": "1.0.10",
   "description": "ESLint configuration for Astro projects with TypeScript. Extends @jmlweb/eslint-config-base with Astro-specific rules.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -52,7 +52,7 @@
   },
   "peerDependencies": {
     "@eslint/js": "^9.0.0 || ^10.0.0",
-    "@jmlweb/eslint-config-base": "workspace:*",
+    "@jmlweb/eslint-config-base": "workspace:^",
     "eslint": "^9.0.0 || ^10.0.0",
     "eslint-config-prettier": "^9.1.0 || ^10.0.0",
     "eslint-plugin-astro": "^1.5.0",
