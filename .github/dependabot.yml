@@ -20,6 +20,19 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    # react and react-dom must be the exact same version at runtime, so bump them together
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      # vitest and its sibling packages declare exact-version peers on each other
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
