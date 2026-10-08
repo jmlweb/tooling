@@ -51,6 +51,12 @@
   ],
   "semverGroups": [
     {
+      "label": "tsdown is pre-1.0 and ships breaking changes in minor releases, so pin it to patch updates",
+      "range": "~",
+      "dependencies": ["tsdown"],
+      "dependencyTypes": ["dev", "prod"]
+    },
+    {
       "label": "Use caret ranges for dev and prod dependencies",
       "range": "^",
       "dependencyTypes": ["dev", "prod"]

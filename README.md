@@ -34,6 +34,7 @@ For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / 
 | [`@jmlweb/vitest-config`](./packages/vitest-config)                       | Base Vitest configuration with TypeScript support and coverage settings | ![npm](https://img.shields.io/npm/v/@jmlweb/vitest-config?label=)            |
 | **Build Tools**                                                           |                                                                         |                                                                              |
 | [`@jmlweb/tsup-config-base`](./packages/tsup-config-base)                 | Base tsup configuration for building TypeScript packages                | ![npm](https://img.shields.io/npm/v/@jmlweb/tsup-config-base?label=)         |
+| [`@jmlweb/tsdown-config-base`](./packages/tsdown-config-base)             | Base tsdown configuration, drop-in successor to tsup-config-base        | ![npm](https://img.shields.io/npm/v/@jmlweb/tsdown-config-base?label=)       |
 | [`@jmlweb/vite-config`](./packages/vite-config)                           | Base Vite configuration for frontend projects                           | ![npm](https://img.shields.io/npm/v/@jmlweb/vite-config?label=)              |
 | **Commit Linting**                                                        |                                                                         |                                                                              |
 | [`@jmlweb/commitlint-config`](./packages/commitlint-config)               | Commitlint configuration for Conventional Commits                       | ![npm](https://img.shields.io/npm/v/@jmlweb/commitlint-config?label=)        |
@@ -90,6 +91,7 @@ tsconfig-base ────► tsconfig-node
 Standalone packages (no inheritance):
 ├── vitest-config      - Testing configuration
 ├── tsup-config-base   - Package bundling
+├── tsdown-config-base - Package bundling (tsdown)
 ├── vite-config        - Frontend build tool
 └── commitlint-config  - Commit message linting
 ```
@@ -149,6 +151,7 @@ Different packages in this monorepo have different Node.js version requirements.
 | `@jmlweb/tsconfig-react`           | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsconfig-nextjs`          | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/tsup-config-base`         | >= 18.0.0           | Standard compatibility                      |
+| `@jmlweb/tsdown-config-base`       | >= 22.18.0          | Matches tsdown's own `engines.node`         |
 | `@jmlweb/vite-config`              | >= 18.0.0           | Standard compatibility                      |
 | `@jmlweb/commitlint-config`        | >= 18.0.0           | Standard compatibility                      |
 
@@ -164,6 +167,11 @@ Different packages in this monorepo have different Node.js version requirements.
 - `@jmlweb/eslint-config-base` and `@jmlweb/eslint-config-react` require Node.js >= 20.11.0
 - These packages use `import.meta.dirname` in their configuration files, which was introduced in Node.js 20.11.0
 - This feature enables better path resolution for ESLint configuration files in the flat config format
+
+**Node.js >= 22.18.0 (tsdown Config)**
+
+- `@jmlweb/tsdown-config-base` declares the same range as tsdown 0.23 itself: `^22.18.0 || ^24.11.0 || >=26.0.0`
+- The config runs inside tsdown, so it cannot support Node.js versions tsdown does not run on
 
 ### Choosing the Right Node.js Version
 
@@ -282,6 +290,7 @@ Track package usage and health through npm statistics:
 | `@jmlweb/tsconfig-nextjs`          | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsconfig-nextjs?label=)          | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsconfig-nextjs?label=)          |
 | `@jmlweb/vitest-config`            | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/vitest-config?label=)            | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/vitest-config?label=)            |
 | `@jmlweb/tsup-config-base`         | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsup-config-base?label=)         | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsup-config-base?label=)         |
+| `@jmlweb/tsdown-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/tsdown-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/tsdown-config-base?label=)       |
 | `@jmlweb/vite-config`              | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/vite-config?label=)              | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/vite-config?label=)              |
 | `@jmlweb/commitlint-config`        | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/commitlint-config?label=)        | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/commitlint-config?label=)        |
 

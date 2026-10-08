@@ -1,4 +1,4 @@
-import type { Options } from 'tsup';
+import type { DepsConfig, UserConfig } from 'tsdown';
 
 /**
  * Entry points configuration - can be an array of paths or an object mapping names to paths
@@ -9,12 +9,42 @@ export type EntryConfig = string[] | Record<string, string>;
  * Node.js target version for CLI builds
  */
 export type NodeTarget =
-  'node16' | 'node18' | 'node20' | 'node22' | `node${number}`;
+  'node16' | 'node18' | 'node20' | 'node22' | 'node24' | `node${number}`;
 
 /**
- * Options for creating a base tsup configuration
+ * Output formats supported by tsdown
  */
-export interface TsupConfigOptions {
+export type OutputFormat = 'cjs' | 'esm' | 'iife' | 'umd';
+
+/**
+ * Dependency options that can be passed through `options.deps`.
+ * `neverBundle` is owned by the `external` option to avoid two sources of truth.
+ */
+export type DepsOptions = Omit<DepsConfig, 'neverBundle'>;
+
+/**
+ * Keys of tsdown's `UserConfig` controlled by the helpers' top-level options
+ */
+type ManagedKeys = 'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'deps';
+
+/**
+ * Additional tsdown options accepted by `createTsdownConfig`
+ */
+export type AdditionalOptions = Omit<UserConfig, ManagedKeys> & {
+  deps?: DepsOptions;
+};
+
+/**
+ * Additional tsdown options accepted by `createTsdownCliConfig`
+ */
+export type AdditionalCliOptions = Omit<UserConfig, ManagedKeys | 'target'> & {
+  deps?: DepsOptions;
+};
+
+/**
+ * Options for creating a base tsdown configuration
+ */
+export interface TsdownConfigOptions {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -34,13 +64,14 @@ export interface TsupConfigOptions {
    * Output formats
    * @default ['cjs', 'esm']
    */
-  format?: ('cjs' | 'esm' | 'iife')[];
+  format?: OutputFormat[];
 
   /**
    * Generate TypeScript declaration files
+   * Accepts tsdown's declaration options too, e.g. `{ generator: 'oxc' }`
    * @default true
    */
-  dts?: boolean;
+  dts?: UserConfig['dts'];
 
   /**
    * Clean output directory before build
@@ -56,24 +87,22 @@ export interface TsupConfigOptions {
 
   /**
    * External packages to exclude from the bundle
-   * Typically includes peer dependencies and internal workspace packages
+   * Typically includes peer dependencies and internal workspace packages.
+   * Mapped to tsdown's `deps.neverBundle`.
    * @default []
    */
   external?: (string | RegExp)[];
 
   /**
-   * Additional tsup options to merge with the base configuration
+   * Additional tsdown options to merge with the base configuration
    */
-  options?: Omit<
-    Options,
-    'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'external'
-  >;
+  options?: AdditionalOptions;
 }
 
 /**
- * Options for creating a CLI-specific tsup configuration
+ * Options for creating a CLI-specific tsdown configuration
  */
-export interface TsupCliConfigOptions {
+export interface TsdownCliConfigOptions {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -96,13 +125,14 @@ export interface TsupCliConfigOptions {
    * Output formats
    * @default ['esm']
    */
-  format?: ('cjs' | 'esm' | 'iife')[];
+  format?: OutputFormat[];
 
   /**
    * Generate TypeScript declaration files
+   * Accepts tsdown's declaration options too, e.g. `{ generator: 'oxc' }`
    * @default true
    */
-  dts?: boolean;
+  dts?: UserConfig['dts'];
 
   /**
    * Clean output directory before build
@@ -118,6 +148,7 @@ export interface TsupCliConfigOptions {
 
   /**
    * External packages to exclude from the bundle
+   * Mapped to tsdown's `deps.neverBundle`.
    * @default []
    */
   external?: (string | RegExp)[];
@@ -148,56 +179,70 @@ export interface TsupCliConfigOptions {
   shebang?: boolean | string | string[];
 
   /**
-   * Additional tsup options to merge with the base configuration
+   * Additional tsdown options to merge with the base configuration
    */
-  options?: Omit<
-    Options,
-    'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'external' | 'target'
-  >;
+  options?: AdditionalCliOptions;
 }
 
 /**
- * Base tsup configuration defaults used across all @jmlweb packages
+ * Base tsdown configuration defaults used across all @jmlweb packages
  */
 const BASE_DEFAULTS = {
   entry: ['src/index.ts'] as EntryConfig,
-  format: ['cjs', 'esm'] as ('cjs' | 'esm')[],
-  dts: true,
+  format: ['cjs', 'esm'] as OutputFormat[],
+  dts: true as UserConfig['dts'],
   clean: true,
   outDir: 'dist',
-} satisfies Partial<Options>;
+  // tsdown defaults to `.mjs`/`.cjs` on the node platform; keep tsup's
+  // package-type-based extensions so existing `exports` maps keep working
+  fixedExtension: false,
+} satisfies Partial<UserConfig>;
 
 /**
- * CLI-specific tsup configuration defaults
+ * CLI-specific tsdown configuration defaults
  */
 const CLI_DEFAULTS = {
   entry: { cli: 'src/cli.ts' } as EntryConfig,
-  format: ['esm'] as 'esm'[],
-  dts: true,
+  format: ['esm'] as OutputFormat[],
+  dts: true as UserConfig['dts'],
   clean: true,
   outDir: 'dist',
+  fixedExtension: false,
   target: 'node18' as NodeTarget,
   shebang: true as boolean | string | string[],
-} satisfies Partial<Options> & {
+} satisfies Partial<UserConfig> & {
   target: NodeTarget;
   shebang: boolean | string | string[];
 };
 
 /**
- * Creates a base tsup configuration with sensible defaults
+ * Builds the `deps` option, mapping `external` to `deps.neverBundle`
+ */
+const resolveDeps = (
+  external: (string | RegExp)[],
+  deps: DepsOptions | undefined,
+): Pick<UserConfig, 'deps'> => {
+  if (external.length === 0) {
+    return deps ? { deps } : {};
+  }
+  return { deps: { ...deps, neverBundle: external } };
+};
+
+/**
+ * Creates a base tsdown configuration with sensible defaults
  *
  * @example
  * ```typescript
  * // Simple usage without externals
- * import { createTsupConfig } from '@jmlweb/tsup-config-base';
- * export default createTsupConfig();
+ * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
+ * export default createTsdownConfig();
  * ```
  *
  * @example
  * ```typescript
  * // With external dependencies
- * import { createTsupConfig } from '@jmlweb/tsup-config-base';
- * export default createTsupConfig({
+ * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
+ * export default createTsdownConfig({
  *   external: ['eslint', 'typescript-eslint', '@eslint/js'],
  * });
  * ```
@@ -205,8 +250,8 @@ const CLI_DEFAULTS = {
  * @example
  * ```typescript
  * // With additional options
- * import { createTsupConfig } from '@jmlweb/tsup-config-base';
- * export default createTsupConfig({
+ * import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
+ * export default createTsdownConfig({
  *   external: ['vitest'],
  *   options: {
  *     minify: true,
@@ -215,7 +260,9 @@ const CLI_DEFAULTS = {
  * });
  * ```
  */
-export const createTsupConfig = (config: TsupConfigOptions = {}): Options => {
+export const createTsdownConfig = (
+  config: TsdownConfigOptions = {},
+): UserConfig => {
   const {
     entry = BASE_DEFAULTS.entry,
     format = BASE_DEFAULTS.format,
@@ -225,6 +272,7 @@ export const createTsupConfig = (config: TsupConfigOptions = {}): Options => {
     external = [],
     options = {},
   } = config;
+  const { deps, ...rest } = options;
 
   return {
     entry,
@@ -232,8 +280,9 @@ export const createTsupConfig = (config: TsupConfigOptions = {}): Options => {
     dts,
     clean,
     outDir,
-    ...(external.length > 0 && { external }),
-    ...options,
+    fixedExtension: BASE_DEFAULTS.fixedExtension,
+    ...resolveDeps(external, deps),
+    ...rest,
   };
 };
 
@@ -243,7 +292,7 @@ export const createTsupConfig = (config: TsupConfigOptions = {}): Options => {
 const SHEBANG = '#!/usr/bin/env node';
 
 /**
- * Creates a CLI-specific tsup configuration with shebang support
+ * Creates a CLI-specific tsdown configuration with shebang support
  *
  * This preset is optimized for CLI packages with:
  * - ESM-only output by default
@@ -254,15 +303,15 @@ const SHEBANG = '#!/usr/bin/env node';
  * @example
  * ```typescript
  * // Simple CLI with shebang
- * import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
- * export default createTsupCliConfig();
+ * import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
+ * export default createTsdownCliConfig();
  * ```
  *
  * @example
  * ```typescript
  * // CLI with library API (shebang only on cli entry)
- * import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
- * export default createTsupCliConfig({
+ * import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
+ * export default createTsdownCliConfig({
  *   entry: { cli: 'src/cli.ts', index: 'src/index.ts' },
  *   shebang: 'cli', // Only add shebang to cli entry
  * });
@@ -271,16 +320,16 @@ const SHEBANG = '#!/usr/bin/env node';
  * @example
  * ```typescript
  * // CLI targeting Node.js 22
- * import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
- * export default createTsupCliConfig({
+ * import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
+ * export default createTsdownCliConfig({
  *   target: 'node22',
  *   external: ['commander'],
  * });
  * ```
  */
-export const createTsupCliConfig = (
-  config: TsupCliConfigOptions = {},
-): Options | Options[] => {
+export const createTsdownCliConfig = (
+  config: TsdownCliConfigOptions = {},
+): UserConfig => {
   const {
     entry = CLI_DEFAULTS.entry,
     format = CLI_DEFAULTS.format,
@@ -292,106 +341,53 @@ export const createTsupCliConfig = (
     shebang = CLI_DEFAULTS.shebang,
     options = {},
   } = config;
+  const { deps, ...rest } = options;
 
-  // Normalize shebang to array of entry names
-  const shebangEntries = normalizeShebangConfig(shebang);
-
-  // If shebang applies to all entries, use simple banner config
-  if (shebangEntries === 'all') {
-    return {
-      entry,
-      format,
-      dts,
-      clean,
-      outDir,
-      target,
-      banner: { js: SHEBANG },
-      ...(external.length > 0 && { external }),
-      ...options,
-    };
-  }
-
-  // If no shebang needed, return simple config
-  if (shebangEntries.length === 0) {
-    return {
-      entry,
-      format,
-      dts,
-      clean,
-      outDir,
-      target,
-      ...(external.length > 0 && { external }),
-      ...options,
-    };
-  }
-
-  // For selective shebang, we need to split into multiple configs
-  const entryObject = normalizeEntry(entry);
-  const shebangSet = new Set(shebangEntries);
-
-  const withShebang: Record<string, string> = {};
-  const withoutShebang: Record<string, string> = {};
-
-  for (const [name, path] of Object.entries(entryObject)) {
-    if (shebangSet.has(name)) {
-      withShebang[name] = path;
-    } else {
-      withoutShebang[name] = path;
-    }
-  }
-
-  const configs: Options[] = [];
-
-  // Config for entries with shebang
-  if (Object.keys(withShebang).length > 0) {
-    configs.push({
-      entry: withShebang,
-      format,
-      dts,
-      clean,
-      outDir,
-      target,
-      banner: { js: SHEBANG },
-      ...(external.length > 0 && { external }),
-      ...options,
-    });
-  }
-
-  // Config for entries without shebang
-  if (Object.keys(withoutShebang).length > 0) {
-    configs.push({
-      entry: withoutShebang,
-      format,
-      dts,
-      // Only clean on first config
-      clean: configs.length === 0 ? clean : false,
-      outDir,
-      target,
-      ...(external.length > 0 && { external }),
-      ...options,
-    });
-  }
-
-  return configs.length === 1 ? configs[0] : configs;
+  return {
+    entry,
+    format,
+    dts,
+    clean,
+    outDir,
+    fixedExtension: CLI_DEFAULTS.fixedExtension,
+    target,
+    ...resolveBanner(shebang),
+    ...resolveDeps(external, deps),
+    ...rest,
+  };
 };
 
 /**
- * Normalize entry to object format
+ * Builds the `banner` option for the requested shebang entries.
+ * tsdown passes each chunk's file name to banner functions, so selective
+ * shebangs fit in a single config instead of tsup's split configs.
  */
-const normalizeEntry = (entry: EntryConfig): Record<string, string> => {
-  if (Array.isArray(entry)) {
-    return entry.reduce(
-      (acc, path) => {
-        // Extract name from path (e.g., 'src/cli.ts' -> 'cli')
-        const name = path.replace(/^.*\//, '').replace(/\.[^.]+$/, '');
-        acc[name] = path;
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
+const resolveBanner = (
+  shebang: boolean | string | string[],
+): Pick<UserConfig, 'banner'> => {
+  const shebangEntries = normalizeShebangConfig(shebang);
+
+  if (shebangEntries === 'all') {
+    return { banner: { js: SHEBANG } };
   }
-  return entry;
+
+  if (shebangEntries.length === 0) {
+    return {};
+  }
+
+  const shebangSet = new Set(shebangEntries);
+
+  return {
+    banner: ({ fileName }) =>
+      shebangSet.has(toEntryName(fileName)) ? { js: SHEBANG } : undefined,
+  };
 };
+
+/**
+ * Strip the JS extension from an output file name (e.g., 'bin/cli.js' -> 'bin/cli')
+ */
+const toEntryName = (fileName: string): string =>
+  fileName.replace(/\.[cm]?js$/, '');
 
 /**
  * Normalize shebang config to determine which entries need shebang
@@ -418,6 +414,7 @@ const normalizeShebangConfig = (
 export { BASE_DEFAULTS, CLI_DEFAULTS };
 
 /**
- * Re-export tsup's Options type for convenience
+ * Re-export tsdown's config type for convenience.
+ * `Options` mirrors the name exported by `@jmlweb/tsup-config-base`.
  */
-export type { Options } from 'tsup';
+export type { UserConfig, UserConfig as Options } from 'tsdown';

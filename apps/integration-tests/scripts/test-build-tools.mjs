@@ -4,9 +4,11 @@ import chalk from 'chalk';
 
 import {
   createTestFile,
+  execInTestProject,
   importFromTestEnv,
   initTestProject,
   installDependencies,
+  testFileExists,
 } from './utils.mjs';
 
 const log = {
@@ -24,7 +26,9 @@ export async function testBuildToolConfigs(packages) {
 
   const buildToolPackages = packages.filter(
     (pkg) =>
-      pkg.name.includes('tsup-config') || pkg.name.includes('vite-config'),
+      pkg.name.includes('tsup-config') ||
+      pkg.name.includes('tsdown-config') ||
+      pkg.name.includes('vite-config'),
   );
 
   if (buildToolPackages.length === 0) {
@@ -51,6 +55,8 @@ async function testBuildToolPackage(pkg, allPackages) {
 
     if (pkg.name.includes('tsup-config')) {
       deps.tsup = '^8.5.1';
+    } else if (pkg.name.includes('tsdown-config')) {
+      deps.tsdown = '~0.23.0';
     } else if (pkg.name.includes('vite-config')) {
       deps.vite = '^6.0.0';
     }
@@ -83,6 +89,16 @@ async function testBuildToolPackage(pkg, allPackages) {
         );
       }
       log.success('tsup config structure is valid');
+    } else if (pkg.name.includes('tsdown-config')) {
+      if (
+        config.createTsdownConfig !== '[Function]' ||
+        config.createTsdownCliConfig !== '[Function]'
+      ) {
+        throw new Error(
+          'tsdown config should export createTsdownConfig and createTsdownCliConfig',
+        );
+      }
+      log.success('tsdown config structure is valid');
     } else if (pkg.name.includes('vite-config')) {
       // Vite config structure check
       if (typeof config !== 'object' && typeof config !== 'function') {
@@ -124,6 +140,8 @@ export default defineConfig({
 `,
         );
       }
+    } else if (pkg.name.includes('tsdown-config')) {
+      testTsdownBuild(pkg);
     } else if (pkg.name.includes('vite-config')) {
       createTestFile(
         'vite.config.ts',
@@ -147,4 +165,50 @@ export default defineConfig({
     }
     throw error;
   }
+}
+
+/**
+ * Run a real tsdown build and check that the output file names match the
+ * `exports` layout our packages publish (.js/.cjs/.d.ts/.d.cts)
+ */
+function testTsdownBuild(pkg) {
+  createTestFile(
+    'src/index.ts',
+    `export const greet = (name: string): string => \`hello \${name}\`;
+`,
+  );
+  createTestFile(
+    'tsconfig.json',
+    JSON.stringify({
+      compilerOptions: {
+        target: 'es2022',
+        module: 'preserve',
+        moduleResolution: 'bundler',
+        strict: true,
+        skipLibCheck: true,
+      },
+      include: ['src'],
+    }),
+  );
+  createTestFile(
+    'tsdown.config.ts',
+    `import { createTsdownConfig } from '${pkg.name}';
+
+export default createTsdownConfig();
+`,
+  );
+
+  execInTestProject('pnpm exec tsdown', { stdio: 'inherit' });
+
+  const expectedFiles = [
+    'dist/index.js',
+    'dist/index.cjs',
+    'dist/index.d.ts',
+    'dist/index.d.cts',
+  ];
+  const missingFiles = expectedFiles.filter((file) => !testFileExists(file));
+  if (missingFiles.length > 0) {
+    throw new Error(`tsdown build is missing: ${missingFiles.join(', ')}`);
+  }
+  log.success('tsdown build emitted .js, .cjs, .d.ts and .d.cts');
 }

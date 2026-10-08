@@ -1,7 +1,7 @@
 {
-  "name": "@jmlweb/vitest-config",
-  "version": "2.0.0",
-  "description": "Base Vitest configuration for jmlweb projects with TypeScript support and coverage settings",
+  "name": "@jmlweb/tsdown-config-base",
+  "version": "0.0.0",
+  "description": "Base tsdown configuration for jmlweb projects with sensible defaults",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -29,11 +29,13 @@
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
   "keywords": [
-    "coverage",
-    "test-config",
-    "testing",
-    "vitest",
-    "vitest-config"
+    "build",
+    "bundler",
+    "config",
+    "rolldown",
+    "tsdown",
+    "tsdown-config",
+    "typescript"
   ],
   "author": "jmlweb",
   "license": "MIT",
@@ -42,22 +44,20 @@
     "url": "https://github.com/jmlweb/tooling.git"
   },
   "bugs": "https://github.com/jmlweb/tooling/issues",
-  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/vitest-config#readme",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/tsdown-config-base#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "peerDependencies": {
-    "vitest": ">=1.0.0"
+    "tsdown": "~0.23.0"
   },
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
-    "@vitest/coverage-v8": "^4.1.11",
-    "@vitest/ui": "^4.1.11",
+    "tsdown": "~0.23.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.11"
+    "typescript": "^5.9.3"
   }
 }

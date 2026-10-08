@@ -87,12 +87,12 @@ react-typescript-app/
 ### `eslint.config.js`
 
 ```javascript
-import reactConfig from "@jmlweb/eslint-config-react";
+import reactConfig from '@jmlweb/eslint-config-react';
 
 export default [
   ...reactConfig,
   {
-    ignores: ["dist/", "node_modules/", "coverage/", "*.config.js"],
+    ignores: ['dist/', 'node_modules/', 'coverage/', '*.config.js'],
   },
 ];
 ```
@@ -100,16 +100,16 @@ export default [
 ### `vitest.config.ts`
 
 ```typescript
-import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
-import baseConfig from "@jmlweb/vitest-config";
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import baseConfig from '@jmlweb/vitest-config';
 
 export default defineConfig({
   plugins: [react()],
   ...baseConfig,
   test: {
     ...baseConfig.test,
-    environment: "jsdom",
+    environment: 'jsdom',
   },
 });
 ```
