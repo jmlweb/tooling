@@ -144,4 +144,4 @@ The Prettier config automatically sorts Tailwind CSS classes in the recommended 
 
 ## Requirements
 
-- Node.js >= 20.11.0 (required for ESLint config)
+- Node.js >= 22.12.0

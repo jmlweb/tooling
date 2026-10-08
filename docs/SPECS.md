@@ -68,7 +68,7 @@ Extends `@jmlweb/eslint-config-base-js` with strict TypeScript support:
 - Consistent type-only imports with inline style
 - Naming conventions (PascalCase for types, camelCase for variables)
 - Prevents enum usage (prefer const maps)
-- Requires Node.js >= 20.11.0 for `import.meta.dirname` support
+- Requires Node.js >= 22.12.0
 
 **Relationship**: The TypeScript config extends the JavaScript base, ensuring all JavaScript rules apply while adding TypeScript-specific strict rules.
 

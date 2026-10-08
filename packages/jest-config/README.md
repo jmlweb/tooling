@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/jest-config)](https://www.npmjs.com/package/@jmlweb/jest-config)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.11.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![Jest](https://img.shields.io/badge/Jest-29.0%2B-C21325.svg)](https://jestjs.io/)
 [![ts-jest](https://img.shields.io/badge/ts--jest-29.0%2B-C21325.svg)](https://kulshekhar.github.io/ts-jest/)
 
@@ -271,7 +271,7 @@ These settings ensure compatibility with modern TypeScript projects.
 
 ## 📋 Requirements
 
-- **Node.js** >= 20.11.0
+- **Node.js** >= 22.12.0
 - **Jest** >= 29.0.0
 - **ts-jest** >= 29.0.0
 - **@types/jest** >= 29.0.0

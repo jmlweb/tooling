@@ -46,7 +46,7 @@
   "bugs": "https://github.com/jmlweb/tooling/issues",
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/eslint-config-react#readme",
   "engines": {
-    "node": ">=20.11.0"
+    "node": ">=22.12.0"
   },
   "publishConfig": {
     "access": "public"
@@ -58,7 +58,7 @@
     "eslint-config-prettier": "^9.1.0 || ^10.0.0",
     "eslint-plugin-react": "^7.37.0",
     "eslint-plugin-react-hooks": "^7.0.0",
-    "eslint-plugin-simple-import-sort": "^12.0.0",
+    "eslint-plugin-simple-import-sort": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "typescript-eslint": "^8.0.0"
   },
   "dependencies": {
@@ -73,9 +73,9 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
     "tsdown": "~0.23.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.59.4"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1"
   }
 }

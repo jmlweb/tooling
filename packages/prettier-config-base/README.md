@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jmlweb/prettier-config-base)](https://www.npmjs.com/package/@jmlweb/prettier-config-base)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 
 > Base Prettier configuration package that provides shared formatting rules for consistent code style across projects.
 
@@ -195,7 +195,7 @@ pnpm format:check  # Check formatting without modifying files
 
 ## 📋 Requirements
 
-- **Node.js** >= 18.0.0
+- **Node.js** >= 22.12.0
 - **Prettier** >= 3.0.0
 
 ## 📦 Peer Dependencies

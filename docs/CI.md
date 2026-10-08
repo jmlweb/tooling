@@ -244,7 +244,7 @@ Note: Turborepo cache artifacts are no longer uploaded separately as Turborepo r
 
 **Solutions**:
 
-1. Match Node.js version locally with CI (check `.github/workflows/ci.yml`)
+1. Match Node.js version locally with CI (`.nvmrc`, e.g. `nvm use`)
 2. Ensure dependencies are correctly categorized in `package.json`
 3. Check for case-sensitive file path issues
 

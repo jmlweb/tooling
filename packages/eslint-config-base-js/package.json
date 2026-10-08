@@ -44,7 +44,7 @@
   "bugs": "https://github.com/jmlweb/tooling/issues",
   "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/eslint-config-base-js#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.12.0"
   },
   "publishConfig": {
     "access": "public"
@@ -53,7 +53,7 @@
     "@eslint/js": "^9.0.0 || ^10.0.0",
     "eslint": "^9.0.0 || ^10.0.0",
     "eslint-config-prettier": "^9.1.0 || ^10.0.0",
-    "eslint-plugin-simple-import-sort": "^12.0.0"
+    "eslint-plugin-simple-import-sort": "^12.0.0 || ^13.0.0 || ^14.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -61,8 +61,8 @@
     "@jmlweb/tsdown-config-base": "workspace:*",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
     "tsdown": "~0.23.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

@@ -14,12 +14,6 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
-      # Starlight 0.41+ and starlight-llms-txt 0.11+ require Astro 7. Remove
-      # these entries once apps/docs is migrated to Astro 7.
-      - dependency-name: "@astrojs/starlight"
-        versions: [">=0.41.0"]
-      - dependency-name: "starlight-llms-txt"
-        versions: [">=0.11.0"]
     labels:
       - "dependencies"
       - "automated"

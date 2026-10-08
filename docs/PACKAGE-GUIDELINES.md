@@ -69,7 +69,7 @@ The following fields are required for all published packages:
 
 These fields are recommended but not strictly required:
 
-- `engines.node`: Minimum Node.js version (e.g., `">=18.0.0"`)
+- `engines.node`: Minimum Node.js version (e.g., `">=22.12.0"`)
 - `keywords`: Array of keywords for npm search
 - `bugs`: Object with `url` pointing to GitHub issues
 - `homepage`: URL to package README on GitHub
