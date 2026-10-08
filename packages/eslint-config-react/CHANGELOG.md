@@ -1,5 +1,21 @@
 # @jmlweb/eslint-config-react
 
+## 4.0.0
+
+### Major Changes
+
+- e2b1805: Require Node.js >= 22.12.0. Node.js 18 and 20 are end-of-life, and 22.12.0 is the first Node.js 22 release that can `require()` ES modules without a flag, which the CommonJS builds need to load ESM-only plugins.
+
+### Minor Changes
+
+- e2b1805: Widen peer dependency ranges to support the latest plugin majors: `eslint-plugin-simple-import-sort` 13 and 14, `eslint-plugin-n` 18 and `eslint-plugin-astro` 2 and 3.
+
+### Patch Changes
+
+- Updated dependencies [e2b1805]
+- Updated dependencies [e2b1805]
+  - @jmlweb/eslint-config-base@3.0.0
+
 ## 3.1.1
 
 ### Patch Changes

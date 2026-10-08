@@ -1,5 +1,11 @@
 # @jmlweb/tsconfig-base
 
+## 2.0.0
+
+### Major Changes
+
+- e2b1805: Require Node.js >= 22.12.0. Node.js 18 and 20 are end-of-life, and 22.12.0 is the first Node.js 22 release that can `require()` ES modules without a flag, which the CommonJS builds need to load ESM-only plugins.
+
 ## 1.0.5
 
 ### Patch Changes

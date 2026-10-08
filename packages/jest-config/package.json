@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/jest-config",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Base Jest configuration for jmlweb projects with TypeScript support and coverage settings",
   "type": "module",
   "main": "./dist/index.cjs",
