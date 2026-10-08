@@ -261,8 +261,11 @@ When creating or editing files:
 
 This project uses shared configuration packages for consistent code style:
 
-- **Prettier**: Use `@jmlweb/prettier-config-base` or `@jmlweb/prettier-config-tailwind` for formatting
+- **Oxfmt** (preferred): Use `@jmlweb/oxfmt-config-base` for formatting in new projects, and migrate existing projects when you are already touching their formatting setup. Enable `sortTailwindcss` for Tailwind projects
+- **Prettier** (maintained for existing projects): `@jmlweb/prettier-config-base` or `@jmlweb/prettier-config-tailwind`. Keep it only when a project needs Prettier plugins Oxfmt does not support
 - **ESLint**: Use `@jmlweb/eslint-config-base` for TypeScript projects (default) or `@jmlweb/eslint-config-base-js` for JavaScript-only projects
+
+This repository formats itself with Oxfmt (`oxfmt.config.ts`).
 
 Follow the configurations defined in these packages. Do not override or modify formatting rules unless explicitly requested.
 

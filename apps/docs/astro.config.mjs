@@ -33,6 +33,15 @@ export default defineConfig({
           link: '/getting-started',
         },
         {
+          label: 'Oxfmt',
+          items: [
+            {
+              label: 'base',
+              link: '/oxfmt/base',
+            },
+          ],
+        },
+        {
           label: 'Prettier',
           items: [
             {

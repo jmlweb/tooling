@@ -1,0 +1,61 @@
+{
+  "name": "@jmlweb/oxfmt-config-base",
+  "version": "0.0.0",
+  "description": "Base Oxfmt configuration for jmlweb projects",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+  },
+  "keywords": [
+    "code-formatter",
+    "oxc",
+    "oxfmt",
+    "oxfmt-config"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": "https://github.com/jmlweb/tooling/issues",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/oxfmt-config-base#readme",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "oxfmt": ">=0.72.0"
+  },
+  "devDependencies": {
+    "@jmlweb/tsconfig-internal": "workspace:*",
+    "@jmlweb/tsdown-config-base": "workspace:*",
+    "oxfmt": "^0.72.0",
+    "tsdown": "~0.23.0",
+    "typescript": "^6.0.3"
+  }
+}

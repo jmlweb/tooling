@@ -49,6 +49,15 @@ Extends `@jmlweb/prettier-config-base` by adding the Tailwind CSS Prettier plugi
 
 **Package Naming**: The naming convention (`@jmlweb/prettier-config-*`) allows for future extensibility. Additional packages can be created following the same pattern (e.g., `@jmlweb/prettier-config-react`, `@jmlweb/prettier-config-vue`) that extend either the base or other specific configurations.
 
+### `@jmlweb/oxfmt-config-base`
+
+Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration with the same options as `@jmlweb/prettier-config-base`, plus the settings that make Oxfmt match Prettier's output:
+
+- `printWidth: 80` - Prettier's default (Oxfmt defaults to 100)
+- `sortPackageJson: false` - Prettier does not sort `package.json`; syncpack owns that order
+
+Recommended formatter for new projects. Tailwind class sorting is a built-in Oxfmt option (`sortTailwindcss`), so no Tailwind variant package is needed. The Prettier packages stay maintained for existing projects and for setups that need Prettier plugins.
+
 ### `@jmlweb/eslint-config-base-js`
 
 Base ESLint configuration for JavaScript-only projects. Uses ESLint 9+ flat config format with:
@@ -183,6 +192,7 @@ The monorepo follows a standard Turborepo structure:
 ```text
 jmlweb-tooling/
 ├── packages/
+│   ├── oxfmt-config-base/
 │   ├── prettier-config-base/
 │   ├── prettier-config-tailwind/
 │   ├── eslint-config-base-js/
@@ -310,5 +320,6 @@ See `AGENTS.md` for detailed publishing workflow documentation.
 
 **Example package names**:
 
+- `@jmlweb/oxfmt-config-base`
 - `@jmlweb/prettier-config-base`
 - `@jmlweb/prettier-config-tailwind`

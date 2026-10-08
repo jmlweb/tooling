@@ -1,0 +1,252 @@
+# @jmlweb/oxfmt-config-base
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/oxfmt-config-base)](https://www.npmjs.com/package/@jmlweb/oxfmt-config-base)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
+
+> Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration that produces the same output as [`@jmlweb/prettier-config-base`](../prettier-config-base), at a fraction of the time.
+
+## ✨ Features
+
+- ⚡ **Fast**: Oxfmt is written in Rust and formats a whole repository in milliseconds
+- 🔁 **Prettier-compatible**: Same options and output as `@jmlweb/prettier-config-base`, so switching does not reformat your codebase
+- 🎨 **Tailwind sorting built in**: Enable class sorting with one option, no plugin required
+- 🧩 **Extensible**: Plain config object you spread into your own `oxfmt.config.ts`
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+```
+
+> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+
+## 🚀 Quick Start
+
+Create an `oxfmt.config.ts` file in your project root:
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+});
+```
+
+> ⚠️ **Note**: Oxfmt has no `extends` option and `.oxfmtrc.json` cannot import packages, so use `oxfmt.config.ts` to share this configuration.
+
+## 📋 Configuration
+
+This package provides the following Oxfmt settings:
+
+| Option            | Value        | Description                                      |
+| ----------------- | ------------ | ------------------------------------------------ |
+| `semi`            | `true`       | Use semicolons at the end of statements          |
+| `singleQuote`     | `true`       | Use single quotes instead of double quotes       |
+| `tabWidth`        | `2`          | Use 2 spaces for indentation                     |
+| `trailingComma`   | `'all'`      | Add trailing commas wherever possible            |
+| `useTabs`         | `false`      | Use spaces instead of tabs                       |
+| `endOfLine`       | `'lf'`       | Use LF line endings (Unix-style)                 |
+| `proseWrap`       | `'preserve'` | Preserve prose wrapping in markdown files        |
+| `printWidth`      | `80`         | Match Prettier's default (Oxfmt defaults to 100) |
+| `sortPackageJson` | `false`      | Leave `package.json` key order untouched         |
+
+## 💡 Examples
+
+### Before Formatting
+
+```javascript
+const user = {
+  name: 'John',
+  age: 30,
+  email: 'john@example.com',
+  role: 'admin',
+};
+```
+
+### After Formatting
+
+```javascript
+const user = {
+  name: 'John',
+  age: 30,
+  email: 'john@example.com',
+  role: 'admin',
+};
+```
+
+## 🤔 Why Use This?
+
+> **Philosophy**: Same style as the Prettier config, without paying Prettier's speed cost.
+
+Oxfmt is the formatter of the [Oxc](https://oxc.rs) project and targets Prettier compatibility. This package keeps the formatting decisions of [`@jmlweb/prettier-config-base`](../prettier-config-base#-why-use-this) (see its design decisions) and only adds the options needed to make Oxfmt match Prettier.
+
+### Design Decisions
+
+**Print Width (`printWidth: 80`)**: Set explicitly to Prettier's default
+
+- **Why**: Oxfmt defaults to 100, which would reflow most files when migrating from Prettier
+- **Trade-off**: None, it keeps the existing style
+- **When to override**: If you prefer longer lines
+
+**No `package.json` Sorting (`sortPackageJson: false`)**: Oxfmt sorts `package.json` keys by default, Prettier does not
+
+- **Why**: Avoids reordering every `package.json` on migration and conflicts with tools that own key order, such as syncpack
+- **Trade-off**: Key order is not enforced by the formatter
+- **When to override**: If nothing else manages `package.json` order, set it to `true`
+
+## 🎯 When to Use
+
+Use this package when you want:
+
+- ✅ Fast formatting for new projects (recommended over Prettier)
+- ✅ To migrate from `@jmlweb/prettier-config-base` without reformatting your code
+- ✅ Tailwind class sorting without a Prettier plugin
+
+**Need Prettier plugins** (for example `prettier-plugin-astro`)? Oxfmt does not support them, keep using [`@jmlweb/prettier-config-base`](../prettier-config-base).
+
+## 🔧 Extending the Configuration
+
+### Tailwind CSS
+
+Oxfmt sorts Tailwind classes natively, replacing [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind):
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+  sortTailwindcss: {
+    stylesheet: './src/index.css',
+    functions: ['clsx', 'cn'],
+  },
+});
+```
+
+### Other Options
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+  printWidth: 100,
+  ignorePatterns: ['generated/**'],
+});
+```
+
+## 📝 Usage with Scripts
+
+Add formatting scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  }
+}
+```
+
+Then run:
+
+```bash
+pnpm format        # Format all files
+pnpm format:check  # Check formatting without modifying files
+```
+
+## 📋 Requirements
+
+- **Node.js** >= 22.12.0
+- **Oxfmt** >= 0.72.0
+
+> Markdown, MDX, HTML, Vue and Svelte are formatted through a Prettier build bundled in the `oxfmt` npm package. The standalone Oxfmt binary skips those files, so install it from npm.
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependency:
+
+- `oxfmt` (>= 0.72.0)
+
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`jmlweb-tooling`](../..) - This monorepo formats itself with this package
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier equivalent of this configuration
+- [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config, compatible with this formatter
+
+### External Tools
+
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) - Prettier-compatible formatter written in Rust
+- [Migrate from Prettier](https://oxc.rs/docs/guide/usage/formatter/migrate-from-prettier.html) - Official migration guide
+- [Editor Setup](https://oxc.rs/docs/guide/usage/formatter/editors.html) - Format on save in VS Code and other editors
+
+## ⚠️ Common Issues
+
+> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Small Differences from Prettier
+
+**Symptoms:**
+
+- A few lines change when switching from Prettier, for example long union types split one member per line
+
+**Cause:**
+
+- Oxfmt is not yet 100% identical to Prettier in every edge case
+
+**Solution:**
+
+Run `oxfmt` once and commit the result. Do not run Prettier and Oxfmt on the same files.
+
+### Configuration Not Being Picked Up
+
+**Symptoms:**
+
+- Oxfmt uses its defaults (double quotes, 100 columns)
+
+**Cause:**
+
+- The config is in a `.prettierrc*` file, which Oxfmt does not read
+- A `.oxfmtrc.json` and an `oxfmt.config.ts` exist in the same directory
+
+**Solution:**
+
+Keep a single `oxfmt.config.ts` in the project root. Oxfmt uses the nearest config file to each formatted file.
+
+## 🔄 Migration Guide
+
+### Migrating from `@jmlweb/prettier-config-base`
+
+1. Install this package and `oxfmt`
+2. Create `oxfmt.config.ts` as shown in [Quick Start](#-quick-start)
+3. Replace `prettier` with `oxfmt` in your scripts and `lint-staged` config
+4. Move `.prettierignore` entries to `ignorePatterns`, then remove `.prettierrc*`, `.prettierignore` and the Prettier packages
+5. Run `pnpm format` once and commit the result
+
+### Upgrading to a New Version
+
+> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](./CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT
