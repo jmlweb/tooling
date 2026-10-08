@@ -16,7 +16,7 @@
     "format:check": "oxfmt --check \"**/*.{js,ts,tsx,json,md}\"",
     "integration:test": "pnpm --filter @jmlweb/integration-tests test",
     "lint": "turbo run lint",
-    "lint:root": "eslint --config eslint.config.mjs .",
+    "lint:root": "oxlint",
     "prepare": "husky",
     "syncpack:check": "syncpack lint",
     "syncpack:fix": "syncpack fix && syncpack format",
@@ -39,6 +39,7 @@
     "@eslint/js": "^10.0.1",
     "@jmlweb/eslint-config-base-js": "workspace:*",
     "@jmlweb/oxfmt-config-base": "workspace:*",
+    "@jmlweb/oxlint-config-base": "workspace:*",
     "@jmlweb/prettier-config-base": "workspace:*",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
@@ -47,6 +48,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "oxlint-tsgolint": "^7.0.2003",
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "syncpack": "^15.3.3",
@@ -55,7 +58,7 @@
   },
   "lint-staged": {
     "*.{js,mjs,cjs}": [
-      "eslint --fix",
+      "oxlint --fix",
       "oxfmt"
     ],
     "*.{ts,tsx}": [

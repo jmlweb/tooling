@@ -58,6 +58,17 @@ Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration with 
 
 Recommended formatter for new projects. Tailwind class sorting is a built-in Oxfmt option (`sortTailwindcss`), so no Tailwind variant package is needed. The Prettier packages stay maintained for existing projects and for setups that need Prettier plugins.
 
+### `@jmlweb/oxlint-config-base`
+
+Base [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for JavaScript and TypeScript, porting `@jmlweb/eslint-config-base-js` and `@jmlweb/eslint-config-base`:
+
+- Oxlint `correctness` category and ESLint `recommended` equivalents for all files
+- typescript-eslint `recommended`, `strict(-type-checked)` and `stylistic(-type-checked)` rules for TypeScript files; type-aware rules run when the consumer sets `options.typeAware`
+- Same conventions: no `any`, `type` over `interface`, inline type imports, no enums, named exports only, no parameter mutation
+- Bundles a JS plugin (`@jmlweb/oxlint-config-base/plugin`) with `jmlweb/no-enum`, since Oxlint has no `no-restricted-syntax`
+
+Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by Oxfmt's `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; React, Node.js and Astro projects keep their ESLint packages until Oxlint variants exist.
+
 ### `@jmlweb/eslint-config-base-js`
 
 Base ESLint configuration for JavaScript-only projects. Uses ESLint 9+ flat config format with:
@@ -73,7 +84,7 @@ This package serves as the foundation that TypeScript configurations extend.
 Extends `@jmlweb/eslint-config-base-js` with strict TypeScript support:
 
 - Strict type checking (`strictTypeChecked` + `stylisticTypeChecked`)
-- Enforces explicit return types and prevents `any` usage
+- Prevents `any` usage (explicit return types are not required)
 - Consistent type-only imports with inline style
 - Naming conventions (PascalCase for types, camelCase for variables)
 - Prevents enum usage (prefer const maps)
@@ -193,6 +204,7 @@ The monorepo follows a standard Turborepo structure:
 jmlweb-tooling/
 ├── packages/
 │   ├── oxfmt-config-base/
+│   ├── oxlint-config-base/
 │   ├── prettier-config-base/
 │   ├── prettier-config-tailwind/
 │   ├── eslint-config-base-js/
@@ -321,5 +333,6 @@ See `AGENTS.md` for detailed publishing workflow documentation.
 **Example package names**:
 
 - `@jmlweb/oxfmt-config-base`
+- `@jmlweb/oxlint-config-base`
 - `@jmlweb/prettier-config-base`
 - `@jmlweb/prettier-config-tailwind`

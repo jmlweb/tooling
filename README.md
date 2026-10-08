@@ -23,6 +23,7 @@ For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / 
 | [`@jmlweb/prettier-config-base`](./packages/prettier-config-base)         | Base Prettier configuration                                             | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-base?label=)     |
 | [`@jmlweb/prettier-config-tailwind`](./packages/prettier-config-tailwind) | Prettier + Tailwind CSS plugin                                          | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-tailwind?label=) |
 | **Linting**                                                               |                                                                         |                                                                              |
+| [`@jmlweb/oxlint-config-base`](./packages/oxlint-config-base)             | Oxlint for JavaScript and TypeScript (recommended for new projects)     | ![npm](https://img.shields.io/npm/v/@jmlweb/oxlint-config-base?label=)       |
 | [`@jmlweb/eslint-config-base`](./packages/eslint-config-base)             | ESLint for TypeScript (strict)                                          | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base?label=)       |
 | [`@jmlweb/eslint-config-base-js`](./packages/eslint-config-base-js)       | ESLint for JavaScript                                                   | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js?label=)    |
 | [`@jmlweb/eslint-config-react`](./packages/eslint-config-react)           | ESLint for React libraries with TypeScript, extending base config       | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-react?label=)      |
@@ -68,6 +69,25 @@ pnpm add -D @jmlweb/prettier-config-base prettier
 {
   "prettier": "@jmlweb/prettier-config-base"
 }
+```
+
+### Oxlint (recommended)
+
+```bash
+pnpm add -D @jmlweb/oxlint-config-base oxlint oxlint-tsgolint
+```
+
+```typescript
+// oxlint.config.ts
+import baseConfig from '@jmlweb/oxlint-config-base';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [baseConfig],
+  options: {
+    typeAware: true,
+  },
+});
 ```
 
 ### ESLint (TypeScript)
@@ -160,6 +180,7 @@ All packages support every Node.js release line that is still maintained upstrea
 | `@jmlweb/oxfmt-config-base`        | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/prettier-config-base`     | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/prettier-config-tailwind` | >= 22.12.0          | Oldest supported Node.js LTS        |
+| `@jmlweb/oxlint-config-base`       | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-base-js`    | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-base`       | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-react`      | >= 22.12.0          | Oldest supported Node.js LTS        |
@@ -293,6 +314,7 @@ Track package usage and health through npm statistics:
 | `@jmlweb/oxfmt-config-base`        | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/oxfmt-config-base?label=)        | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/oxfmt-config-base?label=)        |
 | `@jmlweb/prettier-config-base`     | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-base?label=)     | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-base?label=)     |
 | `@jmlweb/prettier-config-tailwind` | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-tailwind?label=) | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-tailwind?label=) |
+| `@jmlweb/oxlint-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/oxlint-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/oxlint-config-base?label=)       |
 | `@jmlweb/eslint-config-base-js`    | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base-js?label=)    | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base-js?label=)    |
 | `@jmlweb/eslint-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base?label=)       |
 | `@jmlweb/eslint-config-react`      | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-react?label=)      | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-react?label=)      |
