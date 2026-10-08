@@ -13,7 +13,7 @@
 
 - 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
 - ⚛️ **React Best Practices**: React rules from `@eslint-react/eslint-plugin`, which supports ESLint 9 and 10
-- 🪝 **Hooks Validation**: Validates React Hooks rules and exhaustive dependencies
+- 🪝 **Hooks Validation**: Rules of Hooks, exhaustive dependencies and the React Compiler rules from the official plugin
 - 🎨 **JSX Support**: Optimized for modern JSX transform (React 17+)
 - 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
 - 🎯 **Code Quality**: Prevents common React pitfalls and anti-patterns
@@ -104,30 +104,33 @@ This configuration applies React-specific rules to:
 - `**/*.tsx` - TypeScript React files
 - `**/*.jsx` - JavaScript React files
 
+The React and hooks rules from the `@eslint-react` and `eslint-plugin-react-hooks` presets apply to every file, so custom hooks in `.ts` files are checked too.
+
 ### Key Rules Enforced
 
-| Rule                                       | Level   | Description                                          |
-| ------------------------------------------ | ------- | ---------------------------------------------------- |
-| `react-hooks/rules-of-hooks`               | `error` | Enforces Rules of Hooks                              |
-| `react-hooks/exhaustive-deps`              | `warn`  | Validates exhaustive dependencies in hooks           |
-| `@eslint-react/no-missing-key`             | `error` | Prevents missing keys in lists                       |
-| `@eslint-react/no-array-index-key`         | `warn`  | Warns against using array index as key               |
-| `@eslint-react/jsx-no-children-prop`       | `error` | Prevents passing `children` as a prop                |
-| `@eslint-react/jsx-no-useless-fragment`    | `error` | Prevents unnecessary fragments                       |
-| `@eslint-react/dom-no-unknown-property`    | `error` | Prevents unknown DOM properties (`class`, ...)       |
-| `@eslint-react/dom-no-unsafe-target-blank` | `error` | Requires `rel="noreferrer noopener"` on `_blank`     |
-| `@stylistic/jsx-pascal-case`               | `error` | Enforces PascalCase for component names              |
-| `@stylistic/jsx-self-closing-comp`         | `error` | Self-closes elements without children                |
-| `@stylistic/jsx-curly-brace-presence`      | `error` | Prevents unnecessary curly braces                    |
-| `perfectionist/sort-jsx-props`             | `error` | Reserved props first, then shorthand, callbacks last |
+| Rule                                              | Level   | Description                                          |
+| ------------------------------------------------- | ------- | ---------------------------------------------------- |
+| `react-hooks/rules-of-hooks`                      | `error` | Enforces Rules of Hooks                              |
+| `react-hooks/exhaustive-deps`                     | `warn`  | Validates exhaustive dependencies in hooks           |
+| `react-hooks/purity`, `refs`, `immutability`, ... | `error` | React Compiler rules (see below)                     |
+| `@eslint-react/no-missing-key`                    | `error` | Prevents missing keys in lists                       |
+| `@eslint-react/no-array-index-key`                | `warn`  | Warns against using array index as key               |
+| `@eslint-react/jsx-no-children-prop`              | `error` | Prevents passing `children` as a prop                |
+| `@eslint-react/jsx-no-useless-fragment`           | `error` | Prevents unnecessary fragments                       |
+| `@eslint-react/dom-no-unknown-property`           | `error` | Prevents unknown DOM properties (`class`, ...)       |
+| `@eslint-react/dom-no-unsafe-target-blank`        | `error` | Requires `rel="noreferrer noopener"` on `_blank`     |
+| `@stylistic/jsx-pascal-case`                      | `error` | Enforces PascalCase for component names              |
+| `@stylistic/jsx-self-closing-comp`                | `error` | Self-closes elements without children                |
+| `@stylistic/jsx-curly-brace-presence`             | `error` | Prevents unnecessary curly braces                    |
+| `perfectionist/sort-jsx-props`                    | `error` | Reserved props first, then shorthand, callbacks last |
 
-Plus the rest of `@eslint-react`'s `recommended-typescript` preset (for example `no-nested-component-definitions`, `no-leaked-conditional-rendering` and the `web-api-no-leaked-*` rules).
+Plus `eslint-plugin-react-hooks`' `recommended` preset (Rules of Hooks and the React Compiler rules such as `purity`, `refs`, `immutability`, `set-state-in-effect` and `static-components`) and the rest of `@eslint-react`'s `recommended-typescript` preset (for example `no-nested-component-definitions`, `no-leaked-conditional-rendering` and the `web-api-no-leaked-*` rules).
 
 ### What's Included
 
 - ✅ All TypeScript ESLint rules from `@jmlweb/eslint-config-base`
 - ✅ `@eslint-react` recommended rules for TypeScript
-- ✅ React Hooks rules from the official `eslint-plugin-react-hooks`
+- ✅ React Hooks and React Compiler rules from the official `eslint-plugin-react-hooks` (`recommended` preset)
 - ✅ JSX best practices and anti-pattern prevention
 - ✅ Automatic import/export sorting
 - ✅ Prettier conflict resolution
@@ -183,9 +186,9 @@ This package extends the base TypeScript config with React-specific rules that e
 
 **Official Hooks plugin**: `eslint-plugin-react-hooks` owns the hooks rules
 
-- **Why**: `@eslint-react` ships ports of the hooks and React Compiler rules. The official plugin is maintained by the React team, so the config turns the ports off instead of running both
-- **Trade-off**: None; each hooks problem is reported once, by `react-hooks/*`
-- **When to override**: Enable more `react-hooks/*` rules (such as the React Compiler ones) if you need them
+- **Why**: `@eslint-react` ships ports of the hooks and React Compiler rules. The official plugin is maintained by the React team and keeps the `react-hooks/*` names used in existing `eslint-disable` comments, so the config uses its `recommended` preset and turns the ports off instead of running both. Each problem is reported once
+- **Trade-off**: The React Compiler rules are strict (most are errors) and catch problems even if you don't use the React Compiler, such as reading refs during render or calling `setState` synchronously in an effect. Older codebases may get many reports, especially from `set-state-in-effect`
+- **When to override**: Lower individual rules to `warn` while migrating, for example `'react-hooks/set-state-in-effect': 'warn'`
 
 **Modern JSX Transform**: Configured for React 17+ (no `React` import needed)
 
@@ -405,6 +408,7 @@ The warnings are usually safe to ignore if linting works correctly.
 - Peer dependencies: remove `eslint-plugin-react`, add `@eslint-react/eslint-plugin`, `@stylistic/eslint-plugin` and `eslint-plugin-perfectionist`
 - Rule names change from `react/*` to `@eslint-react/*`, `@stylistic/*` and `perfectionist/sort-jsx-props`. Update any overrides and `eslint-disable` comments
 - `@eslint-react`'s recommended preset reports problems the old config did not (for example nested component definitions and leaked event listeners)
+- The React Compiler rules from `eslint-plugin-react-hooks`' `recommended` preset are enabled (`purity`, `refs`, `immutability`, `set-state-in-effect`, ...), and hooks rules now also apply to `.ts` files
 - `jsx-boolean-value`, `jsx-fragments` and `no-unescaped-entities` are no longer enforced
 - The React version setting moves from `settings.react.version` to `settings['react-x'].version`
 
