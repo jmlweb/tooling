@@ -19,13 +19,7 @@
     "//#lint:root": {},
     "format": {
       "outputs": [],
-      "inputs": [
-        "**/*.{js,json,md}",
-        ".prettierrc*",
-        ".prettierignore",
-        "prettier.config.*",
-        "package.json"
-      ]
+      "inputs": ["**/*.{js,json,md}", "oxfmt.config.ts", "package.json"]
     },
     "clean": {
       "cache": false

@@ -39,7 +39,8 @@ export default {
         'eslint-config-astro',
         'eslint-config-node',
         'eslint-config-react',
-        // Prettier configs
+        // Formatter configs
+        'oxfmt-config-base',
         'prettier-config-base',
         'prettier-config-tailwind',
         // TypeScript configs

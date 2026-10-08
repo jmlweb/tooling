@@ -12,8 +12,8 @@
     "docs:build": "pnpm --filter docs build",
     "docs:generate": "pnpm --filter docs generate:docs",
     "docs:preview": "pnpm --filter docs preview",
-    "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\"",
+    "format": "oxfmt \"**/*.{js,ts,tsx,json,md}\"",
+    "format:check": "oxfmt --check \"**/*.{js,ts,tsx,json,md}\"",
     "integration:test": "pnpm --filter @jmlweb/integration-tests test",
     "lint": "turbo run lint",
     "lint:root": "eslint --config eslint.config.mjs .",
@@ -38,6 +38,7 @@
     "@changesets/cli": "^3.0.3",
     "@eslint/js": "^10.0.1",
     "@jmlweb/eslint-config-base-js": "workspace:*",
+    "@jmlweb/oxfmt-config-base": "workspace:*",
     "@jmlweb/prettier-config-base": "workspace:*",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
@@ -45,6 +46,7 @@
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
+    "oxfmt": "^0.72.0",
     "prettier": "^3.9.9",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "syncpack": "^15.3.3",
@@ -54,19 +56,19 @@
   "lint-staged": {
     "*.{js,mjs,cjs}": [
       "eslint --fix",
-      "prettier --write"
+      "oxfmt"
     ],
     "*.{ts,tsx}": [
-      "prettier --write"
+      "oxfmt"
     ],
     "package.json": [
-      "prettier --write"
+      "oxfmt"
     ],
     "*.json": [
-      "prettier --write"
+      "oxfmt"
     ],
     "*.md": [
-      "prettier --write"
+      "oxfmt"
     ]
   },
   "packageManager": "pnpm@10.26.2",

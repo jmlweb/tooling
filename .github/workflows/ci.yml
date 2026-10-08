@@ -29,8 +29,8 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
 
-      - name: Build prettier configs (required for format check)
-        run: pnpm build --filter='@jmlweb/prettier-config-*'
+      - name: Build oxfmt config (required for format check)
+        run: pnpm build --filter='@jmlweb/oxfmt-config-base'
 
       - name: Check formatting
         run: pnpm format:check

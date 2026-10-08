@@ -9,7 +9,12 @@ export type EntryConfig = string[] | Record<string, string>;
  * Node.js target version for CLI builds
  */
 export type NodeTarget =
-  'node16' | 'node18' | 'node20' | 'node22' | 'node24' | `node${number}`;
+  | 'node16'
+  | 'node18'
+  | 'node20'
+  | 'node22'
+  | 'node24'
+  | `node${number}`;
 
 /**
  * Output formats supported by tsdown

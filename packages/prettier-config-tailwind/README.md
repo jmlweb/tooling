@@ -6,6 +6,8 @@
 
 > Prettier configuration with Tailwind CSS class sorting. Extends `@jmlweb/prettier-config-base` with automatic Tailwind class organization.
 
+> 💡 **New projects**: prefer [`@jmlweb/oxfmt-config-base`](../oxfmt-config-base) with its built-in `sortTailwindcss` option. This package stays maintained for existing projects and setups that need Prettier plugins.
+
 ## ✨ Features
 
 - 🎨 **Tailwind Class Sorting**: Automatically sorts Tailwind CSS classes in the recommended order

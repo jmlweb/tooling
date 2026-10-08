@@ -19,6 +19,7 @@ For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / 
 | Package                                                                   | Description                                                             | Version                                                                      |
 | ------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | **Formatting**                                                            |                                                                         |                                                                              |
+| [`@jmlweb/oxfmt-config-base`](./packages/oxfmt-config-base)               | Base Oxfmt configuration (recommended for new projects)                 | ![npm](https://img.shields.io/npm/v/@jmlweb/oxfmt-config-base?label=)        |
 | [`@jmlweb/prettier-config-base`](./packages/prettier-config-base)         | Base Prettier configuration                                             | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-base?label=)     |
 | [`@jmlweb/prettier-config-tailwind`](./packages/prettier-config-tailwind) | Prettier + Tailwind CSS plugin                                          | ![npm](https://img.shields.io/npm/v/@jmlweb/prettier-config-tailwind?label=) |
 | **Linting**                                                               |                                                                         |                                                                              |
@@ -40,6 +41,22 @@ For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / 
 | [`@jmlweb/commitlint-config`](./packages/commitlint-config)               | Commitlint configuration for Conventional Commits                       | ![npm](https://img.shields.io/npm/v/@jmlweb/commitlint-config?label=)        |
 
 ## Quick Start
+
+### Oxfmt (recommended)
+
+```bash
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+```
+
+```typescript
+// oxfmt.config.ts
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+});
+```
 
 ### Prettier
 
@@ -140,6 +157,7 @@ All packages support every Node.js release line that is still maintained upstrea
 
 | Package                            | Node.js Requirement | Reason                              |
 | ---------------------------------- | ------------------- | ----------------------------------- |
+| `@jmlweb/oxfmt-config-base`        | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/prettier-config-base`     | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/prettier-config-tailwind` | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-base-js`    | >= 22.12.0          | Oldest supported Node.js LTS        |
@@ -272,6 +290,7 @@ Track package usage and health through npm statistics:
 
 | Package                            | Weekly Downloads                                                                               | Total Downloads                                                                         |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `@jmlweb/oxfmt-config-base`        | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/oxfmt-config-base?label=)        | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/oxfmt-config-base?label=)        |
 | `@jmlweb/prettier-config-base`     | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-base?label=)     | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-base?label=)     |
 | `@jmlweb/prettier-config-tailwind` | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-tailwind?label=) | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-tailwind?label=) |
 | `@jmlweb/eslint-config-base-js`    | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base-js?label=)    | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base-js?label=)    |
