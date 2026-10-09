@@ -175,7 +175,7 @@ Use this package when you want:
 - ✅ To migrate from `@jmlweb/eslint-config-base` or `@jmlweb/eslint-config-base-js`
 - ✅ Type-aware rules without typescript-eslint's runtime cost
 
-**For React projects**, use [`@jmlweb/oxlint-config-react`](../oxlint-config-react). **For Node.js or Astro projects**, keep using [`@jmlweb/eslint-config-node`](../eslint-config-node) or [`@jmlweb/eslint-config-astro`](../eslint-config-astro) until their Oxlint versions exist.
+**For React projects**, use [`@jmlweb/oxlint-config-react`](../oxlint-config-react). **For Node.js projects**, use [`@jmlweb/oxlint-config-node`](../oxlint-config-node). **For Astro projects**, keep using [`@jmlweb/eslint-config-astro`](../eslint-config-astro), since Oxlint cannot lint `.astro` templates.
 
 ## 🔧 Extending the Configuration
 
@@ -250,6 +250,7 @@ See real-world usage examples:
 ### Internal Packages
 
 - [`@jmlweb/oxlint-config-react`](../oxlint-config-react) - Extends this config for React projects
+- [`@jmlweb/oxlint-config-node`](../oxlint-config-node) - Extends this config for Node.js projects
 - [`@jmlweb/oxfmt-config-base`](../oxfmt-config-base) - Oxfmt config, the formatter to pair with this linter
 - [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint equivalent of this configuration
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript config for type-aware linting

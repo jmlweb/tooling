@@ -8,6 +8,8 @@
 
 > ESLint configuration for Node.js projects with TypeScript. Extends `@jmlweb/eslint-config-base` with Node.js-specific rules, globals, and best practices for Node.js development.
 
+> 💡 **New projects**: prefer [`@jmlweb/oxlint-config-node`](../oxlint-config-node), which ports these rules to Oxlint. This package stays maintained for existing projects.
+
 ## ✨ Features
 
 - 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config

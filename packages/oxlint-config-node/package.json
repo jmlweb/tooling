@@ -1,0 +1,75 @@
+{
+  "name": "@jmlweb/oxlint-config-node",
+  "version": "0.0.0",
+  "description": "Oxlint configuration for Node.js projects, extending @jmlweb/oxlint-config-base",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+  },
+  "keywords": [
+    "linter",
+    "node",
+    "nodejs",
+    "oxc",
+    "oxlint",
+    "oxlint-config"
+  ],
+  "author": "jmlweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmlweb/tooling.git"
+  },
+  "bugs": "https://github.com/jmlweb/tooling/issues",
+  "homepage": "https://github.com/jmlweb/tooling/tree/main/packages/oxlint-config-node#readme",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "eslint-plugin-n": "^17.0.0 || ^18.0.0",
+    "oxlint": ">=1.87.0",
+    "oxlint-tsgolint": ">=7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "oxlint-tsgolint": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@jmlweb/oxlint-config-base": "workspace:*"
+  },
+  "devDependencies": {
+    "@jmlweb/tsconfig-internal": "workspace:*",
+    "@jmlweb/tsdown-config-base": "workspace:*",
+    "eslint-plugin-n": "^18.4.1",
+    "oxlint": "^1.87.0",
+    "oxlint-tsgolint": "^7.0.2003",
+    "tsdown": "~0.23.0",
+    "typescript": "^6.0.3"
+  }
+}
