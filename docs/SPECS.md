@@ -68,7 +68,17 @@ Base [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for Jav
 - Same conventions: no `any`, `type` over `interface`, inline type imports, no enums, named exports only, no parameter mutation
 - Bundles a JS plugin (`@jmlweb/oxlint-config-base/plugin`) with `jmlweb/no-enum`, since Oxlint has no `no-restricted-syntax`
 
-Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by `@jmlweb/oxfmt-config-base`'s Perfectionist-style `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; React, Node.js and Astro projects keep their ESLint packages until Oxlint variants exist.
+Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by `@jmlweb/oxfmt-config-base`'s Perfectionist-style `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; Node.js and Astro projects keep their ESLint packages until Oxlint variants exist.
+
+### `@jmlweb/oxlint-config-react`
+
+Extends `@jmlweb/oxlint-config-base` for React, porting `@jmlweb/eslint-config-react`:
+
+- `eslint-plugin-react-hooks` `recommended` rules, React Compiler ones included, as Oxlint's native `react/*` rules for all files (no `eslint-plugin-react-hooks` needed)
+- `@eslint-react` `recommended-typescript` rules as an Oxlint JS plugin, derived from its presets, without its hooks ports
+- For JSX files: stricter `@eslint-react` rules, native `jsx-pascal-case`, `self-closing-comp` and `jsx-curly-brace-presence`, and `perfectionist/sort-jsx-props`
+
+Not ported: naming convention (as in the base package) and the hooks `config`/`gating` rules (React Compiler option checks).
 
 ### `@jmlweb/eslint-config-base-js`
 
@@ -206,6 +216,7 @@ jmlweb-tooling/
 ├── packages/
 │   ├── oxfmt-config-base/
 │   ├── oxlint-config-base/
+│   ├── oxlint-config-react/
 │   ├── prettier-config-base/
 │   ├── prettier-config-tailwind/
 │   ├── eslint-config-base-js/
@@ -335,5 +346,6 @@ See `AGENTS.md` for detailed publishing workflow documentation.
 
 - `@jmlweb/oxfmt-config-base`
 - `@jmlweb/oxlint-config-base`
+- `@jmlweb/oxlint-config-react`
 - `@jmlweb/prettier-config-base`
 - `@jmlweb/prettier-config-tailwind`
