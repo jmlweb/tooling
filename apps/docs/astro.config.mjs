@@ -61,6 +61,10 @@ export default defineConfig({
               label: 'base',
               link: '/oxlint/base',
             },
+            {
+              label: 'react',
+              link: '/oxlint/react',
+            },
           ],
         },
         {
