@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-base
 
+## 3.0.1
+
+### Patch Changes
+
+- 24e66ae: Fix the README: `@typescript-eslint/explicit-function-return-type` is off, so explicit return types are not required.
+
 ## 3.0.0
 
 ### Major Changes

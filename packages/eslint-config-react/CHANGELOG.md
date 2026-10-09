@@ -1,5 +1,12 @@
 # @jmlweb/eslint-config-react
 
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [24e66ae]
+  - @jmlweb/eslint-config-base@3.0.1
+
 ## 6.0.0
 
 ### Major Changes
