@@ -1,5 +1,11 @@
 # @jmlweb/commitlint-config
 
+## 4.0.1
+
+### Patch Changes
+
+- 8c18e15: Declare the exported options types with `type` instead of `interface`. Their shape is unchanged; only declaration merging into them is no longer possible. `@jmlweb/jest-config` also omits `setupFilesAfterEnv` and `moduleNameMapper` without deleting keys, with the same resulting config.
+
 ## 4.0.0
 
 ### Major Changes
