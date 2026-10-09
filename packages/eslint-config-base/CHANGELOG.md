@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-base
 
+## 3.0.2
+
+### Patch Changes
+
+- 6083b87: Build the config as a plain array instead of with typescript-eslint's deprecated `config()` helper. The resulting config is identical.
+
 ## 3.0.1
 
 ### Patch Changes
