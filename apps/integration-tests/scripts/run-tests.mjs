@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { execSync } from 'node:child_process';
-
 import chalk from 'chalk';
+import { execSync } from 'node:child_process';
 
 import { testBuildToolConfigs } from './test-build-tools.mjs';
 import { testCommitlintConfig } from './test-commitlint.mjs';
 import { testESLintConfigs } from './test-eslint.mjs';
+import { testOxcConfigs } from './test-oxc.mjs';
 import { testPrettierConfigs } from './test-prettier.mjs';
 import { testTestingConfigs } from './test-testing-configs.mjs';
 import { testTSConfigs } from './test-tsconfig.mjs';
@@ -75,6 +75,13 @@ async function main() {
     } catch (error) {
       hasErrors = true;
       log.error(`ESLint config tests failed: ${error.message}`);
+    }
+
+    try {
+      await testOxcConfigs(packedPackages);
+    } catch (error) {
+      hasErrors = true;
+      log.error(`Oxc config tests failed: ${error.message}`);
     }
 
     try {

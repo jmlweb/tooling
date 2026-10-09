@@ -32,6 +32,7 @@ The integration tests are organized by package type:
 
 - **Prettier Configs** (`test-prettier.mjs`) - Tests Prettier configuration packages
 - **ESLint Configs** (`test-eslint.mjs`) - Tests ESLint configuration packages
+- **Oxc Configs** (`test-oxc.mjs`) - Runs Oxfmt and Oxlint with the Oxc configuration packages against fixtures, checking the formatted output and that native, type-aware and JS plugin rules report
 - **TypeScript Configs** (`test-tsconfig.mjs`) - Tests TypeScript configuration packages
 - **Testing Configs** (`test-testing-configs.mjs`) - Tests Vitest and Jest configuration packages
 - **Build Tool Configs** (`test-build-tools.mjs`) - Tests tsup, tsdown, Vite, and PostCSS configuration packages (tsdown also runs a real build)
