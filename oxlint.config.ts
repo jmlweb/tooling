@@ -12,8 +12,8 @@ export default defineConfig({
   ignorePatterns: [
     '**/dist/**',
     '.husky/**',
-    // Linted by their own ESLint setup
-    'apps/example-*/**/*.{ts,tsx,mts,cts}',
+    // Each example app is linted by its own lint task and config
+    'apps/example-*/**',
     // Intentionally invalid inputs for the test app
     'apps/test-app/fixtures/**/*.{ts,tsx,mts,cts}',
   ],

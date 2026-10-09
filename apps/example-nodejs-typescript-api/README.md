@@ -4,8 +4,8 @@ This example demonstrates how to use `@jmlweb` tooling packages in a Node.js Typ
 
 ## Packages Used
 
-- [`@jmlweb/prettier-config-base`](../../packages/prettier-config-base) - Code formatting
-- [`@jmlweb/eslint-config-base`](../../packages/eslint-config-base) - TypeScript linting with strict rules
+- [`@jmlweb/oxfmt-config-base`](../../packages/oxfmt-config-base) - Code formatting and import sorting
+- [`@jmlweb/oxlint-config-node`](../../packages/oxlint-config-node) - Node.js and strict TypeScript linting
 - [`@jmlweb/tsconfig-base`](../../packages/tsconfig-base) - TypeScript configuration
 - [`@jmlweb/vitest-config`](../../packages/vitest-config) - Testing configuration
 
@@ -51,15 +51,16 @@ nodejs-typescript-api/
 ├── dist/                 # Compiled output
 ├── package.json          # Dependencies and scripts
 ├── tsconfig.json         # Extends @jmlweb/tsconfig-base
-├── eslint.config.js      # Uses @jmlweb/eslint-config-base
+├── oxlint.config.ts      # Extends @jmlweb/oxlint-config-node
+├── oxfmt.config.ts       # Uses @jmlweb/oxfmt-config-base
 └── vitest.config.ts      # Uses @jmlweb/vitest-config
 ```
 
 ## Key Features
 
 - ✅ Strict TypeScript configuration
-- ✅ ESLint with strict type checking
-- ✅ Prettier for consistent formatting
+- ✅ Oxlint with type-aware TypeScript rules and Node.js rules (`eslint-plugin-n`)
+- ✅ Oxfmt for consistent formatting and import sorting
 - ✅ Vitest for testing with coverage
 - ✅ Express.js API example
 
@@ -79,25 +80,35 @@ nodejs-typescript-api/
 }
 ```
 
-### `eslint.config.js`
+### `oxlint.config.ts`
 
-```javascript
-import baseConfig from '@jmlweb/eslint-config-base';
+```typescript
+import nodeConfig from '@jmlweb/oxlint-config-node';
+import { defineConfig } from 'oxlint';
 
-export default [
-  ...baseConfig,
-  {
-    ignores: ['dist/', 'node_modules/', 'coverage/'],
+export default defineConfig({
+  extends: [nodeConfig],
+  options: {
+    typeAware: true,
   },
-];
+  ignorePatterns: [
+    'dist/**',
+    'coverage/**',
+    // Outside tsconfig.json, so type-aware rules cannot resolve their imports
+    '*.config.ts',
+  ],
+});
 ```
 
-### `package.json`
+### `oxfmt.config.ts`
 
-```json
-{
-  "prettier": "@jmlweb/prettier-config-base"
-}
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+});
 ```
 
 ## Requirements

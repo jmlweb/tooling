@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config';
 import baseConfig from '@jmlweb/vitest-config';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   ...baseConfig,

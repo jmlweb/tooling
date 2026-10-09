@@ -16,7 +16,7 @@
     "format:check": "oxfmt --check \"**/*.{js,ts,tsx,json,md}\"",
     "integration:test": "pnpm --filter @jmlweb/integration-tests test",
     "lint": "turbo run lint",
-    "lint:root": "oxlint --ignore-pattern 'packages/*/src/**'",
+    "lint:root": "oxlint --disable-nested-config --ignore-pattern 'packages/*/src/**'",
     "prepare": "husky",
     "syncpack:check": "syncpack lint",
     "syncpack:fix": "syncpack fix && syncpack format",
@@ -58,7 +58,7 @@
   },
   "lint-staged": {
     "*.{js,mjs,cjs}": [
-      "oxlint --fix",
+      "oxlint --fix --disable-nested-config",
       "oxfmt"
     ],
     "*.{ts,tsx}": [

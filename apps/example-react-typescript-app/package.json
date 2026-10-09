@@ -1,6 +1,7 @@
 {
   "name": "react-typescript-app-example",
   "version": "1.0.0",
+  "private": true,
   "description": "Example React TypeScript app using @jmlweb tooling packages",
   "type": "module",
   "scripts": {
@@ -9,10 +10,10 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -20,9 +21,9 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@jmlweb/eslint-config-react": "workspace:*",
-    "@jmlweb/prettier-config-tailwind": "workspace:*",
+    "@eslint-react/eslint-plugin": "^5.24.9",
+    "@jmlweb/oxfmt-config-base": "workspace:*",
+    "@jmlweb/oxlint-config-react": "workspace:*",
     "@jmlweb/tsconfig-react": "workspace:*",
     "@jmlweb/vitest-config": "workspace:*",
     "@testing-library/jest-dom": "^7.0.1",
@@ -32,13 +33,13 @@
     "@vitejs/plugin-react": "^6.1.2",
     "@vitest/coverage-v8": "^5.0.3",
     "@vitest/ui": "^5.0.3",
-    "eslint": "^10.12.0",
+    "eslint-plugin-perfectionist": "^5.12.1",
     "jsdom": "^30.1.2",
-    "prettier": "^3.9.9",
-    "prettier-plugin-tailwindcss": "^0.8.1",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "oxlint-tsgolint": "^7.0.2003",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1",
     "vite": "^8.3.4",
     "vitest": "^5.0.3"
   },

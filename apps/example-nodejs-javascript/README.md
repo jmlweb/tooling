@@ -4,8 +4,8 @@ This example demonstrates how to use `@jmlweb` tooling packages in a Node.js Jav
 
 ## Packages Used
 
-- [`@jmlweb/prettier-config-base`](../../packages/prettier-config-base) - Code formatting
-- [`@jmlweb/eslint-config-base-js`](../../packages/eslint-config-base-js) - JavaScript linting
+- [`@jmlweb/oxfmt-config-base`](../../packages/oxfmt-config-base) - Code formatting and import sorting
+- [`@jmlweb/oxlint-config-node`](../../packages/oxlint-config-node) - Node.js linting
 
 ## Setup
 
@@ -40,74 +40,72 @@ nodejs-javascript/
 ├── src/
 │   └── index.js         # Main API server
 ├── package.json         # Dependencies and scripts
-└── eslint.config.js     # Uses @jmlweb/eslint-config-base-js
+├── oxlint.config.ts     # Extends @jmlweb/oxlint-config-node
+└── oxfmt.config.ts      # Uses @jmlweb/oxfmt-config-base
 ```
 
 ## Key Features
 
 - ✅ Pure JavaScript (no TypeScript)
-- ✅ ESLint with recommended JavaScript rules
-- ✅ Prettier for consistent formatting
+- ✅ Oxlint with ESLint's recommended rules and Node.js rules (`eslint-plugin-n`)
+- ✅ Oxfmt for consistent formatting
 - ✅ Express.js API example
 - ✅ Automatic import sorting
 
 ## Configuration Files
 
-### `eslint.config.js`
+### `oxlint.config.ts`
 
-```javascript
-import baseJsConfig from '@jmlweb/eslint-config-base-js';
-import globals from 'globals';
+```typescript
+import nodeConfig from '@jmlweb/oxlint-config-node';
+import { defineConfig } from 'oxlint';
 
-export default [
-  ...baseJsConfig,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
-  {
-    ignores: ['node_modules/'],
-  },
-];
+export default defineConfig({
+  extends: [nodeConfig],
+});
 ```
 
-### `package.json`
+### `oxfmt.config.ts`
 
-```json
-{
-  "prettier": "@jmlweb/prettier-config-base"
-}
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+});
 ```
 
 ## Import Sorting
 
-The ESLint config automatically sorts imports:
+Oxfmt sorts imports when formatting, in the same order as `eslint-plugin-perfectionist`:
 
 **Before:**
 
+<!-- prettier-ignore -->
 ```javascript
-import './polyfill';
 import { Component } from './component';
 import express from 'express';
-import fs from 'fs';
+import './polyfill';
+import fs from 'node:fs';
 ```
 
-**After auto-fix:**
+**After formatting:**
 
 ```javascript
-import './polyfill';
-import fs from 'fs';
 import express from 'express';
+import fs from 'node:fs';
+
+import './polyfill';
 import { Component } from './component';
 ```
 
-Fix import order automatically:
+Side-effect imports such as `./polyfill` are sorted too, so keep order-dependent ones in a separate entry file.
+
+Sort imports and format the code:
 
 ```bash
-npm run lint:fix
+npm run format
 ```
 
 ## Requirements

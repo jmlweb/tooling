@@ -103,30 +103,21 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
     devDependencies:
-      '@eslint/js':
-        specifier: ^10.0.1
-        version: 10.0.1(eslint@10.12.0(jiti@2.6.1))
-      '@jmlweb/eslint-config-base-js':
+      '@jmlweb/oxfmt-config-base':
         specifier: workspace:*
-        version: link:../../packages/eslint-config-base-js
-      '@jmlweb/prettier-config-base':
+        version: link:../../packages/oxfmt-config-base
+      '@jmlweb/oxlint-config-node':
         specifier: workspace:*
-        version: link:../../packages/prettier-config-base
-      eslint:
-        specifier: ^10.12.0
-        version: 10.12.0(jiti@2.6.1)
-      eslint-config-prettier:
-        specifier: ^10.1.8
-        version: 10.1.8(eslint@10.12.0(jiti@2.6.1))
-      eslint-plugin-simple-import-sort:
-        specifier: ^14.0.0
-        version: 14.0.0(eslint@10.12.0(jiti@2.6.1))
-      globals:
-        specifier: ^17.13.0
-        version: 17.13.0
-      prettier:
-        specifier: ^3.9.9
-        version: 3.9.9
+        version: link:../../packages/oxlint-config-node
+      eslint-plugin-n:
+        specifier: ^18.4.1
+        version: 18.4.1(eslint@10.12.0(jiti@2.6.1))(ts-declaration-location@1.0.7(typescript@6.0.3))(typescript@6.0.3)
+      oxfmt:
+        specifier: ^0.72.0
+        version: 0.72.0
+      oxlint:
+        specifier: ^1.87.0
+        version: 1.87.0(oxlint-tsgolint@7.0.2003)
 
   apps/example-nodejs-typescript-api:
     dependencies:
@@ -134,15 +125,12 @@ importers:
         specifier: ^5.2.1
         version: 5.2.1
     devDependencies:
-      '@eslint/js':
-        specifier: ^10.0.1
-        version: 10.0.1(eslint@10.12.0(jiti@2.6.1))
-      '@jmlweb/eslint-config-base':
+      '@jmlweb/oxfmt-config-base':
         specifier: workspace:*
-        version: link:../../packages/eslint-config-base
-      '@jmlweb/prettier-config-base':
+        version: link:../../packages/oxfmt-config-base
+      '@jmlweb/oxlint-config-node':
         specifier: workspace:*
-        version: link:../../packages/prettier-config-base
+        version: link:../../packages/oxlint-config-node
       '@jmlweb/tsconfig-base':
         specifier: workspace:*
         version: link:../../packages/tsconfig-base
@@ -158,21 +146,24 @@ importers:
       '@vitest/ui':
         specifier: ^5.0.3
         version: 5.0.3(vitest@5.0.3)
-      eslint:
-        specifier: ^10.12.0
-        version: 10.12.0(jiti@2.6.1)
-      prettier:
-        specifier: ^3.9.9
-        version: 3.9.9
+      eslint-plugin-n:
+        specifier: ^18.4.1
+        version: 18.4.1(eslint@10.12.0(jiti@2.6.1))(ts-declaration-location@1.0.7(typescript@6.0.3))(typescript@6.0.3)
+      oxfmt:
+        specifier: ^0.72.0
+        version: 0.72.0
+      oxlint:
+        specifier: ^1.87.0
+        version: 1.87.0(oxlint-tsgolint@7.0.2003)
+      oxlint-tsgolint:
+        specifier: ^7.0.2003
+        version: 7.0.2003
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
-      typescript-eslint:
-        specifier: ^8.71.1
-        version: 8.71.1(eslint@10.12.0(jiti@2.6.1))(typescript@6.0.3)
       vitest:
         specifier: ^5.0.3
         version: 5.0.3(@types/node@25.8.0)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(jsdom@30.1.2)(vite@8.3.4(@types/node@25.8.0)(esbuild@0.28.2)(jiti@2.6.1)(tsx@4.23.15)(yaml@2.9.1))
@@ -186,15 +177,15 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0(react@19.3.0)
     devDependencies:
-      '@eslint/js':
-        specifier: ^10.0.1
-        version: 10.0.1(eslint@10.12.0(jiti@2.6.1))
-      '@jmlweb/eslint-config-react':
+      '@eslint-react/eslint-plugin':
+        specifier: ^5.24.9
+        version: 5.24.9(eslint@10.12.0(jiti@2.6.1))(typescript@6.0.3)
+      '@jmlweb/oxfmt-config-base':
         specifier: workspace:*
-        version: link:../../packages/eslint-config-react
-      '@jmlweb/prettier-config-tailwind':
+        version: link:../../packages/oxfmt-config-base
+      '@jmlweb/oxlint-config-react':
         specifier: workspace:*
-        version: link:../../packages/prettier-config-tailwind
+        version: link:../../packages/oxlint-config-react
       '@jmlweb/tsconfig-react':
         specifier: workspace:*
         version: link:../../packages/tsconfig-react
@@ -222,27 +213,27 @@ importers:
       '@vitest/ui':
         specifier: ^5.0.3
         version: 5.0.3(vitest@5.0.3)
-      eslint:
-        specifier: ^10.12.0
-        version: 10.12.0(jiti@2.6.1)
+      eslint-plugin-perfectionist:
+        specifier: ^5.12.1
+        version: 5.12.1(eslint@10.12.0(jiti@2.6.1))(typescript@6.0.3)
       jsdom:
         specifier: ^30.1.2
         version: 30.1.2
-      prettier:
-        specifier: ^3.9.9
-        version: 3.9.9
-      prettier-plugin-tailwindcss:
-        specifier: ^0.8.1
-        version: 0.8.1(prettier@3.9.9)
+      oxfmt:
+        specifier: ^0.72.0
+        version: 0.72.0
+      oxlint:
+        specifier: ^1.87.0
+        version: 1.87.0(oxlint-tsgolint@7.0.2003)
+      oxlint-tsgolint:
+        specifier: ^7.0.2003
+        version: 7.0.2003
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
-      typescript-eslint:
-        specifier: ^8.71.1
-        version: 8.71.1(eslint@10.12.0(jiti@2.6.1))(typescript@6.0.3)
       vite:
         specifier: ^8.3.4
         version: 8.3.4(@types/node@25.8.0)(esbuild@0.28.2)(jiti@2.6.1)(tsx@4.23.15)(yaml@2.9.1)

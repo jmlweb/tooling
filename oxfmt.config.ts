@@ -6,8 +6,6 @@ export default defineConfig({
   overrides: [
     {
       files: [
-        // Linted by ESLint, whose simple-import-sort owns their import order
-        'apps/example-*/**',
         // Intentionally unsorted fixtures and "before" examples
         'apps/test-app/fixtures/**',
         '**/*.md',

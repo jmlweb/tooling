@@ -4,8 +4,8 @@ This example demonstrates how to use `@jmlweb` tooling packages in a React TypeS
 
 ## Packages Used
 
-- [`@jmlweb/prettier-config-tailwind`](../../packages/prettier-config-tailwind) - Code formatting with Tailwind class sorting
-- [`@jmlweb/eslint-config-react`](../../packages/eslint-config-react) - React + TypeScript linting with strict rules
+- [`@jmlweb/oxfmt-config-base`](../../packages/oxfmt-config-base) - Code formatting, import sorting and Tailwind class sorting
+- [`@jmlweb/oxlint-config-react`](../../packages/oxlint-config-react) - React + TypeScript linting with strict rules
 - [`@jmlweb/tsconfig-react`](../../packages/tsconfig-react) - TypeScript configuration for React
 - [`@jmlweb/vitest-config`](../../packages/vitest-config) - Testing configuration
 
@@ -53,18 +53,18 @@ react-typescript-app/
 ├── dist/                # Built output
 ├── package.json         # Dependencies and scripts
 ├── tsconfig.json        # Extends @jmlweb/tsconfig-react
-├── eslint.config.js     # Uses @jmlweb/eslint-config-react
+├── oxlint.config.ts     # Extends @jmlweb/oxlint-config-react
+├── oxfmt.config.ts      # Uses @jmlweb/oxfmt-config-base with Tailwind sorting
 ├── vitest.config.ts     # Uses @jmlweb/vitest-config
-├── vite.config.ts       # Vite configuration
-└── tailwind.config.js   # Tailwind CSS configuration
+└── vite.config.ts       # Vite configuration
 ```
 
 ## Key Features
 
-- ✅ React 18 with TypeScript
-- ✅ Tailwind CSS with automatic class sorting
-- ✅ ESLint with React and strict TypeScript rules
-- ✅ Prettier with Tailwind plugin
+- ✅ React 19 with TypeScript
+- ✅ Tailwind CSS 4 with automatic class sorting
+- ✅ Oxlint with React, React Compiler and type-aware TypeScript rules
+- ✅ Oxfmt for formatting, import sorting and Tailwind class sorting
 - ✅ Vitest for testing with jsdom environment
 - ✅ Vite for fast development and building
 
@@ -84,25 +84,46 @@ react-typescript-app/
 }
 ```
 
-### `eslint.config.js`
+### `oxlint.config.ts`
 
-```javascript
-import reactConfig from '@jmlweb/eslint-config-react';
+```typescript
+import reactConfig from '@jmlweb/oxlint-config-react';
+import { defineConfig } from 'oxlint';
 
-export default [
-  ...reactConfig,
-  {
-    ignores: ['dist/', 'node_modules/', 'coverage/', '*.config.js'],
+export default defineConfig({
+  extends: [reactConfig],
+  options: {
+    typeAware: true,
   },
-];
+  ignorePatterns: [
+    'dist/**',
+    'coverage/**',
+    // Outside tsconfig.json, so type-aware rules cannot resolve their imports
+    '*.config.ts',
+  ],
+});
+```
+
+### `oxfmt.config.ts`
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+  sortTailwindcss: {
+    stylesheet: './src/index.css',
+  },
+});
 ```
 
 ### `vitest.config.ts`
 
 ```typescript
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
 import baseConfig from '@jmlweb/vitest-config';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
@@ -114,24 +135,15 @@ export default defineConfig({
 });
 ```
 
-### `package.json`
-
-```json
-{
-  "prettier": "@jmlweb/prettier-config-tailwind"
-}
-```
-
 ## Tailwind CSS Class Sorting
 
-The Prettier config automatically sorts Tailwind CSS classes in the recommended order:
+Oxfmt sorts Tailwind CSS classes in the recommended order, reading the Tailwind setup from `src/index.css`:
 
 **Before:**
 
+<!-- prettier-ignore -->
 ```tsx
-<button className="rounded-lg bg-blue-500 px-4 py-2 text-white">
-  Click me
-</button>
+<button className="text-white px-4 rounded-lg py-2 bg-blue-500">Click me</button>
 ```
 
 **After formatting:**

@@ -44,8 +44,8 @@ Example projects demonstrating how to use `@jmlweb` tooling packages in real-wor
 
 **Packages Demonstrated:**
 
-- [`@jmlweb/prettier-config-base`](../packages/prettier-config-base) - Code formatting
-- [`@jmlweb/eslint-config-base`](../packages/eslint-config-base) - TypeScript linting with strict rules
+- [`@jmlweb/oxfmt-config-base`](../packages/oxfmt-config-base) - Code formatting and import sorting
+- [`@jmlweb/oxlint-config-node`](../packages/oxlint-config-node) - Node.js and strict TypeScript linting
 - [`@jmlweb/tsconfig-base`](../packages/tsconfig-base) - TypeScript configuration
 - [`@jmlweb/vitest-config`](../packages/vitest-config) - Testing configuration
 
@@ -54,8 +54,8 @@ Example projects demonstrating how to use `@jmlweb` tooling packages in real-wor
 **Key Features:**
 
 - Strict TypeScript configuration
-- ESLint with strict type checking
-- Prettier for consistent formatting
+- Oxlint with type-aware TypeScript rules and Node.js rules
+- Oxfmt for consistent formatting
 - Vitest for testing with coverage
 
 ### 2. React TypeScript App
@@ -64,20 +64,18 @@ Example projects demonstrating how to use `@jmlweb` tooling packages in real-wor
 
 **Packages Demonstrated:**
 
-- [`@jmlweb/prettier-config-tailwind`](../packages/prettier-config-tailwind) - Code formatting with Tailwind class sorting
-- [`@jmlweb/eslint-config-react`](../packages/eslint-config-react) - React + TypeScript linting with strict rules
+- [`@jmlweb/oxfmt-config-base`](../packages/oxfmt-config-base) - Code formatting with Tailwind class sorting
+- [`@jmlweb/oxlint-config-react`](../packages/oxlint-config-react) - React + TypeScript linting with strict rules
 - [`@jmlweb/tsconfig-react`](../packages/tsconfig-react) - TypeScript configuration for React
-- [`@jmlweb/postcss-config`](../packages/postcss-config) - PostCSS configuration for Tailwind CSS
 - [`@jmlweb/vitest-config`](../packages/vitest-config) - Testing configuration
 
 **Use Case:** React application with TypeScript, Tailwind CSS, and Vite.
 
 **Key Features:**
 
-- React 18 with TypeScript
-- Tailwind CSS with automatic class sorting
-- PostCSS for CSS processing
-- ESLint with React and strict TypeScript rules
+- React 19 with TypeScript
+- Tailwind CSS 4 with automatic class sorting
+- Oxlint with React, React Compiler and type-aware TypeScript rules
 - Vitest for component testing with jsdom
 
 ### 3. Node.js JavaScript
@@ -86,16 +84,16 @@ Example projects demonstrating how to use `@jmlweb` tooling packages in real-wor
 
 **Packages Demonstrated:**
 
-- [`@jmlweb/prettier-config-base`](../packages/prettier-config-base) - Code formatting
-- [`@jmlweb/eslint-config-base-js`](../packages/eslint-config-base-js) - JavaScript linting
+- [`@jmlweb/oxfmt-config-base`](../packages/oxfmt-config-base) - Code formatting and import sorting
+- [`@jmlweb/oxlint-config-node`](../packages/oxlint-config-node) - Node.js linting
 
 **Use Case:** Node.js API server with pure JavaScript (no TypeScript).
 
 **Key Features:**
 
 - Pure JavaScript (no TypeScript)
-- ESLint with recommended JavaScript rules
-- Prettier for consistent formatting
+- Oxlint with ESLint's recommended rules and Node.js rules
+- Oxfmt for consistent formatting
 - Automatic import sorting
 
 ## Getting Started
