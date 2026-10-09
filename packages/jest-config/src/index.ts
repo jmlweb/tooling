@@ -3,12 +3,13 @@ import type { Config } from 'jest';
 /**
  * Options for creating a Jest configuration
  */
-export interface JestConfigOptions {
+export type JestConfigOptions = {
   /**
    * Test environment (node, jsdom, etc.)
    * @default 'node'
    */
-  testEnvironment?: 'node' | 'jsdom' | string;
+  // `string & {}` keeps editor suggestions for the named environments
+  testEnvironment?: 'node' | 'jsdom' | (string & {});
 
   /**
    * Array of file extensions Jest will look for
@@ -75,7 +76,7 @@ export interface JestConfigOptions {
    * @default 5000
    */
   testTimeout?: number;
-}
+};
 
 /**
  * Creates a Jest configuration with TypeScript support, coverage settings, and sensible defaults.
@@ -166,13 +167,9 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
     coverageThreshold,
     coverageReporters,
 
-    // Setup files
-    setupFilesAfterEnv:
-      setupFilesAfterEnv.length > 0 ? setupFilesAfterEnv : undefined,
-
-    // Module name mapping for path aliases
-    moduleNameMapper:
-      Object.keys(moduleNameMapper).length > 0 ? moduleNameMapper : undefined,
+    // Setup files and path aliases, only when set, to keep the config clean
+    ...(setupFilesAfterEnv.length > 0 && { setupFilesAfterEnv }),
+    ...(Object.keys(moduleNameMapper).length > 0 && { moduleNameMapper }),
 
     // Transform configuration for TypeScript
     transform,
@@ -192,13 +189,6 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
     // Reset modules between tests
     resetModules: false,
   };
-
-  // Remove undefined values to keep config clean
-  Object.keys(config).forEach((key) => {
-    if (config[key as keyof Config] === undefined) {
-      delete config[key as keyof Config];
-    }
-  });
 
   return config;
 };

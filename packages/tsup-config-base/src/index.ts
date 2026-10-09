@@ -18,7 +18,7 @@ export type NodeTarget =
 /**
  * Options for creating a base tsup configuration
  */
-export interface TsupConfigOptions {
+export type TsupConfigOptions = {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -72,12 +72,12 @@ export interface TsupConfigOptions {
     Options,
     'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'external'
   >;
-}
+};
 
 /**
  * Options for creating a CLI-specific tsup configuration
  */
-export interface TsupCliConfigOptions {
+export type TsupCliConfigOptions = {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -158,7 +158,7 @@ export interface TsupCliConfigOptions {
     Options,
     'entry' | 'format' | 'dts' | 'clean' | 'outDir' | 'external' | 'target'
   >;
-}
+};
 
 /**
  * Base tsup configuration defaults used across all @jmlweb packages
@@ -384,14 +384,12 @@ export const createTsupCliConfig = (
  */
 const normalizeEntry = (entry: EntryConfig): Record<string, string> => {
   if (Array.isArray(entry)) {
-    return entry.reduce(
-      (acc, path) => {
+    return Object.fromEntries(
+      entry.map((path) => [
         // Extract name from path (e.g., 'src/cli.ts' -> 'cli')
-        const name = path.replace(/^.*\//, '').replace(/\.[^.]+$/, '');
-        acc[name] = path;
-        return acc;
-      },
-      {} as Record<string, string>,
+        path.replace(/^.*\//, '').replace(/\.[^.]+$/, ''),
+        path,
+      ]),
     );
   }
   return entry;

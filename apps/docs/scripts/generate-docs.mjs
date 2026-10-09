@@ -339,6 +339,7 @@ function main() {
   console.log(`\n📦 Found ${packages.length} published packages\n`);
 
   // Generate docs for each package
+  /** @type {{ success: string[], failed: string[] }} */
   const results = {
     success: [],
     failed: [],

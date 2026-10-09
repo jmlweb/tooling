@@ -36,6 +36,7 @@
   "scripts": {
     "build": "tsdown",
     "clean": "rm -rf dist",
+    "lint": "oxlint -c ../../oxlint.config.ts src",
     "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
   },
   "keywords": [

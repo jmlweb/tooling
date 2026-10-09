@@ -22,7 +22,7 @@ export type CommitType = (typeof COMMIT_TYPES)[number];
 /**
  * Options for creating a commitlint configuration
  */
-export interface CommitlintConfigOptions {
+export type CommitlintConfigOptions = {
   /**
    * Additional commit types to allow (merged with defaults)
    * @default []
@@ -66,7 +66,7 @@ export interface CommitlintConfigOptions {
    * Return true to skip validation for a commit
    */
   ignores?: ((commit: string) => boolean)[];
-}
+};
 
 /**
  * Creates a commitlint configuration with sensible defaults.
