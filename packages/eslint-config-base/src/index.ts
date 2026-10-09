@@ -10,9 +10,7 @@ import tseslint from 'typescript-eslint';
  * Includes strict type checking, stylistic rules, and best practices.
  * For non-strict projects, override the strict rules in your eslint.config.js.
  */
-// TODO: migrate to ESLint's defineConfig() (follow-up)
-// oxlint-disable-next-line typescript/no-deprecated -- tracked by the TODO above
-const config = tseslint.config(
+const config = [
   ...baseConfig,
   ...tseslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
@@ -87,6 +85,6 @@ const config = tseslint.config(
       ],
     },
   },
-) as Linter.Config[];
+] as Linter.Config[];
 
 export default config;
