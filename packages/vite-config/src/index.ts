@@ -3,7 +3,7 @@ import type { UserConfig, Plugin } from 'vite';
 /**
  * Options for creating a base Vite configuration
  */
-export interface ViteConfigOptions {
+export type ViteConfigOptions = {
   /**
    * Additional Vite plugins to include
    * @default []
@@ -94,7 +94,7 @@ export interface ViteConfigOptions {
     UserConfig,
     'plugins' | 'resolve' | 'build' | 'server' | 'preview'
   >;
-}
+};
 
 /**
  * Base Vite configuration defaults used across all @jmlweb projects
@@ -105,6 +105,8 @@ const BASE_DEFAULTS = {
     sourcemap: false,
     minify: 'esbuild' as const,
     target: 'esnext',
+    // TODO: migrate to rolldownOptions (follow-up)
+    // oxlint-disable-next-line typescript/no-deprecated -- tracked by the TODO above
     rollupOptions: {
       output: {
         manualChunks: undefined,

@@ -266,7 +266,7 @@ This project uses shared configuration packages for consistent code style:
 - **Oxlint** (preferred): Use `@jmlweb/oxlint-config-base` for JavaScript and TypeScript projects, `@jmlweb/oxlint-config-react` for React projects, or `@jmlweb/oxlint-config-node` for Node.js projects, with `options.typeAware` enabled in TypeScript projects. Migrate existing projects when you are already touching their lint setup
 - **ESLint** (maintained for existing projects): `@jmlweb/eslint-config-base` (TypeScript) or `@jmlweb/eslint-config-base-js` (JavaScript-only). `@jmlweb/eslint-config-react` and `@jmlweb/eslint-config-node` stay maintained for existing projects. Astro projects keep `@jmlweb/eslint-config-astro`, since Oxlint cannot lint `.astro` templates
 
-This repository formats itself with Oxfmt (`oxfmt.config.ts`) and lints its root JavaScript files with Oxlint (`oxlint.config.ts`).
+This repository formats itself with Oxfmt (`oxfmt.config.ts`) and lints itself with Oxlint (`oxlint.config.ts`), type-aware rules included. Each package's `lint` script lints its `src` with that root config (`oxlint -c ../../oxlint.config.ts src`); `lint:root` covers everything else. The example apps keep their own ESLint setup.
 
 Follow the configurations defined in these packages. Do not override or modify formatting rules unless explicitly requested.
 

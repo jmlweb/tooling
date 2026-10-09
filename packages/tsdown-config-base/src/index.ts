@@ -61,7 +61,7 @@ export class TsdownConfigError extends Error {
  * Options for creating a base tsdown configuration.
  * Accepts every tsdown option at the top level; the ones below have preset defaults
  */
-export interface TsdownConfigOptions extends TopLevelOptions {
+export type TsdownConfigOptions = TopLevelOptions & {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -116,17 +116,15 @@ export interface TsdownConfigOptions extends TopLevelOptions {
    * A key cannot be set both here and at the top level.
    * @deprecated Pass tsdown options at the top level instead.
    */
+  // oxlint-disable-next-line typescript/no-deprecated -- kept for backward compatibility
   options?: AdditionalOptions;
-}
+};
 
 /**
  * Options for creating a CLI-specific tsdown configuration.
  * Accepts every tsdown option at the top level; the ones below have preset defaults
  */
-export interface TsdownCliConfigOptions extends Omit<
-  TopLevelOptions,
-  'target'
-> {
+export type TsdownCliConfigOptions = Omit<TopLevelOptions, 'target'> & {
   /**
    * Entry points for the build
    * Can be an array of paths or an object mapping output names to source paths
@@ -183,6 +181,7 @@ export interface TsdownCliConfigOptions extends Omit<
    * Node.js target version for the build
    * When omitted, tsdown infers it from `engines.node` in `package.json`
    */
+  // oxlint-disable-next-line typescript/no-redundant-type-constituents -- NodeTarget keeps editor suggestions
   target?: NodeTarget | UserConfig['target'];
 
   /**
@@ -209,8 +208,9 @@ export interface TsdownCliConfigOptions extends Omit<
    * A key cannot be set both here and at the top level.
    * @deprecated Pass tsdown options at the top level instead.
    */
+  // oxlint-disable-next-line typescript/no-deprecated -- kept for backward compatibility
   options?: AdditionalCliOptions;
-}
+};
 
 /**
  * Base tsdown configuration defaults used across all @jmlweb packages
@@ -328,6 +328,7 @@ const mergeTopLevel = <T extends object>(
 export const createTsdownConfig = (
   config: TsdownConfigOptions = {},
 ): UserConfig => {
+  // oxlint-disable-next-line typescript/no-deprecated -- maps the deprecated options to tsdown's
   const { external = [], options = {}, ...topLevel } = config;
   const { deps, checks, ...rest } = mergeTopLevel(topLevel, options);
 
@@ -384,8 +385,10 @@ export const createTsdownCliConfig = (
   config: TsdownCliConfigOptions = {},
 ): UserConfig => {
   const {
+    // oxlint-disable-next-line typescript/no-deprecated -- maps the deprecated option to tsdown's
     external = [],
     shebang = CLI_DEFAULTS.shebang,
+    // oxlint-disable-next-line typescript/no-deprecated -- maps the deprecated option to tsdown's
     options = {},
     ...topLevel
   } = config;

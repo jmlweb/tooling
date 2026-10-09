@@ -16,7 +16,7 @@
     "format:check": "oxfmt --check \"**/*.{js,ts,tsx,json,md}\"",
     "integration:test": "pnpm --filter @jmlweb/integration-tests test",
     "lint": "turbo run lint",
-    "lint:root": "oxlint",
+    "lint:root": "oxlint --ignore-pattern 'packages/*/src/**'",
     "prepare": "husky",
     "syncpack:check": "syncpack lint",
     "syncpack:fix": "syncpack fix && syncpack format",
