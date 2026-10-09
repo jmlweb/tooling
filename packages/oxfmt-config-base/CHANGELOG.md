@@ -1,5 +1,11 @@
 # @jmlweb/oxfmt-config-base
 
+## 0.2.1
+
+### Patch Changes
+
+- 240fe20: Document that side-effect imports are sorted into their group, as in `eslint-plugin-perfectionist`.
+
 ## 0.2.0
 
 ### Minor Changes
