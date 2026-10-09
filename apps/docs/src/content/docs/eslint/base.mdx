@@ -14,10 +14,12 @@ sidebar:
 
 &gt; Strict ESLint configuration for TypeScript projects. Maximum type safety, best practices, and consistent code quality. Extends `@jmlweb/eslint-config-base-js` with strict type checking.
 
+&gt; 💡 **New projects**: prefer [`@jmlweb/oxlint-config-base`](/oxlint/base), which ports these rules to Oxlint. This package stays maintained for existing projects.
+
 ## ✨ Features
 
 - 🔒 **Strict Type Checking**: Enables `strictTypeChecked` and `stylisticTypeChecked` configs
-- 🛡️ **Type Safety**: Enforces explicit return types and prevents `any` usage
+- 🛡️ **Type Safety**: Strict type-aware rules and no `any` usage
 - 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
 - 🎯 **Best Practices**: Prevents enum usage, encourages immutability, enforces naming conventions
 - 🚫 **No Default Exports**: Enforces named exports for better tree-shaking and clearer imports
@@ -159,7 +161,6 @@ export default [
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
       // Override strict rules to be less strict
-      '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/consistent-type-imports': 'off',
     },
@@ -178,15 +179,14 @@ This configuration applies strict TypeScript rules to:
 
 ### Key Rules Enforced
 
-| Rule                                               | Level   | Description                                   |
-| -------------------------------------------------- | ------- | --------------------------------------------- |
-| `@typescript-eslint/no-explicit-any`               | `error` | Prevents `any` type usage                     |
-| `@typescript-eslint/explicit-function-return-type` | `error` | Requires explicit return types                |
-| `@typescript-eslint/consistent-type-imports`       | `error` | Enforces `import type` for type-only imports  |
-| `@typescript-eslint/consistent-type-definitions`   | `error` | Prefers `type` over `interface`               |
-| `no-restricted-syntax` (TSEnumDeclaration)         | `error` | Prevents enum usage (prefer const maps)       |
-| `no-restricted-exports`                            | `error` | Prevents default exports (named exports only) |
-| `@typescript-eslint/naming-convention`             | `error` | Enforces naming conventions                   |
+| Rule                                             | Level   | Description                                   |
+| ------------------------------------------------ | ------- | --------------------------------------------- |
+| `@typescript-eslint/no-explicit-any`             | `error` | Prevents `any` type usage                     |
+| `@typescript-eslint/consistent-type-imports`     | `error` | Enforces `import type` for type-only imports  |
+| `@typescript-eslint/consistent-type-definitions` | `error` | Prefers `type` over `interface`               |
+| `no-restricted-syntax` (TSEnumDeclaration)       | `error` | Prevents enum usage (prefer const maps)       |
+| `no-restricted-exports`                          | `error` | Prevents default exports (named exports only) |
+| `@typescript-eslint/naming-convention`           | `error` | Enforces naming conventions                   |
 
 ### What's Included
 
@@ -240,11 +240,11 @@ This package enforces strict TypeScript practices inspired by the principle that
 - **Trade-off**: More initial errors when adopting this config, and requires explicit typing. However, the bugs caught far outweigh the extra effort
 - **When to override**: If migrating a large JavaScript codebase and need a gradual transition (consider using `@jmlweb/eslint-config-base-js` with recommended TypeScript rules instead)
 
-**Explicit Return Types (`@typescript-eslint/explicit-function-return-type`)**: Requires explicit return types on functions
+**Inferred Return Types (`@typescript-eslint/explicit-function-return-type: 'off'`)**: Return types are not required
 
-- **Why**: Explicit return types prevent accidental type changes and make code easier to reason about. They serve as inline documentation and catch errors where functions return unexpected types
-- **Trade-off**: More verbose code, but improved clarity and safety. Inference can hide bugs
-- **When to override**: For simple, obvious functions where the return type is trivial (but be conservative - explicit is usually better)
+- **Why**: TypeScript infers return types reliably, and the strict type-aware rules already catch unsafe values flowing out of functions
+- **Trade-off**: A function's return type can change silently when its body changes; annotate public APIs where that matters
+- **When to override**: Set it to `'error'` if you want every function to declare its return type
 
 **No `any` Type (`@typescript-eslint/no-explicit-any`)**: Prohibits using `any`
 

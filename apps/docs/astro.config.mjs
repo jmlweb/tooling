@@ -55,6 +55,15 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Oxlint',
+          items: [
+            {
+              label: 'base',
+              link: '/oxlint/base',
+            },
+          ],
+        },
+        {
           label: 'ESLint',
           items: [
             {

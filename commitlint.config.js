@@ -33,7 +33,8 @@ export default {
       2,
       'always',
       [
-        // ESLint configs
+        // Linter configs
+        'oxlint-config-base',
         'eslint-config-base',
         'eslint-config-base-js',
         'eslint-config-astro',

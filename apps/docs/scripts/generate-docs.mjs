@@ -68,7 +68,7 @@ function transformLinks(content, packageName) {
 
       // Simplify the name (e.g., "prettier-config-tailwind" -> "tailwind")
       let simplifiedName = fullPackageName.replace(
-        /^(oxfmt-config-|prettier-config-|eslint-config-|tsconfig-|tsup-config-)/,
+        /^(oxfmt-config-|oxlint-config-|prettier-config-|eslint-config-|tsconfig-|tsup-config-)/,
         '',
       );
 
@@ -94,6 +94,7 @@ function categorizePackage(packageName) {
   const name = packageName.replace('@jmlweb/', '');
 
   if (name.startsWith('oxfmt-config-')) return 'oxfmt';
+  if (name.startsWith('oxlint-config-')) return 'oxlint';
   if (name.startsWith('prettier-config-')) return 'prettier';
   if (name.startsWith('eslint-config-')) return 'eslint';
   if (name.startsWith('tsconfig-')) return 'typescript';
@@ -115,7 +116,7 @@ function generateFrontmatter(metadata, packageName) {
 
   // Create a clean title (e.g., "prettier-config-base" -> "base", "vitest-config" -> "vitest")
   let title = name.replace(
-    /^(oxfmt-config-|prettier-config-|eslint-config-|tsconfig-|tsup-config-)/,
+    /^(oxfmt-config-|oxlint-config-|prettier-config-|eslint-config-|tsconfig-|tsup-config-)/,
     '',
   );
 
@@ -248,7 +249,7 @@ function generatePackageDoc(packageName) {
     // Determine output path
     const category = categorizePackage(packageName);
     let fileName = name.replace(
-      /^(oxfmt-config-|prettier-config-|eslint-config-|tsconfig-|tsup-config-)/,
+      /^(oxfmt-config-|oxlint-config-|prettier-config-|eslint-config-|tsconfig-|tsup-config-)/,
       '',
     );
 

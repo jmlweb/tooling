@@ -3,8 +3,8 @@ import type { Linter } from 'eslint';
 import baseConfig from '@jmlweb/eslint-config-base';
 import prettierConfig from 'eslint-config-prettier';
 import eslintPluginN from 'eslint-plugin-n';
-import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
 
 /**
  * Node.js ESLint configuration that extends the base TypeScript config.

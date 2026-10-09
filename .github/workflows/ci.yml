@@ -49,8 +49,8 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
 
-      - name: Build eslint configs (required for lint check)
-        run: pnpm build --filter='@jmlweb/eslint-config-*'
+      - name: Build lint configs (required for lint check)
+        run: pnpm build --filter='@jmlweb/eslint-config-*' --filter='@jmlweb/oxlint-config-base'
         env:
           TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           TURBO_TEAM: ${{ vars.TURBO_TEAM }}

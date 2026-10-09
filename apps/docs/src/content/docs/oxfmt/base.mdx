@@ -15,7 +15,8 @@ sidebar:
 ## ✨ Features
 
 - ⚡ **Fast**: Oxfmt is written in Rust and formats a whole repository in milliseconds
-- 🔁 **Prettier-compatible**: Same options and output as `@jmlweb/prettier-config-base`, so switching does not reformat your codebase
+- 🔁 **Prettier-compatible**: Same options and output as `@jmlweb/prettier-config-base`, so switching only reorders imports
+- 🔤 **Import sorting**: Same order as `eslint-plugin-perfectionist`'s `sort-imports` defaults
 - 🎨 **Tailwind sorting built in**: Enable class sorting with one option, no plugin required
 - 🧩 **Extensible**: Plain config object you spread into your own `oxfmt.config.ts`
 
@@ -57,24 +58,53 @@ This package provides the following Oxfmt settings:
 | `proseWrap`       | `'preserve'` | Preserve prose wrapping in markdown files        |
 | `printWidth`      | `80`         | Match Prettier's default (Oxfmt defaults to 100) |
 | `sortPackageJson` | `false`      | Leave `package.json` key order untouched         |
+| `sortImports`     | see below    | Sort imports like `eslint-plugin-perfectionist`  |
+
+### Import Sorting
+
+Oxfmt's `sortImports` follows `eslint-plugin-perfectionist`'s `sort-imports` algorithm and shares its defaults (alphabetical, case-insensitive, a blank line between groups, `~/`, `@/` and `#` as internal paths). Only the default groups differ, so this package sets Perfectionist's. It is equivalent to:
+
+```typescript
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  sortImports: {
+    groups: [
+      'type-import',
+      ['value-builtin', 'value-external'],
+      'type-internal',
+      'value-internal',
+      ['type-parent', 'type-sibling', 'type-index'],
+      ['value-parent', 'value-sibling', 'value-index'],
+      'unknown',
+    ],
+  },
+});
+```
 
 ## 💡 Examples
 
 ### Before Formatting
 
-```javascript
-const user = {
-  name: 'John',
-  age: 30,
-  email: 'john@example.com',
-  role: 'admin',
-};
+&lt;!-- prettier-ignore --&gt;
+```typescript
+import { formatName } from "./format";
+import type { User } from "./types";
+import { readFile } from "node:fs/promises";
+
+const user: User = { name: "John", age: 30, email: "john@example.com", role: "admin" }
 ```
 
 ### After Formatting
 
-```javascript
-const user = {
+```typescript
+import { readFile } from 'node:fs/promises';
+
+import type { User } from './types';
+
+import { formatName } from './format';
+
+const user: User = {
   name: 'John',
   age: 30,
   email: 'john@example.com',
@@ -102,6 +132,12 @@ Oxfmt is the formatter of the [Oxc](https://oxc.rs) project and targets Prettier
 - **Trade-off**: Key order is not enforced by the formatter
 - **When to override**: If nothing else manages `package.json` order, set it to `true`
 
+**Import Sorting (`sortImports`)**: Perfectionist's default groups
+
+- **Why**: The formatter owns import order, so `@jmlweb/oxlint-config-base` needs no sorting rule, and the order matches the Perfectionist convention
+- **Trade-off**: The order differs from `eslint-plugin-simple-import-sort`, which the ESLint packages use
+- **When to override**: Set `sortImports: false` while ESLint still sorts imports in the project (see [Extending the Configuration](#-extending-the-configuration))
+
 ## 🎯 When to Use
 
 Use this package when you want:
@@ -128,6 +164,20 @@ export default defineConfig({
     stylesheet: './src/index.css',
     functions: ['clsx', 'cn'],
   },
+});
+```
+
+### Projects Still Linted by ESLint
+
+`@jmlweb/eslint-config-base` sorts imports with `eslint-plugin-simple-import-sort`, which disagrees with this order. Let ESLint keep sorting until you move to [`@jmlweb/oxlint-config-base`](/oxlint/base):
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+  sortImports: false,
 });
 ```
 
@@ -188,7 +238,8 @@ See real-world usage examples:
 ### Internal Packages
 
 - [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier equivalent of this configuration
-- [`@jmlweb/eslint-config-base`](/eslint/base) - ESLint config, compatible with this formatter
+- [`@jmlweb/oxlint-config-base`](/oxlint/base) - Oxlint config, the linter to pair with this formatter
+- [`@jmlweb/eslint-config-base`](/eslint/base) - ESLint config, compatible with this formatter when `sortImports` is off
 
 ### External Tools
 
@@ -239,11 +290,17 @@ Keep a single `oxfmt.config.ts` in the project root. Oxfmt uses the nearest conf
 4. Move `.prettierignore` entries to `ignorePatterns`, then remove `.prettierrc*`, `.prettierignore` and the Prettier packages
 5. Run `pnpm format` once and commit the result
 
-### Upgrading to a New Version
+### From 0.1.x to 0.2.0
 
-&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+**Breaking Changes:**
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+- Import sorting is enabled with Perfectionist's default groups, so the first run reorders imports
+
+**Migration Steps:**
+
+1. Upgrade the package
+2. If ESLint still sorts your imports, set `sortImports: false` (see [Projects Still Linted by ESLint](#projects-still-linted-by-eslint))
+3. Otherwise run `pnpm format` once and commit the result
 
 For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/oxfmt-config-base/CHANGELOG.md).
 
