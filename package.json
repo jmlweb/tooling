@@ -21,7 +21,7 @@
     "syncpack:check": "syncpack lint",
     "syncpack:fix": "syncpack fix && syncpack format",
     "test": "turbo run test",
-    "validate": "pnpm format:check && turbo run lint:root lint && pnpm syncpack:check",
+    "validate": "turbo run format:check lint:root lint && pnpm syncpack:check",
     "validate:code-blocks": "node scripts/validate-markdown-code-blocks.mjs",
     "validate:code-blocks:fix": "node scripts/validate-markdown-code-blocks.mjs --fix",
     "validate:docs": "node scripts/validate-docs.mjs",

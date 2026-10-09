@@ -362,8 +362,8 @@ Publishing uses npm trusted publishing (OIDC), not an `NPM_TOKEN` secret. npm an
 
 **Solutions**:
 
-1. Run locally: `pnpm format:check`
-2. Fix formatting: `pnpm format`
+1. Run locally: `pnpm turbo run format:check` (builds `@jmlweb/oxfmt-config-base` first, which `oxfmt.config.ts` loads)
+2. Fix formatting: `pnpm format` (on a fresh clone, run `pnpm build` once before)
 3. Commit changes and push
 
 **Problem**: `build` job fails with package validation errors
