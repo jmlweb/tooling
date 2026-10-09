@@ -599,6 +599,34 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  packages/oxlint-config-node:
+    dependencies:
+      '@jmlweb/oxlint-config-base':
+        specifier: workspace:*
+        version: link:../oxlint-config-base
+    devDependencies:
+      '@jmlweb/tsconfig-internal':
+        specifier: workspace:*
+        version: link:../tsconfig-internal
+      '@jmlweb/tsdown-config-base':
+        specifier: workspace:*
+        version: link:../tsdown-config-base
+      eslint-plugin-n:
+        specifier: ^18.4.1
+        version: 18.4.1(eslint@10.12.0(jiti@2.6.1))(ts-declaration-location@1.0.7(typescript@6.0.3))(typescript@6.0.3)
+      oxlint:
+        specifier: ^1.87.0
+        version: 1.87.0(oxlint-tsgolint@7.0.2003)
+      oxlint-tsgolint:
+        specifier: ^7.0.2003
+        version: 7.0.2003
+      tsdown:
+        specifier: ~0.23.0
+        version: 0.23.0(@volar/typescript@2.4.28)(tsx@4.23.15)(typescript@6.0.3)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
   packages/oxlint-config-react:
     dependencies:
       '@jmlweb/oxlint-config-base':

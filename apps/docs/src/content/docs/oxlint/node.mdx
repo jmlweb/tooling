@@ -1,0 +1,281 @@
+---
+title: node
+description: Oxlint configuration for Node.js projects, extending @jmlweb/oxlint-config-base
+editUrl: https://github.com/jmlweb/tooling/blob/main/packages/oxlint-config-node/README.md
+sidebar:
+  order: 1
+---
+
+[![npm version](https://img.shields.io/npm/v/@jmlweb/oxlint-config-node)](https://www.npmjs.com/package/@jmlweb/oxlint-config-node)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
+
+&gt; [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for Node.js projects. Extends [`@jmlweb/oxlint-config-base`](/oxlint/base) and ports the rules of [`@jmlweb/eslint-config-node`](/eslint/node).
+
+## ✨ Features
+
+- 🟢 **eslint-plugin-n**: Its `flat/recommended` rules plus stricter best practices, run as an Oxlint JS plugin
+- ⚡ **Native where possible**: Rules Oxlint implements itself run natively instead of through the plugin
+- 📦 **Dependency checks**: Missing, extraneous and unpublished imports, resolved against your `package.json`
+- 🌐 **Node.js globals**: `process`, `Buffer`, `__dirname` and the rest, for JavaScript and TypeScript files
+- 🔒 **Everything from the base config**: Strict TypeScript rules, no enums, named exports only
+
+## 📦 Installation
+
+```bash
+pnpm add -D @jmlweb/oxlint-config-node oxlint oxlint-tsgolint eslint-plugin-n
+```
+
+## 🚀 Quick Start
+
+Create an `oxlint.config.ts` file in your project root:
+
+```typescript
+import nodeConfig from '@jmlweb/oxlint-config-node';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [nodeConfig],
+  options: {
+    typeAware: true,
+  },
+});
+```
+
+&gt; ⚠️ **`typeAware` must be set in your own config**: Oxlint only reads `options` from the root config file, so the base config's type-aware rules are skipped without it.
+
+## 💡 Examples
+
+### Before
+
+```typescript
+import fs from 'fs';
+import { parse } from 'yaml';
+
+export const loadConfig = (dir: string): unknown => {
+  const file = dir + '/config.yml';
+  if (!fs.existsSync(file)) {
+    process.exit(1);
+  }
+  fs.readFile(file, 'utf8', () => undefined);
+  return parse(fs.readFileSync(file, 'utf8'));
+};
+```
+
+### Problems Reported
+
+With `yaml` missing from `package.json`:
+
+```text
+src/config.ts:1:16: error n(prefer-node-protocol): Prefer `node:fs` over `fs`.
+src/config.ts:2:23: error n(no-missing-import): Can't resolve 'yaml' in '/path/to/project/src'
+src/config.ts:7:5: error n(no-process-exit): Don't use process.exit(); throw an error instead.
+src/config.ts:9:3: error n(prefer-promises/fs): Use 'fs.promises.readFile()' instead.
+src/config.ts:10:10: error typescript(no-unsafe-call): Unsafe call of a(n) `error` type typed value.
+```
+
+## 📋 Configuration Details
+
+### All Files
+
+- `eslint-plugin-n` `flat/recommended` rules: deprecated APIs, unsupported features for your `engines.node`, missing, extraneous and unpublished imports, hashbangs
+- Node.js globals for `**/*.{js,mjs,cjs,ts,mts,cts}`
+
+### Key Rules Enforced
+
+| Rule                      | Level   | Description                                         |
+| ------------------------- | ------- | --------------------------------------------------- |
+| `n/no-process-exit`       | `error` | Throw instead of calling `process.exit()`           |
+| `n/process-exit-as-throw` | `error` | Treats `process.exit()` as a throw for control flow |
+| `n/no-deprecated-api`     | `warn`  | Flags deprecated Node.js APIs                       |
+| `n/no-callback-literal`   | `error` | Callbacks receive an error or `null` first          |
+| `n/prefer-node-protocol`  | `error` | Use `node:` imports for built-in modules            |
+| `n/prefer-promises/fs`    | `error` | Use `fs.promises` over callback APIs                |
+| `n/prefer-promises/dns`   | `error` | Use `dns.promises` over callback APIs               |
+| `n/prefer-global/*`       | `error` | Use `Buffer`, `console`, `process`, `URL` globals   |
+| `node/no-new-require`     | `error` | Disallows `new require(...)`                        |
+| `node/no-path-concat`     | `error` | Use `path.join()` with `__dirname`/`__filename`     |
+| `node/no-exports-assign`  | `error` | Disallows assigning to `exports`                    |
+
+The `node/*` rules are Oxlint's native versions of the matching `n/*` rules.
+
+### Differences from `@jmlweb/eslint-config-node`
+
+- **No naming convention rule**: Same as [`@jmlweb/oxlint-config-base`](/oxlint/base#differences-from-jmlwebeslint-config-base)
+- **No import sorting rule**: [`@jmlweb/oxfmt-config-base`](/oxfmt/base) sorts imports
+
+## 🤔 Why Use This?
+
+&gt; **Philosophy**: The Node.js rules of the ESLint config, run by Oxlint.
+
+### Design Decisions
+
+**eslint-plugin-n as a JS plugin**: Oxlint's native `node` plugin only covers a few of its rules
+
+- **Why**: Keeps the dependency checks and unsupported-feature rules, which have no native equivalent
+- **Trade-off**: Runs through Oxlint's JS plugin support, which is still in alpha
+- **When to override**: Turn off single `n/*` rules in your config
+
+**Node.js globals through an override**: The globals are set for JavaScript and TypeScript files instead of with a top-level `env`
+
+- **Why**: Oxlint ignores a top-level `env` in configs loaded through `extends`, but keeps it inside overrides
+- **Trade-off**: None
+- **When to override**: Not needed
+
+## 🎯 When to Use
+
+Use this package when you want:
+
+- ✅ Fast linting for Node.js libraries, CLIs and servers (recommended over ESLint)
+- ✅ Checks that every import is declared in `package.json`
+- ✅ To migrate from `@jmlweb/eslint-config-node`
+
+**For browser or React projects**, use [`@jmlweb/oxlint-config-base`](/oxlint/base) or [`@jmlweb/oxlint-config-react`](/oxlint/react) instead.
+
+## 🔧 Extending the Configuration
+
+```typescript
+import nodeConfig from '@jmlweb/oxlint-config-node';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [nodeConfig],
+  options: {
+    typeAware: true,
+  },
+  overrides: [
+    {
+      // CLIs may exit with a status code
+      files: ['src/cli.ts'],
+      rules: {
+        'n/no-process-exit': 'off',
+      },
+    },
+    {
+      // Scripts and tests may import devDependencies
+      files: ['scripts/**', '**/*.test.ts'],
+      rules: {
+        'n/no-unpublished-import': 'off',
+      },
+    },
+  ],
+});
+```
+
+## 📝 Usage with Scripts
+
+Add linting scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
+  }
+}
+```
+
+Then run:
+
+```bash
+pnpm lint      # Lint all files
+pnpm lint:fix  # Fix auto-fixable problems
+```
+
+## 📋 Requirements
+
+- **Node.js** &gt;= 22.12.0
+- **Oxlint** &gt;= 1.87.0
+- **`engines.node`** in your `package.json` (used by the unsupported-feature rules)
+- **TypeScript project** with a `tsconfig.json` (for type-aware rules)
+
+## 📦 Peer Dependencies
+
+This package requires the following peer dependencies:
+
+- `oxlint` (&gt;= 1.87.0)
+- `oxlint-tsgolint` (&gt;= 7.0.0, optional, enables type-aware rules)
+- `eslint-plugin-n` (^17.0.0 || ^18.0.0)
+
+**Note**: `@jmlweb/oxlint-config-base` is a regular dependency, so you do not need to install it.
+
+## 📚 Examples
+
+See real-world usage examples:
+
+- [`@jmlweb/eslint-config-node`](/eslint/node) - The ESLint configuration this package ports
+
+## 🔗 Related Packages
+
+### Internal Packages
+
+- [`@jmlweb/oxlint-config-base`](/oxlint/base) - Base Oxlint config this package extends
+- [`@jmlweb/oxfmt-config-base`](/oxfmt/base) - Oxfmt config, the formatter to pair with this linter
+- [`@jmlweb/eslint-config-node`](/eslint/node) - ESLint equivalent of this configuration
+- [`@jmlweb/tsconfig-node`](/typescript/node) - TypeScript config for Node.js projects
+
+### External Tools
+
+- [eslint-plugin-n](https://github.com/eslint-community/eslint-plugin-n) - Node.js rules run as a JS plugin
+- [Oxlint JS plugins](https://oxc.rs/docs/guide/usage/linter/js-plugins.html) - How Oxlint runs ESLint plugins
+
+## ⚠️ Common Issues
+
+&gt; **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+### Unpublished Import Errors in Scripts or Tests
+
+**Symptoms:**
+
+- `n/no-unpublished-import` reports `devDependencies` imported from tests or scripts
+
+**Cause:**
+
+- The tests or scripts sit inside a folder listed in the `files` field of `package.json`, so they count as published code, which must not import `devDependencies`
+
+**Solution:**
+
+Turn the rule off for those files (see [Extending the Configuration](#-extending-the-configuration)), or make sure the `files` field only lists published code.
+
+### Oxlint Is Slow or Reports Problems in `node_modules`
+
+**Symptoms:**
+
+- Oxlint takes minutes or reports problems in dependencies
+
+**Cause:**
+
+- The project has no `.gitignore` listing `node_modules`, so Oxlint lints it
+
+**Solution:**
+
+Add `node_modules` to `.gitignore`, or to `ignorePatterns` in your Oxlint config.
+
+## 🔄 Migration Guide
+
+### Migrating from `@jmlweb/eslint-config-node`
+
+1. Install this package and its peer dependencies
+2. Create `oxlint.config.ts` as shown in [Quick Start](#-quick-start)
+3. Format with [`@jmlweb/oxfmt-config-base`](/oxfmt/base), which sorts imports
+4. Replace `eslint` with `oxlint` in your scripts and `lint-staged` config
+5. Remove `eslint.config.*` and the ESLint packages, except `eslint-plugin-n`
+6. Run `pnpm lint` and fix the reported problems
+
+### Upgrading to a New Version
+
+&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+
+**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+
+For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/oxlint-config-node/CHANGELOG.md).
+
+**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+
+## 📜 Changelog
+
+See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/oxlint-config-node/CHANGELOG.md) for version history and release notes.
+
+## 📄 License
+
+MIT

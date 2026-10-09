@@ -25,6 +25,7 @@ For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / 
 | **Linting**                                                               |                                                                         |                                                                              |
 | [`@jmlweb/oxlint-config-base`](./packages/oxlint-config-base)             | Oxlint for JavaScript and TypeScript (recommended for new projects)     | ![npm](https://img.shields.io/npm/v/@jmlweb/oxlint-config-base?label=)       |
 | [`@jmlweb/oxlint-config-react`](./packages/oxlint-config-react)           | Oxlint for React with TypeScript, extending base config                 | ![npm](https://img.shields.io/npm/v/@jmlweb/oxlint-config-react?label=)      |
+| [`@jmlweb/oxlint-config-node`](./packages/oxlint-config-node)             | Oxlint for Node.js with TypeScript, extending base config               | ![npm](https://img.shields.io/npm/v/@jmlweb/oxlint-config-node?label=)       |
 | [`@jmlweb/eslint-config-base`](./packages/eslint-config-base)             | ESLint for TypeScript (strict)                                          | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base?label=)       |
 | [`@jmlweb/eslint-config-base-js`](./packages/eslint-config-base-js)       | ESLint for JavaScript                                                   | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-base-js?label=)    |
 | [`@jmlweb/eslint-config-react`](./packages/eslint-config-react)           | ESLint for React libraries with TypeScript, extending base config       | ![npm](https://img.shields.io/npm/v/@jmlweb/eslint-config-react?label=)      |
@@ -183,6 +184,7 @@ All packages support every Node.js release line that is still maintained upstrea
 | `@jmlweb/prettier-config-tailwind` | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/oxlint-config-base`       | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/oxlint-config-react`      | >= 22.12.0          | Oldest supported Node.js LTS        |
+| `@jmlweb/oxlint-config-node`       | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-base-js`    | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-base`       | >= 22.12.0          | Oldest supported Node.js LTS        |
 | `@jmlweb/eslint-config-react`      | >= 22.12.0          | Oldest supported Node.js LTS        |
@@ -318,6 +320,7 @@ Track package usage and health through npm statistics:
 | `@jmlweb/prettier-config-tailwind` | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/prettier-config-tailwind?label=) | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/prettier-config-tailwind?label=) |
 | `@jmlweb/oxlint-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/oxlint-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/oxlint-config-base?label=)       |
 | `@jmlweb/oxlint-config-react`      | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/oxlint-config-react?label=)      | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/oxlint-config-react?label=)      |
+| `@jmlweb/oxlint-config-node`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/oxlint-config-node?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/oxlint-config-node?label=)       |
 | `@jmlweb/eslint-config-base-js`    | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base-js?label=)    | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base-js?label=)    |
 | `@jmlweb/eslint-config-base`       | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-base?label=)       | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-base?label=)       |
 | `@jmlweb/eslint-config-react`      | ![npm weekly downloads](https://img.shields.io/npm/dw/@jmlweb/eslint-config-react?label=)      | ![npm downloads](https://img.shields.io/npm/dt/@jmlweb/eslint-config-react?label=)      |

@@ -68,7 +68,7 @@ Base [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for Jav
 - Same conventions: no `any`, `type` over `interface`, inline type imports, no enums, named exports only, no parameter mutation
 - Bundles a JS plugin (`@jmlweb/oxlint-config-base/plugin`) with `jmlweb/no-enum`, since Oxlint has no `no-restricted-syntax`
 
-Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by `@jmlweb/oxfmt-config-base`'s Perfectionist-style `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; Node.js and Astro projects keep their ESLint packages until Oxlint variants exist.
+Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by `@jmlweb/oxfmt-config-base`'s Perfectionist-style `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; Astro projects keep `@jmlweb/eslint-config-astro`, since Oxlint cannot lint `.astro` templates.
 
 ### `@jmlweb/oxlint-config-react`
 
@@ -79,6 +79,15 @@ Extends `@jmlweb/oxlint-config-base` for React, porting `@jmlweb/eslint-config-r
 - For JSX files: stricter `@eslint-react` rules, native `jsx-pascal-case`, `self-closing-comp` and `jsx-curly-brace-presence`, and `perfectionist/sort-jsx-props`
 
 Not ported: naming convention (as in the base package) and the hooks `config`/`gating` rules (React Compiler option checks).
+
+### `@jmlweb/oxlint-config-node`
+
+Extends `@jmlweb/oxlint-config-base` for Node.js, porting `@jmlweb/eslint-config-node`:
+
+- `eslint-plugin-n` `flat/recommended` rules plus the same best-practice rules, as an Oxlint JS plugin derived from its preset; the rules Oxlint implements natively (`no-exports-assign`, `no-new-require`, `no-path-concat`) run as `node/*`
+- Node.js globals for JavaScript and TypeScript files, set in an override because Oxlint drops a top-level `env` from configs loaded through `extends`
+
+Not ported: naming convention (as in the base package).
 
 ### `@jmlweb/eslint-config-base-js`
 
@@ -217,6 +226,7 @@ jmlweb-tooling/
 │   ├── oxfmt-config-base/
 │   ├── oxlint-config-base/
 │   ├── oxlint-config-react/
+│   ├── oxlint-config-node/
 │   ├── prettier-config-base/
 │   ├── prettier-config-tailwind/
 │   ├── eslint-config-base-js/
@@ -347,5 +357,6 @@ See `AGENTS.md` for detailed publishing workflow documentation.
 - `@jmlweb/oxfmt-config-base`
 - `@jmlweb/oxlint-config-base`
 - `@jmlweb/oxlint-config-react`
+- `@jmlweb/oxlint-config-node`
 - `@jmlweb/prettier-config-base`
 - `@jmlweb/prettier-config-tailwind`

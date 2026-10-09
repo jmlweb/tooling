@@ -36,6 +36,7 @@ export default {
         // Linter configs
         'oxlint-config-base',
         'oxlint-config-react',
+        'oxlint-config-node',
         'eslint-config-base',
         'eslint-config-base-js',
         'eslint-config-astro',
