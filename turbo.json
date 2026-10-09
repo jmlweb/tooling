@@ -16,7 +16,9 @@
         "package.json"
       ]
     },
-    "//#lint:root": {},
+    "//#lint:root": {
+      "dependsOn": ["@jmlweb/oxlint-config-base#build"]
+    },
     "format": {
       "outputs": [],
       "inputs": ["**/*.{js,json,md}", "oxfmt.config.ts", "package.json"]
