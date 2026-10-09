@@ -3,12 +3,6 @@ import { defineConfig } from 'oxlint';
 
 export default defineConfig({
   extends: [baseConfig],
-  // Keep the import order the ESLint setup enforced, so files linted by both stay stable
-  jsPlugins: ['eslint-plugin-simple-import-sort'],
-  rules: {
-    'simple-import-sort/imports': 'error',
-    'simple-import-sort/exports': 'error',
-  },
   env: {
     node: true,
   },

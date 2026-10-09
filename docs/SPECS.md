@@ -55,6 +55,7 @@ Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration with 
 
 - `printWidth: 80` - Prettier's default (Oxfmt defaults to 100)
 - `sortPackageJson: false` - Prettier does not sort `package.json`; syncpack owns that order
+- `sortImports` with `eslint-plugin-perfectionist`'s default groups (Oxfmt already shares its other `sort-imports` defaults)
 
 Recommended formatter for new projects. Tailwind class sorting is a built-in Oxfmt option (`sortTailwindcss`), so no Tailwind variant package is needed. The Prettier packages stay maintained for existing projects and for setups that need Prettier plugins.
 
@@ -67,7 +68,7 @@ Base [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for Jav
 - Same conventions: no `any`, `type` over `interface`, inline type imports, no enums, named exports only, no parameter mutation
 - Bundles a JS plugin (`@jmlweb/oxlint-config-base/plugin`) with `jmlweb/no-enum`, since Oxlint has no `no-restricted-syntax`
 
-Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by Oxfmt's `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; React, Node.js and Astro projects keep their ESLint packages until Oxlint variants exist.
+Not ported: `@typescript-eslint/naming-convention` (needs typescript-eslint's parser) and import sorting (handled by `@jmlweb/oxfmt-config-base`'s Perfectionist-style `sortImports`, or `eslint-plugin-simple-import-sort` as an Oxlint JS plugin). Recommended linter for new projects; React, Node.js and Astro projects keep their ESLint packages until Oxlint variants exist.
 
 ### `@jmlweb/eslint-config-base-js`
 

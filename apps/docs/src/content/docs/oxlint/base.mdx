@@ -69,12 +69,15 @@ export default function rename(user: User, data: any) {
 ### Errors Reported
 
 ```text
-jmlweb(no-enum): Use const maps instead of enums
-typescript(consistent-type-definitions): Use `type` instead of `interface`.
-import(no-default-export): Prefer named exports
-typescript(no-explicit-any): Unexpected `any`. Specify a different type.
-eslint(no-param-reassign): Assignment to property of function parameter 'user'.
-typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
+src/user.ts:1:1: error jmlweb(no-enum): Use const maps instead of enums
+src/user.ts:1:6: error eslint(no-unused-vars): Enum 'Status' is declared but never used.
+src/user.ts:5:1: error typescript(consistent-type-definitions): Use `type` instead of `interface`.
+src/user.ts:9:8: error import(no-default-export): Prefer named exports
+src/user.ts:9:50: error typescript(no-explicit-any): Unexpected `any`. Specify a different type.
+src/user.ts:10:3: error eslint(no-param-reassign): Assignment to property of function parameter 'user'.
+src/user.ts:10:15: error typescript(no-unsafe-assignment): Unsafe assignment of an any value.
+src/user.ts:10:20: error typescript(no-unsafe-member-access): Unsafe member access .name on an `any` value.
+src/user.ts:11:3: error typescript(no-floating-promises): Promises must be awaited, add void operator to ignore.
 ```
 
 ### After
@@ -125,26 +128,15 @@ Files matching `**/*.config.{ts,mts,cts}` may use default exports, since tools l
 ### Differences from `@jmlweb/eslint-config-base`
 
 - **No naming convention rule**: `@typescript-eslint/naming-convention` needs typescript-eslint's parser and cannot run in Oxlint
-- **No import sorting**: Sort imports with the formatter instead (see [Import Sorting](#-import-sorting))
+- **No import sorting rule**: [`@jmlweb/oxfmt-config-base`](/oxfmt/base) sorts imports instead (see [Import Sorting](#-import-sorting))
 - **No Prettier conflict rules**: Not needed, this config enables no formatting rules
 - **No `no-unsafe-enum-assignment`**: Not available in Oxlint, and enums are banned anyway
 
 ## 🔄 Import Sorting
 
-Enable import sorting in [`@jmlweb/oxfmt-config-base`](/oxfmt/base):
+This config has no import sorting rule: [`@jmlweb/oxfmt-config-base`](/oxfmt/base) sorts imports when formatting, with the same order as `eslint-plugin-perfectionist`'s `sort-imports` defaults. Run `oxfmt` (or `oxfmt --check` in CI) alongside `oxlint`.
 
-```typescript
-// oxfmt.config.ts
-import baseConfig from '@jmlweb/oxfmt-config-base';
-import { defineConfig } from 'oxfmt';
-
-export default defineConfig({
-  ...baseConfig,
-  sortImports: {},
-});
-```
-
-Oxfmt's order differs from `eslint-plugin-simple-import-sort`. To keep the exact ESLint order, for example while some files are still linted by ESLint, run the ESLint plugin through Oxlint instead:
+To keep `eslint-plugin-simple-import-sort`'s order instead, turn off `sortImports` in your Oxfmt config and run the ESLint plugin through Oxlint:
 
 ```typescript
 // oxlint.config.ts
@@ -311,7 +303,7 @@ Reference JS plugins by package name, as this package does with `@jmlweb/oxlint-
 
 1. Install this package, `oxlint` and `oxlint-tsgolint`
 2. Create `oxlint.config.ts` as shown in [Quick Start](#-quick-start)
-3. Choose an [import sorting](#-import-sorting) option
+3. Format with [`@jmlweb/oxfmt-config-base`](/oxfmt/base), which sorts imports (see [Import Sorting](#-import-sorting))
 4. Replace `eslint` with `oxlint` in your scripts and `lint-staged` config
 5. Remove `eslint.config.*` and the ESLint packages
 6. Run `pnpm lint` and fix the reported problems
