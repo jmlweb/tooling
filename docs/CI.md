@@ -313,8 +313,8 @@ Publishing uses npm trusted publishing (OIDC), not an `NPM_TOKEN` secret. npm an
 **Solutions**:
 
 1. Check the package has a trusted publisher on npmjs.com (package **Settings** → **Trusted publishing**) for repository `jmlweb/tooling` and workflow `publish.yml`, with `npm publish` allowed
-2. Configure missing ones with `node scripts/setup-trusted-publishing.mjs` (needs `npm login`)
-3. A brand-new package must be published once by hand before a trusted publisher can be added to it
+2. Configure missing ones with `node scripts/setup-trusted-publishing.mjs <package...>` (needs `npm login`). Pass only the packages to enable, with or without the `@jmlweb/` scope; with no arguments it processes every public package
+3. A brand-new package must be published once by hand before a trusted publisher can be added to it, then passed to the script
 4. Ensure the publish job keeps `id-token: write` and installs npm >= 11.5.1
 
 **Problem**: Package published but missing files
