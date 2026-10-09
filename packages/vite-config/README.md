@@ -185,15 +185,15 @@ export default createViteConfig({
 
 > **Philosophy**: Modern build tools should provide instant feedback during development and optimized production builds with zero configuration.
 
-This package provides a Vite configuration that balances development speed with production optimization. It leverages Vite's native ESM dev server for instant HMR and esbuild for ultra-fast production builds, while remaining flexible enough for any project type.
+This package provides a Vite configuration that balances development speed with production optimization. It leverages Vite's native ESM dev server for instant HMR and Vite's fast default minifier for production builds, while remaining flexible enough for any project type.
 
 ### Design Decisions
 
-**ESBuild Minification (`minify: 'esbuild'`)**: Fast production builds
+**Vite's Default Minifier (no `minify` set)**: Fast production builds
 
-- **Why**: esbuild is orders of magnitude faster than terser while producing comparably small bundles. For most projects, the speed improvement far outweighs the minimal size difference. This keeps build times fast even for large applications
-- **Trade-off**: Terser can sometimes achieve slightly smaller bundles (1-3%). But esbuild's speed is almost always worth it
-- **When to override**: For bundle size-critical applications where every byte matters, consider terser. But try esbuild first
+- **Why**: Vite's default minifier is esbuild up to Vite 7 and Oxc from Vite 8, both much faster than terser with comparably small bundles. Setting `minify: 'esbuild'` explicitly would fail on Vite 8, which no longer installs esbuild
+- **Trade-off**: Terser can sometimes achieve slightly smaller bundles (1-3%)
+- **When to override**: For bundle size-critical applications where every byte matters, set `minify: 'terser'` and install `terser`
 
 **ESNext Target (`target: 'esnext'`)**: Modern JavaScript output
 
@@ -217,17 +217,17 @@ This package provides a Vite configuration that balances development speed with 
 
 ### Default Settings
 
-| Category | Setting      | Default Value | Description                     |
-| -------- | ------------ | ------------- | ------------------------------- |
-| Build    | `outDir`     | `'dist'`      | Output directory for production |
-| Build    | `sourcemap`  | `false`       | Source map generation           |
-| Build    | `minify`     | `'esbuild'`   | Minification strategy           |
-| Build    | `target`     | `'esnext'`    | Build target environment        |
-| Server   | `port`       | `5173`        | Development server port         |
-| Server   | `strictPort` | `false`       | Fail if port is in use          |
-| Server   | `open`       | `false`       | Open browser on start           |
-| Server   | `host`       | `'localhost'` | Host to bind to                 |
-| Preview  | `port`       | `4173`        | Preview server port             |
+| Category | Setting      | Default Value | Description                                   |
+| -------- | ------------ | ------------- | --------------------------------------------- |
+| Build    | `outDir`     | `'dist'`      | Output directory for production               |
+| Build    | `sourcemap`  | `false`       | Source map generation                         |
+| Build    | `minify`     | Vite default  | `'esbuild'` up to Vite 7, `'oxc'` from Vite 8 |
+| Build    | `target`     | `'esnext'`    | Build target environment                      |
+| Server   | `port`       | `5173`        | Development server port                       |
+| Server   | `strictPort` | `false`       | Fail if port is in use                        |
+| Server   | `open`       | `false`       | Open browser on start                         |
+| Server   | `host`       | `'localhost'` | Host to bind to                               |
+| Preview  | `port`       | `4173`        | Preview server port                           |
 
 ### API Reference
 
@@ -304,13 +304,6 @@ export default createViteConfig({
   build: {
     sourcemap: true,
     minify: 'terser',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-        },
-      },
-    },
   },
 });
 ```

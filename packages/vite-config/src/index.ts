@@ -36,9 +36,9 @@ export type ViteConfigOptions = {
 
     /**
      * Minification option
-     * @default 'esbuild'
+     * @default Vite's default: 'esbuild' up to Vite 7, 'oxc' from Vite 8
      */
-    minify?: boolean | 'esbuild' | 'terser';
+    minify?: NonNullable<UserConfig['build']>['minify'];
 
     /**
      * Target environment for build
@@ -103,15 +103,8 @@ const BASE_DEFAULTS = {
   build: {
     outDir: 'dist',
     sourcemap: false,
-    minify: 'esbuild' as const,
+    // No `minify`: Vite 8 dropped esbuild, so Vite's own default works on every version
     target: 'esnext',
-    // TODO: migrate to rolldownOptions (follow-up)
-    // oxlint-disable-next-line typescript/no-deprecated -- tracked by the TODO above
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
   },
   server: {
     port: 5173,
