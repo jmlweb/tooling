@@ -6,31 +6,27 @@
 [![tsup](https://img.shields.io/badge/tsup-8.0%2B-yellow.svg)](https://tsup.egoist.dev/)
 
 > [!WARNING]
-> **Deprecated**: this package is no longer maintained. tsup itself is maintenance-only and recommends tsdown. Use [`@jmlweb/tsdown-config-base`](https://github.com/jmlweb/tooling/tree/main/packages/tsdown-config-base#readme) instead: it keeps the same helper API and published file names, and its README has a [migration guide](https://github.com/jmlweb/tooling/tree/main/packages/tsdown-config-base#from-jmlwebtsup-config-base).
+> **Deprecated and no longer maintained.** tsup is maintenance-only and recommends tsdown. Use [`@jmlweb/tsdown-config-base`](../tsdown-config-base): same helper API and published file names, with a [migration guide](../tsdown-config-base#from-jmlwebtsup-config-base).
 
-> Base tsup configuration for jmlweb projects. Provides sensible defaults and a clean API for creating consistent build configurations.
+> Base tsup configuration for jmlweb projects, with sensible defaults for TypeScript libraries and CLIs.
 
 ## ✨ Features
 
-- 🎯 **Sensible Defaults**: Pre-configured with common settings for TypeScript libraries
-- 📦 **Dual Format**: Generates both CommonJS and ESM outputs by default
-- 📝 **TypeScript Declarations**: Automatic `.d.ts` generation enabled
-- 🔧 **Clean API**: Simple function to create configurations with external dependencies
-- ⚡ **Zero Config**: Works out of the box with minimal setup
-- 🛠️ **Fully Typed**: Complete TypeScript support with exported types
-- 🖥️ **CLI Preset**: Specialized configuration for CLI packages with shebang support
+- 🎯 **Sensible defaults**: Pre-configured for TypeScript libraries
+- 📦 **Dual format**: CommonJS and ESM output by default
+- 📝 **Declarations**: `.d.ts` generation enabled
+- 🖥️ **CLI preset**: Shebang support
+- 🛠️ **Fully typed**: Exported option types
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/tsup-config-base tsup
+npm install --save-dev @jmlweb/tsup-config-base tsup
 ```
-
-> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
 
 ## 🚀 Quick Start
 
-Create a `tsup.config.ts` file in your project root:
+Create `tsup.config.ts` in your project root:
 
 ```typescript
 import { createTsupConfig } from '@jmlweb/tsup-config-base';
@@ -40,191 +36,55 @@ export default createTsupConfig();
 
 ## 💡 Examples
 
-### Basic Setup (No Externals)
+### External Dependencies
 
 ```typescript
-// tsup.config.ts
-import { createTsupConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupConfig();
-```
-
-### With External Dependencies
-
-```typescript
-// tsup.config.ts
 import { createTsupConfig } from '@jmlweb/tsup-config-base';
 
 export default createTsupConfig({
-  external: ['eslint', 'typescript-eslint', '@eslint/js'],
+  external: ['@jmlweb/eslint-config-base-js', '@eslint/js', 'eslint'],
 });
 ```
 
-### With Internal Workspace Dependencies
+### Multiple Entries and Extra Options
 
 ```typescript
-// tsup.config.ts
 import { createTsupConfig } from '@jmlweb/tsup-config-base';
 
 export default createTsupConfig({
-  external: [
-    // Internal packages
-    '@jmlweb/eslint-config-base-js',
-    // External peer dependencies
-    '@eslint/js',
-    'eslint',
-    'eslint-config-prettier',
-    'typescript-eslint',
-  ],
-});
-```
-
-### Custom Entry Point
-
-```typescript
-// tsup.config.ts
-import { createTsupConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupConfig({
-  entry: ['src/main.ts'],
-  external: ['some-dependency'],
-});
-```
-
-### With Additional Options
-
-```typescript
-// tsup.config.ts
-import { createTsupConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupConfig({
-  external: ['vitest'],
+  entry: { index: 'src/index.ts', utils: 'src/utils/index.ts' },
+  external: ['commander'],
   options: {
     minify: true,
     sourcemap: true,
-    splitting: true,
   },
 });
 ```
 
-### Multiple Entry Points
+### CLI Package
 
 ```typescript
-// tsup.config.ts
-import { createTsupConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupConfig({
-  entry: ['src/index.ts', 'src/cli.ts'],
-  external: ['commander'],
-});
-```
-
-### Object-Style Entry Points
-
-```typescript
-// tsup.config.ts
-import { createTsupConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupConfig({
-  entry: {
-    index: 'src/index.ts',
-    utils: 'src/utils/index.ts',
-  },
-});
-```
-
-### CLI Package Configuration
-
-For CLI packages that need shebang injection, use `createTsupCliConfig`:
-
-```typescript
-// tsup.config.ts
 import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
 
 export default createTsupCliConfig();
-// Output: dist/cli.js with #!/usr/bin/env node shebang
-```
-
-### CLI with Custom Entry
-
-```typescript
-// tsup.config.ts
-import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupCliConfig({
-  entry: { bin: 'src/bin.ts' },
-  external: ['commander'],
-});
+// Output: dist/cli.js with a #!/usr/bin/env node shebang
 ```
 
 ### CLI with Library API
 
 ```typescript
-// tsup.config.ts
 import { createTsupCliConfig } from '@jmlweb/tsup-config-base';
 
 export default createTsupCliConfig({
-  entry: {
-    cli: 'src/cli.ts',
-    index: 'src/index.ts',
-  },
-  shebang: 'cli', // Only add shebang to cli entry
+  entry: { cli: 'src/cli.ts', index: 'src/index.ts' },
+  shebang: 'cli', // Only the cli entry gets a shebang
   external: ['commander'],
 });
 ```
 
-## 🤔 Why Use This?
-
-> **Philosophy**: TypeScript libraries should publish both CommonJS and ESM formats with type declarations for maximum compatibility across all consuming projects.
-
-This package provides a tsup configuration optimized for building TypeScript libraries with dual-format output. It handles the complexity of generating both CommonJS and ESM builds while maintaining proper type definitions and ensuring external dependencies aren't bundled.
-
-### Design Decisions
-
-**Dual Format Output (`format: ['cjs', 'esm']`)**: Support both module systems
-
-- **Why**: The JavaScript ecosystem is in transition from CommonJS to ESM. Publishing both formats ensures your library works in all environments - legacy Node.js projects using require(), modern ESM projects using import, and bundlers that optimize based on format. This maximizes compatibility
-- **Trade-off**: Slightly larger published package size (two builds). But consumers only use one format, and the compatibility benefit is essential
-- **When to override**: For internal packages consumed only by ESM projects, you can use `['esm']` only. But dual publishing is safer for public libraries
-
-**Type Declaration Generation (`dts: true`)**: Automatic .d.ts files
-
-- **Why**: TypeScript consumers need type definitions for intellisense, type checking, and developer experience. Generating declarations automatically ensures your library provides first-class TypeScript support without manual maintenance
-- **Trade-off**: Slightly slower builds due to declaration generation. But type safety for consumers is non-negotiable
-- **When to override**: Never for libraries meant to be consumed - types are essential for modern JavaScript development
-
-**External Dependencies (`external` array)**: Control bundling
-
-- **Why**: Libraries shouldn't bundle their dependencies - this leads to duplicate code, version conflicts, and bloated packages. The `external` parameter lets you specify which dependencies should remain as imports, letting consumers manage versions
-- **Trade-off**: Must carefully specify which dependencies are external (typically all dependencies and peerDependencies)
-- **When to override**: For standalone CLI tools, you might bundle all dependencies. But for libraries, externals are crucial
-
-**Clean Builds (`clean: true`)**: Fresh output on every build
-
-- **Why**: Cleaning the output directory prevents stale files from previous builds causing issues. Ensures deterministic builds and prevents shipping renamed or deleted files
-- **Trade-off**: Very slightly slower builds (must delete files first). But the reliability is worth it
-- **When to override**: Rarely - clean builds prevent an entire class of mysterious bugs
-
 ## 📋 Configuration Details
 
-### Default Settings
-
-| Setting    | Default Value      | Description                         |
-| ---------- | ------------------ | ----------------------------------- |
-| `entry`    | `['src/index.ts']` | Entry point(s) for the build        |
-| `format`   | `['cjs', 'esm']`   | Output formats (dual publishing)    |
-| `dts`      | `true`             | Generate TypeScript declarations    |
-| `clean`    | `true`             | Clean output directory before build |
-| `outDir`   | `'dist'`           | Output directory                    |
-| `external` | `[]`               | External packages to exclude        |
-
-### API Reference
-
-#### `createTsupConfig(options?: TsupConfigOptions): Options`
-
-Creates a tsup configuration with sensible defaults for library packages.
-
-**Parameters:**
+### `createTsupConfig(options?): Options`
 
 | Option     | Type                                 | Default            | Description                      |
 | ---------- | ------------------------------------ | ------------------ | -------------------------------- |
@@ -236,129 +96,63 @@ Creates a tsup configuration with sensible defaults for library packages.
 | `external` | `(string \| RegExp)[]`               | `[]`               | Packages to exclude from bundle  |
 | `options`  | `Partial<Options>`                   | `{}`               | Additional tsup options to merge |
 
-**Returns:** A complete tsup `Options` object.
+### `createTsupCliConfig(options?): Options | Options[]`
 
-#### `createTsupCliConfig(options?: TsupCliConfigOptions): Options | Options[]`
+Same options, with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/cli.ts' }`, plus:
 
-Creates a CLI-specific tsup configuration with shebang support.
+| Option    | Type                            | Default    | Description                                       |
+| --------- | ------------------------------- | ---------- | ------------------------------------------------- |
+| `target`  | `NodeTarget`                    | `'node18'` | Node.js target version                            |
+| `shebang` | `boolean \| string \| string[]` | `true`     | Shebang on all entries (`true`) or the named ones |
 
-**Parameters:**
+Returns an array of configs when a selective shebang is used.
 
-| Option     | Type                                 | Default                 | Description                                 |
-| ---------- | ------------------------------------ | ----------------------- | ------------------------------------------- |
-| `entry`    | `string[] \| Record<string, string>` | `{ cli: 'src/cli.ts' }` | Entry point files                           |
-| `format`   | `('cjs' \| 'esm' \| 'iife')[]`       | `['esm']`               | Output formats (ESM only by default)        |
-| `dts`      | `boolean`                            | `true`                  | Generate declaration files                  |
-| `clean`    | `boolean`                            | `true`                  | Clean output before build                   |
-| `outDir`   | `string`                             | `'dist'`                | Output directory                            |
-| `external` | `(string \| RegExp)[]`               | `[]`                    | Packages to exclude from bundle             |
-| `target`   | `NodeTarget`                         | `'node18'`              | Node.js target version                      |
-| `shebang`  | `boolean \| string \| string[]`      | `true`                  | Add shebang to entries (true = all entries) |
-| `options`  | `Partial<Options>`                   | `{}`                    | Additional tsup options to merge            |
+### Exports
 
-**Returns:** A tsup `Options` object, or an array of `Options` when selective shebang is used.
-
-#### Exported Constants
-
-- `BASE_DEFAULTS` - Default library configuration values
-- `CLI_DEFAULTS` - Default CLI configuration values
+- `createTsupConfig`, `createTsupCliConfig` - Helpers
+- `BASE_DEFAULTS`, `CLI_DEFAULTS` - Default values
+- `TsupConfigOptions`, `TsupCliConfigOptions`, `EntryConfig`, `NodeTarget` - Types
 - `Options` - Re-exported from tsup
-
-#### Type Exports
-
-- `EntryConfig` - Entry point configuration type (`string[] | Record<string, string>`)
-- `NodeTarget` - Node.js target version type (`'node16' | 'node18' | 'node20' | 'node22' | ...`)
-- `TsupConfigOptions` - Options for `createTsupConfig`
-- `TsupCliConfigOptions` - Options for `createTsupCliConfig`
 
 ## 🎯 When to Use
 
-Use this configuration when you want:
+**Do not use for new projects.** Use [`@jmlweb/tsdown-config-base`](../tsdown-config-base) instead.
 
-- ✅ Consistent build configuration across multiple packages
-- ✅ Dual-format output (CommonJS + ESM) for maximum compatibility
-- ✅ Automatic TypeScript declaration generation
-- ✅ A clean, simple API for specifying externals
-- ✅ Easy customization without repeating boilerplate
-- ✅ CLI packages with proper shebang injection
+Only keep this package while you have not yet migrated an existing tsup-based build.
 
 ## 🔧 Extending the Configuration
 
-You can extend the configuration for your specific needs:
-
-### Adding Custom Options
-
 ```typescript
-// tsup.config.ts
 import { createTsupConfig } from '@jmlweb/tsup-config-base';
 
 export default createTsupConfig({
-  external: ['vitest'],
+  format: ['esm'], // ESM only
+  dts: false, // No type declarations
+  outDir: 'build',
+  external: ['vitest'], // Peer, workspace and optional dependencies
   options: {
     minify: true,
-    sourcemap: true,
     splitting: true,
     target: 'es2022',
   },
 });
 ```
 
-### Overriding Defaults
-
-```typescript
-// tsup.config.ts
-import { createTsupConfig } from '@jmlweb/tsup-config-base';
-
-export default createTsupConfig({
-  format: ['esm'], // ESM only
-  dts: false, // Disable type declarations
-  outDir: 'build', // Custom output directory
-});
-```
-
-### Externals Strategy
-
-When configuring `external`, include:
-
-1. **Peer dependencies**: Packages that consumers should install themselves
-2. **Workspace dependencies**: Internal `@jmlweb/*` packages used via `workspace:*`
-3. **Optional dependencies**: Packages that may or may not be present
-
-```typescript
-// Example: ESLint config package
-export default createTsupConfig({
-  external: [
-    // Internal workspace dependency
-    '@jmlweb/eslint-config-base-js',
-    // Peer dependencies
-    '@eslint/js',
-    'eslint',
-    'eslint-config-prettier',
-    'eslint-plugin-simple-import-sort',
-    'typescript-eslint',
-  ],
-});
-```
-
 ## 📝 Usage with Scripts
-
-Add build scripts to your `package.json`:
 
 ```json
 {
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "npm run build"
   }
 }
 ```
 
-Then run:
-
 ```bash
-pnpm build    # Build the package
-pnpm clean    # Clean build output
+npm run build  # Build the package
+npm run clean  # Clean build output
 ```
 
 ## 📋 Requirements
@@ -368,41 +162,26 @@ pnpm clean    # Clean build output
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependency:
-
 - `tsup` (>=8.0.0)
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
-- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
+- [`@jmlweb/tsdown-config-base`](../tsdown-config-base) - Successor to this package (recommended)
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
-- [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
-
-### External Tools
-
-- [tsup](https://tsup.egoist.dev/) - Bundle TypeScript libraries with zero config
-- [esbuild](https://esbuild.github.io/) - Extremely fast JavaScript bundler (used by tsup)
-- [TypeScript](https://www.typescriptlang.org/) - JavaScript with syntax for types
-- [Rollup](https://rollupjs.org/) - Alternative bundler for complex configurations
+- [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration
+- [tsup](https://tsup.egoist.dev/) - TypeScript bundler powered by esbuild
 
 ## 🔄 Migration Guide
 
-### Upgrading to a New Version
+### From 1.x to 2.0.0
 
-> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+**Breaking:** Node.js >= 22.12.0 is required (18 and 20 are end-of-life).
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+### To `@jmlweb/tsdown-config-base`
 
-For version history, see the [Changelog](./CHANGELOG.md).
+Follow the [migration guide](../tsdown-config-base#from-jmlwebtsup-config-base).
 
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+See the [Changelog](./CHANGELOG.md) for version history.
 
 ## 📄 License
 

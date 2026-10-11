@@ -10,56 +10,42 @@ sidebar:
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
-[![Astro](https://img.shields.io/badge/Astro-4.0%2B-FF5D01.svg)](https://astro.build/)
 
-&gt; ESLint configuration for Astro projects with TypeScript. Extends `@jmlweb/eslint-config-base` with Astro-specific rules and best practices for `.astro` files.
+&gt; ESLint flat config for Astro with TypeScript. Extends [`@jmlweb/eslint-config-base`](../../eslint/base/) with `eslint-plugin-astro` rules for `.astro` files.
 
-&gt; 💡 **With Oxlint**: Oxlint cannot lint `.astro` templates, so this package stays the way to lint them. Lint the rest of the project with [`@jmlweb/oxlint-config-base`](../../oxlint/base/) and only `.astro` files with ESLint, as shown in the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/#astro-projects).
+&gt; ✅ **Recommended**: Oxlint cannot lint `.astro` templates, so this package is the way to lint them. In a project migrated to Oxlint, lint everything else with [`@jmlweb/oxlint-config-base`](../../oxlint/base/) and only `.astro` files with ESLint; see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/#astro-projects).
 
 ## ✨ Features
 
-- 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
-- 🚀 **Astro Support**: Enforces Astro-specific rules and patterns
-- 📝 **Astro File Handling**: Proper linting for `.astro` files
-- 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
-- 🎯 **Code Quality**: Prevents common Astro pitfalls and anti-patterns
-- 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
-- 🚀 **Flat Config**: Uses ESLint 9 and 10 flat config format (latest stable)
+- 🚀 **Astro rules**: `eslint-plugin-astro` recommended config
+- 📝 **`.astro` parsing**: TypeScript parser for frontmatter, with type-checked rules disabled where `.astro` has no type info
+- 🔒 **Strict TypeScript**: everything from `@jmlweb/eslint-config-base` for `.ts` and `.tsx`
+- 📦 **Import sorting**: imports and exports sorted in `.astro`, `.ts` and `.tsx`
+- 🎨 **Prettier compatible**: disables rules that conflict with Prettier
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/eslint-config-astro eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-astro eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
+npm install --save-dev @jmlweb/eslint-config-astro @jmlweb/eslint-config-base eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-simple-import-sort eslint-plugin-astro
 ```
 
-&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+&gt; 💡 **Upgrading?** See the [Migration Guide](#-migration-guide).
 
 ## 🚀 Quick Start
 
-Create an `eslint.config.js` file in your project root:
-
 ```javascript
+// eslint.config.js
 import astroConfig from '@jmlweb/eslint-config-astro';
 
 export default [
   ...astroConfig,
-  // Add your project-specific overrides here
+  // Project-specific overrides
 ];
 ```
 
 ## 💡 Examples
 
-### Basic Setup
-
-```javascript
-// eslint.config.js
-import astroConfig from '@jmlweb/eslint-config-astro';
-
-export default [...astroConfig];
-```
-
-### With Project-Specific Overrides
+### Test overrides and ignores
 
 ```javascript
 // eslint.config.js
@@ -68,21 +54,19 @@ import astroConfig from '@jmlweb/eslint-config-astro';
 export default [
   ...astroConfig,
   {
-    files: ['**/*.test.ts', '**/*.test.astro'],
+    files: ['**/*.test.ts'],
     rules: {
-      // Allow any in tests
       '@typescript-eslint/no-explicit-any': 'off',
-      // Allow console in tests
       'no-console': 'off',
     },
   },
   {
-    ignores: ['dist/', '.astro/', 'node_modules/', '*.config.ts'],
+    ignores: ['dist/', '.astro/', 'node_modules/'],
   },
 ];
 ```
 
-### With Custom Astro Settings
+### Tune Astro rules
 
 ```javascript
 // eslint.config.js
@@ -93,8 +77,6 @@ export default [
   {
     files: ['**/*.astro'],
     rules: {
-      // Customize Astro-specific rules
-      'astro/no-conflict-set-directives': 'error',
       'astro/no-unused-define-vars-in-style': 'warn',
     },
   },
@@ -103,39 +85,23 @@ export default [
 
 ## 📋 Configuration Details
 
-### Astro Files
+| Files                 | Applied                                                                 |
+| --------------------- | ----------------------------------------------------------------------- |
+| `**/*.astro`          | `astro` recommended, TypeScript parser, type-checked rules off, sorting |
+| `**/*.ts`, `**/*.tsx` | Strict TypeScript from `base`, import and export sorting                |
 
-This configuration applies Astro-specific rules to:
+### Included
 
-- `**/*.astro` - Astro component files
-
-### TypeScript Files
-
-TypeScript rules are also applied to:
-
-- `**/*.ts` - TypeScript files
-- `**/*.tsx` - TypeScript React files (if used in Astro project)
-
-### Key Rules Enforced
-
-| Rule                                   | Level   | Description                         |
-| -------------------------------------- | ------- | ----------------------------------- |
-| `astro/no-conflict-set-directives`     | `error` | Prevents conflicting set directives |
-| `astro/no-unused-define-vars-in-style` | `warn`  | Warns about unused CSS variables    |
-| `simple-import-sort/imports`           | `error` | Enforces import sorting             |
-| `simple-import-sort/exports`           | `error` | Enforces export sorting             |
-
-### What's Included
-
-- ✅ All TypeScript ESLint rules from `@jmlweb/eslint-config-base`
-- ✅ Astro recommended rules from `eslint-plugin-astro`
-- ✅ Proper handling of `.astro` files with TypeScript parser
-- ✅ Automatic import/export sorting
+- ✅ Everything from `@jmlweb/eslint-config-base`
+- ✅ `eslint-plugin-astro` recommended rules
+- ✅ `.astro` files parsed with `@typescript-eslint/parser` and `.astro` as an extra file extension
 - ✅ Prettier conflict resolution
+
+Type-checked rules are disabled for `.astro` files because `astro-eslint-parser` provides no type information.
 
 ## 🔄 Import Sorting
 
-The configuration automatically sorts imports and enforces type-only imports:
+Imports are sorted and type-only imports are enforced.
 
 **Before:**
 
@@ -145,7 +111,7 @@ import type { User } from './types';
 import fs from 'fs';
 ```
 
-**After auto-fix:**
+**After `eslint --fix`:**
 
 ```typescript
 import fs from 'fs';
@@ -153,77 +119,34 @@ import type { User } from './types';
 import { Component } from './component';
 ```
 
-Fix import order automatically:
-
-```bash
-pnpm exec eslint --fix .
-```
-
-## 🤔 Why Use This?
-
-&gt; **Philosophy**: Astro components should follow Astro's mental model - islands of interactivity with server-first rendering.
-
-This package extends the base TypeScript config with Astro-specific rules that enforce best practices for `.astro` files, prevent common pitfalls with Astro's unique component model, and ensure proper usage of Astro directives.
-
-### Design Decisions
-
-**Astro Plugin (`eslint-plugin-astro`)**: Enforces Astro-specific rules and patterns
-
-- **Why**: Astro has a unique component format that blends frontmatter, markup, and optional client-side interactivity. The plugin catches misuse of directives, style conflicts, and component structure issues
-- **Trade-off**: Additional rules specific to Astro, but prevents framework-specific bugs
-- **When to override**: When you have a legitimate reason to deviate from Astro conventions (rare)
-
-**Astro File Support**: Properly lints `.astro` files with awareness of their structure
-
-- **Why**: `.astro` files have three sections (frontmatter, template, style) that need different parsing. Standard linters don't understand this format
-- **Trade-off**: None - this is essential for Astro development
-- **When to override**: Never - Astro files require Astro-aware linting
-
-**Extends Base TypeScript Config**: Inherits all strict type checking rules for TypeScript in frontmatter
-
-- **Why**: Astro components often contain complex TypeScript logic in frontmatter. Strict typing catches bugs early
-- **Trade-off**: More verbose frontmatter code, but prevents runtime errors
-- **When to override**: Follow the same guidelines as the base TypeScript config
-
 ## 🎯 When to Use
 
-Use this configuration when you want:
+- ✅ Astro projects written in TypeScript
+- ✅ Linting `.astro` files alongside Oxlint in a migrated project
+- ✅ Strict type-aware linting for `.ts` files in Astro projects
 
-- ✅ Astro project development with TypeScript
-- ✅ Maximum type safety with Astro
-- ✅ Strict code quality standards for Astro code
-- ✅ Consistent Astro patterns across the team
-- ✅ Prevention of common Astro pitfalls
-
-**For non-Astro TypeScript projects**, use [`@jmlweb/eslint-config-base`](../../eslint/base/) instead.
-
-**For React projects**, use [`@jmlweb/eslint-config-react`](../../eslint/react/) instead.
+For other TypeScript projects use [`@jmlweb/eslint-config-base`](../../eslint/base/), or [`@jmlweb/eslint-config-react`](../../eslint/react/) for React.
 
 ## 🔧 Extending the Configuration
 
-You can extend or override the configuration for your specific needs:
+Spread the config, then add objects after it. Later entries win.
 
 ```javascript
+// eslint.config.js
 import astroConfig from '@jmlweb/eslint-config-astro';
 
 export default [
   ...astroConfig,
   {
-    files: ['**/*.test.ts', '**/*.test.astro'],
+    files: ['src/pages/**/*.astro'],
     rules: {
-      // Test-specific rules
-      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off',
     },
-  },
-  {
-    ignores: ['dist/', '.astro/', 'node_modules/'],
   },
 ];
 ```
 
 ## 📝 Usage with Scripts
-
-Add linting scripts to your `package.json`:
 
 ```json
 {
@@ -234,63 +157,43 @@ Add linting scripts to your `package.json`:
 }
 ```
 
-Then run:
-
 ```bash
-pnpm lint      # Lint all files
-pnpm lint:fix  # Fix auto-fixable issues
+npm run lint
 ```
 
 ## 📋 Requirements
 
 - **Node.js** &gt;= 22.12.0
-- **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
-- **TypeScript** project with `tsconfig.json`
-- **Astro** &gt;= 4.0.0
-- **TypeScript project service** enabled (automatic with this config)
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config)
+- **TypeScript** project with a `tsconfig.json` (versions supported by typescript-eslint 8)
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependencies:
-
-- `eslint` (^9.0.0 || ^10.0.0)
-- `@eslint/js` (^9.0.0 || ^10.0.0)
-- `typescript-eslint` (^8.0.0)
-- `eslint-config-prettier` (^9.1.0 || ^10.0.0)
-- `eslint-plugin-astro` (^1.5.0 || ^2.0.0 || ^3.0.0)
-- `eslint-plugin-simple-import-sort` (^12.0.0 || ^13.0.0 || ^14.0.0)
-- `@jmlweb/eslint-config-base` (^2.0.2)
+- `eslint` (`^9.0.0 || ^10.0.0`)
+- `@eslint/js` (`^9.0.0 || ^10.0.0`)
+- `typescript-eslint` (`^8.0.0`)
+- `eslint-config-prettier` (`^9.1.0 || ^10.0.0`)
+- `eslint-plugin-astro` (`^1.5.0 || ^2.0.0 || ^3.0.0`)
+- `eslint-plugin-simple-import-sort` (`^12.0.0 || ^13.0.0 || ^14.0.0`)
+- `@jmlweb/eslint-config-base` (`^3.0.3`)
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/eslint-config-base`](../../eslint/base/) - Base TypeScript ESLint config (extended by this package)
-- [`@jmlweb/tsconfig-astro`](../../typescript/astro/) - TypeScript configuration for Astro projects
-- [`@jmlweb/prettier-config-base`](../../prettier/base/) - Prettier config for consistent formatting
-
-### External Tools
-
-- [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript and TypeScript
-- [Astro](https://astro.build/) - The web framework for content-driven websites
-- [eslint-plugin-astro](https://ota-meshi.github.io/eslint-plugin-astro/) - ESLint plugin for Astro components
-- [Prettier Plugin Astro](https://github.com/withastro/prettier-plugin-astro) - Prettier plugin for .astro files
+- [`@jmlweb/eslint-config-base`](../../eslint/base/): TypeScript config (extended by this package, maintenance mode)
+- [`@jmlweb/oxlint-config-base`](../../oxlint/base/): Oxlint config for the non-`.astro` files
+- [`@jmlweb/tsconfig-astro`](../../typescript/astro/): TypeScript config for Astro
+- [`@jmlweb/prettier-config-base`](../../prettier/base/): Prettier config (maintenance mode)
 
 ## 🔄 Migration Guide
 
-### Upgrading to a New Version
+### 1.x to 2.0
 
-&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+Node.js 18 and 20 are end-of-life. Node.js &gt;= 22.12.0 is now required: it is the first Node.js 22 release that can `require()` ES modules without a flag, which the CommonJS build needs to load ESM-only plugins. Peer ranges were also widened (`eslint-plugin-astro` 2 and 3, `eslint-plugin-simple-import-sort` 13 and 14).
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+1. Upgrade Node.js to 22.12.0 or later.
+2. Update the package: `npm install --save-dev @jmlweb/eslint-config-astro@latest`.
 
-For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/eslint-config-astro/CHANGELOG.md).
-
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/eslint-config-astro/CHANGELOG.md) for version history and release notes.
+See the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/eslint-config-astro/CHANGELOG.md).
 
 ## 📄 License
 

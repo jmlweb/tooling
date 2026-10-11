@@ -11,40 +11,38 @@ sidebar:
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![Vitest](https://img.shields.io/badge/Vitest-1.0%2B-6E9F18.svg)](https://vitest.dev/)
 
-&gt; Base Vitest configuration for jmlweb projects. TypeScript support, coverage settings, and sensible defaults out of the box.
+&gt; Base Vitest configuration with TypeScript-friendly defaults, v8 coverage and 80% thresholds.
 
 ## ✨ Features
 
-- 🔧 **TypeScript Support**: Configured for TypeScript projects (type checking via CLI)
-- 📊 **Coverage Configuration**: Pre-configured with v8 provider and 80% coverage thresholds
-- 🎯 **Sensible Defaults**: Node.js environment, globals enabled, optimized test execution
-- ⚡ **Performance Optimized**: Thread pool configuration for efficient parallel test execution
-- 🚀 **Easy Extension**: Flat config format for easy customization
-- 📦 **Zero Config**: Works out of the box with minimal setup
+- 📊 **Coverage**: v8 provider with 80% thresholds
+- 🎯 **Sensible defaults**: Node environment, globals enabled, verbose reporter
+- ⚡ **Fast**: thread pool by default
+- 🔀 **Dual format**: ESM and CommonJS builds
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/vitest-config vitest
+npm install --save-dev @jmlweb/vitest-config vitest @vitest/coverage-v8
 ```
 
-&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+`@vitest/coverage-v8` is needed for `--coverage`; use the same version as `vitest`.
+
+&gt; 💡 Upgrading? See the [Migration Guide](#-migration-guide).
 
 ## 🚀 Quick Start
 
-Create a `vitest.config.ts` file in your project root:
-
 ```typescript
+// vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import baseConfig from '@jmlweb/vitest-config';
 
 export default defineConfig({
   ...baseConfig,
-  // Add your project-specific overrides here
 });
 ```
 
-Every setting, including `include` and `exclude`, lives under `test`. A `test` key in your config replaces the whole base `test` block, so spread `...baseConfig.test` into it, or use `mergeConfig`, which merges nested objects and concatenates arrays:
+Everything lives under `test`. A `test` key in your config **replaces** the whole base `test` block, so spread `...baseConfig.test` into it, or use `mergeConfig`:
 
 ```typescript
 import { defineConfig, mergeConfig } from 'vitest/config';
@@ -58,22 +56,9 @@ export default mergeConfig(
 
 ## 💡 Examples
 
-### Basic Setup
+### Overrides
 
 ```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import baseConfig from '@jmlweb/vitest-config';
-
-export default defineConfig({
-  ...baseConfig,
-});
-```
-
-### With Project-Specific Overrides
-
-```typescript
-// vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import baseConfig from '@jmlweb/vitest-config';
 
@@ -81,45 +66,16 @@ export default defineConfig({
   ...baseConfig,
   test: {
     ...baseConfig.test,
-    // Override environment for browser testing
     environment: 'jsdom',
-    // Custom test timeout
+    setupFiles: ['./src/test/setup.ts'],
     testTimeout: 10000,
-    // Custom coverage thresholds
-    coverage: {
-      ...baseConfig.test?.coverage,
-      thresholds: {
-        lines: 90,
-        functions: 90,
-        branches: 85,
-        statements: 90,
-      },
-    },
   },
 });
 ```
 
-### React/JSX Project Example
+### Custom coverage thresholds
 
 ```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import baseConfig from '@jmlweb/vitest-config';
-
-export default defineConfig({
-  ...baseConfig,
-  test: {
-    ...baseConfig.test,
-    environment: 'jsdom', // Use jsdom for React component testing
-    setupFiles: ['./src/test/setup.ts'], // Optional setup file
-  },
-});
-```
-
-### Lower Coverage Thresholds
-
-```typescript
-// vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import baseConfig from '@jmlweb/vitest-config';
 
@@ -129,23 +85,17 @@ export default defineConfig({
     ...baseConfig.test,
     coverage: {
       ...baseConfig.test?.coverage,
-      thresholds: {
-        lines: 60,
-        functions: 60,
-        branches: 60,
-        statements: 60,
-      },
+      thresholds: { lines: 90, functions: 90, branches: 85, statements: 90 },
     },
   },
 });
 ```
 
-### Explicit Imports and No Thresholds
+### Explicit imports, no thresholds
 
-`globals: true` and the 80% thresholds apply as soon as you run `vitest --coverage`. To import `describe`, `it` and `expect` explicitly and report coverage without failing the run:
+Import `describe`, `it` and `expect` yourself and report coverage without failing the run:
 
 ```typescript
-// vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import baseConfig from '@jmlweb/vitest-config';
 
@@ -154,131 +104,42 @@ export default defineConfig({
   test: {
     ...baseConfig.test,
     globals: false,
-    coverage: {
-      ...baseConfig.test?.coverage,
-      thresholds: {},
-    },
+    coverage: { ...baseConfig.test?.coverage, thresholds: {} },
   },
 });
 ```
-
-## 🤔 Why Use This?
-
-&gt; **Philosophy**: Modern testing should be fast, have excellent DX, and enforce meaningful coverage without slowing down development.
-
-This package provides a Vitest configuration optimized for speed and developer experience while maintaining high code quality standards. It leverages Vitest's Vite-powered architecture for extremely fast test execution and hot module replacement during test development.
-
-### Design Decisions
-
-**80% Coverage Thresholds**: Balanced quality enforcement
-
-- **Why**: 80% coverage ensures most code is tested without creating unrealistic goals that lead to testing trivial code just to hit metrics. It's high enough to catch bugs but low enough to remain practical for real-world development
-- **Trade-off**: Some projects need higher (90%+) or lower (60%) thresholds depending on criticality
-- **When to override**: Increase for safety-critical code, decrease for rapid prototyping or legacy code being brought under test
-
-**Global Test Functions (`globals: true`)**: Familiar testing API
-
-- **Why**: Enables the familiar `describe`, `it`, `expect` globals without imports, matching Jest's API. This makes migration easier and reduces boilerplate in every test file. Most developers expect this API
-- **Trade-off**: Technically pollutes global scope, but this is standard in testing and expected behavior
-- **When to override**: If you prefer explicit imports (`import { describe, it, expect } from 'vitest'`) for stricter code style
-
-**Thread Pool (`pool: 'threads'`)**: Parallel test execution
-
-- **Why**: Vitest's thread pool runs tests in parallel using worker threads, dramatically speeding up large test suites. Much faster than Jest's default process-based isolation while maintaining proper isolation
-- **Trade-off**: Minimal memory overhead from worker threads. But the speed improvement is significant
-- **When to override**: For tests with native modules that don't work in workers - use `forks` pool instead
-
-**V8 Coverage Provider**: Fast native coverage
-
-- **Why**: V8's built-in coverage is significantly faster than instrumentation-based coverage (like Istanbul). For Vitest projects, it's the best choice for speed while maintaining accuracy
-- **Trade-off**: Less configurable than Istanbul, but coverage accuracy is equivalent for modern code
-- **When to override**: Rarely needed - V8 coverage works well for all modern JavaScript/TypeScript
 
 ## 📋 Configuration Details
 
-### Default Settings
+| Setting                       | Value                                                        |
+| ----------------------------- | ------------------------------------------------------------ |
+| `globals`                     | `true`                                                       |
+| `environment`                 | `'node'`                                                     |
+| `testTimeout` / `hookTimeout` | `5000` / `10000` ms                                          |
+| `pool`                        | `'threads'`                                                  |
+| `reporters`                   | `['verbose']`                                                |
+| `include`                     | `**/*.{test,spec}.{ts,tsx,js,jsx}`                           |
+| `exclude`                     | `node_modules`, `dist`, `build`, dot-dirs, tool config files |
+| `coverage.provider`           | `'v8'`                                                       |
+| `coverage.thresholds`         | `80` for lines, functions, branches, statements              |
+| `coverage.include`            | `src/**/*.{ts,tsx,js,jsx}`                                   |
+| `coverage.reporter`           | `['text', 'json', 'html']`                                   |
 
-| Setting                          | Value     | Description                                          |
-| -------------------------------- | --------- | ---------------------------------------------------- |
-| `globals`                        | `true`    | Enables global test functions (describe, it, expect) |
-| `environment`                    | `node`    | Node.js environment by default                       |
-| `testTimeout`                    | `5000`    | Test timeout in milliseconds (5 seconds)             |
-| `hookTimeout`                    | `10000`   | Hook timeout in milliseconds (10 seconds)            |
-| `pool`                           | `threads` | Use thread pool for parallel test execution          |
-| `coverage.provider`              | `v8`      | Coverage provider                                    |
-| `coverage.thresholds.lines`      | `80`      | Minimum line coverage                                |
-| `coverage.thresholds.functions`  | `80`      | Minimum function coverage                            |
-| `coverage.thresholds.branches`   | `80`      | Minimum branch coverage                              |
-| `coverage.thresholds.statements` | `80`      | Minimum statement coverage                           |
-
-### Coverage Exclusions
-
-The following patterns are excluded from coverage by default:
-
-- `**/*.d.ts` - TypeScript declaration files
-- `**/*.config.{ts,js}` - Configuration files
-- `**/dist/**` - Build output
-- `**/build/**` - Build directories
-- `**/node_modules/**` - Dependencies
-- `**/coverage/**` - Coverage reports
-- `**/*.test.{ts,tsx,js,jsx}` - Test files
-- `**/*.spec.{ts,tsx,js,jsx}` - Spec files
-
-### Test File Patterns
-
-Tests are automatically discovered from:
-
-- `**/*.test.{ts,tsx,js,jsx}`
-- `**/*.spec.{ts,tsx,js,jsx}`
-
-### Reporters
-
-**Test Reporters:**
-
-- `verbose` - Detailed test output with full test names and results
-
-**Coverage Reporters:**
-
-- `text` - Text summary in terminal
-- `json` - JSON format for CI/CD integration
-- `html` - HTML coverage report (generated in `coverage/` directory)
+Coverage excludes `*.d.ts`, `*.config.{ts,js}`, `dist`, `build`, `node_modules`, `coverage`, and test/spec files.
 
 ## 🎯 When to Use
 
-Use this configuration when you want:
+- ✅ Vitest-based TypeScript projects
+- ✅ Enforced coverage with a shared baseline
+- ✅ Node.js libraries, CLIs and APIs, or browser code with `environment: 'jsdom'`
 
-- ✅ Consistent testing setup across projects
-- ✅ TypeScript support out of the box
-- ✅ Coverage thresholds enforced
-- ✅ Optimized test execution with thread pool
-- ✅ Sensible defaults for Node.js projects
-- ✅ Easy customization and extension
+Not for you if you use Jest: see [`@jmlweb/jest-config`](../../testing/jest/) (maintenance mode).
 
 ## 🔧 Extending the Configuration
 
-You can extend or override the configuration for your specific needs:
-
-```typescript
-import { defineConfig } from 'vitest/config';
-import baseConfig from '@jmlweb/vitest-config';
-
-export default defineConfig({
-  ...baseConfig,
-  test: {
-    ...baseConfig.test,
-    // Add custom setup files
-    setupFiles: ['./src/test/setup.ts'],
-    // Custom test patterns
-    include: ['**/*.test.ts', '**/__tests__/**/*.ts'],
-    // Custom environment
-    environment: 'jsdom',
-  },
-});
-```
+Spread `baseConfig.test` and override what you need (see [Examples](#-examples)). Install `jsdom` or `happy-dom` yourself when you set `environment` to either.
 
 ## 📝 Usage with Scripts
-
-Add test scripts to your `package.json`:
 
 ```json
 {
@@ -286,220 +147,49 @@ Add test scripts to your `package.json`:
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui",
     "test:typecheck": "vitest typecheck"
   }
 }
 ```
 
-Then run:
-
 ```bash
-pnpm test           # Run tests in watch mode
-pnpm test:run       # Run tests once
-pnpm test:coverage  # Run tests with coverage
-pnpm test:ui        # Open Vitest UI
-pnpm test:typecheck # Run TypeScript type checking
+npm test                  # watch mode
+npm run test:coverage     # single run with coverage
 ```
 
-### TypeScript Type Checking
-
-Type checking is performed separately using the `vitest typecheck` command for better performance. This allows you to run type checking independently of your test suite:
-
-```bash
-# Run type checking only
-pnpm test:typecheck
-
-# Or run tests and type checking together
-pnpm test && pnpm test:typecheck
-```
+Type checking is not part of the config: run `vitest typecheck` separately.
 
 ## 📋 Requirements
 
 - **Node.js** &gt;= 22.12.0
-- **Vitest** &gt;= 1.0.0
-- **TypeScript** project (recommended, but not required)
+- **Vitest** &gt;= 1.0.0 (config targets Vitest 4)
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependency:
-
-- `vitest` (^1.0.0)
-
-## 📚 Examples
-
-See real-world usage examples:
-
-- [`example-nodejs-typescript-api`](https://github.com/jmlweb/tooling/tree/main/apps/example-nodejs-typescript-api) - Node.js TypeScript API with testing
-- [`example-react-typescript-app`](https://github.com/jmlweb/tooling/tree/main/apps/example-react-typescript-app) - React TypeScript app with component testing
+- `vitest` (`>=1.0.0`)
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/jest-config`](../../testing/jest/) - Jest configuration (alternative test runner)
-- [`@jmlweb/eslint-config-base`](../../eslint/base/) - ESLint config for TypeScript projects
-- [`@jmlweb/prettier-config-base`](../../prettier/base/) - Prettier config for consistent formatting
+- [`@jmlweb/vite-config`](../../build-tools/vite/) - Vite base config
 - [`@jmlweb/tsconfig-base`](../../typescript/base/) - TypeScript configuration
-
-### External Tools
-
-- [Vitest](https://vitest.dev/) - Blazing-fast unit test framework powered by Vite
-- [@testing-library/jest-dom](https://testing-library.com/docs/ecosystem-jest-dom/) - Custom matchers for the DOM (works with Vitest)
-- [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) - React testing utilities (for React projects)
-- [@vitest/ui](https://vitest.dev/guide/ui.html) - Visual UI for Vitest test results
-
-## ⚠️ Common Issues
-
-&gt; **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-### Module Resolution Issues
-
-**Symptoms:**
-
-- Error: "Cannot find module" when running tests
-- Import paths work in the app but fail in tests
-
-**Cause:**
-
-- Vitest uses Vite's module resolution which may differ from TypeScript
-- Path aliases or special imports not configured for tests
-
-**Solution:**
-
-If you're using path aliases in `tsconfig.json`, configure them in your Vitest config:
-
-```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import vitestConfig from '@jmlweb/vitest-config';
-
-export default defineConfig({
-  ...vitestConfig,
-  resolve: {
-    alias: {
-      '@': '/src',
-      '@components': '/src/components',
-    },
-  },
-});
-```
-
-### jsdom or happy-dom Not Found
-
-**Symptoms:**
-
-- Error: "Environment 'jsdom' not found" or "Environment 'happy-dom' not found"
-- Tests fail to run with DOM-related errors
-
-**Cause:**
-
-- The test environment package is not installed
-- This config specifies the environment but doesn't install it (peer dependency)
-
-**Solution:**
-
-Install the DOM environment package:
-
-```bash
-# For jsdom (more compatible, slower)
-pnpm add -D jsdom
-
-# Or for happy-dom (faster, less compatible)
-pnpm add -D happy-dom
-```
-
-Then specify in your config if different from default:
-
-```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import vitestConfig from '@jmlweb/vitest-config';
-
-export default defineConfig({
-  ...vitestConfig,
-  test: {
-    ...vitestConfig.test,
-    environment: 'jsdom', // or 'happy-dom'
-  },
-});
-```
-
-### Coverage Not Working
-
-**Symptoms:**
-
-- No coverage reports generated
-- Coverage command runs but shows no output
-
-**Cause:**
-
-- Coverage provider not installed
-- Coverage not enabled in configuration
-
-**Solution:**
-
-Install the coverage provider:
-
-```bash
-pnpm add -D @vitest/coverage-v8
-```
-
-Run tests with coverage flag:
-
-```bash
-vitest --coverage
-```
-
-### Test Files Not Found
-
-**Symptoms:**
-
-- "No test files found" even though test files exist
-- Vitest doesn't pick up `*.test.ts` or `*.spec.ts` files
-
-**Cause:**
-
-- Test file pattern mismatch
-- Files in excluded directories
-
-**Solution:**
-
-This config includes common patterns. If your tests aren't found, check:
-
-1. File naming: Use `.test.ts`, `.spec.ts`, `.test.tsx`, or `.spec.tsx`
-2. Location: Ensure tests aren't in `node_modules` or `dist`
-3. Explicitly include test patterns:
-
-```typescript
-// vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import vitestConfig from '@jmlweb/vitest-config';
-
-export default defineConfig({
-  ...vitestConfig,
-  test: {
-    ...vitestConfig.test,
-    include: ['**/*.{test,spec}.{ts,tsx}'],
-  },
-});
-```
+- [`@jmlweb/oxlint-config-base`](../../oxlint/base/) - Oxlint config
+- [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/) - Oxfmt config
+- [`@jmlweb/jest-config`](../../testing/jest/) - Jest alternative (maintenance mode)
 
 ## 🔄 Migration Guide
 
-### Upgrading to a New Version
+### 2.x to 3.0
 
-&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+**Breaking:** Node.js &gt;= 22.12.0 is required.
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+1. Upgrade Node.js to 22.12.0 or later.
+2. Update: `npm install --save-dev @jmlweb/vitest-config@latest`
 
-For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/vitest-config/CHANGELOG.md).
+### 1.x to 2.0
 
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
+Vitest 4: `poolOptions.threads.minThreads` and `maxThreads` are gone; Vitest manages the pool automatically.
 
-## 📜 Changelog
-
-See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/vitest-config/CHANGELOG.md) for version history and release notes.
+See the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/vitest-config/CHANGELOG.md) for details.
 
 ## 📄 License
 

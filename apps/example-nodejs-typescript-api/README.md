@@ -1,96 +1,55 @@
-# Node.js TypeScript API Example
+# 🟢 Node.js TypeScript API Example
 
-This example demonstrates how to use `@jmlweb` tooling packages in a Node.js TypeScript API project.
+Express API in strict TypeScript, using the `@jmlweb` Oxc, tsconfig and Vitest configs.
 
-## Packages Used
+## 📦 Packages
 
-- [`@jmlweb/oxfmt-config-base`](../../packages/oxfmt-config-base) - Code formatting and import sorting
-- [`@jmlweb/oxlint-config-node`](../../packages/oxlint-config-node) - Node.js and strict TypeScript linting
-- [`@jmlweb/tsconfig-base`](../../packages/tsconfig-base) - TypeScript configuration
-- [`@jmlweb/vitest-config`](../../packages/vitest-config) - Testing configuration
+- [`@jmlweb/oxfmt-config-base`](../../packages/oxfmt-config-base) - formatting and import sorting
+- [`@jmlweb/oxlint-config-node`](../../packages/oxlint-config-node) - Node.js and type-aware TypeScript linting
+- [`@jmlweb/tsconfig-base`](../../packages/tsconfig-base) - TypeScript config
+- [`@jmlweb/vitest-config`](../../packages/vitest-config) - test config
 
-## Setup
+## 🚀 Scripts
 
-1. Install dependencies:
+| Script                         | Does                     |
+| ------------------------------ | ------------------------ |
+| `pnpm dev`                     | Run `src/index.ts` (tsx) |
+| `pnpm build` / `start`         | Compile to `dist/` / run |
+| `pnpm test` / `test:coverage`  | Vitest                   |
+| `pnpm lint` / `lint:fix`       | Oxlint                   |
+| `pnpm format` / `format:check` | Oxfmt                    |
+| `pnpm typecheck`               | `tsc --noEmit`           |
 
-```bash
-npm install
-```
-
-2. Run the development server:
-
-```bash
-npm run dev
-```
-
-3. Run tests:
-
-```bash
-npm test
-```
-
-4. Format code:
-
-```bash
-npm run format
-```
-
-5. Lint code:
-
-```bash
-npm run lint
-```
-
-## Project Structure
+## 📁 Structure
 
 ```text
-nodejs-typescript-api/
-├── src/
-│   ├── index.ts          # Main API server
-│   └── index.test.ts     # Tests
-├── dist/                 # Compiled output
-├── package.json          # Dependencies and scripts
-├── tsconfig.json         # Extends @jmlweb/tsconfig-base
-├── oxlint.config.ts      # Extends @jmlweb/oxlint-config-node
-├── oxfmt.config.ts       # Uses @jmlweb/oxfmt-config-base
-└── vitest.config.ts      # Uses @jmlweb/vitest-config
+src/index.ts        # API server
+src/index.test.ts   # Tests
+tsconfig.json       # Extends tsconfig-base
+oxlint.config.ts    # Extends oxlint-config-node, type-aware
+oxfmt.config.ts     # Spreads oxfmt-config-base
+vitest.config.ts    # Extends vitest-config, adds coverage reporters
 ```
 
-## Key Features
-
-- ✅ Strict TypeScript configuration
-- ✅ Oxlint with type-aware TypeScript rules and Node.js rules (`eslint-plugin-n`)
-- ✅ Oxfmt for consistent formatting and import sorting
-- ✅ Vitest for testing with coverage
-- ✅ Express.js API example
-
-## Configuration Files
-
-### `tsconfig.json`
+## ⚙️ Config
 
 ```json
 {
   "extends": "@jmlweb/tsconfig-base",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
+  "compilerOptions": { "outDir": "./dist", "rootDir": "./src" },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
 ```
 
-### `oxlint.config.ts`
-
 ```typescript
+// oxlint.config.ts
 import nodeConfig from '@jmlweb/oxlint-config-node';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
   extends: [nodeConfig],
-  options: {
-    typeAware: true,
-  },
+  options: { typeAware: true },
   ignorePatterns: [
     'dist/**',
     'coverage/**',
@@ -100,17 +59,6 @@ export default defineConfig({
 });
 ```
 
-### `oxfmt.config.ts`
+`oxfmt.config.ts` spreads `@jmlweb/oxfmt-config-base`, as in the other examples.
 
-```typescript
-import baseConfig from '@jmlweb/oxfmt-config-base';
-import { defineConfig } from 'oxfmt';
-
-export default defineConfig({
-  ...baseConfig,
-});
-```
-
-## Requirements
-
-- Node.js >= 22.12.0
+Requires Node.js >= 22.12.0.

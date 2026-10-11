@@ -12,29 +12,23 @@ sidebar:
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-13%2B-000000.svg)](https://nextjs.org/)
 
-&gt; TypeScript configuration for Next.js applications. Extends `@jmlweb/tsconfig-react` with Next.js-specific optimizations, incremental builds, and path aliases.
+&gt; TypeScript configuration for Next.js apps (App Router and Pages Router). Extends `@jmlweb/tsconfig-react` with incremental builds, the Next.js plugin and an `@/*` alias.
 
 ## ✨ Features
 
-- 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base configs
-- ⚛️ **React Support**: Full JSX support with modern React transform
-- 🚀 **Next.js Optimized**: Incremental builds and Next.js TypeScript plugin
-- 📁 **Path Aliases**: Pre-configured `@/*` path alias for clean imports
-- 🎯 **App Router Ready**: Optimized for Next.js App Router and Pages Router
-- 🌐 **DOM Types**: Includes DOM and DOM.Iterable libs for browser APIs
-- 📦 **Bundler Resolution**: Optimized `moduleResolution: "bundler"` for Next.js
+- 🚀 **Next.js Plugin**: enhanced type checking for Next.js APIs
+- ⚡ **Incremental Builds**: `incremental: true` for faster rebuilds
+- 📁 **Path Alias**: `@/*` maps to the project root
+- ⚛️ **React Ready**: inherits JSX, DOM types and bundler resolution
+- 🔒 **Strict Mode**: inherits every strict flag from the base config
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/tsconfig-nextjs typescript next @jmlweb/tsconfig-react @jmlweb/tsconfig-base
+npm install --save-dev @jmlweb/tsconfig-nextjs @jmlweb/tsconfig-react @jmlweb/tsconfig-base next typescript
 ```
 
-&gt; 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
-
 ## 🚀 Quick Start
-
-Create a `tsconfig.json` file in your Next.js project root:
 
 ```json
 {
@@ -46,34 +40,7 @@ Create a `tsconfig.json` file in your Next.js project root:
 
 ## 💡 Examples
 
-### Basic Next.js Setup (App Router)
-
-```json
-{
-  "extends": "@jmlweb/tsconfig-nextjs",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
-
-### Next.js with Custom Path Aliases
-
-```json
-{
-  "extends": "@jmlweb/tsconfig-nextjs",
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/lib/*": ["./src/lib/*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
-
-### Next.js Pages Router
+### Pages Router
 
 ```json
 {
@@ -83,187 +50,52 @@ Create a `tsconfig.json` file in your Next.js project root:
 }
 ```
 
-### Next.js with Additional Compiler Options
+### `src/` directory with custom aliases
+
+Overriding `paths` replaces the default `@/*` entry.
 
 ```json
 {
   "extends": "@jmlweb/tsconfig-nextjs",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    },
-    "noEmit": true
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
 ```
-
-## 🤔 Why Use This?
-
-&gt; **Philosophy**: Next.js projects need TypeScript configured for both server and client code with incremental builds and framework-specific optimizations.
-
-This package provides a TypeScript configuration specifically optimized for Next.js applications. It extends the React configuration while adding Next.js-specific settings like incremental compilation, the Next.js TypeScript plugin, and sensible path aliases that work with Next.js's file-based routing.
-
-### Design Decisions
-
-**Incremental Compilation (`incremental: true`)**: Faster rebuilds for development
-
-- **Why**: Next.js projects are often large with many files. Incremental compilation dramatically speeds up subsequent builds by only recompiling changed files and their dependents. This makes the development experience much faster
-- **Trade-off**: Creates a `.tsbuildinfo` file that needs to be gitignored. But the build speed improvement is worth it
-- **When to override**: Never - there's no downside to incremental compilation in Next.js projects
-
-**Next.js TypeScript Plugin**: Framework-specific type checking
-
-- **Why**: Next.js has special conventions (Server Components, Route Handlers, Metadata API, etc.) that benefit from enhanced type checking. The plugin provides better autocomplete and catches Next.js-specific errors that generic TypeScript can't detect
-- **Trade-off**: Adds a dependency on Next.js being installed. But if you're using this config, you're already using Next.js
-- **When to override**: Only if the plugin causes issues (rare), but report bugs to Next.js if found
-
-**Path Aliases (`@/*` → project root)**: Clean imports for Next.js file structure
-
-- **Why**: Next.js projects have deep file structures (app/components/ui/button/index.tsx). Path aliases like `@/components/ui/button` are more readable and easier to refactor than `../../../components/ui/button`. The `@/*` convention is standard in Next.js projects
-- **Trade-off**: Need to configure the same alias in next.config.js for runtime (though Next.js 13+ does this automatically from tsconfig.json)
-- **When to override**: If your team prefers a different alias convention (like `~/*`), but `@/*` is the Next.js convention
 
 ## 📋 Configuration Details
 
-### What's Included
+Extends [`@jmlweb/tsconfig-react`](../../typescript/react/) (which extends [`@jmlweb/tsconfig-base`](../../typescript/base/)) and adds:
 
-This configuration extends `@jmlweb/tsconfig-react` and adds:
+| Option        | Value                  | Description                          |
+| ------------- | ---------------------- | ------------------------------------ |
+| `incremental` | `true`                 | Reuse previous compilation info      |
+| `plugins`     | `[{ "name": "next" }]` | Next.js TypeScript plugin            |
+| `paths`       | `{ "@/*": ["./*"] }`   | `@/*` alias pointing to project root |
 
-- ✅ **Incremental Builds**: `incremental: true` for faster compilation
-- ✅ **Next.js Plugin**: TypeScript plugin for Next.js-specific type checking
-- ✅ **Path Aliases**: Default `@/*` alias pointing to project root
-- ✅ **All React Config**: Inherits JSX support, DOM types, and bundler resolution
-- ✅ **All Base Config**: Inherits strict type checking and best practices
+Inherited from the React config: `jsx: "react-jsx"`, `module: "ESNext"`, `moduleResolution: "bundler"`, `lib: ["ES2022", "DOM", "DOM.Iterable"]`.
 
-### Next.js TypeScript Plugin
-
-The Next.js TypeScript plugin provides:
-
-- ✅ Enhanced type checking for Next.js APIs
-- ✅ Better autocomplete for Next.js components
-- ✅ Type safety for App Router and Pages Router
-- ✅ Support for Next.js-specific features
-
-### Incremental Builds
-
-Incremental compilation:
-
-- ✅ Faster subsequent builds
-- ✅ Only recompiles changed files
-- ✅ Stores build information in `.tsbuildinfo` file
-- ✅ Recommended by Next.js for better performance
-
-### Path Aliases
-
-Default path alias configuration:
-
-```typescript
-// Instead of:
-import { Button } from '../../../components/Button';
-
-// You can use:
-import { Button } from '@/components/Button';
-```
-
-The `@/*` alias is pre-configured to point to your project root. You can customize it in your `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
-}
-```
-
-**Note**: Make sure to also configure the same alias in your `next.config.js`:
-
-```javascript
-// next.config.js
-module.exports = {
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, './src'),
-    };
-    return config;
-  },
-};
-```
-
-Or use the built-in Next.js path mapping:
-
-```javascript
-// next.config.js
-module.exports = {
-  // Next.js 13+ automatically resolves tsconfig paths
-};
-```
+`incremental` writes a `.tsbuildinfo` file; add it to `.gitignore`.
 
 ## 🎯 When to Use
 
-Use this configuration when you want:
+- ✅ Next.js apps with the App Router or Pages Router
+- ✅ Projects that want the `@/*` import convention
 
-- ✅ Next.js application development (App Router or Pages Router)
-- ✅ Strict type checking for Next.js code
-- ✅ Incremental builds for faster development
-- ✅ Next.js TypeScript plugin support
-- ✅ Path aliases for cleaner imports
-- ✅ Modern React JSX transform
-- ✅ DOM API type support
-
-**For React projects without Next.js**, use [`@jmlweb/tsconfig-react`](../../typescript/react/) instead.
-
-**For non-React TypeScript projects**, use [`@jmlweb/tsconfig-base`](../../typescript/base/) instead.
+Plain React: use [`@jmlweb/tsconfig-react`](../../typescript/react/).
 
 ## 🔧 Extending the Configuration
 
-You can extend or override the configuration for your specific needs:
-
 ```json
 {
   "extends": "@jmlweb/tsconfig-nextjs",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/types/*": ["./src/types/*"]
-    },
-    "noEmit": true
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
-
-### Disabling Next.js Plugin
-
-If you need to disable the Next.js plugin:
-
-```json
-{
-  "extends": "@jmlweb/tsconfig-nextjs",
-  "compilerOptions": {
-    "plugins": []
-  }
-}
-```
-
-### Customizing Path Aliases
-
-Override the default path alias:
-
-```json
-{
-  "extends": "@jmlweb/tsconfig-nextjs",
-  "compilerOptions": {
-    "baseUrl": ".",
+    "noEmit": true,
     "paths": {
       "~/*": ["./src/*"]
     }
@@ -272,8 +104,6 @@ Override the default path alias:
 ```
 
 ## 📝 Usage with Scripts
-
-Next.js handles TypeScript compilation automatically. You typically don't need to run `tsc` manually, but you can add type checking scripts:
 
 ```json
 {
@@ -285,71 +115,39 @@ Next.js handles TypeScript compilation automatically. You typically don't need t
 }
 ```
 
-### Next.js Type Checking
-
-Next.js includes built-in type checking:
-
-- ✅ Type errors shown during `next build`
-- ✅ Type errors shown in development mode
-- ✅ IDE integration with TypeScript language server
-
-### VS Code Integration
-
-For the best experience in VS Code:
-
-1. Install the TypeScript extension
-2. Open Command Palette (`Ctrl/⌘ + Shift + P`)
-3. Select "TypeScript: Select TypeScript Version"
-4. Choose "Use Workspace Version"
-
-This ensures VS Code uses the Next.js TypeScript plugin for enhanced type checking.
+```bash
+npm run typecheck
+```
 
 ## 📋 Requirements
 
 - **Node.js** &gt;= 22.12.0
 - **TypeScript** &gt;= 5.0.0
-- **Next.js** &gt;= 13.0.0 (for App Router support)
-- **React** &gt;= 17.0.0 (for JSX runtime support)
+- **Next.js** &gt;= 13.0.0
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependencies:
-
-- `typescript` (&gt;= 5.0.0)
-- `next` (&gt;= 13.0.0)
-- `@jmlweb/tsconfig-react` (^1.0.0)
+- `@jmlweb/tsconfig-react` (^2.0.0), which itself requires `@jmlweb/tsconfig-base` (^2.0.0)
+- `next` (&gt;=13.0.0)
+- `typescript` (&gt;=5.0.0)
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/tsconfig-react`](../../typescript/react/) - TypeScript configuration for React (extended by this package)
-- [`@jmlweb/tsconfig-base`](../../typescript/base/) - Base TypeScript configuration
-- [`@jmlweb/eslint-config-react`](../../eslint/react/) - ESLint configuration for React/Next.js projects
-- [`@jmlweb/prettier-config-base`](../../prettier/base/) - Prettier config for consistent formatting
-
-### External Tools
-
-- [TypeScript](https://www.typescriptlang.org/) - Strongly typed programming language that builds on JavaScript
-- [Next.js](https://nextjs.org/) - The React framework for production
-- [React](https://react.dev/) - JavaScript library for building user interfaces
-- [Turbopack](https://turbo.build/pack) - Incremental bundler optimized for JavaScript and TypeScript
+- [`@jmlweb/tsconfig-react`](../../typescript/react/) - config extended by this package
+- [`@jmlweb/tsconfig-base`](../../typescript/base/) - root of the extends chain
+- [`@jmlweb/oxlint-config-react`](../../oxlint/react/) - Oxlint configuration for React (recommended)
+- [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/) - Oxfmt configuration (recommended)
 
 ## 🔄 Migration Guide
 
-### Upgrading to a New Version
+### 1.x → 2.0.0
 
-&gt; **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+**Breaking:** Node.js `>=22.12.0` is now required (Node.js 18 and 20 are end-of-life).
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+1. Upgrade Node.js to 22.12.0 or later.
+2. Update the package: `npm install --save-dev @jmlweb/tsconfig-nextjs@^2.0.0`.
 
-For version history, see the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/tsconfig-nextjs/CHANGELOG.md).
-
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](https://github.com/jmlweb/tooling/blob/main/packages/tsconfig-nextjs/CHANGELOG.md) for version history and release notes.
+The `compilerOptions` are unchanged. See the [Changelog](https://github.com/jmlweb/tooling/blob/main/packages/tsconfig-nextjs/CHANGELOG.md).
 
 ## 📄 License
 

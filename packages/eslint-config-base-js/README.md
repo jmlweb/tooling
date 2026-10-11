@@ -5,52 +5,41 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
 
-> Base ESLint configuration for JavaScript projects. Foundation for JavaScript-only projects and extended by TypeScript configs. Uses ESLint 9 and 10 flat config format.
+> Base ESLint flat config for JavaScript-only projects. Foundation extended by [`@jmlweb/eslint-config-base`](../eslint-config-base).
 
-> 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxlint-config-base`](../oxlint-config-base), which ports these rules to Oxlint. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
+> 🔧 **Maintenance mode**: only dependency and security updates, no new rules. For new projects use [`@jmlweb/oxlint-config-base`](../oxlint-config-base). To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 
-- 🎯 **JavaScript Support**: Recommended ESLint rules for modern JavaScript (ES modules)
-- 📦 **Import Sorting**: Automatic import and export sorting via `eslint-plugin-simple-import-sort`
-- 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
-- 🌐 **Environment Agnostic**: Works for both Node.js and browser projects
-- 🚀 **Flat Config**: Uses ESLint 9 and 10 flat config format (latest stable)
-- 🔧 **Modular Design**: Designed to be extended by other configs (e.g., TypeScript)
+- 🎯 **Recommended rules**: `@eslint/js` recommended for modern JavaScript (ES modules)
+- 📦 **Import sorting**: imports and exports sorted by `eslint-plugin-simple-import-sort`
+- 🎨 **Prettier compatible**: disables rules that conflict with Prettier
+- 🌐 **Environment agnostic**: no Node.js or browser globals by default
+- 🔧 **Composable**: extended by the TypeScript, React, Node.js and Astro configs
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/eslint-config-base-js eslint @eslint/js eslint-config-prettier eslint-plugin-simple-import-sort
+npm install --save-dev @jmlweb/eslint-config-base-js eslint @eslint/js eslint-config-prettier eslint-plugin-simple-import-sort
 ```
 
-> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+> 💡 **Upgrading?** See the [Migration Guide](#-migration-guide).
 
 ## 🚀 Quick Start
-
-Create an `eslint.config.js` file in your project root:
-
-```javascript
-import baseJsConfig from '@jmlweb/eslint-config-base-js';
-
-export default [
-  ...baseJsConfig,
-  // Add your project-specific overrides here
-];
-```
-
-## 💡 Examples
-
-### Basic Setup
 
 ```javascript
 // eslint.config.js
 import baseJsConfig from '@jmlweb/eslint-config-base-js';
 
-export default [...baseJsConfig];
+export default [
+  ...baseJsConfig,
+  // Project-specific overrides
+];
 ```
 
-### With Project-Specific Rules
+## 💡 Examples
+
+### Overrides and ignores
 
 ```javascript
 // eslint.config.js
@@ -61,37 +50,16 @@ export default [
   {
     files: ['**/*.test.js', '**/*.spec.js'],
     rules: {
-      'no-console': 'off', // Allow console in tests
+      'no-console': 'off',
     },
   },
   {
-    ignores: ['dist/', 'build/', 'node_modules/', '*.config.js'],
+    ignores: ['dist/', 'build/', 'node_modules/'],
   },
 ];
 ```
 
-### Node.js Project
-
-```javascript
-// eslint.config.js
-import baseJsConfig from '@jmlweb/eslint-config-base-js';
-
-export default [
-  ...baseJsConfig,
-  {
-    languageOptions: {
-      globals: {
-        // Add Node.js globals if needed
-        process: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-      },
-    },
-  },
-];
-```
-
-### Browser Project
+### Node.js globals
 
 ```javascript
 // eslint.config.js
@@ -102,41 +70,46 @@ export default [
   ...baseJsConfig,
   {
     languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
+      globals: globals.node,
     },
   },
 ];
 ```
 
+### Browser globals
+
+```javascript
+// eslint.config.js
+import baseJsConfig from '@jmlweb/eslint-config-base-js';
+import globals from 'globals';
+
+export default [
+  ...baseJsConfig,
+  {
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+];
+```
+
+`globals` is not a peer dependency; install it with `npm install --save-dev globals`.
+
 ## 📋 Configuration Details
 
-### JavaScript Files
-
-The base configuration applies to:
-
-- `**/*.js` - Standard JavaScript files
-- `**/*.mjs` - ES modules
-- `**/*.cjs` - CommonJS files
-
-### Included Rules
-
-- ✅ ESLint recommended rules (`@eslint/js`)
-- ✅ Automatic import/export sorting
-- ✅ Prettier conflict resolution
+| Setting        | Value                                  |
+| -------------- | -------------------------------------- |
+| Files          | `**/*.js`, `**/*.mjs`, `**/*.cjs`      |
+| `ecmaVersion`  | `latest`                               |
+| `sourceType`   | `module`                               |
+| Rules          | `@eslint/js` recommended               |
+| Import sorting | `simple-import-sort/imports`: `error`  |
+| Export sorting | `simple-import-sort/exports`: `error`  |
+| Prettier       | `eslint-config-prettier` rules applied |
 
 ## 🔄 Import Sorting
 
-The configuration automatically sorts imports and exports. The default sorting order is:
-
-1. **Side effect imports** (e.g., `import 'polyfill'`)
-2. **Node.js built-in modules** (e.g., `import fs from 'fs'`)
-3. **External packages** (e.g., `import react from 'react'`)
-4. **Internal absolute imports** (e.g., `import utils from '@/utils'`)
-5. **Relative imports** (e.g., `import './component'`)
-
-### Example
+Imports are grouped as side effects, Node.js built-ins and external packages, internal absolute imports, then relative imports.
 
 **Before:**
 
@@ -145,85 +118,31 @@ import './styles.css';
 import { Component } from './component';
 import React from 'react';
 import fs from 'fs';
-import { utils } from '@/utils';
 ```
 
-**After auto-fix:**
+**After `eslint --fix`:**
 
 ```javascript
 import './styles.css';
 import fs from 'fs';
 import React from 'react';
-import { utils } from '@/utils';
 import { Component } from './component';
 ```
 
-Fix import order automatically:
-
-```bash
-pnpm exec eslint --fix .
-```
-
-## 🎨 Prettier Integration
-
-This configuration disables all ESLint rules that conflict with Prettier, allowing Prettier to handle all code formatting.
-
-**Recommended**: Use [`@jmlweb/prettier-config-base`](../prettier-config-base) for consistent formatting.
-
-## 🤔 Why Use This?
-
-> **Philosophy**: Code quality and consistency through simple, battle-tested rules. Foundation for specialized configs.
-
-This package provides the JavaScript linting foundation used across all other configs in the `@jmlweb` ecosystem. It focuses on code quality and best practices while delegating formatting to Prettier.
-
-### Design Decisions
-
-**ESLint Recommended Rules Only**: Uses `@eslint/js` recommended config without additional opinionated rules
-
-- **Why**: Provides a solid baseline of best practices without being overly strict. Allows specialized configs to add their own rules based on context (TypeScript, React, etc.)
-- **Trade-off**: Less opinionated than configs like Airbnb, but more flexible and maintainable as a foundation
-- **When to override**: When you need stricter or more specific rules for your project (consider using specialized configs instead)
-
-**Automatic Import Sorting**: Uses `eslint-plugin-simple-import-sort` for consistent import organization
-
-- **Why**: Manual import organization is tedious and inconsistent. Automatic sorting ensures a predictable order that's easy to scan (built-ins → external → internal → relative)
-- **Trade-off**: Initial formatting may reorder your manually organized imports, but consistency across the codebase is worth it
-- **When to override**: Rarely needed - the default order works well for most projects
-
-**Prettier Integration**: Includes `eslint-config-prettier` to disable conflicting rules
-
-- **Why**: ESLint handles code quality, Prettier handles formatting. Trying to use both for formatting causes conflicts and frustration
-- **Trade-off**: None - this is the recommended approach by both ESLint and Prettier teams
-- **When to override**: Never - this prevents tooling conflicts
-
-**Environment Agnostic**: No browser or Node.js globals by default
-
-- **Why**: Projects should explicitly declare their runtime environment. This config is used as a foundation for both browser and Node.js projects
-- **Trade-off**: Requires you to add globals in your config, but makes the base config more portable and explicit
-- **When to override**: Always override by adding the globals your project needs (browser, Node.js, etc.)
-
-**Flat Config Format**: Uses ESLint 9 and 10 flat config (not legacy `.eslintrc`)
-
-- **Why**: Flat config is the future of ESLint, offering better composition, clearer configuration, and improved performance
-- **Trade-off**: Not compatible with older ESLint plugins that haven't migrated (rare)
-- **When to override**: If you're on an older ESLint version (but you should upgrade)
-
 ## 🎯 When to Use
 
-Use this package when you want:
-
 - ✅ JavaScript-only projects (no TypeScript)
-- ✅ Modern JavaScript linting with ESLint 9 and 10 flat config
-- ✅ Automatic import/export sorting
-- ✅ Foundation for extending with TypeScript or React configs
+- ✅ Modern ESLint 9 or 10 flat config
+- ✅ A foundation for your own shared config
 
-**For TypeScript projects**, use [`@jmlweb/eslint-config-base`](../eslint-config-base) instead, which extends this config with strict type checking.
+For TypeScript projects use [`@jmlweb/eslint-config-base`](../eslint-config-base). For new projects of any kind prefer [`@jmlweb/oxlint-config-base`](../oxlint-config-base).
 
 ## 🔧 Extending the Configuration
 
-You can extend or override the configuration for your specific needs:
+Spread the config, then add objects after it. Later entries win.
 
 ```javascript
+// eslint.config.js
 import baseJsConfig from '@jmlweb/eslint-config-base-js';
 
 export default [
@@ -231,19 +150,13 @@ export default [
   {
     files: ['**/*.test.js'],
     rules: {
-      // Test-specific rules
       'no-console': 'off',
     },
-  },
-  {
-    ignores: ['dist/', 'build/', 'node_modules/'],
   },
 ];
 ```
 
 ## 📝 Usage with Scripts
-
-Add linting scripts to your `package.json`:
 
 ```json
 {
@@ -254,63 +167,40 @@ Add linting scripts to your `package.json`:
 }
 ```
 
-Then run:
-
 ```bash
-pnpm lint      # Lint all files
-pnpm lint:fix  # Fix auto-fixable issues
+npm run lint
 ```
 
 ## 📋 Requirements
 
 - **Node.js** >= 22.12.0
-- **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config)
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependencies:
+- `eslint` (`^9.0.0 || ^10.0.0`)
+- `@eslint/js` (`^9.0.0 || ^10.0.0`)
+- `eslint-config-prettier` (`^9.1.0 || ^10.0.0`)
+- `eslint-plugin-simple-import-sort` (`^12.0.0 || ^13.0.0 || ^14.0.0`)
 
-- `eslint` (^9.0.0 || ^10.0.0)
-- `@eslint/js` (^9.0.0 || ^10.0.0)
-- `eslint-config-prettier` (^9.1.0 || ^10.0.0)
-- `eslint-plugin-simple-import-sort` (^12.0.0 || ^13.0.0 || ^14.0.0)
-
-**Note**: This package does NOT require `typescript-eslint` as it's for JavaScript-only projects.
-
-## 📚 Examples
-
-See real-world usage examples:
-
-- [`example-nodejs-javascript`](../../apps/example-nodejs-javascript) - Node.js JavaScript example
+No `typescript-eslint` needed.
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/eslint-config-base`](../eslint-config-base) - TypeScript ESLint config (extends this package)
-- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
-
-### External Tools
-
-- [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript
-- [Prettier](https://prettier.io/) - Opinionated code formatter (pairs with eslint-config-prettier)
-- [eslint-plugin-simple-import-sort](https://github.com/lydell/eslint-plugin-simple-import-sort) - Auto-sorts imports
+- [`@jmlweb/eslint-config-base`](../eslint-config-base): TypeScript config that extends this package (maintenance mode)
+- [`@jmlweb/oxlint-config-base`](../oxlint-config-base): Oxlint equivalent, recommended for new projects
+- [`@jmlweb/prettier-config-base`](../prettier-config-base): Prettier config (maintenance mode)
 
 ## 🔄 Migration Guide
 
-### Upgrading to a New Version
+### 1.x to 2.0
 
-> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+Node.js 18 and 20 are end-of-life. Node.js >= 22.12.0 is now required: it is the first Node.js 22 release that can `require()` ES modules without a flag, which the CommonJS build needs to load ESM-only plugins.
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+1. Upgrade Node.js to 22.12.0 or later.
+2. Update the package: `npm install --save-dev @jmlweb/eslint-config-base-js@latest`.
 
-For version history, see the [Changelog](./CHANGELOG.md).
-
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+See the [Changelog](./CHANGELOG.md).
 
 ## 📄 License
 

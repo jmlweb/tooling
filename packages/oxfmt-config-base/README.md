@@ -4,27 +4,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 
-> Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration that produces the same output as [`@jmlweb/prettier-config-base`](../prettier-config-base), at a fraction of the time.
+> Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration with the same output as [`@jmlweb/prettier-config-base`](../prettier-config-base), at a fraction of the time. Recommended formatter.
 
 ## ✨ Features
 
 - ⚡ **Fast**: Oxfmt is written in Rust and formats a whole repository in milliseconds
-- 🔁 **Prettier-compatible**: Same options and output as `@jmlweb/prettier-config-base`, so switching only reorders imports
+- 🔁 **Prettier-compatible**: Same options and output as `@jmlweb/prettier-config-base`
 - 🔤 **Import sorting**: Same order as `eslint-plugin-perfectionist`'s `sort-imports` defaults
-- 🎨 **Tailwind sorting built in**: Enable class sorting with one option, no plugin required
-- 🧩 **Extensible**: Plain config object you spread into your own `oxfmt.config.ts`
+- 🎨 **Tailwind sorting built in**: One option, no plugin required
+- 🧩 **Extensible**: Plain config object to spread into your `oxfmt.config.ts`
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+npm install --save-dev @jmlweb/oxfmt-config-base oxfmt
 ```
-
-> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
 
 ## 🚀 Quick Start
 
-Create an `oxfmt.config.ts` file in your project root:
+Create `oxfmt.config.ts` in your project root:
 
 ```typescript
 import baseConfig from '@jmlweb/oxfmt-config-base';
@@ -35,28 +33,56 @@ export default defineConfig({
 });
 ```
 
-> ⚠️ **Note**: Oxfmt has no `extends` option and `.oxfmtrc.json` cannot import packages, so use `oxfmt.config.ts` to share this configuration.
+> ⚠️ Oxfmt has no `extends` option and `.oxfmtrc.json` cannot import packages, so share this config through `oxfmt.config.ts`.
 
-## 📋 Configuration
+## 💡 Examples
 
-This package provides the following Oxfmt settings:
+### Before
 
-| Option            | Value        | Description                                      |
-| ----------------- | ------------ | ------------------------------------------------ |
-| `semi`            | `true`       | Use semicolons at the end of statements          |
-| `singleQuote`     | `true`       | Use single quotes instead of double quotes       |
-| `tabWidth`        | `2`          | Use 2 spaces for indentation                     |
-| `trailingComma`   | `'all'`      | Add trailing commas wherever possible            |
-| `useTabs`         | `false`      | Use spaces instead of tabs                       |
-| `endOfLine`       | `'lf'`       | Use LF line endings (Unix-style)                 |
-| `proseWrap`       | `'preserve'` | Preserve prose wrapping in markdown files        |
-| `printWidth`      | `80`         | Match Prettier's default (Oxfmt defaults to 100) |
-| `sortPackageJson` | `false`      | Leave `package.json` key order untouched         |
-| `sortImports`     | see below    | Sort imports like `eslint-plugin-perfectionist`  |
+<!-- prettier-ignore -->
+```typescript
+import { formatName } from "./format";
+import type { User } from "./types";
+import { readFile } from "node:fs/promises";
+
+const user: User = { name: "John", age: 30, email: "john@example.com", role: "admin" }
+```
+
+### After
+
+```typescript
+import { readFile } from 'node:fs/promises';
+
+import type { User } from './types';
+
+import { formatName } from './format';
+
+const user: User = {
+  name: 'John',
+  age: 30,
+  email: 'john@example.com',
+  role: 'admin',
+};
+```
+
+## 📋 Configuration Details
+
+| Option            | Value        | Why                                                    |
+| ----------------- | ------------ | ------------------------------------------------------ |
+| `semi`            | `true`       | Semicolons                                             |
+| `singleQuote`     | `true`       | Single quotes                                          |
+| `tabWidth`        | `2`          | 2-space indentation                                    |
+| `trailingComma`   | `'all'`      | Trailing commas wherever possible                      |
+| `useTabs`         | `false`      | Spaces, not tabs                                       |
+| `endOfLine`       | `'lf'`       | Unix line endings                                      |
+| `proseWrap`       | `'preserve'` | Keep markdown wrapping                                 |
+| `printWidth`      | `80`         | Prettier's default (Oxfmt defaults to 100)             |
+| `sortPackageJson` | `false`      | Prettier does not sort it, and syncpack owns the order |
+| `sortImports`     | see below    | Perfectionist's default groups                         |
 
 ### Import Sorting
 
-Oxfmt's `sortImports` follows `eslint-plugin-perfectionist`'s `sort-imports` algorithm and shares its defaults (alphabetical, case-insensitive, a blank line between groups, `~/`, `@/` and `#` as internal paths). Only the default groups differ, so this package sets Perfectionist's. It is equivalent to:
+Oxfmt's `sortImports` already shares Perfectionist's defaults (alphabetical, case-insensitive, blank line between groups); only the default groups differ, so this package sets them:
 
 ```typescript
 import { defineConfig } from 'oxfmt';
@@ -76,79 +102,21 @@ export default defineConfig({
 });
 ```
 
-Side-effect imports (`import './polyfill'`) are sorted into their group too, as in Perfectionist, so keep order-dependent ones in a separate entry file.
-
-## 💡 Examples
-
-### Before Formatting
-
-<!-- prettier-ignore -->
-```typescript
-import { formatName } from "./format";
-import type { User } from "./types";
-import { readFile } from "node:fs/promises";
-
-const user: User = { name: "John", age: 30, email: "john@example.com", role: "admin" }
-```
-
-### After Formatting
-
-```typescript
-import { readFile } from 'node:fs/promises';
-
-import type { User } from './types';
-
-import { formatName } from './format';
-
-const user: User = {
-  name: 'John',
-  age: 30,
-  email: 'john@example.com',
-  role: 'admin',
-};
-```
-
-## 🤔 Why Use This?
-
-> **Philosophy**: Same style as the Prettier config, without paying Prettier's speed cost.
-
-Oxfmt is the formatter of the [Oxc](https://oxc.rs) project and targets Prettier compatibility. This package keeps the formatting decisions of [`@jmlweb/prettier-config-base`](../prettier-config-base#-why-use-this) (see its design decisions) and only adds the options needed to make Oxfmt match Prettier.
-
-### Design Decisions
-
-**Print Width (`printWidth: 80`)**: Set explicitly to Prettier's default
-
-- **Why**: Oxfmt defaults to 100, which would reflow most files when migrating from Prettier
-- **Trade-off**: None, it keeps the existing style
-- **When to override**: If you prefer longer lines
-
-**No `package.json` Sorting (`sortPackageJson: false`)**: Oxfmt sorts `package.json` keys by default, Prettier does not
-
-- **Why**: Avoids reordering every `package.json` on migration and conflicts with tools that own key order, such as syncpack
-- **Trade-off**: Key order is not enforced by the formatter
-- **When to override**: If nothing else manages `package.json` order, set it to `true`
-
-**Import Sorting (`sortImports`)**: Perfectionist's default groups
-
-- **Why**: The formatter owns import order, so `@jmlweb/oxlint-config-base` needs no sorting rule, and the order matches the Perfectionist convention
-- **Trade-off**: The order differs from `eslint-plugin-simple-import-sort`, which the ESLint packages use
-- **When to override**: Set `sortImports: false` while ESLint still sorts imports in the project (see [Extending the Configuration](#-extending-the-configuration))
+Side-effect imports (`import './polyfill'`) are sorted into their group too, so keep order-dependent ones in a separate entry file.
 
 ## 🎯 When to Use
 
-Use this package when you want:
-
-- ✅ Fast formatting for new projects (recommended over Prettier)
-- ✅ To migrate from `@jmlweb/prettier-config-base` without reformatting your code
+- ✅ New projects that need fast formatting (recommended)
+- ✅ Migrating from `@jmlweb/prettier-config-base` without reformatting
 - ✅ Tailwind class sorting without a Prettier plugin
 
-**Need Prettier plugins** (for example `prettier-plugin-astro`)? Oxfmt does not support them, keep using [`@jmlweb/prettier-config-base`](../prettier-config-base).
+**Need Prettier plugins** (for example `prettier-plugin-astro`)? Oxfmt does not support them; keep [`@jmlweb/prettier-config-base`](../prettier-config-base) (maintenance mode).
 
 ## 🔧 Extending the Configuration
 
 ### Tailwind CSS
 
-Oxfmt sorts Tailwind classes natively, replacing [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind):
+Replaces [`@jmlweb/prettier-config-tailwind`](../prettier-config-tailwind) (maintenance mode):
 
 ```typescript
 import baseConfig from '@jmlweb/oxfmt-config-base';
@@ -165,7 +133,7 @@ export default defineConfig({
 
 ### Projects Still Linted by ESLint
 
-`@jmlweb/eslint-config-base` sorts imports with `eslint-plugin-simple-import-sort`, which disagrees with this order. Let ESLint keep sorting until you move to [`@jmlweb/oxlint-config-base`](../oxlint-config-base):
+`@jmlweb/eslint-config-base` (maintenance mode) sorts imports with `eslint-plugin-simple-import-sort`, which disagrees with this order. Disable Oxfmt's sorting until you move to [`@jmlweb/oxlint-config-base`](../oxlint-config-base):
 
 ```typescript
 import baseConfig from '@jmlweb/oxfmt-config-base';
@@ -192,8 +160,6 @@ export default defineConfig({
 
 ## 📝 Usage with Scripts
 
-Add formatting scripts to your `package.json`:
-
 ```json
 {
   "scripts": {
@@ -203,11 +169,9 @@ Add formatting scripts to your `package.json`:
 }
 ```
 
-Then run:
-
 ```bash
-pnpm format        # Format all files
-pnpm format:check  # Check formatting without modifying files
+npm run format        # Format all files
+npm run format:check  # Check without modifying files
 ```
 
 ## 📋 Requirements
@@ -215,96 +179,31 @@ pnpm format:check  # Check formatting without modifying files
 - **Node.js** >= 22.12.0
 - **Oxfmt** >= 0.72.0
 
-> Markdown, MDX, HTML, Vue and Svelte are formatted through a Prettier build bundled in the `oxfmt` npm package. The standalone Oxfmt binary skips those files, so install it from npm.
+> Markdown, MDX, HTML, Vue and Svelte are formatted by a Prettier build bundled in the `oxfmt` npm package. The standalone binary skips them, so install from npm.
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependency:
-
-- `oxfmt` (>= 0.72.0)
-
-## 📚 Examples
-
-See real-world usage examples:
-
-- [`jmlweb-tooling`](../..) - This monorepo formats itself with this package
+- `oxfmt` (>=0.72.0)
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier equivalent of this configuration
 - [`@jmlweb/oxlint-config-base`](../oxlint-config-base) - Oxlint config, the linter to pair with this formatter
-- [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config, compatible with this formatter when `sortImports` is off
-
-### External Tools
-
-- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) - Prettier-compatible formatter written in Rust
-- [Migrate from Prettier](https://oxc.rs/docs/guide/usage/formatter/migrate-from-prettier.html) - Official migration guide
-- [Editor Setup](https://oxc.rs/docs/guide/usage/formatter/editors.html) - Format on save in VS Code and other editors
-
-## ⚠️ Common Issues
-
-> **Note:** This section documents known issues and their solutions. If you encounter a problem not listed here, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-### Small Differences from Prettier
-
-**Symptoms:**
-
-- A few lines change when switching from Prettier, for example long union types split one member per line
-
-**Cause:**
-
-- Oxfmt is not yet 100% identical to Prettier in every edge case
-
-**Solution:**
-
-Run `oxfmt` once and commit the result. Do not run Prettier and Oxfmt on the same files.
-
-### Configuration Not Being Picked Up
-
-**Symptoms:**
-
-- Oxfmt uses its defaults (double quotes, 100 columns)
-
-**Cause:**
-
-- The config is in a `.prettierrc*` file, which Oxfmt does not read
-- A `.oxfmtrc.json` and an `oxfmt.config.ts` exist in the same directory
-
-**Solution:**
-
-Keep a single `oxfmt.config.ts` in the project root. Oxfmt uses the nearest config file to each formatted file.
+- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier equivalent (maintenance mode)
+- [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config, compatible when `sortImports` is off (maintenance mode)
+- [Migrate to Oxc](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/) - Move a project from the `@jmlweb` Prettier/ESLint packages
+- [Migrate from Prettier](https://oxc.rs/docs/guide/usage/formatter/migrate-from-prettier.html) - Official guide
 
 ## 🔄 Migration Guide
 
-### Migrating from `@jmlweb/prettier-config-base`
-
-1. Install this package and `oxfmt`
-2. Create `oxfmt.config.ts` as shown in [Quick Start](#-quick-start)
-3. Replace `prettier` with `oxfmt` in your scripts and `lint-staged` config
-4. Move `.prettierignore` entries to `ignorePatterns`, then remove `.prettierrc*`, `.prettierignore` and the Prettier packages
-5. Run `pnpm format` once and commit the result
-
 ### From 0.1.x to 0.2.0
 
-**Breaking Changes:**
-
-- Import sorting is enabled with Perfectionist's default groups, so the first run reorders imports
-
-**Migration Steps:**
+**Breaking:** import sorting is enabled with Perfectionist's default groups, so the first run reorders imports.
 
 1. Upgrade the package
 2. If ESLint still sorts your imports, set `sortImports: false` (see [Projects Still Linted by ESLint](#projects-still-linted-by-eslint))
-3. Otherwise run `pnpm format` once and commit the result
+3. Otherwise run `npm run format` once and commit the result
 
-For version history, see the [Changelog](./CHANGELOG.md).
-
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+See the [Changelog](./CHANGELOG.md) for details.
 
 ## 📄 License
 

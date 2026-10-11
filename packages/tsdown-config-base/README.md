@@ -5,28 +5,27 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.18.0-339933.svg)](https://nodejs.org/)
 [![tsdown](https://img.shields.io/badge/tsdown-0.23.x-ff7e17.svg)](https://tsdown.dev/)
 
-> Base tsdown configuration for jmlweb projects. The tsdown successor to [`@jmlweb/tsup-config-base`](../tsup-config-base), with the same helper API so a package can switch with minimal changes.
+> Base [tsdown](https://tsdown.dev/) configuration for jmlweb projects. The successor to [`@jmlweb/tsup-config-base`](../tsup-config-base) (deprecated), with the same helper API. Recommended build config.
 
 ## ✨ Features
 
-- 🎯 **Sensible Defaults**: Same defaults as `@jmlweb/tsup-config-base` (entry, formats, declarations, clean, `dist`)
-- 📦 **Dual Format**: Generates CommonJS and ESM with `.d.ts` and `.d.cts` declarations
-- 🔁 **tsdown Options**: `createTsdownConfig` and `createTsdownCliConfig` accept every tsdown option at the top level and only add defaults. The tsup-era `external` and `options` still work, but are deprecated
-- 🧭 **Stable File Names**: Keeps tsup's `.js`/`.cjs` extensions so existing `exports` maps keep working
-- ⚡ **Rolldown + Oxc**: Faster builds, and declaration generation without the TypeScript compiler API when you opt in
-- 🖥️ **CLI Preset**: Shebang injection, including per-entry shebangs in a single config
+- 🎯 **Sensible defaults**: Entry, dual CJS/ESM format, declarations, clean, `dist`
+- 🔁 **Plain tsdown options**: Every tsdown option goes at the top level; the presets only add defaults
+- 🧭 **Stable file names**: Keeps `.js`/`.cjs`/`.d.ts`/`.d.cts` so existing `exports` maps keep working
+- ⚡ **Rolldown + Oxc**: Fast builds, and declarations without the TypeScript compiler API when you opt in
+- 🖥️ **CLI preset**: Shebang injection, including per-entry shebangs in one config
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/tsdown-config-base tsdown typescript
+npm install --save-dev @jmlweb/tsdown-config-base tsdown typescript
 ```
 
-> 💡 `typescript` is needed for declaration generation unless you enable `isolatedDeclarations`. See [Declaration Files and TypeScript 7](#declaration-files-and-typescript-7).
+> `typescript` is needed for declarations unless you enable `isolatedDeclarations` (see [Declaration Files](#declaration-files-and-typescript-7)).
 
 ## 🚀 Quick Start
 
-Create a `tsdown.config.ts` file in your project root:
+Create `tsdown.config.ts` in your project root:
 
 ```typescript
 import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
@@ -36,29 +35,21 @@ export default createTsdownConfig();
 
 ## 💡 Examples
 
-### With External Dependencies
+### External Dependencies
 
 ```typescript
-// tsdown.config.ts
 import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
 
 export default createTsdownConfig({
   deps: {
-    neverBundle: [
-      // Internal packages
-      '@jmlweb/eslint-config-base-js',
-      // External peer dependencies
-      '@eslint/js',
-      'eslint',
-    ],
+    neverBundle: ['@jmlweb/eslint-config-base-js', '@eslint/js', 'eslint'],
   },
 });
 ```
 
-### With Additional Options
+### Multiple Entries and Extra Options
 
 ```typescript
-// tsdown.config.ts
 import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
 
 export default createTsdownConfig({
@@ -69,189 +60,131 @@ export default createTsdownConfig({
 });
 ```
 
-### CLI Package Configuration
+### CLI Package
 
 ```typescript
-// tsdown.config.ts
 import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
 
 export default createTsdownCliConfig();
-// Output: dist/cli.js with #!/usr/bin/env node shebang
+// Output: dist/cli.js with a #!/usr/bin/env node shebang
 ```
 
 ### CLI with Library API
 
 ```typescript
-// tsdown.config.ts
 import { createTsdownCliConfig } from '@jmlweb/tsdown-config-base';
 
 export default createTsdownCliConfig({
-  entry: {
-    cli: 'src/cli.ts',
-    index: 'src/index.ts',
-  },
-  shebang: 'cli', // Only add shebang to the cli entry
+  entry: { cli: 'src/cli.ts', index: 'src/index.ts' },
+  shebang: 'cli', // Only the cli entry gets a shebang
   deps: { neverBundle: ['commander'] },
 });
 ```
 
-## 🤔 Why Use This?
-
-> **Philosophy**: Keep the build contract of our packages (dual format, declarations, explicit externals) while moving off tsup, which is maintenance-only and recommends tsdown.
-
-The defaults and design decisions are the same as [`@jmlweb/tsup-config-base`](../tsup-config-base). This package only adapts them to tsdown's option names and defaults, so the published output of a package does not change when it switches.
-
-### Design Decisions
-
-**Package-type file extensions (`fixedExtension: false`)**: Keep tsup's output names
-
-- **Why**: tsdown defaults `fixedExtension` to `true` on the `node` platform, which emits `index.mjs`/`index.d.mts` instead of `index.js`/`index.d.ts`. Every `@jmlweb` package's `exports` map points to `.js`/`.cjs`/`.d.ts`/`.d.cts`, so the preset turns it off
-- **Trade-off**: The extension of the ESM output depends on the `type` field in `package.json`, like tsup
-- **When to override**: Pass `fixedExtension: true` if you prefer `.mjs`/`.cjs` and update your `exports` map accordingly
-
-**tsdown options at the top level**: A config reads like a plain tsdown config
-
-- **Why**: The tsup-era API kept most options in an `options` field, hiding tsdown's real option names behind extra nesting. Every tsdown option is now accepted at the top level, and the presets only add defaults
-- **Trade-off**: `options` still works for existing configs, but it is deprecated. Setting the same key at the top level and in `options` throws a `TsdownConfigError` instead of silently picking one
-- **When to override**: Not applicable; move keys out of `options` when convenient
-
-**Explicit externals through tsdown's own option (`deps.neverBundle`)**: No preset-specific name
-
-- **Why**: tsdown 0.23 deprecated `external` in favor of `deps.neverBundle`. The preset uses tsdown's name instead of giving `external` a new meaning, so `deps` is passed to tsdown unchanged
-- **Trade-off**: Externals are nested under `deps`. The `external` option is still accepted for packages migrating from `@jmlweb/tsup-config-base`, but it is deprecated and will be removed in a future release. It is mapped to `deps.neverBundle`, and passing both `external` and `deps.neverBundle` throws a `TsdownConfigError` (like tsdown, the preset does not merge the two silently)
-- **When to override**: Rarely. Like tsup, tsdown already externalizes `dependencies`, `peerDependencies` and `optionalDependencies` from `package.json`; `deps.neverBundle` covers anything else
-
-**No `legacyCjs` warning (`checks.legacyCjs: false`)**: Dual output is intentional
-
-- **Why**: tsdown warns `We recommend using the ESM format instead of CommonJS.` whenever the output includes `cjs` and the target supports `require(esm)` (`^20.19.0 || >=22.12.0`). Every supported Node.js version does, so with the default dual format the warning would show on every build
-- **Trade-off**: You are not reminded that CommonJS output could be dropped. Consumers on supported Node.js versions can `require()` the ESM build, so `format: ['esm']` is a valid choice when you no longer need CommonJS
-- **When to override**: Pass `checks: { legacyCjs: true }` to get the warning back. Other `checks` options pass through
-
-**Node.js target from `engines.node`**: No hardcoded target
-
-- **Why**: tsdown infers the target from `engines.node` in `package.json` (for example `>=22.12.0` becomes `node22.12.0`), so the output syntax follows the Node.js versions the package actually supports. Both presets rely on this, including the CLI preset
-- **Trade-off**: Without an `engines.node` field, tsdown does not lower the syntax at all
-- **When to override**: Pass `target` to pin a version, or `target: false` to disable lowering explicitly
-
 ## 📋 Configuration Details
 
-### Default Settings
+### Defaults
 
-| Setting          | Default Value          | Description                                   |
-| ---------------- | ---------------------- | --------------------------------------------- |
-| `entry`          | `['src/index.ts']`     | Entry point(s) for the build                  |
-| `format`         | `['cjs', 'esm']`       | Output formats (dual publishing)              |
-| `dts`            | `true`                 | Generate TypeScript declarations              |
-| `clean`          | `true`                 | Clean output directory before build           |
-| `outDir`         | `'dist'`               | Output directory                              |
-| `fixedExtension` | `false`                | Use `.js`/`.cjs` based on `package.json` type |
-| `checks`         | `{ legacyCjs: false }` | Silence the CommonJS deprecation warning      |
-| `target`         | From `engines.node`    | Inferred by tsdown, not set by the preset     |
+| Setting          | Default                | Description                                                            |
+| ---------------- | ---------------------- | ---------------------------------------------------------------------- |
+| `entry`          | `['src/index.ts']`     | Entry point(s)                                                         |
+| `format`         | `['cjs', 'esm']`       | Dual publishing                                                        |
+| `dts`            | `true`                 | Generate declarations                                                  |
+| `clean`          | `true`                 | Clean output before build                                              |
+| `outDir`         | `'dist'`               | Output directory                                                       |
+| `fixedExtension` | `false`                | `.js`/`.cjs` by `package.json` type, not `.mjs`                        |
+| `checks`         | `{ legacyCjs: false }` | Silences tsdown's CommonJS warning (dual is on purpose)                |
+| `target`         | From `engines.node`    | Inferred by tsdown; without `engines.node` there is no syntax lowering |
 
-### API Reference
+### `createTsdownConfig(options?): UserConfig`
 
-#### `createTsdownConfig(options?: TsdownConfigOptions): UserConfig`
+| Option     | Type                                    | Default            | Description                                      |
+| ---------- | --------------------------------------- | ------------------ | ------------------------------------------------ |
+| `entry`    | `string[] \| Record<string, string>`    | `['src/index.ts']` | Entry point files                                |
+| `format`   | `('cjs' \| 'esm' \| 'iife' \| 'umd')[]` | `['cjs', 'esm']`   | Output formats                                   |
+| `dts`      | `boolean \| DtsOptions`                 | `true`             | Declaration files (or tsdown dts options)        |
+| `clean`    | `boolean`                               | `true`             | Clean output before build                        |
+| `outDir`   | `string`                                | `'dist'`           | Output directory                                 |
+| `external` | `(string \| RegExp)[]`                  | `[]`               | **Deprecated**: use `deps.neverBundle`           |
+| `options`  | `AdditionalOptions`                     | `{}`               | **Deprecated**: pass tsdown options at top level |
 
-| Option     | Type                                    | Default            | Description                                          |
-| ---------- | --------------------------------------- | ------------------ | ---------------------------------------------------- |
-| `entry`    | `string[] \| Record<string, string>`    | `['src/index.ts']` | Entry point files                                    |
-| `format`   | `('cjs' \| 'esm' \| 'iife' \| 'umd')[]` | `['cjs', 'esm']`   | Output formats                                       |
-| `dts`      | `boolean \| DtsOptions`                 | `true`             | Generate declaration files (or tsdown options)       |
-| `clean`    | `boolean`                               | `true`             | Clean output before build                            |
-| `outDir`   | `string`                                | `'dist'`           | Output directory                                     |
-| `external` | `(string \| RegExp)[]`                  | `[]`               | **Deprecated**: use `deps.neverBundle`               |
-| `options`  | `AdditionalOptions`                     | `{}`               | **Deprecated**: pass tsdown options at the top level |
+Any other tsdown option is accepted at the top level.
 
-#### `createTsdownCliConfig(options?: TsdownCliConfigOptions): UserConfig`
+### `createTsdownCliConfig(options?): UserConfig`
 
-Accepts the options above (with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/cli.ts' }`) plus:
+Same options, with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/cli.ts' }`, plus:
 
-| Option    | Type                            | Default             | Description                                                      |
-| --------- | ------------------------------- | ------------------- | ---------------------------------------------------------------- |
-| `target`  | `NodeTarget`                    | From `engines.node` | Node.js target version                                           |
-| `shebang` | `boolean \| string \| string[]` | `true`              | Add shebang to all entries (`true`) or to the named entries only |
+| Option    | Type                            | Default             | Description                                       |
+| --------- | ------------------------------- | ------------------- | ------------------------------------------------- |
+| `target`  | `NodeTarget`                    | From `engines.node` | Node.js target version                            |
+| `shebang` | `boolean \| string \| string[]` | `true`              | Shebang on all entries (`true`) or the named ones |
 
-Entry names for `shebang` are the output names tsdown emits without extension (for example `cli` for `dist/cli.js`).
+Shebang names are output names without extension (`cli` for `dist/cli.js`). An entry whose source already starts with a shebang keeps its own; no second one is added.
 
-An entry whose source file already starts with a shebang (for example `#!/usr/bin/env node` at the top of `src/cli.ts`) keeps its own and does not get a second one. tsdown preserves source shebangs and marks those outputs executable.
+### Conflicts and Deprecations
 
-#### Exports
+- `external` maps to `deps.neverBundle`; passing both throws `TsdownConfigError`
+- Setting the same key at the top level and in `options` throws `TsdownConfigError`
+- `checks: { legacyCjs: true }` brings back the CommonJS warning; `fixedExtension: true` emits `.mjs`/`.cjs` (update your `exports` map)
 
-- `BASE_DEFAULTS`, `CLI_DEFAULTS` - Default configuration values
-- `EntryConfig`, `NodeTarget`, `OutputFormat`, `DepsOptions` - Helper types
-- `TsdownConfigError` - Thrown when options conflict (`external` together with `deps.neverBundle`, or the same key at the top level and in `options`)
-- `TsdownConfigOptions`, `TsdownCliConfigOptions` - Options for the helpers
+### Exports
+
+- `createTsdownConfig`, `createTsdownCliConfig` - Helpers
+- `BASE_DEFAULTS`, `CLI_DEFAULTS` - Default values
+- `TsdownConfigError` - Thrown on conflicting options
+- `TsdownConfigOptions`, `TsdownCliConfigOptions`, `EntryConfig`, `NodeTarget`, `OutputFormat`, `DepsOptions` - Types
 - `AdditionalOptions`, `AdditionalCliOptions` - Types of the deprecated `options` field
-- `UserConfig` - Re-exported from tsdown, also exported as `Options` to match `@jmlweb/tsup-config-base`
+- `UserConfig` - Re-exported from tsdown, also as `Options`
 
 ### Differences from `@jmlweb/tsup-config-base`
 
-| Area                  | tsup-config-base                                      | tsdown-config-base                                                                          |
-| --------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Helper names          | `createTsupConfig`, `createTsupCliConfig`             | `createTsdownConfig`, `createTsdownCliConfig`                                               |
-| Config file           | `tsup.config.ts`                                      | `tsdown.config.ts`                                                                          |
-| Return type           | `Options` (`Options \| Options[]` for the CLI preset) | Always a single `UserConfig`                                                                |
-| `external`            | Passed to tsup's `external`                           | Deprecated: use `deps.neverBundle` (tsdown 0.23's replacement for `external`)               |
-| File extensions       | Based on `package.json` type                          | Same, by setting `fixedExtension: false` (tsdown's node default is `true`)                  |
-| Selective shebang     | Split into several configs                            | One config with a per-file `banner` function                                                |
-| `format`              | `cjs`, `esm`, `iife`                                  | Adds `umd`                                                                                  |
-| `splitting`, `bundle` | Available in `options`                                | Not available: code splitting is always on; use `unbundle: true` instead of `bundle: false` |
-| `noExternal`          | Available in `options`                                | Use `deps.alwaysBundle`                                                                     |
-| Declarations          | rollup-plugin-dts on the TypeScript compiler API      | tsc, tsgo or Oxc, see below                                                                 |
-| Node.js               | >= 22.12.0                                            | `^22.18.0 \|\| ^24.11.0 \|\| >=26.0.0` (tsdown's own requirement)                           |
-
-tsdown's `legacyCjs` warning is turned off by default (see [Design Decisions](#design-decisions)).
+| Area                  | tsup-config-base                              | tsdown-config-base                                             |
+| --------------------- | --------------------------------------------- | -------------------------------------------------------------- |
+| Helpers               | `createTsupConfig`, `createTsupCliConfig`     | `createTsdownConfig`, `createTsdownCliConfig`                  |
+| Config file           | `tsup.config.ts`                              | `tsdown.config.ts`                                             |
+| Return type           | `Options` (`Options[]` for selective shebang) | Always one `UserConfig`                                        |
+| `external`            | tsup's `external`                             | Deprecated alias of `deps.neverBundle`                         |
+| Selective shebang     | Split configs                                 | One config with a per-file `banner`                            |
+| `format`              | `cjs`, `esm`, `iife`                          | Adds `umd`                                                     |
+| `splitting`, `bundle` | In `options`                                  | Not available; use `unbundle: true` instead of `bundle: false` |
+| `noExternal`          | In `options`                                  | `deps.alwaysBundle`                                            |
+| Declarations          | rollup-plugin-dts                             | tsc, tsgo or Oxc                                               |
+| Node.js               | >= 22.12.0                                    | `^22.18.0 \|\| ^24.11.0 \|\| >=26.0.0` (tsdown's requirement)  |
 
 ### Declaration Files and TypeScript 7
 
-tsdown picks the declaration generator automatically. Verified with tsdown 0.23.0:
+tsdown picks the declaration generator automatically (verified with tsdown 0.23.0):
 
-| Project setup                                   | Generator | Needs the TypeScript compiler API?                        |
-| ----------------------------------------------- | --------- | --------------------------------------------------------- |
-| `typescript` 5.x / 6.x installed                | `tsc`     | Yes                                                       |
-| `typescript` 7.x installed                      | `tsgo`    | No: runs the native `tsc` binary (experimental in tsdown) |
-| `isolatedDeclarations: true` in `tsconfig.json` | `oxc`     | No: works even without `typescript` installed             |
-| No `typescript` and no `isolatedDeclarations`   | -         | Build fails: `TypeScript is not installed`                |
+| Project setup                                   | Generator | Needs the TypeScript compiler API?                           |
+| ----------------------------------------------- | --------- | ------------------------------------------------------------ |
+| `typescript` 5.x / 6.x installed                | `tsc`     | Yes                                                          |
+| `typescript` 7.x installed                      | `tsgo`    | No: native binary (experimental in tsdown)                   |
+| `isolatedDeclarations: true` in `tsconfig.json` | `oxc`     | No: works without `typescript` (needs explicit export types) |
+| Neither                                         | -         | Build fails: `TypeScript is not installed`                   |
 
-So `.d.ts`/`.d.cts` generation works without the TypeScript compiler API in two ways: with TypeScript 7 (through tsgo), or with `isolatedDeclarations` (through Oxc, which requires explicit types on exported declarations). To force a generator, pass `dts: { generator: 'oxc' }` (or `'tsc'` / `'tsgo'`).
+Force one with `dts: { generator: 'oxc' }` (or `'tsc'` / `'tsgo'`).
 
-> ⚠️ tsdown being ready for TypeScript 7 does not mean the rest of a typical toolchain is. As of this release, `typescript-eslint` (`typescript <6.1.0`), `ts-jest` (`<7`) and `@astrojs/check` (`^5 || ^6`) do not support TypeScript 7, so projects using them should stay on TypeScript 6.
+> ⚠️ Much of the toolchain does not support TypeScript 7 yet (`typescript-eslint` `<6.1.0`, `ts-jest` `<7`, `@astrojs/check` `^5 || ^6`). Stay on TypeScript 6 if you use them.
 
 ## 🎯 When to Use
 
-Use this configuration when you want:
-
-- ✅ To build a TypeScript library with tsdown instead of tsup
-- ✅ Dual-format output (CommonJS + ESM) with declarations for both
-- ✅ To migrate from `@jmlweb/tsup-config-base` without changing published file names
-- ✅ Declaration generation that is ready for TypeScript 7
+- ✅ Building a TypeScript library with dual CJS/ESM output and declarations
+- ✅ Migrating from `@jmlweb/tsup-config-base` without changing published file names
+- ✅ Declaration generation ready for TypeScript 7
 - ✅ CLI packages with shebang injection
 
-**To stay on tsup**, [`@jmlweb/tsup-config-base`](../tsup-config-base) still works but is deprecated and no longer maintained.
+**Staying on tsup?** [`@jmlweb/tsup-config-base`](../tsup-config-base) still works but is deprecated and unmaintained.
 
 ## 🔧 Extending the Configuration
 
-### Overriding Defaults
-
 ```typescript
-// tsdown.config.ts
 import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
 
 export default createTsdownConfig({
   format: ['esm'], // ESM only
   outDir: 'build',
   fixedExtension: true, // Emit .mjs/.d.mts
-  unbundle: true, // Mirror the src/ structure instead of bundling
-});
-```
-
-### Bundling a Specific Dependency
-
-```typescript
-// tsdown.config.ts
-import { createTsdownConfig } from '@jmlweb/tsdown-config-base';
-
-export default createTsdownConfig({
+  unbundle: true, // Mirror src/ instead of bundling
   deps: {
     neverBundle: ['eslint'],
     alwaysBundle: ['tiny-utils'],
@@ -259,63 +192,52 @@ export default createTsdownConfig({
 });
 ```
 
-## 📝 Usage with Scripts
+tsdown already externalizes `dependencies`, `peerDependencies` and `optionalDependencies`; `deps.neverBundle` covers anything else.
 
-Add build scripts to your `package.json`:
+## 📝 Usage with Scripts
 
 ```json
 {
   "scripts": {
     "build": "tsdown",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "npm run build"
   }
 }
 ```
 
-Then run:
-
 ```bash
-pnpm build    # Build the package
-pnpm clean    # Clean build output
+npm run build  # Build the package
+npm run clean  # Clean build output
 ```
 
 ## 📋 Requirements
 
-- **Node.js** ^22.18.0, ^24.11.0 or >= 26.0.0
+- **Node.js** ^22.18.0, ^24.11.0 or >=26.0.0
 - **tsdown** ~0.23.0
 - **TypeScript** 5.x, 6.x or 7.x (optional with `isolatedDeclarations`)
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependency:
-
 - `tsdown` (~0.23.0)
 
-**Note**: tsdown is pre-1.0 and ships breaking changes in minor releases, so the range only allows patch updates. It will be widened as tsdown releases are verified.
+tsdown is pre-1.0 and ships breaking changes in minor releases, so the range allows patch updates only. It is widened as tsdown releases are verified.
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/tsup-config-base`](../tsup-config-base) - Deprecated tsup equivalent of this package
+- [`@jmlweb/tsup-config-base`](../tsup-config-base) - Deprecated tsup equivalent
 - [`@jmlweb/tsconfig-base`](../tsconfig-base) - TypeScript configuration
-- [`@jmlweb/eslint-config-base`](../eslint-config-base) - ESLint config for TypeScript projects
-- [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration for testing
-
-### External Tools
-
-- [tsdown](https://tsdown.dev/) - The elegant library bundler, powered by Rolldown
-- [Rolldown](https://rolldown.rs/) - Rust bundler used by tsdown
-- [Oxc](https://oxc.rs/) - Used for fast declaration generation with `isolatedDeclarations`
+- [`@jmlweb/oxlint-config-base`](../oxlint-config-base) - Oxlint config for TypeScript projects
+- [`@jmlweb/vitest-config`](../vitest-config) - Vitest configuration
+- [tsdown](https://tsdown.dev/) - Library bundler powered by Rolldown
 
 ## 🔄 Migration Guide
 
 ### From `@jmlweb/tsup-config-base`
 
-1. Install the new packages: `pnpm add -D @jmlweb/tsdown-config-base tsdown` and remove `@jmlweb/tsup-config-base` and `tsup`
-2. Rename `tsup.config.ts` to `tsdown.config.ts`
-3. Change the import and helper name, and move `external` to `deps.neverBundle`:
+1. Install `@jmlweb/tsdown-config-base` and `tsdown`; remove `@jmlweb/tsup-config-base` and `tsup`
+2. Rename `tsup.config.ts` to `tsdown.config.ts` and change the `build` script from `tsup` to `tsdown`
+3. Change the import and helper name, and move `external` to `deps.neverBundle` (`external` still works, deprecated):
 
    ```typescript
    // Before
@@ -329,17 +251,10 @@ This package requires the following peer dependency:
    });
    ```
 
-   `external` still works as a deprecated alias, so this step can also be done later
+4. Move everything from `options` to the top level, and replace tsup-only options (`splitting`, `bundle`, `noExternal`, `esbuildPlugins`, ...) using [Differences](#differences-from-jmlwebtsup-config-base)
+5. Build and compare `dist/` with the previous output
 
-4. Change the `build` script from `tsup` to `tsdown`
-5. Move everything from `options` to the top level (`options` still works, but is deprecated), and replace tsup-only options (`splitting`, `bundle`, `noExternal`, `esbuildPlugins`, ...) with their tsdown equivalents (see [Differences](#differences-from-jmlwebtsup-config-base))
-6. Build and compare `dist/` with the previous output
-
-For version history, see the [Changelog](./CHANGELOG.md).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+See the [Changelog](./CHANGELOG.md) for version history.
 
 ## 📄 License
 

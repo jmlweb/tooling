@@ -1,61 +1,32 @@
-# Integration Tests
+# 📦 Integration Tests
 
-Integration tests that verify packages work correctly when installed and consumed, similar to how they would be used in real projects.
+Verify packages work as consumers get them: packed to tarballs, installed in a temp project, then exercised.
 
-## Purpose
-
-These tests ensure that:
-
-- Packages can be installed from packed tarballs (as they would be from npm)
-- Packages can be imported and used correctly
-- Configurations work as expected with their respective tools
-- Breaking changes are caught before publishing
-
-## Running Tests
-
-From the root of the monorepo:
+## 🚀 Run
 
 ```bash
 pnpm test --filter @jmlweb/integration-tests
 ```
 
-Or from this directory:
+Runs in CI (see [`docs/CI.md`](../../docs/CI.md)).
 
-```bash
-cd apps/integration-tests
-pnpm test
-```
+## 🔄 Flow
 
-## Test Structure
+1. Pack all workspace packages
+2. Create a temp project and install the tarballs
+3. Run each suite
+4. Clean up
 
-The integration tests are organized by package type:
+## 🧪 Suites (`scripts/`)
 
-- **Prettier Configs** (`test-prettier.mjs`) - Tests Prettier configuration packages
-- **ESLint Configs** (`test-eslint.mjs`) - Tests ESLint configuration packages
-- **Oxc Configs** (`test-oxc.mjs`) - Runs Oxfmt and Oxlint with the Oxc configuration packages against fixtures, checking the formatted output and that native, type-aware and JS plugin rules report
-- **TypeScript Configs** (`test-tsconfig.mjs`) - Tests TypeScript configuration packages
-- **Testing Configs** (`test-testing-configs.mjs`) - Tests Vitest and Jest configuration packages
-- **Build Tool Configs** (`test-build-tools.mjs`) - Tests tsup, tsdown, Vite, and PostCSS configuration packages (tsdown also runs a real build)
-- **Commitlint Config** (`test-commitlint.mjs`) - Tests Commitlint configuration package
+| File                       | Covers                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| `test-oxc.mjs`             | Oxfmt/Oxlint configs run on fixtures: output, native, type-aware and JS plugin rules |
+| `test-prettier.mjs`        | Prettier configs                                                                     |
+| `test-eslint.mjs`          | ESLint configs                                                                       |
+| `test-tsconfig.mjs`        | TypeScript configs                                                                   |
+| `test-testing-configs.mjs` | Vitest and Jest configs                                                              |
+| `test-build-tools.mjs`     | tsup, tsdown (real build), Vite, PostCSS configs                                     |
+| `test-commitlint.mjs`      | Commitlint config                                                                    |
 
-## How It Works
-
-1. **Pack Packages**: All packages in the monorepo are packed into tarballs (as they would be published to npm)
-2. **Create Test Environment**: A temporary test project is created
-3. **Install Packages**: Packed packages are installed as file dependencies
-4. **Run Tests**: Each package type is tested to verify it works correctly
-5. **Cleanup**: Test environment is cleaned up
-
-## Test Coverage
-
-The tests verify:
-
-- ✅ Packages can be imported
-- ✅ Configuration structures are valid
-- ✅ Configurations work with their respective tools
-- ✅ Package exports are configured correctly
-- ✅ Peer dependencies are handled correctly
-
-## CI Integration
-
-These tests run automatically in CI to ensure packages are ready for publishing. See `.github/workflows/ci.yml` for details.
+`run-tests.mjs` is the entry point; `utils.mjs` holds shared helpers.

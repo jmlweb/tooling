@@ -4,55 +4,42 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![ESLint](https://img.shields.io/badge/ESLint-9%20%7C%2010-4B32C3.svg)](https://eslint.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
 
-> ESLint configuration for Node.js projects with TypeScript. Extends `@jmlweb/eslint-config-base` with Node.js-specific rules, globals, and best practices for Node.js development.
+> ESLint flat config for Node.js with TypeScript. Extends [`@jmlweb/eslint-config-base`](../eslint-config-base) with `eslint-plugin-n` rules and Node.js globals.
 
-> 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxlint-config-node`](../oxlint-config-node), which ports these rules to Oxlint. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
+> 🔧 **Maintenance mode**: only dependency and security updates, no new rules. For new projects use [`@jmlweb/oxlint-config-node`](../oxlint-config-node). To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 
-- 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
-- 🟢 **Node.js Best Practices**: Enforces Node.js-specific rules and patterns
-- 🌐 **Node.js Globals**: Automatically enables Node.js global variables
-- 📦 **Import Management**: Enforces type-only imports with inline style + automatic sorting
-- 🎯 **Code Quality**: Prevents common Node.js pitfalls and anti-patterns
-- 🎨 **Prettier Integration**: Disables all ESLint rules that conflict with Prettier
-- 🚀 **Flat Config**: Uses ESLint 9 and 10 flat config format (latest stable)
+- 🟢 **Node.js rules**: `eslint-plugin-n` recommended plus stricter module, process and API rules
+- 🌐 **Node.js globals**: `process`, `Buffer`, `__dirname` and friends
+- 🔒 **Strict TypeScript**: everything from `@jmlweb/eslint-config-base`
+- 📦 **`node:` protocol**: built-in modules must use the `node:` prefix
+- 🎨 **Prettier compatible**: disables rules that conflict with Prettier
 
 ## 📦 Installation
 
 ```bash
-pnpm add -D @jmlweb/eslint-config-node eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-n eslint-plugin-simple-import-sort globals @jmlweb/eslint-config-base
+npm install --save-dev @jmlweb/eslint-config-node @jmlweb/eslint-config-base eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-simple-import-sort eslint-plugin-n globals
 ```
 
-> 💡 **Upgrading from a previous version?** See the [Migration Guide](#-migration-guide) for breaking changes and upgrade instructions.
+> 💡 **Upgrading?** See the [Migration Guide](#-migration-guide).
 
 ## 🚀 Quick Start
 
-Create an `eslint.config.js` file in your project root:
-
 ```javascript
+// eslint.config.js
 import nodeConfig from '@jmlweb/eslint-config-node';
 
 export default [
   ...nodeConfig,
-  // Add your project-specific overrides here
+  // Project-specific overrides
 ];
 ```
 
 ## 💡 Examples
 
-### Basic Setup
-
-```javascript
-// eslint.config.js
-import nodeConfig from '@jmlweb/eslint-config-node';
-
-export default [...nodeConfig];
-```
-
-### With Project-Specific Overrides
+### Test overrides and ignores
 
 ```javascript
 // eslint.config.js
@@ -63,164 +50,6 @@ export default [
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
-      // Allow any in tests
-      '@typescript-eslint/no-explicit-any': 'off',
-      // Allow console in tests
-      'no-console': 'off',
-      // Relax Node.js rules in tests
-      'n/no-process-exit': 'off',
-    },
-  },
-  {
-    ignores: ['dist/', 'build/', 'node_modules/', '*.config.ts'],
-  },
-];
-```
-
-### With Custom Node.js Settings
-
-```javascript
-// eslint.config.js
-import nodeConfig from '@jmlweb/eslint-config-node';
-
-export default [
-  ...nodeConfig,
-  {
-    files: ['**/*.ts', '**/*.js'],
-    rules: {
-      // Customize Node.js rules
-      'n/no-process-exit': 'warn', // Warn instead of error
-      'n/no-deprecated-api': 'error', // Error on deprecated APIs
-    },
-  },
-];
-```
-
-## 📋 Configuration Details
-
-### Node.js Files
-
-This configuration applies Node.js-specific rules to:
-
-- `**/*.ts` - TypeScript files
-- `**/*.js` - JavaScript files
-- `**/*.mjs` - ES modules
-- `**/*.cjs` - CommonJS files
-
-### Key Rules Enforced
-
-| Rule                       | Level   | Description                                   |
-| -------------------------- | ------- | --------------------------------------------- |
-| `n/no-process-exit`        | `error` | Prevents direct `process.exit()` calls        |
-| `n/no-missing-import`      | `error` | Prevents missing imports                      |
-| `n/no-missing-require`     | `error` | Prevents missing require statements           |
-| `n/no-unpublished-import`  | `error` | Prevents importing unpublished packages       |
-| `n/no-unpublished-require` | `error` | Prevents requiring unpublished packages       |
-| `n/no-extraneous-import`   | `error` | Prevents extraneous imports                   |
-| `n/no-extraneous-require`  | `error` | Prevents extraneous require statements        |
-| `n/no-deprecated-api`      | `warn`  | Warns about deprecated Node.js APIs           |
-| `n/process-exit-as-throw`  | `error` | Treats process.exit as throw                  |
-| `n/no-callback-literal`    | `error` | Prevents callback literal patterns            |
-| `n/no-new-require`         | `error` | Prevents `new require()`                      |
-| `n/no-path-concat`         | `error` | Prevents string concatenation for paths       |
-| `n/prefer-global/buffer`   | `error` | Prefers global Buffer                         |
-| `n/prefer-global/console`  | `error` | Prefers global console                        |
-| `n/prefer-global/process`  | `error` | Prefers global process                        |
-| `n/prefer-promises/dns`    | `error` | Prefers promise-based DNS APIs                |
-| `n/prefer-promises/fs`     | `error` | Prefers promise-based fs APIs                 |
-| `n/prefer-node-protocol`   | `error` | Prefers `node:` protocol for built-in modules |
-
-### What's Included
-
-- ✅ All TypeScript ESLint rules from `@jmlweb/eslint-config-base`
-- ✅ Node.js recommended rules from `eslint-plugin-n`
-- ✅ Node.js globals automatically enabled
-- ✅ Node.js best practices and anti-pattern prevention
-- ✅ Automatic import/export sorting
-- ✅ Prettier conflict resolution
-
-## 🔄 Import Sorting
-
-The configuration automatically sorts imports and enforces type-only imports:
-
-**Before:**
-
-```typescript
-import { Component } from './component';
-import fs from 'fs';
-import type { User } from './types';
-import express from 'express';
-```
-
-**After auto-fix:**
-
-```typescript
-import fs from 'fs';
-import express from 'express';
-import type { User } from './types';
-import { Component } from './component';
-```
-
-Fix import order automatically:
-
-```bash
-pnpm exec eslint --fix .
-```
-
-## 🤔 Why Use This?
-
-> **Philosophy**: Node.js applications should follow Node.js best practices and leverage the platform's capabilities correctly.
-
-This package extends the base TypeScript config with Node.js-specific rules that prevent common Node.js pitfalls, enforce best practices for the platform, and provide proper global variable handling for the Node.js runtime.
-
-### Design Decisions
-
-**Node.js Plugin (`eslint-plugin-n`)**: Enforces Node.js best practices and catches platform-specific issues
-
-- **Why**: Node.js has unique patterns (async I/O, modules, process management) that require specific rules. The plugin catches deprecated APIs, improper module usage, and process handling issues
-- **Trade-off**: Additional rules to learn, but prevents Node.js-specific bugs
-- **When to override**: When you know you're using a pattern correctly despite the warning (rare)
-
-**Node.js Globals**: Automatically includes Node.js global variables (`process`, `__dirname`, `Buffer`, etc.)
-
-- **Why**: Node.js applications need access to platform globals. Explicitly declaring them prevents "undefined variable" errors
-- **Trade-off**: None - this is required for Node.js development
-- **When to override**: Never - Node.js code needs these globals
-
-**Extends Base TypeScript Config**: Inherits all strict type checking rules
-
-- **Why**: Node.js applications benefit from strict typing, especially for API contracts, database models, and configuration
-- **Trade-off**: More verbose code, but prevents runtime errors in production
-- **When to override**: Follow the same guidelines as the base TypeScript config
-
-## 🎯 When to Use
-
-Use this configuration when you want:
-
-- ✅ Node.js library or application development with TypeScript
-- ✅ Maximum type safety with Node.js
-- ✅ Strict code quality standards for Node.js code
-- ✅ Consistent Node.js patterns across the team
-- ✅ Prevention of common Node.js pitfalls
-- ✅ Best practices enforcement for Node.js APIs
-
-**For non-Node.js TypeScript projects**, use [`@jmlweb/eslint-config-base`](../eslint-config-base) instead.
-
-**For JavaScript-only Node.js projects**, you can extend `@jmlweb/eslint-config-base-js` and add Node.js plugins manually.
-
-## 🔧 Extending the Configuration
-
-You can extend or override the configuration for your specific needs:
-
-```javascript
-import nodeConfig from '@jmlweb/eslint-config-node';
-
-export default [
-  ...nodeConfig,
-  {
-    files: ['**/*.test.ts', '**/*.spec.ts'],
-    rules: {
-      // Test-specific rules
       '@typescript-eslint/no-explicit-any': 'off',
       'n/no-process-exit': 'off',
     },
@@ -231,9 +60,98 @@ export default [
 ];
 ```
 
-## 📝 Usage with Scripts
+### Soften Node.js rules
 
-Add linting scripts to your `package.json`:
+```javascript
+// eslint.config.js
+import nodeConfig from '@jmlweb/eslint-config-node';
+
+export default [
+  ...nodeConfig,
+  {
+    files: ['**/*.ts', '**/*.js'],
+    rules: {
+      'n/no-process-exit': 'warn',
+      'n/no-unpublished-import': 'off',
+    },
+  },
+];
+```
+
+## 📋 Configuration Details
+
+Applied to `**/*.ts`, `**/*.js`, `**/*.mjs` and `**/*.cjs`, with `globals.node` enabled.
+
+### Included
+
+- ✅ Everything from `@jmlweb/eslint-config-base`
+- ✅ `eslint-plugin-n` `flat/recommended`
+- ✅ Import and export sorting, Prettier conflict resolution
+
+### Key rules
+
+| Rule                                                                             | Level              |
+| -------------------------------------------------------------------------------- | ------------------ |
+| `n/no-process-exit`, `n/process-exit-as-throw`                                   | `error`            |
+| `n/no-missing-import`, `n/no-missing-require`                                    | `error`            |
+| `n/no-unpublished-import`, `n/no-unpublished-require`                            | `error`            |
+| `n/no-extraneous-import`, `n/no-extraneous-require`                              | `error`            |
+| `n/no-deprecated-api`                                                            | `warn`             |
+| `n/no-callback-literal`, `n/no-new-require`, `n/no-path-concat`                  | `error`            |
+| `n/prefer-global/*` (`buffer`, `console`, `process`, `url`, `url-search-params`) | `error` (`always`) |
+| `n/prefer-promises/dns`, `n/prefer-promises/fs`                                  | `error`            |
+| `n/prefer-node-protocol`                                                         | `error`            |
+
+## 🔄 Import Sorting
+
+Imports are sorted and type-only imports are enforced.
+
+**Before:**
+
+```typescript
+import { Component } from './component';
+import express from 'express';
+import fs from 'node:fs';
+import { User } from './types';
+```
+
+**After `eslint --fix`:**
+
+```typescript
+import express from 'express';
+import fs from 'node:fs';
+import { type User } from './types';
+import { Component } from './component';
+```
+
+## 🎯 When to Use
+
+- ✅ Node.js libraries, CLIs and services written in TypeScript
+- ✅ Catching missing or unpublished imports and deprecated APIs
+- ✅ Strict type-aware linting for backend code
+
+For non-Node.js TypeScript use [`@jmlweb/eslint-config-base`](../eslint-config-base). For new projects prefer [`@jmlweb/oxlint-config-node`](../oxlint-config-node).
+
+## 🔧 Extending the Configuration
+
+Spread the config, then add objects after it. Later entries win.
+
+```javascript
+// eslint.config.js
+import nodeConfig from '@jmlweb/eslint-config-node';
+
+export default [
+  ...nodeConfig,
+  {
+    files: ['scripts/**/*.js'],
+    rules: {
+      'n/no-process-exit': 'off',
+    },
+  },
+];
+```
+
+## 📝 Usage with Scripts
 
 ```json
 {
@@ -244,69 +162,44 @@ Add linting scripts to your `package.json`:
 }
 ```
 
-Then run:
-
 ```bash
-pnpm lint      # Lint all files
-pnpm lint:fix  # Fix auto-fixable issues
+npm run lint
 ```
 
 ## 📋 Requirements
 
 - **Node.js** >= 22.12.0
-- **ESLint** ^9.0.0 || ^10.0.0 (flat config format)
-- **TypeScript** project with `tsconfig.json`
-- **TypeScript project service** enabled (automatic with this config)
+- **ESLint** ^9.0.0 || ^10.0.0 (flat config)
+- **TypeScript** project with a `tsconfig.json` (versions supported by typescript-eslint 8)
 
 ## 📦 Peer Dependencies
 
-This package requires the following peer dependencies:
-
-- `eslint` (^9.0.0 || ^10.0.0)
-- `@eslint/js` (^9.0.0 || ^10.0.0)
-- `typescript-eslint` (^8.0.0)
-- `eslint-config-prettier` (^9.1.0 || ^10.0.0)
-- `eslint-plugin-n` (^17.0.0 || ^18.0.0)
-- `eslint-plugin-simple-import-sort` (^12.0.0 || ^13.0.0 || ^14.0.0)
-- `globals` (^15.0.0 || ^16.0.0 || ^17.0.0)
-- `@jmlweb/eslint-config-base` (^1.0.0)
-
-## 📚 Examples
-
-See real-world usage examples:
-
-- [`example-nodejs-typescript-api`](../../apps/example-nodejs-typescript-api) - Node.js TypeScript API example
+- `eslint` (`^9.0.0 || ^10.0.0`)
+- `@eslint/js` (`^9.0.0 || ^10.0.0`)
+- `typescript-eslint` (`^8.0.0`)
+- `eslint-config-prettier` (`^9.1.0 || ^10.0.0`)
+- `eslint-plugin-n` (`^17.0.0 || ^18.0.0`)
+- `eslint-plugin-simple-import-sort` (`^12.0.0 || ^13.0.0 || ^14.0.0`)
+- `globals` (`^15.0.0 || ^16.0.0 || ^17.0.0`)
+- `@jmlweb/eslint-config-base` (`^3.0.3`)
 
 ## 🔗 Related Packages
 
-### Internal Packages
-
-- [`@jmlweb/eslint-config-base`](../eslint-config-base) - Base TypeScript ESLint config (extended by this package)
-- [`@jmlweb/tsconfig-node`](../tsconfig-node) - TypeScript configuration for Node.js libraries
-- [`@jmlweb/prettier-config-base`](../prettier-config-base) - Prettier config for consistent formatting
-
-### External Tools
-
-- [ESLint](https://eslint.org/) - Pluggable linting utility for JavaScript and TypeScript
-- [Node.js](https://nodejs.org/) - JavaScript runtime built on Chrome's V8 engine
-- [eslint-plugin-n](https://github.com/eslint-community/eslint-plugin-n) - ESLint rules for Node.js
-- [tsx](https://github.com/privatenumber/tsx) - TypeScript execute (ts-node alternative)
+- [`@jmlweb/eslint-config-base`](../eslint-config-base): TypeScript config (extended by this package)
+- [`@jmlweb/oxlint-config-node`](../oxlint-config-node): Oxlint equivalent, recommended for new projects
+- [`@jmlweb/tsconfig-node`](../tsconfig-node): TypeScript config for Node.js
+- [`@jmlweb/prettier-config-base`](../prettier-config-base): Prettier config (maintenance mode)
 
 ## 🔄 Migration Guide
 
-### Upgrading to a New Version
+### 2.x to 3.0
 
-> **Note:** If no breaking changes were introduced in a version, it's safe to upgrade without additional steps.
+Node.js 18 and 20 are end-of-life. Node.js >= 22.12.0 is now required: it is the first Node.js 22 release that can `require()` ES modules without a flag, which the CommonJS build needs to load ESM-only plugins. Peer ranges were also widened (`eslint-plugin-n` 18, `eslint-plugin-simple-import-sort` 13 and 14).
 
-**No breaking changes have been introduced yet.** This package follows semantic versioning. When breaking changes are introduced, detailed migration instructions will be provided here.
+1. Upgrade Node.js to 22.12.0 or later.
+2. Update the package: `npm install --save-dev @jmlweb/eslint-config-node@latest`.
 
-For version history, see the [Changelog](./CHANGELOG.md).
-
-**Need Help?** If you encounter issues during migration, please [open an issue](https://github.com/jmlweb/tooling/issues/new).
-
-## 📜 Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for version history and release notes.
+See the [Changelog](./CHANGELOG.md).
 
 ## 📄 License
 
