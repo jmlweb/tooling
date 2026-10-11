@@ -42,7 +42,7 @@
     "lint-staged": "^17.6.0",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
-    "oxlint-tsgolint": "^7.0.2003",
+    "oxlint-tsgolint": "^7.0.2004",
     "syncpack": "^15.3.3",
     "turbo": "^2.11.7",
     "typescript": "^6.0.3"

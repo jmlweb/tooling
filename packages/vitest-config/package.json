@@ -58,7 +58,7 @@
     "@jmlweb/tsdown-config-base": "workspace:*",
     "@vitest/coverage-v8": "^5.0.3",
     "@vitest/ui": "^5.0.3",
-    "tsdown": "~0.23.0",
+    "tsdown": "~0.23.1",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   }

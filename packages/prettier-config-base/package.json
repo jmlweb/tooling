@@ -54,8 +54,8 @@
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
-    "prettier": "^3.9.9",
-    "tsdown": "~0.23.0",
+    "prettier": "^3.9.10",
+    "tsdown": "~0.23.1",
     "typescript": "^6.0.3"
   }
 }
