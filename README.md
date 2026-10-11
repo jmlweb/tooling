@@ -41,7 +41,7 @@ Shared `@jmlweb/*` configs for formatting, linting, TypeScript, build, test and 
 | [`@jmlweb/vite-config`](./packages/vite-config)                           | ✅     | Vite base config, optional React        | ![npm](https://img.shields.io/npm/v/@jmlweb/vite-config?label=)              |
 | **🧪 Testing**                                                            |        |                                         |                                                                              |
 | [`@jmlweb/vitest-config`](./packages/vitest-config)                       | ✅     | Vitest with TypeScript and coverage     | ![npm](https://img.shields.io/npm/v/@jmlweb/vitest-config?label=)            |
-| [`@jmlweb/jest-config`](./packages/jest-config)                           | ✅     | Jest with TypeScript and coverage       | ![npm](https://img.shields.io/npm/v/@jmlweb/jest-config?label=)              |
+| [`@jmlweb/jest-config`](./packages/jest-config)                           | 🛠️     | Jest with TypeScript and coverage       | ![npm](https://img.shields.io/npm/v/@jmlweb/jest-config?label=)              |
 | **📝 Commits**                                                            |        |                                         |                                                                              |
 | [`@jmlweb/commitlint-config`](./packages/commitlint-config)               | ✅     | Conventional Commits                    | ![npm](https://img.shields.io/npm/v/@jmlweb/commitlint-config?label=)        |
 
