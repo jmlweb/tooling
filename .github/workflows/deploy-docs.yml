@@ -38,7 +38,7 @@ jobs:
       - name: Validate documentation
         run: |
           # Count generated package MDX files (exclude index.mdx and getting-started.mdx)
-          GENERATED_COUNT=$(find apps/docs/src/content/docs -name "*.mdx" -not -name "index.mdx" -not -name "getting-started.mdx" | wc -l | xargs)
+          GENERATED_COUNT=$(find apps/docs/src/content/docs -name "*.mdx" -not -name "index.mdx" -not -name "getting-started.mdx" -not -path "*/guides/*" | wc -l | xargs)
           echo "Generated $GENERATED_COUNT package documentation pages"
 
           # The generator emits one page per published (non-private) package
