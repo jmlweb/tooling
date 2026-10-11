@@ -11,6 +11,7 @@
       "outputs": [],
       "inputs": [
         "src/**",
+        "scripts/**",
         "*.{js,mjs,cjs,ts,tsx,jsx}",
         "eslint.config.*",
         "tsconfig.json",
