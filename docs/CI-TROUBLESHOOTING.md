@@ -104,7 +104,7 @@ Note: Turborepo cache artifacts are no longer uploaded to GitHub Actions artifac
 
 ## Publishing Issues
 
-**Problem**: Publishing fails with `E404 Not Found - PUT` or another authentication error
+**Problem**: Publishing fails with `E404 Not Found - PUT`, `ENEEDAUTH` or another authentication error
 
 Publishing uses npm trusted publishing (OIDC), not an `NPM_TOKEN` secret. npm answers a rejected publish credential with a 404.
 
@@ -114,6 +114,22 @@ Publishing uses npm trusted publishing (OIDC), not an `NPM_TOKEN` secret. npm an
 2. Configure missing ones with `node scripts/setup-trusted-publishing.mjs <package...>` (needs `npm login`). Pass only the packages to enable, with or without the `@jmlweb/` scope; with no arguments it processes every public package
 3. A brand-new package must be published once by hand before a trusted publisher can be added to it, then passed to the script
 4. Ensure the publish job keeps `id-token: write` and installs npm >= 11.5.1
+
+**Problem**: The trusted publisher shows **Status: Expired** on npmjs.com
+
+npm expires a trusted publisher that has not completed a publish within 2 days of its creation ([changelog](https://github.blog/changelog/2026-10-02-unvalidated-npm-trusted-publishing-configurations-now-expire/)). The first successful publish validates it, and a validated one does not expire. An expired one cannot be edited.
+
+**Solutions**:
+
+1. Delete the expired trusted publisher on npmjs.com
+2. Recreate it with the script only when a changeset for that package is ready to merge, so CI publishes within 2 days. Created earlier, it expires again
+
+**Problem**: `setup-trusted-publishing.mjs` fails with `E401 Unauthorized` or `EOTP`
+
+**Solutions**:
+
+1. `E401 ... You must be logged in`: run `npm login`. `npm trust` rejects legacy credentials and granular tokens that bypass 2FA
+2. `EOTP ... This operation requires a one-time password`: run the script in an interactive terminal, not through an agent or a non-TTY shell. npm then waits while you approve 2FA in the browser; without a TTY it fails right away
 
 **Problem**: Package published but missing files
 
