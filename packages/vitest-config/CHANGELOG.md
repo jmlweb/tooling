@@ -1,5 +1,11 @@
 # @jmlweb/vitest-config
 
+## 3.0.1
+
+### Patch Changes
+
+- 5d32645: Document how to extend the Vitest `test` block without losing the base settings, and how to fix `n/hashbang` and `n/no-missing-import` reports for CLIs built to `dist/`.
+
 ## 3.0.0
 
 ### Major Changes

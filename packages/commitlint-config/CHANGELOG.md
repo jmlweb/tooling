@@ -1,5 +1,11 @@
 # @jmlweb/commitlint-config
 
+## 4.1.0
+
+### Minor Changes
+
+- 5330a27: Add a `subjectCase` option to `createCommitlintConfig`, and default `subject-case` to `@commitlint/config-conventional`'s rule so subjects can cite ids such as `TSK-010`. Pass `subjectCase: ['always', 'lower-case']` to keep the previous behavior.
+
 ## 4.0.1
 
 ### Patch Changes
