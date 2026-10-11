@@ -33,4 +33,4 @@ When making breaking changes:
 
 - [Changesets Documentation](https://github.com/changesets/changesets)
 - [Common Questions](https://github.com/changesets/changesets/blob/main/docs/common-questions.md)
-- Project-specific changelog documentation: See `AGENTS.md` in the root directory
+- Project-specific changelog documentation: See `docs/PUBLISHING-GUIDELINES.md`

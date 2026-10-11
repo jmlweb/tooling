@@ -1,6 +1,6 @@
 # Publishing Guidelines
 
-> **Note for Cursor**: This file is referenced by `AGENTS.md`. For complete publishing rules, see both this file and [`AGENTS.md`](../AGENTS.md).
+> **Note for Cursor**: This file is referenced by `AGENTS.md`. For complete publishing rules, see also [`AGENTS.md`](../AGENTS.md) and [`CI.md`](./CI.md).
 
 This document contains detailed guidelines for publishing packages to npm.
 

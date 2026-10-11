@@ -21,7 +21,7 @@ const rootDir = join(__dirname, '..');
 const errors = [];
 const warnings = [];
 
-// Required sections for package READMEs (from packages/AGENTS.md)
+// Required sections for package READMEs (from docs/README-STANDARDS.md)
 const REQUIRED_README_SECTIONS = [
   { name: 'Title and Badges', patterns: [/# @jmlweb\/[\w-]+/] },
   { name: 'Description', patterns: [/^> /m] },

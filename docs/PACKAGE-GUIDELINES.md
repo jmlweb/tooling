@@ -1,6 +1,6 @@
 # Package Development Guidelines
 
-> **Note for Cursor**: This file is referenced by `AGENTS.md`. For complete package development rules, see both this file and [`AGENTS.md`](../AGENTS.md).
+> **Note for Cursor**: This file is referenced by `AGENTS.md`. For complete package development rules, see also [`AGENTS.md`](../AGENTS.md) and [`DEPENDENCIES.md`](./DEPENDENCIES.md).
 
 This document contains detailed guidelines for creating, developing, and maintaining packages in this monorepo.
 
@@ -47,7 +47,7 @@ When creating a new configuration package:
 7. **Follow package.json structure guidelines** (see below)
 8. **Configure build system** if package requires compilation (see below)
 9. **Set up TypeScript configuration** (see below)
-10. **Create README** following standard structure (see [`packages/AGENTS.md`](../packages/AGENTS.md))
+10. **Create README** following standard structure (see [`README-STANDARDS.md`](./README-STANDARDS.md))
 
 ## Package.json Structure
 

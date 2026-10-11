@@ -25,7 +25,7 @@ The main objectives of this project are:
 
 ## PACKAGES
 
-The initial phase focuses on Prettier configuration packages:
+All packages live in `packages/`. Oxc-based packages are preferred; Prettier and ESLint packages are maintained for existing projects (see [Migrate to Oxc](../apps/docs/src/content/docs/guides/migrate-to-oxc.mdx)).
 
 ### `@jmlweb/prettier-config-base`
 
@@ -170,6 +170,35 @@ ESLint configuration for React projects with TypeScript:
 - Accessibility (a11y) rules
 - JSX-specific linting
 
+### `@jmlweb/eslint-config-node`
+
+ESLint configuration for Node.js projects with TypeScript:
+
+- Extends `@jmlweb/eslint-config-base`
+- Node.js globals and best-practice rules
+
+### `@jmlweb/eslint-config-astro`
+
+ESLint configuration for Astro projects with TypeScript:
+
+- Extends `@jmlweb/eslint-config-base`
+- Lints `.astro` files (Oxlint cannot, so this package stays the Astro option)
+
+### `@jmlweb/tsconfig-astro`
+
+TypeScript configuration for Astro projects:
+
+- Extends `@jmlweb/tsconfig-base`
+- JSX `preserve`, DOM libs, `moduleResolution: "bundler"`, ESNext modules
+
+### `@jmlweb/jest-config`
+
+Base Jest configuration for testing:
+
+- TypeScript support via ts-jest
+- 80% coverage thresholds
+- Factory function for customization
+
 ### `@jmlweb/vitest-config`
 
 Base Vitest configuration for testing:
@@ -232,26 +261,31 @@ jmlweb-tooling/
 │   ├── eslint-config-base-js/
 │   ├── eslint-config-base/
 │   ├── eslint-config-react/
+│   ├── eslint-config-node/
+│   ├── eslint-config-astro/
 │   ├── tsconfig-base/
 │   ├── tsconfig-node/
 │   ├── tsconfig-react/
 │   ├── tsconfig-nextjs/
+│   ├── tsconfig-astro/
 │   ├── tsconfig-internal/ (private, internal use only)
 │   ├── vitest-config/
+│   ├── jest-config/
 │   ├── tsup-config-base/
 │   ├── tsdown-config-base/
 │   ├── vite-config/
 │   └── commitlint-config/
 ├── apps/
+│   ├── docs/ (Starlight docs site)
+│   ├── integration-tests/
 │   ├── test-app/ (testing and validation)
 │   ├── example-nodejs-typescript-api/
 │   ├── example-react-typescript-app/
 │   └── example-nodejs-javascript/
+├── scripts/ (validation and release helpers)
 ├── turbo.json
 ├── package.json
-└── docs/
-    ├── SPECS.md
-    └── README-TEMPLATE.md
+└── docs/ (see docs/README.md)
 ```
 
 - **packages/**: Contains all publishable configuration packages (and one private internal package)
@@ -290,10 +324,8 @@ The project implementation follows these steps:
    - ~~Validate formatting and linting behavior~~
    - ~~Create test app in `apps/test-app/` with validation scripts~~
 
-7. **Publishing setup**: Prepare packages for npm publication
-   - Configure npm publishing settings
-   - Set up versioning strategy
-   - Prepare package documentation
+7. ~~**Publishing setup**: Prepare packages for npm publication~~ ✅
+   - ~~Changesets versioning and CI publishing with trusted publishing~~ (see [PUBLISHING-GUIDELINES.md](./PUBLISHING-GUIDELINES.md))
 
 ## FUTURE CONSIDERATIONS
 
@@ -305,18 +337,21 @@ This monorepo is designed to grow over time. Current progress and future package
 - ~~`@jmlweb/tsconfig-node`: TypeScript config for Node.js-specific projects~~ ✅
 - ~~`@jmlweb/tsconfig-react`: TypeScript config for React projects~~ ✅
 - ~~`@jmlweb/tsconfig-nextjs`: TypeScript config for Next.js applications~~ ✅
+- ~~`@jmlweb/tsconfig-astro`: TypeScript config for Astro projects~~ ✅
 
 ### ESLint Configuration
 
 - ~~`@jmlweb/eslint-config-base`: Base ESLint configuration for TypeScript projects (default)~~ ✅
 - ~~`@jmlweb/eslint-config-base-js`: Base ESLint configuration for JavaScript-only projects~~ ✅
 - ~~`@jmlweb/eslint-config-react`: ESLint config for React projects~~ ✅
-- `@jmlweb/eslint-config-node`: ESLint config for Node.js-specific projects
+- ~~`@jmlweb/eslint-config-node`: ESLint config for Node.js-specific projects~~ ✅
+- ~~`@jmlweb/eslint-config-astro`: ESLint config for Astro projects~~ ✅
 - `@jmlweb/eslint-config-nextjs`: ESLint config for Next.js applications
 
 ### Testing Configuration
 
 - ~~`@jmlweb/vitest-config`: Vitest testing configuration~~ ✅
+- ~~`@jmlweb/jest-config`: Jest testing configuration~~ ✅
 
 ### Build Tools
 
@@ -350,7 +385,7 @@ All non-internal packages will be published to npm under the `@jmlweb` scope pre
 2. When changes are merged to `main`, CI automatically versions packages and generates changelogs
 3. Packages with new versions are automatically published to npm
 
-See `AGENTS.md` for detailed publishing workflow documentation.
+See [PUBLISHING-GUIDELINES.md](./PUBLISHING-GUIDELINES.md) for the publishing workflow.
 
 **Example package names**:
 
