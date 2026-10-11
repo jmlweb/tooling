@@ -202,4 +202,4 @@ Oxlint `overrides` entries accept `files`, `rules`, `plugins`, `jsPlugins`, `env
 
 ### Checking Which Rules Apply
 
-In Oxlint 1.87, `oxlint --rules` prints nothing with the default output format. Run `oxlint --print-config` to see the rules your config enables, or `oxlint --rules --format json` to list every available rule.
+Since Oxlint 1.66, `oxlint --rules` prints nothing when run by an AI coding agent: Oxlint detects the agent from environment variables such as `CLAUDECODE` and switches to its `agent` output format, which cannot list rules. Pass the format explicitly, `oxlint --rules --format default` or `--format json`. To see the rules your config enables, run `oxlint --print-config`.
