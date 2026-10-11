@@ -231,6 +231,49 @@ See real-world usage examples:
 
 Turn the rule off for those files (see [Extending the Configuration](#-extending-the-configuration)), or make sure the `files` field only lists published code.
 
+### Shebang or Missing Import Errors with a Built `bin`
+
+**Symptoms:**
+
+- `n/hashbang` reports `This file needs no shebang.` on the source of a CLI whose `bin` points at `dist/`
+- `n/no-missing-import` reports `Can't resolve '../dist/index.js'` in scripts that import build output
+
+**Cause:**
+
+- `eslint-plugin-n` compares source files with the `bin` and `files` paths in `package.json`, which point at build output. `src/cli.ts` is not `dist/cli.js`, so the plugin treats it as a module, not an executable
+- Build output does not exist until the build runs
+
+**Solution:**
+
+Map source paths to their build output with the `n.convertPath` setting, and turn `n/no-missing-import` off for scripts that run after the build:
+
+```typescript
+import nodeConfig from '@jmlweb/oxlint-config-node';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [nodeConfig],
+  settings: {
+    n: {
+      convertPath: [
+        {
+          include: ['src/**/*.ts'],
+          replace: ['^src/(.+)\\.ts$', 'dist/$1.js'],
+        },
+      ],
+    },
+  },
+  overrides: [
+    {
+      files: ['scripts/**'],
+      rules: {
+        'n/no-missing-import': 'off',
+      },
+    },
+  ],
+});
+```
+
 ### Oxlint Is Slow or Reports Problems in `node_modules`
 
 **Symptoms:**

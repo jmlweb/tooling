@@ -38,6 +38,18 @@ export default defineConfig({
 });
 ```
 
+Every setting, including `include` and `exclude`, lives under `test`. A `test` key in your config replaces the whole base `test` block, so spread `...baseConfig.test` into it, or use `mergeConfig`, which merges nested objects and concatenates arrays:
+
+```typescript
+import { defineConfig, mergeConfig } from 'vitest/config';
+import baseConfig from '@jmlweb/vitest-config';
+
+export default mergeConfig(
+  baseConfig,
+  defineConfig({ test: { environment: 'jsdom' } }),
+);
+```
+
 ## 💡 Examples
 
 ### Basic Setup
@@ -117,6 +129,28 @@ export default defineConfig({
         branches: 60,
         statements: 60,
       },
+    },
+  },
+});
+```
+
+### Explicit Imports and No Thresholds
+
+`globals: true` and the 80% thresholds apply as soon as you run `vitest --coverage`. To import `describe`, `it` and `expect` explicitly and report coverage without failing the run:
+
+```typescript
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import baseConfig from '@jmlweb/vitest-config';
+
+export default defineConfig({
+  ...baseConfig,
+  test: {
+    ...baseConfig.test,
+    globals: false,
+    coverage: {
+      ...baseConfig.test?.coverage,
+      thresholds: {},
     },
   },
 });

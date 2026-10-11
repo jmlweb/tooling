@@ -10,12 +10,12 @@ The Prettier and ESLint packages are in maintenance mode: they keep receiving de
 
 ## Which Packages to Use
 
-| Project            | Formatter                   | Linter                                                  |
-| ------------------ | --------------------------- | ------------------------------------------------------- |
-| JavaScript         | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base`                            |
-| TypeScript library | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base`                            |
-| React              | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-react`                           |
-| Node.js            | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-node`                            |
+| Project            | Formatter                   | Linter                                                                          |
+| ------------------ | --------------------------- | ------------------------------------------------------------------------------- |
+| JavaScript         | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base`                                                    |
+| TypeScript library | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base`                                                    |
+| React              | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-react`                                                   |
+| Node.js            | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-node`                                                    |
 | Astro              | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base` + `@jmlweb/eslint-config-astro` for `.astro` files |
 
 Each package page lists what it replaces and what it does not port.
@@ -74,6 +74,8 @@ export default defineConfig({
 
 5. Run `pnpm format` once and commit the result. Expect import order changes and, rarely, a different line break than Prettier's.
 
+Oxfmt also formats Markdown by default and rewraps hand-written docs. To leave them as they are, add `'**/*.md'` to `ignorePatterns` and remove `md` from the `lint-staged` pattern.
+
 ### Import Sorting
 
 Oxfmt sorts imports in the same order as `eslint-plugin-perfectionist`'s `sort-imports` defaults, so the linter no longer needs a sorting rule. If the project still lints with ESLint, its `eslint-plugin-simple-import-sort` disagrees with this order: set `sortImports: false` until you migrate the linter.
@@ -100,6 +102,8 @@ pnpm remove eslint @eslint/js typescript-eslint eslint-config-prettier eslint-pl
 ```
 
 Also remove the `@jmlweb/eslint-config-*` package and plugins the old config used. `eslint-plugin-n` stays for Node.js projects, since Oxlint runs it as a plugin.
+
+The ESLint plugins that Oxlint runs, `@eslint-react/eslint-plugin`, `eslint-plugin-perfectionist` and `eslint-plugin-n`, declare `eslint` as a peer dependency. Your package manager installs it, so `eslint` stays in the lockfile even though nothing runs it.
 
 2. Replace `eslint.config.*` with an `oxlint.config.ts`:
 
@@ -187,3 +191,15 @@ Without a `.gitignore` that lists `node_modules`, Oxlint lints your dependencies
 ### `n/no-unpublished-import` Reports Tests or Config Files
 
 `eslint-plugin-n` treats files as published unless the package is `private` or the files are outside the `files` field of `package.json`. Mark applications as `"private": true`.
+
+### `n/hashbang` or `n/no-missing-import` Report a CLI Built to `dist/`
+
+When `bin` points at build output, `n/hashbang` reports `This file needs no shebang.` on the source file, and `n/no-missing-import` fails on scripts that import `dist/`. Map source to build paths with the `n.convertPath` setting and turn `n/no-missing-import` off for those scripts. See the `@jmlweb/oxlint-config-node` README for the config.
+
+### An Override Needs Another Shared Config
+
+Oxlint `overrides` entries accept `files`, `rules`, `plugins`, `jsPlugins`, `env` and `globals`, but not `extends`. To apply another shared config to part of the project, such as `@jmlweb/oxlint-config-node` for a `server/` folder in a React app, put an `oxlint.config.ts` that extends it in that folder. Oxlint uses the nearest config for each file.
+
+### Checking Which Rules Apply
+
+In Oxlint 1.87, `oxlint --rules` prints nothing with the default output format. Run `oxlint --print-config` to see the rules your config enables, or `oxlint --rules --format json` to list every available rule.
