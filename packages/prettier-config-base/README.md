@@ -6,7 +6,7 @@
 
 > Base Prettier configuration package that provides shared formatting rules for consistent code style across projects.
 
-> 💡 **New projects**: prefer [`@jmlweb/oxfmt-config-base`](../oxfmt-config-base), which produces the same output much faster. This package stays maintained for existing projects and setups that need Prettier plugins.
+> 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxfmt-config-base`](../oxfmt-config-base), which produces the same output much faster. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 

@@ -9,7 +9,7 @@
 
 > ESLint configuration for React libraries with TypeScript. Extends `@jmlweb/eslint-config-base` with React-specific rules, hooks validation, and JSX best practices.
 
-> 💡 **New projects**: prefer [`@jmlweb/oxlint-config-react`](../oxlint-config-react), which ports these rules to Oxlint. This package stays maintained for existing projects.
+> 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxlint-config-react`](../oxlint-config-react), which ports these rules to Oxlint. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 

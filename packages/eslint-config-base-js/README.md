@@ -7,7 +7,7 @@
 
 > Base ESLint configuration for JavaScript projects. Foundation for JavaScript-only projects and extended by TypeScript configs. Uses ESLint 9 and 10 flat config format.
 
-> 💡 **New projects**: prefer [`@jmlweb/oxlint-config-base`](../oxlint-config-base), which ports these rules to Oxlint. This package stays maintained for existing projects.
+> 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxlint-config-base`](../oxlint-config-base), which ports these rules to Oxlint. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 

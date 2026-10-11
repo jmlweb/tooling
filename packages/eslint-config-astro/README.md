@@ -9,6 +9,8 @@
 
 > ESLint configuration for Astro projects with TypeScript. Extends `@jmlweb/eslint-config-base` with Astro-specific rules and best practices for `.astro` files.
 
+> 💡 **With Oxlint**: Oxlint cannot lint `.astro` templates, so this package stays the way to lint them. Lint the rest of the project with [`@jmlweb/oxlint-config-base`](../oxlint-config-base) and only `.astro` files with ESLint, as shown in the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/#astro-projects).
+
 ## ✨ Features
 
 - 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config

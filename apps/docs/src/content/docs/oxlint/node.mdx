@@ -10,7 +10,7 @@ sidebar:
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 
-&gt; [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for Node.js projects. Extends [`@jmlweb/oxlint-config-base`](/oxlint/base) and ports the rules of [`@jmlweb/eslint-config-node`](/eslint/node).
+&gt; [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for Node.js projects. Extends [`@jmlweb/oxlint-config-base`](../../oxlint/base/) and ports the rules of [`@jmlweb/eslint-config-node`](../../eslint/node/).
 
 ## ✨ Features
 
@@ -101,8 +101,8 @@ The `node/*` rules are Oxlint's native versions of the matching `n/*` rules.
 
 ### Differences from `@jmlweb/eslint-config-node`
 
-- **No naming convention rule**: Same as [`@jmlweb/oxlint-config-base`](/oxlint/base#differences-from-jmlwebeslint-config-base)
-- **No import sorting rule**: [`@jmlweb/oxfmt-config-base`](/oxfmt/base) sorts imports
+- **No naming convention rule**: Same as [`@jmlweb/oxlint-config-base`](../../oxlint/base/#differences-from-jmlwebeslint-config-base)
+- **No import sorting rule**: [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/) sorts imports
 
 ## 🤔 Why Use This?
 
@@ -130,7 +130,7 @@ Use this package when you want:
 - ✅ Checks that every import is declared in `package.json`
 - ✅ To migrate from `@jmlweb/eslint-config-node`
 
-**For browser or React projects**, use [`@jmlweb/oxlint-config-base`](/oxlint/base) or [`@jmlweb/oxlint-config-react`](/oxlint/react) instead.
+**For browser or React projects**, use [`@jmlweb/oxlint-config-base`](../../oxlint/base/) or [`@jmlweb/oxlint-config-react`](../../oxlint/react/) instead.
 
 ## 🔧 Extending the Configuration
 
@@ -203,16 +203,16 @@ This package requires the following peer dependencies:
 
 See real-world usage examples:
 
-- [`@jmlweb/eslint-config-node`](/eslint/node) - The ESLint configuration this package ports
+- [`@jmlweb/eslint-config-node`](../../eslint/node/) - The ESLint configuration this package ports
 
 ## 🔗 Related Packages
 
 ### Internal Packages
 
-- [`@jmlweb/oxlint-config-base`](/oxlint/base) - Base Oxlint config this package extends
-- [`@jmlweb/oxfmt-config-base`](/oxfmt/base) - Oxfmt config, the formatter to pair with this linter
-- [`@jmlweb/eslint-config-node`](/eslint/node) - ESLint equivalent of this configuration
-- [`@jmlweb/tsconfig-node`](/typescript/node) - TypeScript config for Node.js projects
+- [`@jmlweb/oxlint-config-base`](../../oxlint/base/) - Base Oxlint config this package extends
+- [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/) - Oxfmt config, the formatter to pair with this linter
+- [`@jmlweb/eslint-config-node`](../../eslint/node/) - ESLint equivalent of this configuration
+- [`@jmlweb/tsconfig-node`](../../typescript/node/) - TypeScript config for Node.js projects
 
 ### External Tools
 
@@ -257,7 +257,7 @@ Add `node_modules` to `.gitignore`, or to `ignorePatterns` in your Oxlint config
 
 1. Install this package and its peer dependencies
 2. Create `oxlint.config.ts` as shown in [Quick Start](#-quick-start)
-3. Format with [`@jmlweb/oxfmt-config-base`](/oxfmt/base), which sorts imports
+3. Format with [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/), which sorts imports
 4. Replace `eslint` with `oxlint` in your scripts and `lint-staged` config
 5. Remove `eslint.config.*` and the ESLint packages, except `eslint-plugin-n`
 6. Run `pnpm lint` and fix the reported problems

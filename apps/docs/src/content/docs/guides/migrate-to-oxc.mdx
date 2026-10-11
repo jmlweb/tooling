@@ -1,0 +1,189 @@
+---
+title: Migrate to Oxc
+description: Move a project from the Prettier and ESLint packages to Oxfmt and Oxlint
+tableOfContents: true
+---
+
+[Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) and [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) are the recommended formatter and linter for new projects. They are written in Rust, run in milliseconds, and the `@jmlweb` Oxc packages keep the same conventions as the Prettier and ESLint ones.
+
+The Prettier and ESLint packages are in maintenance mode: they keep receiving dependency and security updates, but no new rules. Migrate a project when you are already touching its formatting or lint setup.
+
+## Which Packages to Use
+
+| Project            | Formatter                   | Linter                                                  |
+| ------------------ | --------------------------- | ------------------------------------------------------- |
+| JavaScript         | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base`                            |
+| TypeScript library | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base`                            |
+| React              | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-react`                           |
+| Node.js            | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-node`                            |
+| Astro              | `@jmlweb/oxfmt-config-base` | `@jmlweb/oxlint-config-base` + `@jmlweb/eslint-config-astro` for `.astro` files |
+
+Each package page lists what it replaces and what it does not port.
+
+## Formatter: Prettier to Oxfmt
+
+`@jmlweb/oxfmt-config-base` produces the same output as `@jmlweb/prettier-config-base`, except that it also sorts imports.
+
+1. Install the packages and remove Prettier:
+
+```bash
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+pnpm remove @jmlweb/prettier-config-base @jmlweb/prettier-config-tailwind prettier prettier-plugin-tailwindcss
+```
+
+2. Replace `.prettierrc*` (or the `prettier` field in `package.json`) with an `oxfmt.config.ts`:
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+});
+```
+
+For Tailwind CSS, replace `@jmlweb/prettier-config-tailwind` with Oxfmt's built-in class sorting:
+
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+  sortTailwindcss: {
+    stylesheet: './src/index.css',
+  },
+});
+```
+
+3. Move `.prettierignore` entries to `ignorePatterns` in the same file, then delete `.prettierignore`.
+
+4. Update the scripts and `lint-staged`:
+
+```json
+{
+  "scripts": {
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,mts,cts,jsx,tsx,json,md,css}": ["oxfmt"]
+  }
+}
+```
+
+5. Run `pnpm format` once and commit the result. Expect import order changes and, rarely, a different line break than Prettier's.
+
+### Import Sorting
+
+Oxfmt sorts imports in the same order as `eslint-plugin-perfectionist`'s `sort-imports` defaults, so the linter no longer needs a sorting rule. If the project still lints with ESLint, its `eslint-plugin-simple-import-sort` disagrees with this order: set `sortImports: false` until you migrate the linter.
+
+Side-effect imports such as `import './polyfill'` are sorted into their group too. Keep order-dependent ones in a separate entry file.
+
+## Linter: ESLint to Oxlint
+
+The Oxlint packages port the ESLint ones rule by rule, including typescript-eslint's type-aware rules.
+
+1. Install the package for your project type with its peer dependencies, and remove ESLint:
+
+```bash
+# TypeScript or JavaScript
+pnpm add -D @jmlweb/oxlint-config-base oxlint oxlint-tsgolint
+
+# React
+pnpm add -D @jmlweb/oxlint-config-react oxlint oxlint-tsgolint @eslint-react/eslint-plugin eslint-plugin-perfectionist
+
+# Node.js
+pnpm add -D @jmlweb/oxlint-config-node oxlint oxlint-tsgolint eslint-plugin-n
+
+pnpm remove eslint @eslint/js typescript-eslint eslint-config-prettier eslint-plugin-simple-import-sort @jmlweb/eslint-config-base
+```
+
+Also remove the `@jmlweb/eslint-config-*` package and plugins the old config used. `eslint-plugin-n` stays for Node.js projects, since Oxlint runs it as a plugin.
+
+2. Replace `eslint.config.*` with an `oxlint.config.ts`:
+
+```typescript
+import reactConfig from '@jmlweb/oxlint-config-react';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [reactConfig],
+  options: {
+    typeAware: true,
+  },
+});
+```
+
+`options.typeAware` must be in your own config: Oxlint ignores `options` in configs loaded through `extends`, and skips the type-aware rules without telling you.
+
+3. Update the scripts and `lint-staged`:
+
+```json
+{
+  "scripts": {
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}": ["oxlint --fix"]
+  }
+}
+```
+
+4. Run `pnpm lint` and fix the reported problems. The rules are the same as before, so most findings point to code the ESLint setup did not cover, such as files it ignored.
+
+### What Is Not Ported
+
+- **`@typescript-eslint/naming-convention`**: It needs typescript-eslint's parser, which Oxlint cannot run
+- **Import sorting rules**: Oxfmt sorts imports (see [Import Sorting](#import-sorting))
+- **`eslint-config-prettier`**: Not needed, the Oxlint configs enable no formatting rules
+- **React Compiler `config` and `gating` checks**: They only validate compiler options
+
+## Astro Projects
+
+Oxlint only lints the `<script>` blocks of `.astro` files, and cannot run `eslint-plugin-astro`. Keep `@jmlweb/eslint-config-astro` for `.astro` files and lint everything else with Oxlint:
+
+```json
+{
+  "scripts": {
+    "lint": "oxlint && eslint \"src/**/*.astro\""
+  }
+}
+```
+
+Oxfmt does not format `.astro` files either.
+
+## Editor Setup
+
+Install the [Oxc extension](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode) for VS Code, which runs both tools, and replace the Prettier and ESLint settings in `.vscode/settings.json`:
+
+```json
+{
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "always"
+  }
+}
+```
+
+## Monorepos
+
+- Oxlint reads `options.typeAware` only from the root config. Run each package's lint with the root config (`oxlint -c ../../oxlint.config.ts src`), or give packages their own configs and lint the root with `oxlint --disable-nested-config`
+- Type-aware rules resolve imports from other workspace packages through their built type declarations, so build dependencies before linting
+- Oxfmt picks the nearest `oxfmt.config.ts` for each file, so a package can override the root formatting
+
+## Common Issues
+
+### Type-Aware Rules Do Not Report
+
+Set `options: { typeAware: true }` in your own `oxlint.config.ts` and install `oxlint-tsgolint`. Files outside your `tsconfig.json`, such as `vite.config.ts`, have no type information: ignore them in `ignorePatterns` if type-aware rules report errors there.
+
+### Oxlint Is Slow or Reports Problems in Dependencies
+
+Without a `.gitignore` that lists `node_modules`, Oxlint lints your dependencies. Add it to `.gitignore`, or to `ignorePatterns`.
+
+### `n/no-unpublished-import` Reports Tests or Config Files
+
+`eslint-plugin-n` treats files as published unless the package is `private` or the files are outside the `files` field of `package.json`. Mark applications as `"private": true`.

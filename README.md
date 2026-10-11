@@ -16,6 +16,8 @@ For AI coding agents: [`llms.txt`](https://jmlweb.github.io/tooling/llms.txt) / 
 
 ## Packages
 
+Oxfmt and Oxlint are recommended for new projects; the Prettier and ESLint packages are in maintenance mode. To move a project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
+
 | Package                                                                   | Description                                                             | Version                                                                      |
 | ------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | **Formatting**                                                            |                                                                         |                                                                              |

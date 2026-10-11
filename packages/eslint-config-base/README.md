@@ -8,7 +8,7 @@
 
 > Strict ESLint configuration for TypeScript projects. Maximum type safety, best practices, and consistent code quality. Extends `@jmlweb/eslint-config-base-js` with strict type checking.
 
-> 💡 **New projects**: prefer [`@jmlweb/oxlint-config-base`](../oxlint-config-base), which ports these rules to Oxlint. This package stays maintained for existing projects.
+> 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxlint-config-base`](../oxlint-config-base), which ports these rules to Oxlint. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 

@@ -10,7 +10,7 @@ sidebar:
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 
-&gt; Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration that produces the same output as [`@jmlweb/prettier-config-base`](/prettier/base), at a fraction of the time.
+&gt; Base [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) configuration that produces the same output as [`@jmlweb/prettier-config-base`](../../prettier/base/), at a fraction of the time.
 
 ## ✨ Features
 
@@ -118,7 +118,7 @@ const user: User = {
 
 &gt; **Philosophy**: Same style as the Prettier config, without paying Prettier's speed cost.
 
-Oxfmt is the formatter of the [Oxc](https://oxc.rs) project and targets Prettier compatibility. This package keeps the formatting decisions of [`@jmlweb/prettier-config-base`](/prettier/base#-why-use-this) (see its design decisions) and only adds the options needed to make Oxfmt match Prettier.
+Oxfmt is the formatter of the [Oxc](https://oxc.rs) project and targets Prettier compatibility. This package keeps the formatting decisions of [`@jmlweb/prettier-config-base`](../../prettier/base/#-why-use-this) (see its design decisions) and only adds the options needed to make Oxfmt match Prettier.
 
 ### Design Decisions
 
@@ -148,13 +148,13 @@ Use this package when you want:
 - ✅ To migrate from `@jmlweb/prettier-config-base` without reformatting your code
 - ✅ Tailwind class sorting without a Prettier plugin
 
-**Need Prettier plugins** (for example `prettier-plugin-astro`)? Oxfmt does not support them, keep using [`@jmlweb/prettier-config-base`](/prettier/base).
+**Need Prettier plugins** (for example `prettier-plugin-astro`)? Oxfmt does not support them, keep using [`@jmlweb/prettier-config-base`](../../prettier/base/).
 
 ## 🔧 Extending the Configuration
 
 ### Tailwind CSS
 
-Oxfmt sorts Tailwind classes natively, replacing [`@jmlweb/prettier-config-tailwind`](/prettier/tailwind):
+Oxfmt sorts Tailwind classes natively, replacing [`@jmlweb/prettier-config-tailwind`](../../prettier/tailwind/):
 
 ```typescript
 import baseConfig from '@jmlweb/oxfmt-config-base';
@@ -171,7 +171,7 @@ export default defineConfig({
 
 ### Projects Still Linted by ESLint
 
-`@jmlweb/eslint-config-base` sorts imports with `eslint-plugin-simple-import-sort`, which disagrees with this order. Let ESLint keep sorting until you move to [`@jmlweb/oxlint-config-base`](/oxlint/base):
+`@jmlweb/eslint-config-base` sorts imports with `eslint-plugin-simple-import-sort`, which disagrees with this order. Let ESLint keep sorting until you move to [`@jmlweb/oxlint-config-base`](../../oxlint/base/):
 
 ```typescript
 import baseConfig from '@jmlweb/oxfmt-config-base';
@@ -233,15 +233,15 @@ This package requires the following peer dependency:
 
 See real-world usage examples:
 
-- [`jmlweb-tooling`](/other/..) - This monorepo formats itself with this package
+- [`jmlweb-tooling`](https://github.com/jmlweb/tooling/tree/main/packages/..) - This monorepo formats itself with this package
 
 ## 🔗 Related Packages
 
 ### Internal Packages
 
-- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier equivalent of this configuration
-- [`@jmlweb/oxlint-config-base`](/oxlint/base) - Oxlint config, the linter to pair with this formatter
-- [`@jmlweb/eslint-config-base`](/eslint/base) - ESLint config, compatible with this formatter when `sortImports` is off
+- [`@jmlweb/prettier-config-base`](../../prettier/base/) - Prettier equivalent of this configuration
+- [`@jmlweb/oxlint-config-base`](../../oxlint/base/) - Oxlint config, the linter to pair with this formatter
+- [`@jmlweb/eslint-config-base`](../../eslint/base/) - ESLint config, compatible with this formatter when `sortImports` is off
 
 ### External Tools
 

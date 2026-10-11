@@ -7,7 +7,13 @@
  * This script converts package READMEs to MDX format with proper frontmatter
  */
 
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -56,12 +62,20 @@ function transformLinks(content, packageName) {
   );
 
   // Transform links to other packages (e.g., ../prettier-config-tailwind)
-  // Pattern: [text](../package-name) -> [text](/category/simplified-name)
+  // Pattern: [text](../package-name#anchor) -> [text](../../category/simplified-name/#anchor)
+  // Relative, because Starlight does not add the site base (/tooling) to absolute links
   transformed = transformed.replace(
     /\[([^\]]+)\]\(\.\.\/([^)]+)\)/g,
-    (match, text, path) => {
+    (match, text, linkPath) => {
+      const [path, anchor] = linkPath.split('#');
+
       // Extract just the package name (e.g., "prettier-config-tailwind")
       const fullPackageName = path.replace(/^.*\//, '');
+
+      // Private packages get no docs page, so link to their source instead
+      if (isPrivatePackage(fullPackageName)) {
+        return `[${text}](https://github.com/jmlweb/tooling/tree/main/packages/${fullPackageName})`;
+      }
 
       // Determine category
       const category = categorizePackage(fullPackageName);
@@ -80,11 +94,27 @@ function transformLinks(content, packageName) {
       if (fullPackageName === 'commitlint-config')
         simplifiedName = 'commitlint';
 
-      return `[${text}](/${category}/${simplifiedName})`;
+      return `[${text}](../../${category}/${simplifiedName}/${anchor ? `#${anchor}` : ''})`;
     },
   );
 
   return transformed;
+}
+
+/**
+ * Check whether a monorepo package is private (and so has no docs page)
+ */
+function isPrivatePackage(packageName) {
+  const packageJsonPath = join(
+    ROOT_DIR,
+    'packages',
+    packageName,
+    'package.json',
+  );
+  return (
+    existsSync(packageJsonPath) &&
+    JSON.parse(readFileSync(packageJsonPath, 'utf-8')).private === true
+  );
 }
 
 /**

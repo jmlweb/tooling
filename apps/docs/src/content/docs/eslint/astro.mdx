@@ -15,6 +15,8 @@ sidebar:
 
 &gt; ESLint configuration for Astro projects with TypeScript. Extends `@jmlweb/eslint-config-base` with Astro-specific rules and best practices for `.astro` files.
 
+&gt; 💡 **With Oxlint**: Oxlint cannot lint `.astro` templates, so this package stays the way to lint them. Lint the rest of the project with [`@jmlweb/oxlint-config-base`](../../oxlint/base/) and only `.astro` files with ESLint, as shown in the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/#astro-projects).
+
 ## ✨ Features
 
 - 🔒 **Strict Type Checking**: Inherits all strict TypeScript rules from base config
@@ -193,9 +195,9 @@ Use this configuration when you want:
 - ✅ Consistent Astro patterns across the team
 - ✅ Prevention of common Astro pitfalls
 
-**For non-Astro TypeScript projects**, use [`@jmlweb/eslint-config-base`](/eslint/base) instead.
+**For non-Astro TypeScript projects**, use [`@jmlweb/eslint-config-base`](../../eslint/base/) instead.
 
-**For React projects**, use [`@jmlweb/eslint-config-react`](/eslint/react) instead.
+**For React projects**, use [`@jmlweb/eslint-config-react`](../../eslint/react/) instead.
 
 ## 🔧 Extending the Configuration
 
@@ -263,9 +265,9 @@ This package requires the following peer dependencies:
 
 ### Internal Packages
 
-- [`@jmlweb/eslint-config-base`](/eslint/base) - Base TypeScript ESLint config (extended by this package)
-- [`@jmlweb/tsconfig-astro`](/typescript/astro) - TypeScript configuration for Astro projects
-- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier config for consistent formatting
+- [`@jmlweb/eslint-config-base`](../../eslint/base/) - Base TypeScript ESLint config (extended by this package)
+- [`@jmlweb/tsconfig-astro`](../../typescript/astro/) - TypeScript configuration for Astro projects
+- [`@jmlweb/prettier-config-base`](../../prettier/base/) - Prettier config for consistent formatting
 
 ### External Tools
 

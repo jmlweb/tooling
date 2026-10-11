@@ -11,7 +11,7 @@ sidebar:
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18%2B-61DAFB.svg)](https://react.dev/)
 
-&gt; [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for React projects. Extends [`@jmlweb/oxlint-config-base`](/oxlint/base) and ports the rules of [`@jmlweb/eslint-config-react`](/eslint/react).
+&gt; [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) configuration for React projects. Extends [`@jmlweb/oxlint-config-base`](../../oxlint/base/) and ports the rules of [`@jmlweb/eslint-config-react`](../../eslint/react/).
 
 ## ✨ Features
 
@@ -105,8 +105,8 @@ Applied to `**/*.{tsx,jsx}`:
 
 ### Differences from `@jmlweb/eslint-config-react`
 
-- **No naming convention rule**: Same as [`@jmlweb/oxlint-config-base`](/oxlint/base#differences-from-jmlwebeslint-config-base)
-- **No import sorting rule**: [`@jmlweb/oxfmt-config-base`](/oxfmt/base) sorts imports
+- **No naming convention rule**: Same as [`@jmlweb/oxlint-config-base`](../../oxlint/base/#differences-from-jmlwebeslint-config-base)
+- **No import sorting rule**: [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/) sorts imports
 - **No `config` and `gating` hooks rules**: They validate React Compiler options and have no Oxlint equivalent
 
 ## 🤔 Why Use This?
@@ -135,7 +135,7 @@ Use this package when you want:
 - ✅ React Compiler checks without installing `eslint-plugin-react-hooks`
 - ✅ To migrate from `@jmlweb/eslint-config-react`
 
-**For projects without React**, use [`@jmlweb/oxlint-config-base`](/oxlint/base) instead.
+**For projects without React**, use [`@jmlweb/oxlint-config-base`](../../oxlint/base/) instead.
 
 ## 🔧 Extending the Configuration
 
@@ -200,16 +200,16 @@ This package requires the following peer dependencies:
 
 See real-world usage examples:
 
-- [`@jmlweb/eslint-config-react`](/eslint/react) - The ESLint configuration this package ports
+- [`@jmlweb/eslint-config-react`](../../eslint/react/) - The ESLint configuration this package ports
 
 ## 🔗 Related Packages
 
 ### Internal Packages
 
-- [`@jmlweb/oxlint-config-base`](/oxlint/base) - Base Oxlint config this package extends
-- [`@jmlweb/oxfmt-config-base`](/oxfmt/base) - Oxfmt config, the formatter to pair with this linter
-- [`@jmlweb/eslint-config-react`](/eslint/react) - ESLint equivalent of this configuration
-- [`@jmlweb/tsconfig-react`](/typescript/react) - TypeScript config for React projects
+- [`@jmlweb/oxlint-config-base`](../../oxlint/base/) - Base Oxlint config this package extends
+- [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/) - Oxfmt config, the formatter to pair with this linter
+- [`@jmlweb/eslint-config-react`](../../eslint/react/) - ESLint equivalent of this configuration
+- [`@jmlweb/tsconfig-react`](../../typescript/react/) - TypeScript config for React projects
 
 ### External Tools
 
@@ -257,7 +257,7 @@ Add `node_modules` to `.gitignore`, or to `ignorePatterns` in your Oxlint config
 
 1. Install this package and its peer dependencies
 2. Create `oxlint.config.ts` as shown in [Quick Start](#-quick-start)
-3. Format with [`@jmlweb/oxfmt-config-base`](/oxfmt/base), which sorts imports
+3. Format with [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/), which sorts imports
 4. Replace `eslint` with `oxlint` in your scripts and `lint-staged` config
 5. Remove `eslint.config.*`, the ESLint packages and `eslint-plugin-react-hooks`
 6. Run `pnpm lint` and fix the reported problems

@@ -12,7 +12,7 @@ sidebar:
 
 &gt; Base Prettier configuration package that provides shared formatting rules for consistent code style across projects.
 
-&gt; 💡 **New projects**: prefer [`@jmlweb/oxfmt-config-base`](/oxfmt/base), which produces the same output much faster. This package stays maintained for existing projects and setups that need Prettier plugins.
+&gt; 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxfmt-config-base`](../../oxfmt/base/), which produces the same output much faster. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 
@@ -149,7 +149,7 @@ Use this package when you want:
 - ✅ Modern JavaScript/TypeScript formatting defaults
 - ✅ Foundation for extending with framework-specific configs
 
-**For Tailwind CSS projects**, use [`@jmlweb/prettier-config-tailwind`](/prettier/tailwind) instead.
+**For Tailwind CSS projects**, use [`@jmlweb/prettier-config-tailwind`](../../prettier/tailwind/) instead.
 
 ## 🔧 Extending the Configuration
 
@@ -223,8 +223,8 @@ See real-world usage examples:
 
 ### Internal Packages
 
-- [`@jmlweb/prettier-config-tailwind`](/prettier/tailwind) - Adds Tailwind CSS class sorting
-- [`@jmlweb/eslint-config-base`](/eslint/base) - ESLint config that works seamlessly with this Prettier config
+- [`@jmlweb/prettier-config-tailwind`](../../prettier/tailwind/) - Adds Tailwind CSS class sorting
+- [`@jmlweb/eslint-config-base`](../../eslint/base/) - ESLint config that works seamlessly with this Prettier config
 
 ### External Tools
 
@@ -268,7 +268,7 @@ export default [
 ];
 ```
 
-Or use [`@jmlweb/eslint-config-base`](/eslint/base) which already includes this integration.
+Or use [`@jmlweb/eslint-config-base`](../../eslint/base/) which already includes this integration.
 
 ### IDE Not Formatting on Save
 

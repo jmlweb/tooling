@@ -13,7 +13,7 @@ sidebar:
 
 &gt; Base ESLint configuration for JavaScript projects. Foundation for JavaScript-only projects and extended by TypeScript configs. Uses ESLint 9 and 10 flat config format.
 
-&gt; 💡 **New projects**: prefer [`@jmlweb/oxlint-config-base`](/oxlint/base), which ports these rules to Oxlint. This package stays maintained for existing projects.
+&gt; 🔧 **Maintenance mode**: this package receives dependency and security updates, but no new rules. New projects should use [`@jmlweb/oxlint-config-base`](../../oxlint/base/), which ports these rules to Oxlint. To move an existing project, see the [migration guide](https://jmlweb.github.io/tooling/guides/migrate-to-oxc/).
 
 ## ✨ Features
 
@@ -174,7 +174,7 @@ pnpm exec eslint --fix .
 
 This configuration disables all ESLint rules that conflict with Prettier, allowing Prettier to handle all code formatting.
 
-**Recommended**: Use [`@jmlweb/prettier-config-base`](/prettier/base) for consistent formatting.
+**Recommended**: Use [`@jmlweb/prettier-config-base`](../../prettier/base/) for consistent formatting.
 
 ## 🤔 Why Use This?
 
@@ -223,7 +223,7 @@ Use this package when you want:
 - ✅ Automatic import/export sorting
 - ✅ Foundation for extending with TypeScript or React configs
 
-**For TypeScript projects**, use [`@jmlweb/eslint-config-base`](/eslint/base) instead, which extends this config with strict type checking.
+**For TypeScript projects**, use [`@jmlweb/eslint-config-base`](../../eslint/base/) instead, which extends this config with strict type checking.
 
 ## 🔧 Extending the Configuration
 
@@ -293,8 +293,8 @@ See real-world usage examples:
 
 ### Internal Packages
 
-- [`@jmlweb/eslint-config-base`](/eslint/base) - TypeScript ESLint config (extends this package)
-- [`@jmlweb/prettier-config-base`](/prettier/base) - Prettier config for consistent formatting
+- [`@jmlweb/eslint-config-base`](../../eslint/base/) - TypeScript ESLint config (extends this package)
+- [`@jmlweb/prettier-config-base`](../../prettier/base/) - Prettier config for consistent formatting
 
 ### External Tools
 

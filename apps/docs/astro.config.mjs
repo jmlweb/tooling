@@ -33,6 +33,15 @@ export default defineConfig({
           link: '/getting-started',
         },
         {
+          label: 'Guides',
+          items: [
+            {
+              label: 'Migrate to Oxc',
+              link: '/guides/migrate-to-oxc',
+            },
+          ],
+        },
+        {
           label: 'Oxfmt',
           items: [
             {

@@ -10,11 +10,12 @@ Welcome to **jmlweb-tooling**! This guide will help you get started with our sha
 
 jmlweb-tooling is a collection of shared configuration packages that provide consistent, opinionated settings for popular development tools:
 
-- **Prettier** - Code formatting with sensible defaults
-- **ESLint** - Linting for JavaScript, TypeScript, React, Node.js, and Astro
+- **Oxfmt** - Fast code formatting with import sorting (recommended)
+- **Oxlint** - Fast linting for JavaScript, TypeScript, React and Node.js, with type-aware rules (recommended)
+- **Prettier and ESLint** - The previous formatter and linter configurations, in maintenance mode
 - **TypeScript** - Strict TypeScript configurations for various project types
 - **Testing** - Pre-configured Vitest and Jest setups
-- **Build Tools** - Ready-to-use tsup and Vite configurations
+- **Build Tools** - Ready-to-use tsdown and Vite configurations
 - **Commit Linting** - Conventional Commits enforcement
 
 ### Why Use Shared Configurations?
@@ -25,7 +26,7 @@ jmlweb-tooling is a collection of shared configuration packages that provide con
 - **Easy Updates** - Update one package to get improvements across all projects
 - **Monorepo Friendly** - Designed to work seamlessly in monorepo setups
 
-Browse all available packages in the [sidebar navigation](#) or explore specific categories below.
+Browse all available packages in the sidebar navigation or explore specific categories below.
 
 ## Prerequisites
 
@@ -48,56 +49,59 @@ npm install -g pnpm
 
 ## Quick Start
 
-Let's set up a new project with Prettier, ESLint, and TypeScript configurations.
+Let's set up a new TypeScript project with Oxfmt, Oxlint and TypeScript configurations.
 
-### 1. Install Prettier Configuration
+### 1. Install the Formatter
 
-First, install the Prettier configuration and its peer dependency:
-
-```bash
-pnpm add -D @jmlweb/prettier-config-base prettier
-```
-
-Add the configuration to your `package.json`:
-
-```json
-{
-  "prettier": "@jmlweb/prettier-config-base"
-}
-```
-
-Or create a `.prettierrc.mjs` file (recommended for ES modules):
-
-```javascript
-export { default } from '@jmlweb/prettier-config-base';
-```
-
-Test it by formatting your code:
+Install the Oxfmt configuration and Oxfmt:
 
 ```bash
-pnpm exec prettier --write "**/*.{js,ts,tsx,json,md}"
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
 ```
 
-### 2. Install ESLint Configuration
+Create an `oxfmt.config.ts` file:
 
-Install ESLint configuration for TypeScript:
+```typescript
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
+
+export default defineConfig({
+  ...baseConfig,
+});
+```
+
+Format your code:
 
 ```bash
-pnpm add -D @jmlweb/eslint-config-base eslint typescript-eslint
+pnpm exec oxfmt
 ```
 
-Create an `eslint.config.js` file:
+### 2. Install the Linter
 
-```javascript
-import baseConfig from '@jmlweb/eslint-config-base';
-
-export default [...baseConfig];
-```
-
-Run ESLint:
+Install the Oxlint configuration, Oxlint and its type-aware engine:
 
 ```bash
-pnpm exec eslint .
+pnpm add -D @jmlweb/oxlint-config-base oxlint oxlint-tsgolint
+```
+
+Create an `oxlint.config.ts` file:
+
+```typescript
+import baseConfig from '@jmlweb/oxlint-config-base';
+import { defineConfig } from 'oxlint';
+
+export default defineConfig({
+  extends: [baseConfig],
+  options: {
+    typeAware: true,
+  },
+});
+```
+
+Run Oxlint:
+
+```bash
+pnpm exec oxlint
 ```
 
 ### 3. Install TypeScript Configuration
@@ -121,22 +125,36 @@ Create a `tsconfig.json` file:
 }
 ```
 
-Your project is now configured with Prettier, ESLint, and TypeScript!
+Your project is now configured with Oxfmt, Oxlint and TypeScript!
+
+Already using the Prettier and ESLint packages? See [Migrate to Oxc](../guides/migrate-to-oxc/).
 
 ## Configuration Hierarchy
 
 jmlweb-tooling packages follow a **base → variant** pattern, allowing you to start with sensible defaults and extend for specific use cases.
 
-### Prettier Configurations
+### Formatter Configurations
+
+```
+@jmlweb/oxfmt-config-base (formatting, import sorting, optional Tailwind CSS class sorting)
+```
+
+The Prettier configurations are maintained for existing projects:
 
 ```
 @jmlweb/prettier-config-base (base formatting rules)
   └── @jmlweb/prettier-config-tailwind (adds Tailwind CSS class sorting)
 ```
 
-**Example**: Start with `prettier-config-base`, then switch to `prettier-config-tailwind` when you add Tailwind CSS to your project.
+### Linter Configurations
 
-### ESLint Configurations
+```
+@jmlweb/oxlint-config-base (JavaScript and TypeScript linting)
+  ├── @jmlweb/oxlint-config-react (adds React, hooks and JSX rules)
+  └── @jmlweb/oxlint-config-node (adds Node.js rules)
+```
+
+The ESLint configurations are maintained for existing projects, and `eslint-config-astro` remains the way to lint `.astro` files:
 
 ```
 @jmlweb/eslint-config-base-js (JavaScript linting)
@@ -145,8 +163,6 @@ jmlweb-tooling packages follow a **base → variant** pattern, allowing you to s
       ├── @jmlweb/eslint-config-node (adds Node.js specific rules)
       └── @jmlweb/eslint-config-astro (adds Astro framework rules)
 ```
-
-**Example**: Use `eslint-config-base` for TypeScript projects, extend to `eslint-config-react` for React applications.
 
 ### TypeScript Configurations
 
@@ -170,9 +186,9 @@ jmlweb-tooling packages follow a **base → variant** pattern, allowing you to s
 ### Build Tool Configurations
 
 ```
-@jmlweb/tsup-config-base (tsup for building TypeScript packages)
 @jmlweb/tsdown-config-base (tsdown for building TypeScript packages)
 @jmlweb/vite-config (Vite for frontend projects)
+@jmlweb/tsup-config-base (deprecated, use tsdown-config-base)
 ```
 
 ## Common Patterns
@@ -187,8 +203,8 @@ mkdir my-project && cd my-project
 pnpm init
 
 # Install configurations
-pnpm add -D @jmlweb/prettier-config-base prettier
-pnpm add -D @jmlweb/eslint-config-base eslint typescript-eslint
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+pnpm add -D @jmlweb/oxlint-config-base oxlint oxlint-tsgolint
 pnpm add -D @jmlweb/tsconfig-node typescript
 
 # Create source directory
@@ -201,21 +217,12 @@ mkdir src
 {
   "name": "my-project",
   "type": "module",
-  "prettier": "@jmlweb/prettier-config-base",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint .",
-    "format": "prettier --write \"**/*.{js,ts,json,md}\""
+    "lint": "oxlint",
+    "format": "oxfmt"
   }
 }
-```
-
-**eslint.config.js**:
-
-```javascript
-import baseConfig from '@jmlweb/eslint-config-base';
-
-export default [...baseConfig];
 ```
 
 **tsconfig.json**:
@@ -230,26 +237,34 @@ export default [...baseConfig];
 }
 ```
 
+Add the `oxfmt.config.ts` and `oxlint.config.ts` files from the [Quick Start](#quick-start).
+
 ### React TypeScript Project
 
 For a React application with TypeScript:
 
 ```bash
 # Install dependencies
-pnpm add -D @jmlweb/prettier-config-base prettier
-pnpm add -D @jmlweb/eslint-config-react eslint typescript-eslint
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+pnpm add -D @jmlweb/oxlint-config-react oxlint oxlint-tsgolint @eslint-react/eslint-plugin eslint-plugin-perfectionist
 pnpm add -D @jmlweb/tsconfig-react typescript
 
 # For Vite-based projects
 pnpm add -D @jmlweb/vite-config vite
 ```
 
-**eslint.config.js**:
+**oxlint.config.ts**:
 
-```javascript
-import reactConfig from '@jmlweb/eslint-config-react';
+```typescript
+import reactConfig from '@jmlweb/oxlint-config-react';
+import { defineConfig } from 'oxlint';
 
-export default [...reactConfig];
+export default defineConfig({
+  extends: [reactConfig],
+  options: {
+    typeAware: true,
+  },
+});
 ```
 
 **tsconfig.json**:
@@ -272,14 +287,16 @@ import { createReactViteConfig } from '@jmlweb/vite-config';
 export default createReactViteConfig();
 ```
 
+For Tailwind CSS, enable class sorting in `oxfmt.config.ts` with `sortTailwindcss: { stylesheet: './src/index.css' }`.
+
 ### Next.js Project
 
 For a Next.js application:
 
 ```bash
 # Install configurations
-pnpm add -D @jmlweb/prettier-config-base prettier
-pnpm add -D @jmlweb/eslint-config-react eslint typescript-eslint
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+pnpm add -D @jmlweb/oxlint-config-react oxlint oxlint-tsgolint @eslint-react/eslint-plugin eslint-plugin-perfectionist
 pnpm add -D @jmlweb/tsconfig-nextjs typescript
 ```
 
@@ -299,29 +316,36 @@ For a Node.js backend service:
 
 ```bash
 # Install configurations
-pnpm add -D @jmlweb/prettier-config-base prettier
-pnpm add -D @jmlweb/eslint-config-node eslint typescript-eslint
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
+pnpm add -D @jmlweb/oxlint-config-node oxlint oxlint-tsgolint eslint-plugin-n
 pnpm add -D @jmlweb/tsconfig-node typescript
 pnpm add -D @jmlweb/vitest-config vitest
 ```
 
-**eslint.config.js**:
+**oxlint.config.ts**:
 
-```javascript
-import nodeConfig from '@jmlweb/eslint-config-node';
+```typescript
+import nodeConfig from '@jmlweb/oxlint-config-node';
+import { defineConfig } from 'oxlint';
 
-export default [...nodeConfig];
+export default defineConfig({
+  extends: [nodeConfig],
+  options: {
+    typeAware: true,
+  },
+});
 ```
 
 **vitest.config.ts**:
 
 ```typescript
-import { defineConfig } from 'vitest/config';
 import baseConfig from '@jmlweb/vitest-config';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  ...baseConfig,
   test: {
-    ...baseConfig,
+    ...baseConfig.test,
   },
 });
 ```
@@ -335,47 +359,51 @@ For workspace/monorepo dependencies, use the `workspace:*` protocol:
 ```json
 {
   "devDependencies": {
-    "@jmlweb/prettier-config-base": "workspace:*",
-    "@jmlweb/eslint-config-base": "workspace:*",
+    "@jmlweb/oxfmt-config-base": "workspace:*",
+    "@jmlweb/oxlint-config-base": "workspace:*",
     "@jmlweb/tsconfig-base": "workspace:*"
   }
 }
 ```
 
-This allows all packages in the monorepo to share the same configuration versions.
+This allows all packages in the monorepo to share the same configuration versions. See [Monorepos](../guides/migrate-to-oxc/#monorepos) for how Oxlint resolves configs and type-aware rules across packages.
 
 ## Extending Configurations
 
 All configurations can be extended to customize for your specific needs:
 
-### Extending Prettier
+### Extending Oxfmt
 
-```javascript
-// .prettierrc.mjs
-import baseConfig from '@jmlweb/prettier-config-base';
+```typescript
+// oxfmt.config.ts
+import baseConfig from '@jmlweb/oxfmt-config-base';
+import { defineConfig } from 'oxfmt';
 
-export default {
+export default defineConfig({
   ...baseConfig,
-  printWidth: 100, // Override specific options
+  // Override specific options
+  printWidth: 100,
   semi: false,
-};
+});
 ```
 
-### Extending ESLint
+### Extending Oxlint
 
-```javascript
-// eslint.config.js
-import baseConfig from '@jmlweb/eslint-config-base';
+```typescript
+// oxlint.config.ts
+import baseConfig from '@jmlweb/oxlint-config-base';
+import { defineConfig } from 'oxlint';
 
-export default [
-  ...baseConfig,
-  {
-    rules: {
-      // Override or add specific rules
-      '@typescript-eslint/no-unused-vars': 'warn',
-    },
+export default defineConfig({
+  extends: [baseConfig],
+  options: {
+    typeAware: true,
   },
-];
+  rules: {
+    // Override or add specific rules
+    'eslint/no-unused-vars': 'warn',
+  },
+});
 ```
 
 ### Extending TypeScript
@@ -400,10 +428,10 @@ Add these common scripts to your `package.json`:
 {
   "scripts": {
     "build": "tsc",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md}\"",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "test": "vitest",
     "type-check": "tsc --noEmit"
   }
@@ -421,29 +449,22 @@ pnpm test        # Run tests
 
 ## Troubleshooting
 
-### Conflicts Between Tools
+### Type-Aware Rules Do Not Report
 
-If ESLint and Prettier conflict on formatting rules:
-
-1. Ensure you're using compatible versions
-2. ESLint configs already include `eslint-config-prettier` to disable conflicting rules
-3. Run Prettier first, then ESLint: `pnpm format && pnpm lint`
+`options.typeAware` must be set in your own `oxlint.config.ts`, and `oxlint-tsgolint` must be installed. Oxlint ignores `options` in configs loaded through `extends`.
 
 ### IDE Integration
 
-For VS Code, install these extensions:
-
-- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+For VS Code, install the [Oxc extension](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode), which runs both Oxfmt and Oxlint.
 
 Add to `.vscode/settings.json`:
 
 ```json
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.oxc": "always"
   }
 }
 ```
@@ -460,11 +481,12 @@ If you see `Cannot find package '@jmlweb/...'`:
 
 Now that you're set up, explore the documentation for specific packages:
 
-- **[Prettier](/prettier/base)** - Code formatting options and customization
-- **[ESLint](/eslint/base)** - Linting rules and configuration
-- **[TypeScript](/typescript/base)** - Type checking and compiler options
-- **[Testing](/testing/vitest)** - Test configuration and coverage
-- **[Build Tools](/build-tools/base)** - Building and bundling your code
+- **[Oxfmt](../oxfmt/base/)** - Formatting options and import sorting
+- **[Oxlint](../oxlint/base/)** - Linting rules and configuration
+- **[Migrate to Oxc](../guides/migrate-to-oxc/)** - Move an existing project from Prettier and ESLint
+- **[TypeScript](../typescript/base/)** - Type checking and compiler options
+- **[Testing](../testing/vitest/)** - Test configuration and coverage
+- **[Build Tools](../build-tools/tsdown/)** - Building and bundling your code
 
 ### Contributing
 

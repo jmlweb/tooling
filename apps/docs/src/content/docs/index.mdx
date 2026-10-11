@@ -13,11 +13,14 @@ A collection of shared configuration packages for modern JavaScript and TypeScri
 ## Package Categories
 
 <CardGrid>
-  <Card title="Prettier" icon="seti:prettier">
-    Code formatting configurations with sensible defaults and Tailwind CSS support.
+  <Card title="Oxfmt" icon="seti:config">
+    Fast code formatting with import sorting and Tailwind CSS class sorting. Recommended for new projects.
   </Card>
-  <Card title="ESLint" icon="seti:eslint">
-    Linting configurations for JavaScript, TypeScript, React, Node.js, and Astro projects.
+  <Card title="Oxlint" icon="seti:config">
+    Fast linting for JavaScript, TypeScript, React and Node.js, with type-aware rules. Recommended for new projects.
+  </Card>
+  <Card title="Prettier and ESLint" icon="seti:eslint">
+    The previous formatter and linter configurations, maintained for existing projects. ESLint still lints Astro files.
   </Card>
   <Card title="TypeScript" icon="seti:typescript">
     Strict TypeScript configurations for various project types including React, Next.js, and Node.js.
@@ -26,7 +29,7 @@ A collection of shared configuration packages for modern JavaScript and TypeScri
     Pre-configured setups for Vitest and Jest testing frameworks.
   </Card>
   <Card title="Build Tools" icon="seti:config">
-    Build configurations for tsup and Vite with optimized defaults.
+    Build configurations for tsdown and Vite with optimized defaults.
   </Card>
   <Card title="Commit" icon="approve-check-mark">
     Commitlint configuration following Conventional Commits specification.
@@ -46,17 +49,17 @@ A collection of shared configuration packages for modern JavaScript and TypeScri
 All packages are published to npm under the `@jmlweb` scope. Install the configurations you need:
 
 ```bash
-# Prettier configuration
-pnpm add -D @jmlweb/prettier-config-base
+# Formatter
+pnpm add -D @jmlweb/oxfmt-config-base oxfmt
 
-# ESLint configuration
-pnpm add -D @jmlweb/eslint-config-base
+# Linter
+pnpm add -D @jmlweb/oxlint-config-base oxlint oxlint-tsgolint
 
 # TypeScript configuration
-pnpm add -D @jmlweb/tsconfig-base
+pnpm add -D @jmlweb/tsconfig-base typescript
 ```
 
-See individual package documentation for detailed usage instructions.
+See [Getting Started](getting-started/) for the setup, or [Migrate to Oxc](guides/migrate-to-oxc/) to move a project from Prettier and ESLint.
 
 ## Repository
 
