@@ -1,5 +1,11 @@
 # @jmlweb/vitest-config
 
+## 3.0.2
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+
 ## 3.0.1
 
 ### Patch Changes

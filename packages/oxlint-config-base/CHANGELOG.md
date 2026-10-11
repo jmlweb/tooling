@@ -1,5 +1,11 @@
 # @jmlweb/oxlint-config-base
 
+## 0.1.2
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+
 ## 0.1.1
 
 ### Patch Changes

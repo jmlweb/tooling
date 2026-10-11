@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsconfig-react",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "TypeScript configuration for React libraries with JSX support and modern defaults",
   "main": "tsconfig.json",
   "exports": {

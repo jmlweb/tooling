@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/oxfmt-config-base",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Base Oxfmt configuration for jmlweb projects",
   "type": "module",
   "main": "./dist/index.cjs",

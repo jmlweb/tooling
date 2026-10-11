@@ -1,5 +1,11 @@
 # @jmlweb/tsdown-config-base
 
+## 0.2.3
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+
 ## 0.2.2
 
 ### Patch Changes

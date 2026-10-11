@@ -1,5 +1,13 @@
 # @jmlweb/prettier-config-tailwind
 
+## 2.0.2
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+- Updated dependencies [30a45bc]
+  - @jmlweb/prettier-config-base@2.0.2
+
 ## 2.0.1
 
 ### Patch Changes

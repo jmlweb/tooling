@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-astro
 
+## 2.0.4
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+- Updated dependencies [30a45bc]
+  - @jmlweb/eslint-config-base@3.0.4
+
 ## 2.0.3
 
 ### Patch Changes

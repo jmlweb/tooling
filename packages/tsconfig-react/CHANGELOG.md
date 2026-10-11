@@ -1,5 +1,11 @@
 # @jmlweb/tsconfig-react
 
+## 2.0.1
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+
 ## 2.0.0
 
 ### Major Changes

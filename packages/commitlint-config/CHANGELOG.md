@@ -1,5 +1,11 @@
 # @jmlweb/commitlint-config
 
+## 4.1.1
+
+### Patch Changes
+
+- 30a45bc: Condense the README and sync versions, peer dependencies, requirements and migration notes with the package.
+
 ## 4.1.0
 
 ### Minor Changes
