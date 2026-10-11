@@ -4,3 +4,12 @@ packages:
 
 overrides:
   "postcss-selector-parser@>=7 <7.1.6": ">=7.1.6"
+  "postcss-selector-parser@<7.1.6": ">=7.1.6"
+  "esbuild@>=0.27.3 <0.28.1": ">=0.28.1"
+
+# No patched release exists for these; both are build/test-time only transitive dependencies.
+# Remove an entry once the advisory has a fix.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-vfj7-8cjw-p6xm # braces, via starlight-llms-txt
+    - GHSA-hp3w-g68c-fv3c # sprintf-js, via jest
