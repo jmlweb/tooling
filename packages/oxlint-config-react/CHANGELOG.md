@@ -1,5 +1,13 @@
 # @jmlweb/oxlint-config-react
 
+## 0.1.1
+
+### Patch Changes
+
+- 553899a: Publish from CI to validate npm trusted publishing. No code changes.
+- Updated dependencies [553899a]
+  - @jmlweb/oxlint-config-base@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

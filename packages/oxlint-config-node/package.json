@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/oxlint-config-node",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Oxlint configuration for Node.js projects, extending @jmlweb/oxlint-config-base",
   "type": "module",
   "main": "./dist/index.cjs",

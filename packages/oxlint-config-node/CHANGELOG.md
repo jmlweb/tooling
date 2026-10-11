@@ -1,5 +1,12 @@
 # @jmlweb/oxlint-config-node
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [553899a]
+  - @jmlweb/oxlint-config-base@0.1.1
+
 ## 0.1.1
 
 ### Patch Changes

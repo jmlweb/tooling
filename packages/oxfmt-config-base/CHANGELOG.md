@@ -1,5 +1,11 @@
 # @jmlweb/oxfmt-config-base
 
+## 0.2.2
+
+### Patch Changes
+
+- 553899a: Publish from CI to validate npm trusted publishing. No code changes.
+
 ## 0.2.1
 
 ### Patch Changes
