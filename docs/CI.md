@@ -127,8 +127,18 @@ Main CI workflow that runs on every push and pull request:
   - Validates packages using `scripts/validate-all-packages.mjs`
 - **test-pack**: Package publishing validation
   - Uses `scripts/test-pack.mjs` to pack and validate tarballs
+  - Runs `pnpm check:exports` (publint in strict mode and Are The Types Wrong) on every built package
 - **integration-test**: Runs integration tests
 - **status-check**: Final status aggregation
+
+### `.github/workflows/security.yml`
+
+Supply-chain checks on pushes, pull requests, and a weekly schedule:
+
+- **dependency-review**: Fails pull requests that introduce dependencies with high-severity advisories
+- **codeql**: CodeQL analysis of the JavaScript/TypeScript sources and the workflow files
+
+All third-party actions are pinned to full commit SHAs with the version tag in a trailing comment. Dependabot keeps both up to date.
 
 ### `.github/workflows/publish.yml`
 
