@@ -1,5 +1,13 @@
 # @jmlweb/eslint-config-node
 
+## 3.0.3
+
+### Patch Changes
+
+- 26b9116: Document the package's status: the Prettier and ESLint packages are in maintenance mode, with a link to the guide for migrating to Oxfmt and Oxlint. `@jmlweb/eslint-config-astro` explains how to pair it with Oxlint for `.astro` files.
+- Updated dependencies [26b9116]
+  - @jmlweb/eslint-config-base@3.0.3
+
 ## 3.0.2
 
 ### Patch Changes
