@@ -1,4 +1,8 @@
-import type { UserConfig } from '@commitlint/types';
+import type {
+  RuleConfigCondition,
+  TargetCaseType,
+  UserConfig,
+} from '@commitlint/types';
 
 /**
  * Allowed commit types following Conventional Commits specification
@@ -18,6 +22,14 @@ export const COMMIT_TYPES = [
 ] as const;
 
 export type CommitType = (typeof COMMIT_TYPES)[number];
+
+/**
+ * Default `subject-case` rule, same as @commitlint/config-conventional
+ */
+export const DEFAULT_SUBJECT_CASE = [
+  'never',
+  ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
+] as const satisfies readonly [RuleConfigCondition, readonly TargetCaseType[]];
 
 /**
  * Options for creating a commitlint configuration
@@ -60,6 +72,19 @@ export type CommitlintConfigOptions = {
    * @default false
    */
   bodyRequired?: boolean;
+
+  /**
+   * Condition and cases for the `subject-case` rule, or `false` to disable it.
+   * The default rejects subjects written entirely in sentence, start, pascal
+   * or upper case, so ids such as `TSK-010` can appear inside a subject.
+   * @default ['never', ['sentence-case', 'start-case', 'pascal-case', 'upper-case']]
+   */
+  subjectCase?:
+    | false
+    | readonly [
+        RuleConfigCondition,
+        TargetCaseType | readonly TargetCaseType[],
+      ];
 
   /**
    * Custom function to ignore certain commits (e.g., merge commits, dependabot)
@@ -122,6 +147,7 @@ export const createCommitlintConfig = (
     headerMaxLength = 100,
     scopeRequired = false,
     bodyRequired = false,
+    subjectCase = DEFAULT_SUBJECT_CASE,
     ignores,
   } = options;
 
@@ -152,7 +178,7 @@ export const createCommitlintConfig = (
       'scope-empty': scopeRequired ? [2, 'never'] : [0],
 
       // Subject rules
-      'subject-case': [2, 'always', 'lower-case'],
+      'subject-case': subjectCase ? [2, ...subjectCase] : [0],
       'subject-empty': [2, 'never'],
       'subject-full-stop': [2, 'never', '.'],
 

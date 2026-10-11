@@ -96,6 +96,19 @@ export default createCommitlintConfig({
 });
 ```
 
+### Subject Case
+
+The default allows mixed case inside a subject, so `feat: add parser (TSK-010)` passes, and rejects subjects written entirely in sentence, start, pascal or upper case. Pass a condition and cases to change it, or `false` to disable the rule:
+
+```typescript
+import { createCommitlintConfig } from '@jmlweb/commitlint-config';
+
+// Strict lower case (rejects task ids such as TSK-010)
+export default createCommitlintConfig({
+  subjectCase: ['always', 'lower-case'],
+});
+```
+
 ## 🤔 Why Use This?
 
 &gt; **Philosophy**: Structured commit messages enable automation, improve collaboration, and make project history meaningful and navigable.
@@ -180,6 +193,7 @@ ci: add GitHub Actions workflow
 | `headerMaxLength`  | `number`                          | `100`       | Maximum length for the header line             |
 | `scopeRequired`    | `boolean`                         | `false`     | Whether to require a scope                     |
 | `bodyRequired`     | `boolean`                         | `false`     | Whether to require a commit body               |
+| `subjectCase`      | `[condition, cases] \| false`     | see below   | `subject-case` rule, `false` disables it       |
 | `ignores`          | `((commit: string) => boolean)[]` | `undefined` | Functions to ignore certain commits            |
 
 ### Exports
@@ -193,6 +207,9 @@ import { createCommitlintConfig } from '@jmlweb/commitlint-config';
 
 // Commit types constant
 import { COMMIT_TYPES } from '@jmlweb/commitlint-config';
+
+// Default subject-case rule: ['never', ['sentence-case', 'start-case', 'pascal-case', 'upper-case']]
+import { DEFAULT_SUBJECT_CASE } from '@jmlweb/commitlint-config';
 ```
 
 ## 🎯 When to Use

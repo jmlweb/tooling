@@ -4,6 +4,7 @@ import chalk from 'chalk';
 
 import {
   createTestFile,
+  execInTestProject,
   importFromTestEnv,
   initTestProject,
   installDependencies,
@@ -77,6 +78,42 @@ export default baseConfig;
     );
 
     log.success('Config file structure is valid');
+
+    // Test 4: Lint real messages, including the subjectCase option
+    log.info('Test 4: Linting commit messages...');
+    const lintMessage = (message, config = 'commitlint.config.js') => {
+      try {
+        execInTestProject(`npx commitlint --config ${config}`, {
+          input: message,
+          stdio: 'pipe',
+        });
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    createTestFile(
+      'commitlint.strict.config.js',
+      `import { createCommitlintConfig } from '${pkg.name}';
+
+export default createCommitlintConfig({ subjectCase: ['always', 'lower-case'] });
+`,
+    );
+
+    const cases = [
+      ['feat: add parser (TSK-010)', undefined, true],
+      ['feat: Add parser', undefined, false],
+      ['feat: add parser (TSK-010)', 'commitlint.strict.config.js', false],
+    ];
+    for (const [message, config, expected] of cases) {
+      if (lintMessage(message, config) !== expected) {
+        throw new Error(
+          `Expected "${message}" to ${expected ? 'pass' : 'fail'}${config ? ` with ${config}` : ''}`,
+        );
+      }
+    }
+    log.success('Commit messages are linted as expected');
 
     log.success(`✅ All tests passed for ${pkg.name}\n`);
   } catch (error) {
