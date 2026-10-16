@@ -69,3 +69,7 @@ Transitive vulnerabilities without an upstream fix go in the root `pnpm` overrid
 - Pinned older version for compatibility: document the reason next to the pin.
 - Newer major needs a large refactor: weigh the trade-off, record the decision.
 - Published packages: check consumer impact before a major bump.
+
+### Current pins
+
+- **TypeScript 6.x** (`^6.0.3`, not 7): `@eslint-react/eslint-plugin` and `eslint-plugin-perfectionist` load `@typescript-eslint/utils`, which supports TypeScript `<6.1.0`. TypeScript 7 has no classic JS API, so Oxlint crashes in those JS plugins when linting React code. Dependabot skips majors; when running `pnpm exec syncpack update`, revert any TypeScript 7 bump. Lift the pin when typescript-eslint supports TypeScript 7.

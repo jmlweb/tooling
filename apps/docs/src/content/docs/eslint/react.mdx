@@ -249,7 +249,23 @@ Hooks rules now come from `eslint-plugin-react-hooks`' `recommended` preset inst
    npm install --save-dev @eslint-react/eslint-plugin @stylistic/eslint-plugin eslint-plugin-perfectionist
    ```
 
-2. Rename `react/*` rules in overrides and `eslint-disable` comments (`react/no-array-index-key` becomes `@eslint-react/no-array-index-key`).
+2. Rename `react/*` rules in overrides and `eslint-disable` comments. Most keep their name under `@eslint-react/` (`react/no-array-index-key` becomes `@eslint-react/no-array-index-key`). These change name:
+
+   | 4.x                              | 5.0                                                                             |
+   | -------------------------------- | ------------------------------------------------------------------------------- |
+   | `react/jsx-key`                  | `@eslint-react/no-missing-key`                                                  |
+   | `react/no-children-prop`         | `@eslint-react/jsx-no-children-prop`                                            |
+   | `react/no-danger-with-children`  | `@eslint-react/dom-no-dangerously-set-innerhtml-with-children`                  |
+   | `react/no-find-dom-node`         | `@eslint-react/dom-no-find-dom-node`                                            |
+   | `react/no-render-return-value`   | `@eslint-react/dom-no-render-return-value`                                      |
+   | `react/no-unknown-property`      | `@eslint-react/dom-no-unknown-property`                                         |
+   | `react/no-deprecated`            | `@eslint-react/no-component-will-*`, `@eslint-react/dom-no-render`, and similar |
+   | `react/display-name` (off)       | `@eslint-react/no-missing-component-display-name` (off)                         |
+   | `react/jsx-pascal-case`          | `@stylistic/jsx-pascal-case`                                                    |
+   | `react/self-closing-comp`        | `@stylistic/jsx-self-closing-comp`                                              |
+   | `react/jsx-curly-brace-presence` | `@stylistic/jsx-curly-brace-presence`                                           |
+   | `react/jsx-sort-props`           | `perfectionist/sort-jsx-props`                                                  |
+
 3. Run `npx eslint --fix .` and review the remaining reports.
 
 ### 3.x to 4.0

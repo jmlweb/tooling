@@ -72,7 +72,7 @@ export default defineConfig({
 }
 ```
 
-5. Run `pnpm format` once and commit the result. Expect import order changes and, rarely, a different line break than Prettier's.
+5. Run `pnpm format` once and commit the result. Expect import order changes and, rarely, a different line break than Prettier's. With `sortTailwindcss.stylesheet`, Oxfmt also moves custom theme classes such as `bg-ocean-600` to their correct position: `@jmlweb/prettier-config-tailwind` never pointed the Tailwind plugin at a stylesheet, so it put them first.
 
 Oxfmt also formats Markdown by default and rewraps hand-written docs. To leave them as they are, add `'**/*.md'` to `ignorePatterns` and remove `md` from the `lint-staged` pattern.
 
@@ -183,6 +183,10 @@ Install the [Oxc extension](https://marketplace.visualstudio.com/items?itemName=
 ### Type-Aware Rules Do Not Report
 
 Set `options: { typeAware: true }` in your own `oxlint.config.ts` and install `oxlint-tsgolint`. Files outside your `tsconfig.json`, such as `vite.config.ts`, have no type information: ignore them in `ignorePatterns` if type-aware rules report errors there.
+
+### Oxlint Crashes with `Cannot read properties of undefined (reading 'Intrinsic')`
+
+The React config's JS plugins, `@eslint-react/eslint-plugin` and `eslint-plugin-perfectionist`, depend on `@typescript-eslint/utils`, which supports TypeScript &lt; 6.1. TypeScript 7 has no classic JS API, so the plugins crash. Keep React projects on TypeScript 6.0 until typescript-eslint supports TypeScript 7. `tsc` and `oxlint-tsgolint` work with TypeScript 7.
 
 ### Oxlint Is Slow or Reports Problems in Dependencies
 

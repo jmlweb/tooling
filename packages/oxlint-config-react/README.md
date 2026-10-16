@@ -150,6 +150,7 @@ npm run lint:fix  # Fix auto-fixable problems
 - **Node.js** >= 22.12.0
 - **Oxlint** >= 1.87.0
 - **TypeScript project** with a `tsconfig.json` (for type-aware rules)
+- **TypeScript** < 6.1: `@eslint-react/eslint-plugin` and `eslint-plugin-perfectionist` depend on `@typescript-eslint/utils`, which does not support TypeScript 7 yet. With TypeScript 7, Oxlint crashes in the JS plugins with `Cannot read properties of undefined (reading 'Intrinsic')`
 
 ## 📦 Peer Dependencies
 
