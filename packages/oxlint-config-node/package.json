@@ -68,7 +68,7 @@
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
     "eslint-plugin-n": "^18.4.1",
-    "oxlint": "^1.87.0",
+    "oxlint": "^1.88.0",
     "oxlint-tsgolint": "^7.0.2004",
     "tsdown": "~0.23.1",
     "typescript": "^6.0.3"
