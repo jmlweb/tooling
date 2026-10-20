@@ -55,7 +55,7 @@
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
-    "oxfmt": "^0.72.0",
+    "oxfmt": "^0.73.0",
     "tsdown": "~0.23.1",
     "typescript": "^6.0.3"
   }
