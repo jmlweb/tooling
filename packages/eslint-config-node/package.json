@@ -70,7 +70,7 @@
     "@jmlweb/eslint-config-base": "workspace:*",
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
-    "eslint": "^10.12.0",
+    "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^18.4.1",
     "eslint-plugin-simple-import-sort": "^14.0.0",
