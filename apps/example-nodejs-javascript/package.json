@@ -20,7 +20,7 @@
     "@jmlweb/oxlint-config-node": "workspace:*",
     "eslint-plugin-n": "^18.4.1",
     "oxfmt": "^0.72.0",
-    "oxlint": "^1.87.0"
+    "oxlint": "^1.88.0"
   },
   "prettier": "@jmlweb/prettier-config-base",
   "engines": {
