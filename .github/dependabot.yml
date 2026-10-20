@@ -48,3 +48,8 @@ updates:
     commit-message:
       prefix: "ci"
       include: "scope"
+    # CodeQL init and analyze must run the same version, so bump them together
+    groups:
+      codeql-action:
+        patterns:
+          - "github/codeql-action"
