@@ -21,7 +21,7 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@eslint-react/eslint-plugin": "^5.26.0",
+    "@eslint-react/eslint-plugin": "^5.28.0",
     "@jmlweb/oxfmt-config-base": "workspace:*",
     "@jmlweb/oxlint-config-react": "workspace:*",
     "@jmlweb/tsconfig-react": "workspace:*",
