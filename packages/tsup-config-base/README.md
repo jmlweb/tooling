@@ -158,7 +158,7 @@ npm run clean  # Clean build output
 ## 📋 Requirements
 
 - **Node.js** >= 22.12.0
-- **tsup** >= 8.0.0
+- **tsup** >= 8.0.0 (tsup 9 itself requires Node.js >= 22.18.0)
 
 ## 📦 Peer Dependencies
 
