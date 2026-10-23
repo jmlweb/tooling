@@ -159,12 +159,11 @@ export function initTestProject(packages = []) {
     private: true,
   };
 
+  const overrides = {};
+
   // Add dependencies from packed packages
   if (packages.length > 0) {
     packageJson.dependencies = {};
-    packageJson.pnpm = {
-      overrides: {},
-    };
 
     for (const pkg of packages) {
       // Use absolute path to packed tarball since test dir is in system temp
@@ -172,8 +171,7 @@ export function initTestProject(packages = []) {
 
       // Add pnpm override to force this package version to use local file
       // This ensures nested dependencies also resolve to local packages
-      packageJson.pnpm.overrides[`${pkg.name}@${pkg.packageJson.version}`] =
-        `file:${pkg.path}`;
+      overrides[`${pkg.name}@${pkg.packageJson.version}`] = `file:${pkg.path}`;
     }
   }
 
@@ -183,10 +181,19 @@ export function initTestProject(packages = []) {
   );
 
   // Create pnpm-workspace.yaml to isolate test environment from parent workspace
-  // This prevents pnpm from treating test-env as part of the monorepo workspace
+  // This prevents pnpm from treating test-env as part of the monorepo workspace.
+  // pnpm 11+ reads overrides only from here, not from package.json, and fails
+  // install on unapproved build scripts unless strictDepBuilds is off.
+  // JSON strings are valid YAML scalars, so JSON.stringify quotes keys safely.
+  const overrideLines = Object.entries(overrides).map(
+    ([selector, target]) =>
+      `  ${JSON.stringify(selector)}: ${JSON.stringify(target)}\n`,
+  );
   writeFileSync(
     join(testDir, 'pnpm-workspace.yaml'),
-    'packages:\n  # No packages - this is an isolated test environment\n',
+    'packages:\n  # No packages - this is an isolated test environment\n' +
+      'strictDepBuilds: false\n' +
+      (overrideLines.length > 0 ? `overrides:\n${overrideLines.join('')}` : ''),
   );
 }
 
