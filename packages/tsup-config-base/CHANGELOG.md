@@ -1,5 +1,11 @@
 # @jmlweb/tsup-config-base
 
+## 2.0.3
+
+### Patch Changes
+
+- a0949a3: Document that tsup 9 requires Node.js >= 22.18.0.
+
 ## 2.0.2
 
 ### Patch Changes
