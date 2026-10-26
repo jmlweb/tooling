@@ -65,7 +65,7 @@
     "@jmlweb/oxlint-config-base": "workspace:*"
   },
   "devDependencies": {
-    "@eslint-react/eslint-plugin": "^5.28.4",
+    "@eslint-react/eslint-plugin": "^5.28.6",
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
     "eslint-plugin-perfectionist": "^5.13.0",
