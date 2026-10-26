@@ -62,7 +62,7 @@
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
     "@vitejs/plugin-react": "^6.1.2",
-    "tsdown": "~0.23.1",
+    "tsdown": "~0.23.2",
     "typescript": "^6.0.3",
     "vite": "^8.3.5"
   }
