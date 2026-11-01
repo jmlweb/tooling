@@ -5,13 +5,13 @@
 | Status   | Count |
 | -------- | ----- |
 | Pending | 0 |
-| Active | 1 |
+| Active | 0 |
 | Blocked | 0 |
-| Complete | 0 |
+| Complete | 1 |
 
 ## Active Tasks
 
-- TSK-001: Fix: CI Check Formatting fails on main because flowstate index files under .backlog are not oxfmt-formatted (P2)
+_No active tasks._
 
 ## Pending Tasks
 
@@ -22,4 +22,4 @@
 
 | ID | Title | Completed |
 |----|-------|-----------|
-
+| TSK-001 | Fix: CI Check Formatting fails on main because flowstate index files under .backlog are not oxfmt-formatted | 2026-11-01 |
