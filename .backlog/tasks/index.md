@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 0 |
+| Pending | 1 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 1 |
@@ -17,6 +17,7 @@ _No active tasks._
 
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
+| TSK-002 | Fix: createTsdownCliConfig silently drops the shebang when the user sets banner | P3 | tsdown-config-base, bug | 2026-11-01 |
 
 ## Recently Completed
 
