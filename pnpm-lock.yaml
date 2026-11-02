@@ -461,8 +461,8 @@ importers:
         specifier: workspace:*
         version: link:../tsdown-config-base
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -495,8 +495,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(eslint@10.13.0(jiti@2.6.1)(supports-color@8.1.1))
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -529,8 +529,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(eslint@10.13.0(jiti@2.6.1)(supports-color@8.1.1))
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -559,8 +559,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(eslint@10.13.0(jiti@2.6.1)(supports-color@8.1.1))
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -596,8 +596,8 @@ importers:
         specifier: ^17.13.0
         version: 17.13.0
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -642,8 +642,8 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(eslint@10.13.0(jiti@2.6.1)(supports-color@8.1.1))
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -669,8 +669,8 @@ importers:
         specifier: ^29.4.15
         version: 29.4.15(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.5.2(supports-color@8.1.1))(@jest/types@30.5.1)(babel-jest@30.5.2(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(esbuild@0.28.2)(jest-util@30.5.1)(jest@30.5.2(@types/node@26.6.5)(supports-color@8.1.1))(typescript@6.0.3)
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -687,8 +687,8 @@ importers:
         specifier: ^0.74.0
         version: 0.74.0(@astrojs/compiler-rs@0.5.2)
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -708,8 +708,8 @@ importers:
         specifier: ^7.0.2005
         version: 7.0.2005
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -736,8 +736,8 @@ importers:
         specifier: ^7.0.2005
         version: 7.0.2005
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -767,8 +767,8 @@ importers:
         specifier: ^7.0.2005
         version: 7.0.2005
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -785,8 +785,8 @@ importers:
         specifier: ^3.9.10
         version: 3.9.10
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -810,8 +810,8 @@ importers:
         specifier: ^3.9.10
         version: 3.9.10
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -865,8 +865,8 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig-internal
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -880,8 +880,8 @@ importers:
         specifier: workspace:*
         version: link:../tsdown-config-base
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       tsup:
         specifier: ^9.0.0
         version: 9.0.0(jiti@2.6.1)(postcss@8.5.29)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.1)
@@ -901,8 +901,8 @@ importers:
         specifier: ^6.1.2
         version: 6.1.2(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.6.1)(tsx@4.23.15)(yaml@2.9.1))
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -925,8 +925,8 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5(vitest@5.0.5)
       tsdown:
-        specifier: ~0.23.2
-        version: 0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
+        specifier: ~0.23.4
+        version: 0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -6260,16 +6260,19 @@ packages:
   retext-smartypants@6.2.0:
     resolution: {integrity: sha512-kk0jOU7+zGv//kfjXEBjdIryL1Acl4i9XNkHxtM7Tm5lFiCog576fjNC9hjoR7LTKQ0DsPWy09JummSsH1uqfQ==}
 
-  rolldown-plugin-dts@0.29.0-beta.2:
-    resolution: {integrity: sha512-0NT4q7HMRIpQv47+SfZB5IhEWJh0gp2rDEZPu2ry+LeJFb9tlMB08Sy+sl1+cqcCXnHpkd9dvBy3rZDCBF1JIg==}
+  rolldown-plugin-dts@0.28.8:
+    resolution: {integrity: sha512-FVhfqxorCWcc20BVT5eVRfRjzLLl6mgzjcMR4gSBf0K4oQMXT0qoHhhzfXy0L7y83fQy7Ug5ZDNk90xM3/LiCQ==}
     engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
     peerDependencies:
+      '@typescript/native-preview': '*'
       '@volar/typescript': ~2.4.0
       '@vue/language-core': ~3.2.0 || ~3.3.0
       rolldown: ^1.2.0
-      typescript: ^5.0.0 || ^6.0.0 || ~7.0.0 || ~7.1.0-0
+      typescript: ^5.0.0 || ^6.0.0 || ~7.0.0
       vue-tsc: ~3.2.0 || ~3.3.0
     peerDependenciesMeta:
+      '@typescript/native-preview':
+        optional: true
       '@volar/typescript':
         optional: true
       '@vue/language-core':
@@ -6629,6 +6632,9 @@ packages:
   tinyps@0.5.0:
     resolution: {integrity: sha512-Llu7nEtVOGHh7jok32l6+udlu+4Np5vsYVB7zeTK614coSsro2qjwte7MFt/ouLM/h4kXqbGXktSMMvMsttSDw==}
 
+  tinyps@0.5.1:
+    resolution: {integrity: sha512-B6Ykif5HflC3AdDkS4Zst/2muYVfeXoVMy+KorqH80s/1x4vunIORpNySH681X7fjj+dFM9MDKD6/Hsccjb87Q==}
+
   tinyrainbow@3.2.0:
     resolution: {integrity: sha512-LgO3D9yZJjApUiuUfl9iFAwrtaX4+lok3wJIqttGoKCHlWUqHqbQpnxCf82L8FjgKsh4iGo78hqJwgL8F6To2A==}
     engines: {node: '>=14.0.0'}
@@ -6717,14 +6723,14 @@ packages:
   ts-pattern@5.9.2:
     resolution: {integrity: sha512-qAf+7M7Jjk7uebZeIo9uEzyintfuRtgHdzM9dqxRKcMi2dt76Ec+FH2wW3bnU9TuGLkZIJLoLs7cCQnU7Tu8ig==}
 
-  tsdown@0.23.2:
-    resolution: {integrity: sha512-om1OoDykFlv07uM98WAX3ZNmu02FBmHqZYLW1hm+IMktb92r7VMNKgQ/G8dknECI1Q2huPrFJ+sggdYk8efsQg==}
+  tsdown@0.23.4:
+    resolution: {integrity: sha512-AQQ/2Y7KBnf15GL4Ynjdltc94PkbKRI+arStyrp7inSQkRmTWNiXgfv50ESsjhBEsoVtiSloCAO2VyrqojWIOQ==}
     engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@arethetypeswrong/core': ^0.18.1
-      '@tsdown/css': 0.23.2
-      '@tsdown/exe': 0.23.2
+      '@tsdown/css': 0.23.4
+      '@tsdown/exe': 0.23.4
       '@vitejs/devtools': '*'
       publint: ^0.3.8
       tsx: '*'
@@ -12976,7 +12982,7 @@ snapshots:
       nlcst-to-string: 4.0.0
       unist-util-visit: 5.1.0
 
-  rolldown-plugin-dts@0.29.0-beta.2(@volar/typescript@2.4.28(typescript@6.0.3))(rolldown@1.2.15)(typescript@6.0.3):
+  rolldown-plugin-dts@0.28.8(@volar/typescript@2.4.28(typescript@6.0.3))(rolldown@1.2.15)(typescript@6.0.3):
     dependencies:
       dts-resolver: 3.0.0
       get-tsconfig: 5.0.0-beta.6
@@ -13482,6 +13488,8 @@ snapshots:
 
   tinyps@0.5.0: {}
 
+  tinyps@0.5.1: {}
+
   tinyrainbow@3.2.0: {}
 
   tldts-core@7.4.18: {}
@@ -13549,7 +13557,7 @@ snapshots:
 
   ts-pattern@5.9.2: {}
 
-  tsdown@0.23.2(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3):
+  tsdown@0.23.4(@arethetypeswrong/core@0.18.5)(@volar/typescript@2.4.28(typescript@6.0.3))(publint@0.3.25)(tsx@4.23.15)(typescript@6.0.3):
     dependencies:
       cac: 7.1.0
       defu: 6.1.7
@@ -13559,10 +13567,10 @@ snapshots:
       obug: 3.0.0
       picomatch: 4.0.7
       rolldown: 1.2.15
-      rolldown-plugin-dts: 0.29.0-beta.2(@volar/typescript@2.4.28(typescript@6.0.3))(rolldown@1.2.15)(typescript@6.0.3)
+      rolldown-plugin-dts: 0.28.8(@volar/typescript@2.4.28(typescript@6.0.3))(rolldown@1.2.15)(typescript@6.0.3)
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      tree-kill: 1.2.2
+      tinyps: 0.5.1
       unconfig-core: 7.5.0
       verkit: 0.5.0
     optionalDependencies:
@@ -13571,6 +13579,7 @@ snapshots:
       tsx: 4.23.15
       typescript: 6.0.3
     transitivePeerDependencies:
+      - '@typescript/native-preview'
       - '@volar/typescript'
       - '@vue/language-core'
       - oxc-resolver
