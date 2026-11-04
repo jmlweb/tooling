@@ -127,8 +127,6 @@ Same options, with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/
 
 Shebang names are output names without extension (`cli` for `dist/cli.js`). An entry whose source already starts with a shebang keeps its own; no second one is added.
 
-A `banner` of your own (string, object or function form) is kept on every output. On the shebang entries the shebang goes first and your `js` banner follows on the next line. A `js` banner that already starts with `#!` is used as is.
-
 ### Conflicts and Deprecations
 
 - `external` maps to `deps.neverBundle`; passing both throws `TsdownConfigError`

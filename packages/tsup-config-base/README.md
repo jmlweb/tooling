@@ -107,8 +107,6 @@ Same options, with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/
 
 Returns an array of configs when a selective shebang is used.
 
-A `banner` in `options` replaces the shebang banner, so the output has no shebang. To keep both, put the shebang first in your own banner: `banner: { js: '#!/usr/bin/env node\n/* license */' }`. [`@jmlweb/tsdown-config-base`](../tsdown-config-base) combines them for you.
-
 ### Exports
 
 - `createTsupConfig`, `createTsupCliConfig` - Helpers
