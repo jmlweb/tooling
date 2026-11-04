@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 0 |
+| Pending | 2 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 2 |
@@ -17,6 +17,8 @@ _No active tasks._
 
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
+| TSK-003 | Fix: jest-config default ignore patterns skip every test when an ancestor directory is named build, dist or .cache | P3 |  | 2026-11-04 |
+| TSK-004 | Fix: createTsupCliConfig with selective shebang drops array entries that share a basename | P4 |  | 2026-11-04 |
 
 ## Recently Completed
 
