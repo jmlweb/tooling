@@ -50,3 +50,4 @@ Take `banner` out of `rest` in `createTsdownCliConfig` and pass it to `resolveSh
 - [2026-11-04] criterion 5 — evidence: packages/tsup-config-base/README.md documents that a banner in options replaces the shebang and how to keep both (2026-11-04)
 - [2026-11-04] criterion 6 — evidence: .changeset/keep-shebang-with-user-banner.md → patch for @jmlweb/tsdown-config-base and @jmlweb/tsup-config-base (2026-11-04)
 - [2026-11-04] Completed
+- [2026-11-04] re-verified on clean clone: pnpm --filter @jmlweb/tsdown-config-base test → 22 pass (16 fail on unfixed src/index.ts); turbo build, test, lint, format:check, lint:root → all successful; syncpack, validate:docs, validate:packages → pass (2026-11-04)
