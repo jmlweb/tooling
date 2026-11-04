@@ -27,7 +27,8 @@
     "build": "tsdown",
     "clean": "rm -rf dist",
     "lint": "oxlint -c ../../oxlint.config.ts src",
-    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build",
+    "test": "node --test test/*.test.mjs"
   },
   "keywords": [
     "build",

@@ -38,6 +38,7 @@
       "outputs": [],
       "inputs": [
         "src/**",
+        "test/**",
         "fixtures/**",
         "scripts/**",
         "*.test.*",
