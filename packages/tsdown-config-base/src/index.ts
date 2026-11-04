@@ -1,4 +1,9 @@
-import type { DepsConfig, Rolldown, UserConfig } from 'tsdown';
+import type {
+  ChunkAddonObject,
+  DepsConfig,
+  Rolldown,
+  UserConfig,
+} from 'tsdown';
 
 /**
  * Entry points configuration - can be an array of paths or an object mapping names to paths
@@ -392,13 +397,16 @@ export const createTsdownCliConfig = (
     options = {},
     ...topLevel
   } = config;
-  const { deps, checks, plugins, ...rest } = mergeTopLevel(topLevel, options);
+  const { deps, checks, plugins, banner, ...rest } = mergeTopLevel(
+    topLevel,
+    options,
+  );
   const { shebang: _shebang, ...defaults } = CLI_DEFAULTS;
 
   return {
     ...defaults,
     ...resolveChecks(checks),
-    ...resolveShebang(shebang, plugins),
+    ...resolveShebang(shebang, plugins, banner),
     ...resolveDeps(external, deps),
     ...rest,
   };
@@ -449,17 +457,21 @@ const createOwnShebangDetector = (): {
  * plugin that detects entries whose source already has one: adding a second
  * shebang would make the output a syntax error. tsdown passes each chunk's
  * file name to banner functions, so selective shebangs fit in a single config
- * instead of tsup's split configs.
+ * instead of tsup's split configs. A user `banner` is kept: the shebang is
+ * prepended to its `js` part, so it stays on the first line.
  */
 const resolveShebang = (
   shebang: boolean | string | string[],
   userPlugins: UserConfig['plugins'],
+  userBanner: UserConfig['banner'],
 ): Pick<UserConfig, 'banner' | 'plugins'> => {
   const shebangEntries = normalizeShebangConfig(shebang);
-  const pluginsOnly = userPlugins === undefined ? {} : { plugins: userPlugins };
 
   if (shebangEntries !== 'all' && shebangEntries.length === 0) {
-    return pluginsOnly;
+    return {
+      ...(userBanner === undefined ? {} : { banner: userBanner }),
+      ...(userPlugins === undefined ? {} : { plugins: userPlugins }),
+    };
   }
 
   const targets =
@@ -467,14 +479,41 @@ const resolveShebang = (
   const { plugin, hasOwnShebang } = createOwnShebangDetector();
 
   return {
-    banner: ({ fileName }) => {
-      const entryName = toEntryName(fileName);
+    banner: (context) => {
+      const entryName = toEntryName(context.fileName);
       const isTarget = targets === undefined || targets.has(entryName);
+      const resolvedUserBanner =
+        typeof userBanner === 'function' ? userBanner(context) : userBanner;
       return isTarget && !hasOwnShebang(entryName)
-        ? { js: SHEBANG }
-        : undefined;
+        ? prependShebang(resolvedUserBanner)
+        : resolvedUserBanner;
     },
     plugins: [plugin, userPlugins],
+  };
+};
+
+/**
+ * Puts the shebang before the `js` part of a resolved user banner. tsdown
+ * applies a string banner to every output type (js, css and dts), so it is
+ * spread into an object first: returning a string would put the shebang in
+ * declaration files too. A `js` banner that already starts with a shebang is
+ * kept as is, since a second one is a syntax error
+ */
+const prependShebang = (
+  banner: ChunkAddonObject | string | undefined,
+): ChunkAddonObject => {
+  const bannerObject =
+    typeof banner === 'string'
+      ? { js: banner, css: banner, dts: banner }
+      : (banner ?? {});
+  const userJs = bannerObject.js;
+
+  if (userJs?.startsWith('#!')) {
+    return bannerObject;
+  }
+  return {
+    ...bannerObject,
+    js: userJs ? `${SHEBANG}\n${userJs}` : SHEBANG,
   };
 };
 
