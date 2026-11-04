@@ -1,6 +1,6 @@
 {
   "name": "@jmlweb/tsdown-config-base",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Base tsdown configuration for jmlweb projects with sensible defaults",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -27,7 +27,8 @@
     "build": "tsdown",
     "clean": "rm -rf dist",
     "lint": "oxlint -c ../../oxlint.config.ts src",
-    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build"
+    "prepublishOnly": "node ../../scripts/validate-package.mjs && pnpm build",
+    "test": "node --test test/*.test.mjs"
   },
   "keywords": [
     "build",
