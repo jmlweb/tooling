@@ -25,10 +25,10 @@ Prefix the default patterns with `<rootDir>` (e.g. `'<rootDir>/build/'`). Keep n
 
 ## Acceptance Criteria
 
-- [x] Default testPathIgnorePatterns and coveragePathIgnorePatterns are anchored to <rootDir> so ancestor directories named build, dist, .git, .cache or coverage do not exclude project files
-- [x] A regression test runs the default config from a project inside an ancestor directory named build and finds its tests
-- [x] packages/jest-config/README.md documents the new default patterns
-- [x] Changeset recorded for @jmlweb/jest-config
+- [x] Default testPathIgnorePatterns and coveragePathIgnorePatterns are anchored to <rootDir> so ancestor directories named build, dist, .git, .cache or coverage do not exclude project files — evidence: node --test packages/jest-config/test/index.test.mjs → anchored-pattern tests pass for build, dist, .git, .cache, coverage ancestors (pre-fix 17/20 fail) (2026-11-07)
+- [x] A regression test runs the default config from a project inside an ancestor directory named build and finds its tests — evidence: node --test packages/jest-config/test/index.test.mjs → jest runCLI inside <tmp>/build/project finds 1 test; 20 pass, 0 fail (2026-11-07)
+- [x] packages/jest-config/README.md documents the new default patterns — evidence: packages/jest-config/README.md defaults table + note; pnpm validate:docs → passed (2026-11-07)
+- [x] Changeset recorded for @jmlweb/jest-config — evidence: .changeset/anchor-jest-ignore-patterns.md → @jmlweb/jest-config patch (2026-11-07)
 
 ## Notes
 
