@@ -85,20 +85,22 @@ export default {
 
 `createJestConfig(options)` options and defaults:
 
-| Option                       | Default                                                                              |
-| ---------------------------- | ------------------------------------------------------------------------------------ |
-| `testEnvironment`            | `'node'`                                                                             |
-| `moduleFileExtensions`       | `['ts', 'tsx', 'js', 'jsx', 'json']`                                                 |
-| `testMatch`                  | `['**/*.{test,spec}.{ts,tsx,js,jsx}']`                                               |
-| `testPathIgnorePatterns`     | `/node_modules/`, `/dist/`, `/build/`, `/.git/`, `/.cache/`                          |
-| `collectCoverageFrom`        | `['src/**/*.{ts,tsx,js,jsx}']`                                                       |
-| `coveragePathIgnorePatterns` | node_modules, dist, build, coverage, `.d.ts`, config, test and spec files            |
-| `coverageThreshold`          | `global`: 80 for lines, functions, branches, statements                              |
-| `coverageReporters`          | `['text', 'json', 'html']`                                                           |
-| `setupFilesAfterEnv`         | `[]` (omitted when empty)                                                            |
-| `moduleNameMapper`           | `{}` (omitted when empty)                                                            |
-| `transform`                  | `ts-jest` for `.ts`/`.tsx` with `esModuleInterop` and `allowSyntheticDefaultImports` |
-| `testTimeout`                | `5000`                                                                               |
+| Option                       | Default                                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `testEnvironment`            | `'node'`                                                                                                             |
+| `moduleFileExtensions`       | `['ts', 'tsx', 'js', 'jsx', 'json']`                                                                                 |
+| `testMatch`                  | `['**/*.{test,spec}.{ts,tsx,js,jsx}']`                                                                               |
+| `testPathIgnorePatterns`     | `/node_modules/`, `<rootDir>/dist/`, `<rootDir>/build/`, `<rootDir>/.git/`, `<rootDir>/.cache/`                      |
+| `collectCoverageFrom`        | `['src/**/*.{ts,tsx,js,jsx}']`                                                                                       |
+| `coveragePathIgnorePatterns` | `/node_modules/`, `<rootDir>/dist/`, `<rootDir>/build/`, `<rootDir>/coverage/`, `.d.ts`, config, test and spec files |
+| `coverageThreshold`          | `global`: 80 for lines, functions, branches, statements                                                              |
+| `coverageReporters`          | `['text', 'json', 'html']`                                                                                           |
+| `setupFilesAfterEnv`         | `[]` (omitted when empty)                                                                                            |
+| `moduleNameMapper`           | `{}` (omitted when empty)                                                                                            |
+| `transform`                  | `ts-jest` for `.ts`/`.tsx` with `esModuleInterop` and `allowSyntheticDefaultImports`                                 |
+| `testTimeout`                | `5000`                                                                                                               |
+
+Jest matches ignore patterns against absolute paths, so the output directories are anchored to `<rootDir>`: a project inside a directory named `build`, `dist`, `.cache` or `coverage` still finds its tests and coverage. `node_modules` stays unanchored to skip nested ones. Jest itself skips every path containing a `.git` directory, so do not place a project inside one.
 
 Fixed settings: `collectCoverage: false` (use `--coverage`), `verbose: true`, `clearMocks: true`, `restoreMocks: true`, `resetModules: false`.
 

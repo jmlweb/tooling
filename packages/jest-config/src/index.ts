@@ -25,7 +25,7 @@ export type JestConfigOptions = {
 
   /**
    * Array of patterns to skip when looking for test files
-   * @default ['**\/node_modules\/**', '**\/dist\/**', '**\/build\/**']
+   * @default ['/node_modules/', '<rootDir>/dist/', '<rootDir>/build/', '<rootDir>/.git/', '<rootDir>/.cache/']
    */
   testPathIgnorePatterns?: string[];
 
@@ -43,7 +43,7 @@ export type JestConfigOptions = {
 
   /**
    * Array of patterns to exclude from coverage
-   * @default ['**\/*.d.ts', '**\/*.config.{ts,js}', '**\/dist\/**', '**\/build\/**', '**\/node_modules\/**', '**\/coverage\/**', '**\/*.test.{ts,tsx,js,jsx}', '**\/*.spec.{ts,tsx,js,jsx}']
+   * @default ['/node_modules/', '<rootDir>/dist/', '<rootDir>/build/', '<rootDir>/coverage/', '.*\\.d\\.ts$', '.*\\.config\\.(ts|js)$', '.*\\.test\\.(ts|tsx|js|jsx)$', '.*\\.spec\\.(ts|tsx|js|jsx)$']
    */
   coveragePathIgnorePatterns?: string[];
 
@@ -104,12 +104,14 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
     testEnvironment = 'node',
     moduleFileExtensions = ['ts', 'tsx', 'js', 'jsx', 'json'],
     testMatch = ['**/*.{test,spec}.{ts,tsx,js,jsx}'],
+    // Jest matches these against absolute paths: anchor output directories
+    // to <rootDir> so an ancestor directory with the same name is not ignored
     testPathIgnorePatterns = [
       '/node_modules/',
-      '/dist/',
-      '/build/',
-      '/.git/',
-      '/.cache/',
+      '<rootDir>/dist/',
+      '<rootDir>/build/',
+      '<rootDir>/.git/',
+      '<rootDir>/.cache/',
     ],
     coverageThreshold = {
       global: {
@@ -122,9 +124,9 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
     collectCoverageFrom = ['src/**/*.{ts,tsx,js,jsx}'],
     coveragePathIgnorePatterns = [
       '/node_modules/',
-      '/dist/',
-      '/build/',
-      '/coverage/',
+      '<rootDir>/dist/',
+      '<rootDir>/build/',
+      '<rootDir>/coverage/',
       '.*\\.d\\.ts$',
       '.*\\.config\\.(ts|js)$',
       '.*\\.test\\.(ts|tsx|js|jsx)$',
