@@ -68,11 +68,11 @@
     "@jmlweb/eslint-config-base": "workspace:*",
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
-    "eslint": "^10.13.0",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-simple-import-sort": "^14.0.0",
-    "tsdown": "~0.23.4",
+    "tsdown": "~0.23.7",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1"
   }

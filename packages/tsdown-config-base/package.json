@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
-    "tsdown": "~0.23.4",
+    "tsdown": "~0.23.7",
     "typescript": "^6.0.3"
   }
 }
