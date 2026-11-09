@@ -6,6 +6,12 @@ overrides:
   'postcss-selector-parser@>=7 <7.1.6': '>=7.1.6'
   'postcss-selector-parser@<7.1.6': '>=7.1.6'
   'esbuild@>=0.27.3 <0.28.1': '>=0.28.1'
+  # rolldown 1.3.0's WASM binding depends on @emnapi/*@2.0.0-beta.2. pnpm then
+  # resolves the astro check WASM binding's peer to that beta runtime next to a
+  # 1.x core, which crashes `astro check`. Keep @emnapi on the stable line;
+  # remove once @emnapi 2.x is stable.
+  '@emnapi/core@2.0.0-beta.2': '^1.11.3'
+  '@emnapi/runtime@2.0.0-beta.2': '^1.11.3'
 
 # No patched release exists for these; both are build/test-time only transitive dependencies.
 # Remove an entry once the advisory has a fix.
