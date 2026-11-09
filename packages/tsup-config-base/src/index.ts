@@ -6,6 +6,13 @@ import type { Options } from 'tsup';
 export type EntryConfig = string[] | Record<string, string>;
 
 /**
+ * Thrown when a configuration cannot be built without losing an entry or a shebang
+ */
+export class TsupConfigError extends Error {
+  override name = 'TsupConfigError';
+}
+
+/**
  * Node.js target version for CLI builds
  */
 export type NodeTarget =
@@ -135,7 +142,10 @@ export type TsupCliConfigOptions = {
   /**
    * Add shebang (#!/usr/bin/env node) to the output
    * When true, adds shebang to all entry points
-   * When a string or array, only adds shebang to matching entry names
+   * When a string or array, only adds shebang to matching entry names.
+   * Array entries are named by their path relative to the directory all
+   * entries share, without extension, as tsup names their output
+   * (`['src/cli.ts', 'src/admin/cli.ts']` gives `cli` and `admin/cli`)
    * @default true
    * @example
    * ```typescript
@@ -331,6 +341,7 @@ export const createTsupCliConfig = (
 
   // For selective shebang, we need to split into multiple configs
   const entryObject = normalizeEntry(entry);
+  assertShebangEntriesExist(shebangEntries, entryObject);
   const shebangSet = new Set(shebangEntries);
 
   const withShebang: Record<string, string> = {};
@@ -379,20 +390,84 @@ export const createTsupCliConfig = (
   return configs.length === 1 ? configs[0] : configs;
 };
 
+const GLOB_CHARACTERS = /[*?[\]{}!]/;
+
+const toPosixPath = (path: string): string =>
+  path.replaceAll('\\', '/').replace(/^(\.\/)+/, '');
+
+const directorySegments = (path: string): string[] =>
+  path.split('/').slice(0, -1);
+
+const commonDirectorySegments = (paths: string[]): string[] =>
+  paths
+    .map(directorySegments)
+    .reduce<string[] | undefined>((common, segments) => {
+      if (common === undefined) {
+        return segments;
+      }
+      const firstMismatch = common.findIndex(
+        (segment, index) => segment !== segments[index],
+      );
+      return firstMismatch === -1 ? common : common.slice(0, firstMismatch);
+    }, undefined) ?? [];
+
+const withoutExtension = (path: string): string =>
+  path.replace(/\.[^./]+$/, '');
+
 /**
- * Normalize entry to object format
+ * Normalize entry to object format.
+ * Array entries are named the way tsup names their output: by the path
+ * relative to the deepest directory all entries share, without extension
+ * (e.g. ['src/cli.ts', 'src/admin/cli.ts'] -> 'cli' and 'admin/cli')
  */
 const normalizeEntry = (entry: EntryConfig): Record<string, string> => {
-  if (Array.isArray(entry)) {
-    return Object.fromEntries(
-      entry.map((path) => [
-        // Extract name from path (e.g., 'src/cli.ts' -> 'cli')
-        path.replace(/^.*\//, '').replace(/\.[^.]+$/, ''),
-        path,
-      ]),
+  if (!Array.isArray(entry)) {
+    return entry;
+  }
+
+  const globEntry = entry.find((path) => GLOB_CHARACTERS.test(path));
+  if (globEntry !== undefined) {
+    throw new TsupConfigError(
+      `Cannot apply a selective shebang to the glob entry "${globEntry}". ` +
+        'Use the object form of entry instead, e.g. { cli: "src/cli.ts" }.',
     );
   }
-  return entry;
+
+  const posixPaths = entry.map(toPosixPath);
+  const commonPrefixLength = commonDirectorySegments(posixPaths).length;
+  const pathsByName = new Map<string, string>();
+
+  entry.forEach((path, index) => {
+    const segments = posixPaths[index].split('/').slice(commonPrefixLength);
+    const name = withoutExtension(segments.join('/'));
+    const existingPath = pathsByName.get(name);
+    if (existingPath !== undefined) {
+      throw new TsupConfigError(
+        `Entries "${existingPath}" and "${path}" both map to the output name "${name}". ` +
+          'Use the object form of entry to give each one its own name.',
+      );
+    }
+    pathsByName.set(name, path);
+  });
+
+  return Object.fromEntries(pathsByName);
+};
+
+/**
+ * A shebang name that matches no entry would silently produce a binary without a shebang
+ */
+const assertShebangEntriesExist = (
+  shebangEntries: string[],
+  entryObject: Record<string, string>,
+): void => {
+  const entryNames = Object.keys(entryObject);
+  const missingName = shebangEntries.find((name) => !entryNames.includes(name));
+  if (missingName !== undefined) {
+    throw new TsupConfigError(
+      `Shebang entry "${missingName}" matches no entry. ` +
+        `Available entry names: ${entryNames.map((name) => `"${name}"`).join(', ')}.`,
+    );
+  }
 };
 
 /**

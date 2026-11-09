@@ -107,6 +107,10 @@ Same options, with `format` defaulting to `['esm']` and `entry` to `{ cli: 'src/
 
 Returns an array of configs when a selective shebang is used.
 
+With a selective shebang, `shebang` names refer to entry names. An object entry uses its keys. An array entry is named the way tsup names its output: the path relative to the deepest directory all entries share, without extension. `['src/cli.ts', 'src/admin/cli.ts']` gives `cli` and `admin/cli`, built to `dist/cli.js` and `dist/admin/cli.js`. A single entry gets its basename (`['src/cli.ts']` gives `cli`).
+
+On that path the config throws a `TsupConfigError` when two array entries map to the same name (`src/cli.ts` and `src/cli.js`), when an array entry is a glob, or when a `shebang` name matches no entry. Use the object form of `entry` to name entries yourself.
+
 A `banner` in `options` replaces the shebang banner, so the output has no shebang. To keep both, put the shebang first in your own banner: `banner: { js: '#!/usr/bin/env node\n/* license */' }`. [`@jmlweb/tsdown-config-base`](../tsdown-config-base) combines them for you.
 
 ### Exports
