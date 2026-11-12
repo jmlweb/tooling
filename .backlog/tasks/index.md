@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 0 |
+| Pending | 1 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 4 |
@@ -17,6 +17,7 @@ _No active tasks._
 
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
+| TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
 
 ## Recently Completed
 
