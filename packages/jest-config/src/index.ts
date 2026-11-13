@@ -67,7 +67,7 @@ export type JestConfigOptions = {
 
   /**
    * Transform configuration
-   * @default { '^.+\\.tsx?$': ['ts-jest', { tsconfig: { esModuleInterop: true, allowSyntheticDefaultImports: true } }] }
+   * @default { '^.+\\.tsx?$': ['ts-jest', { tsconfig: { esModuleInterop: true, allowSyntheticDefaultImports: true } }], '^.+\\.jsx?$': 'babel-jest' }
    */
   transform?: Record<string, string | [string, Record<string, unknown>]>;
 
@@ -83,7 +83,7 @@ export type JestConfigOptions = {
  * This configuration provides a solid foundation for testing TypeScript projects.
  *
  * Features:
- * - TypeScript support via ts-jest
+ * - TypeScript support via ts-jest, JavaScript via babel-jest
  * - Coverage configuration with 80% thresholds
  * - Node.js environment by default
  * - Standard test file patterns
@@ -145,6 +145,9 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
           },
         },
       ],
+      // An explicit transform replaces Jest's implicit babel-jest default,
+      // so JS tests would lose jest.mock hoisting and the project Babel config
+      '^.+\\.jsx?$': 'babel-jest',
     },
     testTimeout = 5000,
   } = options;
@@ -173,7 +176,7 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
     ...(setupFilesAfterEnv.length > 0 && { setupFilesAfterEnv }),
     ...(Object.keys(moduleNameMapper).length > 0 && { moduleNameMapper }),
 
-    // Transform configuration for TypeScript
+    // Transform configuration for TypeScript and JavaScript
     transform,
 
     // Test timeout
@@ -200,7 +203,7 @@ export const createJestConfig = (options: JestConfigOptions = {}): Config => {
  * This configuration provides a solid foundation for testing TypeScript projects.
  *
  * Features:
- * - TypeScript support via ts-jest
+ * - TypeScript support via ts-jest, JavaScript via babel-jest
  * - Coverage configuration with 80% thresholds
  * - Node.js environment by default
  * - Standard test file patterns
