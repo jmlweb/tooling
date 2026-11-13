@@ -195,7 +195,7 @@ TypeScript configuration for Astro projects:
 
 Base Jest configuration for testing:
 
-- TypeScript support via ts-jest
+- TypeScript support via ts-jest, JavaScript via babel-jest
 - 80% coverage thresholds
 - Factory function for customization
 
