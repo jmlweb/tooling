@@ -10,19 +10,35 @@ import { createJestConfig } from '../src/index.ts';
 
 const PASSING_TEST = "test('passes', () => { expect(1).toBe(1); });\n";
 const FAILING_TEST = "test('fails', () => { expect(1).toBe(2); });\n";
+// jest.mock runs after the require only if babel-jest hoists it
+const HOISTED_MOCK_TEST = [
+  "const dependency = require('./dependency');",
+  "jest.mock('./dependency', () => 'mocked');",
+  "test('uses the hoisted mock', () => { expect(dependency).toBe('mocked'); });",
+  '',
+].join('\n');
+const DEPENDENCY = "module.exports = 'real';\n";
 const SOURCE = 'module.exports = (a, b) => a + b;\n';
 const SOURCE_TEST =
   "const sum = require('./sum');\ntest('sums', () => { expect(sum(1, 2)).toBe(3); });\n";
 
-// The temp project has no node_modules, so the default ts-jest transform
+// The temp project has no node_modules, so the default transformers
 // would not resolve from its rootDir
+const resolveTransformer = (transformer) => {
+  const resolveFromHere = createRequire(import.meta.url).resolve;
+  if (typeof transformer === 'string') {
+    return resolveFromHere(transformer);
+  }
+  const [name, options] = transformer;
+  return [resolveFromHere(name), options];
+};
+
 const defaultConfigWithResolvableTransform = () => {
   const { transform } = createJestConfig();
-  const tsJestPath = createRequire(import.meta.url).resolve('ts-jest');
   const resolvedTransform = Object.fromEntries(
-    Object.entries(transform).map(([pattern, [, options]]) => [
+    Object.entries(transform).map(([pattern, transformer]) => [
       pattern,
-      [tsJestPath, options],
+      resolveTransformer(transformer),
     ]),
   );
   // runCLI loads this as a project config, where Jest warns about the
@@ -53,6 +69,10 @@ const runInsideAncestor = async (ancestorName, files, cliOptions = {}) => {
   );
   const projectDir = join(tempRoot, ancestorName, 'project');
   await writeFiles(projectDir, files);
+  // babel-jest only instruments files for coverage when Jest runs from the
+  // project directory, as it does in a real project
+  const previousCwd = process.cwd();
+  process.chdir(projectDir);
 
   try {
     const { results } = await runCLI(
@@ -74,6 +94,7 @@ const runInsideAncestor = async (ancestorName, files, cliOptions = {}) => {
     );
     return results;
   } finally {
+    process.chdir(previousCwd);
     await rm(tempRoot, { recursive: true, force: true });
   }
 };
@@ -204,4 +225,41 @@ await test('default config still ignores the project output directories', async 
 
   assert.equal(results.numTotalTests, 1);
   assert.equal(results.numPassedTests, 1);
+});
+
+const JS_PATTERN = '^.+\\.jsx?$';
+const TS_PATTERN = '^.+\\.tsx?$';
+
+await test('default transform', async (t) => {
+  const { transform } = createJestConfig();
+
+  await t.test('handles .js and .jsx files with babel-jest', () => {
+    assert.equal(transform[JS_PATTERN], 'babel-jest');
+    const jsPattern = new RegExp(JS_PATTERN);
+    assert.ok(jsPattern.test('src/app.test.js'));
+    assert.ok(jsPattern.test('src/app.test.jsx'));
+    assert.ok(!jsPattern.test('src/app.test.ts'));
+  });
+
+  await t.test('keeps ts-jest for .ts and .tsx files', () => {
+    assert.equal(transform[TS_PATTERN][0], 'ts-jest');
+  });
+
+  await t.test('hoists jest.mock in .js tests', async () => {
+    const results = await runInsideAncestor('plain', {
+      'src/dependency.js': DEPENDENCY,
+      'src/hoisting.test.js': HOISTED_MOCK_TEST,
+    });
+
+    assert.equal(results.numTotalTests, 1);
+    assert.equal(results.numPassedTests, 1);
+  });
+});
+
+await test('a custom transform replaces the default entirely', () => {
+  const customTransform = { '^.+\\.mjs$': 'custom-transformer' };
+
+  const { transform } = createJestConfig({ transform: customTransform });
+
+  assert.deepEqual(transform, customTransform);
 });
