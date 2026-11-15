@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 2 |
+| Pending | 3 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 4 |
@@ -19,6 +19,7 @@ _No active tasks._
 |----|-------|----------|------|---------|
 | TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
 | TSK-006 | Fix: vite-config JSDoc alias examples use a relative './src' path that Vite cannot resolve | P4 |  | 2026-11-13 |
+| TSK-007 | Fix: createReactViteConfig types reactPlugin as Plugin, so the documented react() call fails type-checking | P3 |  | 2026-11-15 |
 
 ## Recently Completed
 
