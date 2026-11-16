@@ -47,7 +47,7 @@
     "oxlint-tsgolint": "^7.0.2006",
     "publint": "^0.3.25",
     "syncpack": "^15.3.3",
-    "turbo": "^2.11.10",
+    "turbo": "^2.11.11",
     "typescript": "^6.0.3"
   },
   "lint-staged": {
