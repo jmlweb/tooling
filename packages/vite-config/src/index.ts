@@ -12,7 +12,7 @@ export type ViteConfigOptions = {
 
   /**
    * Path aliases for module resolution
-   * @example { '@': './src' }
+   * @example { '@': resolve(import.meta.dirname, 'src') }
    */
   resolve?: {
     alias?: Record<string, string>;
@@ -209,6 +209,7 @@ export const createViteConfig = (
  *
  * @example
  * ```typescript
+ * import { resolve } from 'node:path';
  * import { createReactViteConfig } from '@jmlweb/vite-config';
  * import react from '@vitejs/plugin-react';
  *
@@ -216,7 +217,7 @@ export const createViteConfig = (
  *   reactPlugin: react(),
  *   resolve: {
  *     alias: {
- *       '@': './src',
+ *       '@': resolve(import.meta.dirname, 'src'),
  *     },
  *   },
  * });
