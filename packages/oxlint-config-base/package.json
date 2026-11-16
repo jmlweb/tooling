@@ -72,7 +72,7 @@
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
     "oxlint": "^1.93.0",
-    "oxlint-tsgolint": "^7.0.2006",
+    "oxlint-tsgolint": "^7.0.2007",
     "tsdown": "~0.23.7",
     "typescript": "^6.0.3"
   }
