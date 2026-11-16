@@ -44,7 +44,7 @@
     "lint-staged": "^17.6.0",
     "oxfmt": "^0.77.0",
     "oxlint": "^1.93.0",
-    "oxlint-tsgolint": "^7.0.2006",
+    "oxlint-tsgolint": "^7.0.2007",
     "publint": "^0.3.25",
     "syncpack": "^15.3.3",
     "turbo": "^2.11.11",
