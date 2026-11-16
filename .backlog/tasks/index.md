@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 1 |
+| Pending | 2 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 5 |
@@ -18,6 +18,7 @@ _No active tasks._
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
 | TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
+| TSK-007 | Fix: createReactViteConfig types reactPlugin as Plugin, so the documented react() call fails type-checking | P3 |  | 2026-11-15 |
 
 ## Recently Completed
 
