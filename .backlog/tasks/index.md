@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 2 |
+| Pending | 3 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 5 |
@@ -19,6 +19,7 @@ _No active tasks._
 |----|-------|----------|------|---------|
 | TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
 | TSK-007 | Fix: createReactViteConfig types reactPlugin as Plugin, so the documented react() call fails type-checking | P3 |  | 2026-11-15 |
+| TSK-008 | Fix: tsconfig-nextjs @/* path alias resolves inside node_modules, not the project root | P2 |  | 2026-11-17 |
 
 ## Recently Completed
 
