@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 1 |
+| Pending | 2 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 6 |
@@ -18,6 +18,7 @@ _No active tasks._
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
 | TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
+| TSK-008 | Fix: tsconfig-nextjs @/* path alias resolves inside node_modules, not the project root | P2 |  | 2026-11-17 |
 
 ## Recently Completed
 
