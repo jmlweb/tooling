@@ -1,4 +1,4 @@
-import type { UserConfig, Plugin } from 'vite';
+import type { UserConfig, PluginOption } from 'vite';
 
 /**
  * Options for creating a base Vite configuration
@@ -8,7 +8,7 @@ export type ViteConfigOptions = {
    * Additional Vite plugins to include
    * @default []
    */
-  plugins?: Plugin[];
+  plugins?: PluginOption[];
 
   /**
    * Path aliases for module resolution
@@ -231,9 +231,7 @@ export const createViteConfig = (
  *
  * export default createReactViteConfig({
  *   reactPlugin: react({
- *     babel: {
- *       plugins: ['@emotion/babel-plugin'],
- *     },
+ *     jsxImportSource: '@emotion/react',
  *   }),
  *   build: {
  *     sourcemap: true,
@@ -242,7 +240,7 @@ export const createViteConfig = (
  * ```
  */
 export const createReactViteConfig = (
-  config: ViteConfigOptions & { reactPlugin: Plugin },
+  config: ViteConfigOptions & { reactPlugin: PluginOption },
 ): UserConfig => {
   const { reactPlugin, plugins = [], ...rest } = config;
 
@@ -260,4 +258,4 @@ export { BASE_DEFAULTS };
 /**
  * Re-export Vite's types for convenience
  */
-export type { UserConfig, Plugin } from 'vite';
+export type { UserConfig, Plugin, PluginOption } from 'vite';

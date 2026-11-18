@@ -110,13 +110,13 @@ export default createViteConfig({
 
 ### API
 
-| Export                  | Description                                                                  |
-| ----------------------- | ---------------------------------------------------------------------------- |
-| `createViteConfig`      | Options: `plugins`, `resolve.alias`, `build`, `server`, `preview`, `options` |
-| `createReactViteConfig` | Same options plus required `reactPlugin`, placed first in `plugins`          |
-| `BASE_DEFAULTS`         | Default `build`, `server` and `preview` values                               |
-| `ViteConfigOptions`     | Options type                                                                 |
-| `UserConfig`, `Plugin`  | Re-exported Vite types                                                       |
+| Export                                 | Description                                                                                |
+| -------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `createViteConfig`                     | Options: `plugins`, `resolve.alias`, `build`, `server`, `preview`, `options`               |
+| `createReactViteConfig`                | Same options plus required `reactPlugin` (the `react()` result), placed first in `plugins` |
+| `BASE_DEFAULTS`                        | Default `build`, `server` and `preview` values                                             |
+| `ViteConfigOptions`                    | Options type                                                                               |
+| `UserConfig`, `Plugin`, `PluginOption` | Re-exported Vite types                                                                     |
 
 ## 🎯 When to Use
 
