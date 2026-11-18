@@ -1,5 +1,11 @@
 # @jmlweb/vite-config
 
+## 2.0.5
+
+### Patch Changes
+
+- 8f0ff10: Type `reactPlugin` and `plugins` as Vite `PluginOption` so `createReactViteConfig({ reactPlugin: react() })` type-checks with `@vitejs/plugin-react` 6, which returns `Plugin[]`. Re-export the `PluginOption` type.
+
 ## 2.0.4
 
 ### Patch Changes
