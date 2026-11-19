@@ -4,6 +4,7 @@ import chalk from 'chalk';
 
 import {
   createTestFile,
+  execInTestProject,
   initTestProject,
   installDependencies,
   readTestFile,
@@ -99,6 +100,10 @@ async function testTSConfigPackage(pkg, allPackages) {
     }
     log.success('Package exports are configured correctly');
 
+    if (pkg.name === '@jmlweb/tsconfig-nextjs') {
+      testPathAliasResolvesFromProjectRoot(pkg);
+    }
+
     log.success(`✅ All tests passed for ${pkg.name}\n`);
   } catch (error) {
     log.error(`❌ Tests failed for ${pkg.name}: ${error.message}`);
@@ -107,4 +112,37 @@ async function testTSConfigPackage(pkg, allPackages) {
     }
     throw error;
   }
+}
+
+// `paths` entries resolve against the tsconfig that declares them, so a
+// shared config must use ${configDir} for the alias to reach the consumer.
+function testPathAliasResolvesFromProjectRoot(pkg) {
+  log.info('Test 6: Type-checking an @/ import from the project root...');
+  const aliasTSConfig = {
+    extends: pkg.name,
+    compilerOptions: {
+      noEmit: true,
+      incremental: false,
+      // The Next.js language service plugin is not installed here
+      plugins: [],
+    },
+    include: ['alias-check/**/*'],
+  };
+
+  createTestFile('tsconfig.alias.json', JSON.stringify(aliasTSConfig, null, 2));
+  createTestFile('lib/answer.ts', 'export const answer = 42;\n');
+  createTestFile(
+    'alias-check/page.ts',
+    "import { answer } from '@/lib/answer';\n\nexport const doubled: number = answer * 2;\n",
+  );
+
+  try {
+    execInTestProject('npx tsc -p tsconfig.alias.json', { stdio: 'pipe' });
+  } catch (error) {
+    const output = `${error.stdout ?? ''}${error.stderr ?? ''}`.trim();
+    throw new Error(`tsc failed to resolve the @/* alias:\n${output}`, {
+      cause: error,
+    });
+  }
+  log.success('@/* alias resolves against the consumer project root');
 }

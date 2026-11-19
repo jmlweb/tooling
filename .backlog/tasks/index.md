@@ -4,10 +4,10 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 2 |
+| Pending | 1 |
 | Active | 0 |
 | Blocked | 0 |
-| Complete | 6 |
+| Complete | 7 |
 
 ## Active Tasks
 
@@ -18,12 +18,12 @@ _No active tasks._
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
 | TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
-| TSK-008 | Fix: tsconfig-nextjs @/* path alias resolves inside node_modules, not the project root | P2 |  | 2026-11-17 |
 
 ## Recently Completed
 
 | ID | Title | Completed |
 |----|-------|-----------|
+| TSK-008 | Fix: tsconfig-nextjs @/* path alias resolves inside node_modules, not the project root | 2026-11-19 |
 | TSK-007 | Fix: createReactViteConfig types reactPlugin as Plugin, so the documented react() call fails type-checking | 2026-11-17 |
 | TSK-006 | Fix: vite-config JSDoc alias examples use a relative './src' path that Vite cannot resolve | 2026-11-15 |
 | TSK-004 | Fix: createTsupCliConfig with selective shebang drops array entries that share a basename | 2026-11-09 |

@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@jmlweb/tsconfig-nextjs)](https://www.npmjs.com/package/@jmlweb/tsconfig-nextjs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D22.12.0-339933.svg)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-3178C6.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5%2B-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-13%2B-000000.svg)](https://nextjs.org/)
 
 > TypeScript configuration for Next.js apps (App Router and Pages Router). Extends `@jmlweb/tsconfig-react` with incremental builds, the Next.js plugin and an `@/*` alias.
@@ -12,7 +12,7 @@
 
 - 🚀 **Next.js Plugin**: enhanced type checking for Next.js APIs
 - ⚡ **Incremental Builds**: `incremental: true` for faster rebuilds
-- 📁 **Path Alias**: `@/*` maps to the project root
+- 📁 **Path Alias**: `@/*` maps to the project root (the directory of your `tsconfig.json`)
 - ⚛️ **React Ready**: inherits JSX, DOM types and bundler resolution
 - 🔒 **Strict Mode**: inherits every strict flag from the base config
 
@@ -66,11 +66,11 @@ Overriding `paths` replaces the default `@/*` entry.
 
 Extends [`@jmlweb/tsconfig-react`](../tsconfig-react) (which extends [`@jmlweb/tsconfig-base`](../tsconfig-base)) and adds:
 
-| Option        | Value                  | Description                          |
-| ------------- | ---------------------- | ------------------------------------ |
-| `incremental` | `true`                 | Reuse previous compilation info      |
-| `plugins`     | `[{ "name": "next" }]` | Next.js TypeScript plugin            |
-| `paths`       | `{ "@/*": ["./*"] }`   | `@/*` alias pointing to project root |
+| Option        | Value                           | Description                          |
+| ------------- | ------------------------------- | ------------------------------------ |
+| `incremental` | `true`                          | Reuse previous compilation info      |
+| `plugins`     | `[{ "name": "next" }]`          | Next.js TypeScript plugin            |
+| `paths`       | `{ "@/*": ["${configDir}/*"] }` | `@/*` alias pointing to project root |
 
 Inherited from the React config: `jsx: "react-jsx"`, `module: "ESNext"`, `moduleResolution: "bundler"`, `lib: ["ES2022", "DOM", "DOM.Iterable"]`.
 
@@ -116,14 +116,14 @@ npm run typecheck
 ## 📋 Requirements
 
 - **Node.js** >= 22.12.0
-- **TypeScript** >= 5.0.0
+- **TypeScript** >= 5.5.0 (required for `${configDir}` in `paths`)
 - **Next.js** >= 13.0.0
 
 ## 📦 Peer Dependencies
 
 - `@jmlweb/tsconfig-react` (^2.0.0), which itself requires `@jmlweb/tsconfig-base` (^2.0.0)
 - `next` (>=13.0.0)
-- `typescript` (>=5.0.0)
+- `typescript` (>=5.5.0)
 
 ## 🔗 Related Packages
 
