@@ -21,11 +21,11 @@ From RPT-008. The shared `paths` entry `"@/*": ["./*"]` resolves relative to `no
 
 ## Acceptance Criteria
 
-- [x] packages/tsconfig-nextjs/tsconfig.json maps @/* to ${configDir}/* so it resolves against the consumer config directory
-- [x] A scratch consumer extending @jmlweb/tsconfig-nextjs type-checks an @/ import with tsc (exit 0)
-- [x] The TypeScript >=5.5 requirement for ${configDir} is reflected in the peerDependencies range or the README
-- [x] README Configuration Details table matches the new paths value
-- [x] A changeset is added for @jmlweb/tsconfig-nextjs
+- [x] packages/tsconfig-nextjs/tsconfig.json maps @/* to ${configDir}/* so it resolves against the consumer config directory — evidence: packages/tsconfig-nextjs/tsconfig.json:13 maps @/* to ${configDir}/* (2026-11-19)
+- [x] A scratch consumer extending @jmlweb/tsconfig-nextjs type-checks an @/ import with tsc (exit 0) — evidence: integration Test 6 (npx tsc -p tsconfig.alias.json in packed consumer) → TS2307 before fix, exit 0 after (2026-11-19)
+- [x] The TypeScript >=5.5 requirement for ${configDir} is reflected in the peerDependencies range or the README — evidence: peerDependencies typescript >=5.5.0 plus README Requirements note; pnpm syncpack:check → no issues (2026-11-19)
+- [x] README Configuration Details table matches the new paths value — evidence: README paths row = { "@/*": ["${configDir}/*"] }; docs regenerated; pnpm format:check → clean (2026-11-19)
+- [x] A changeset is added for @jmlweb/tsconfig-nextjs — evidence: .changeset/fix-tsconfig-nextjs-path-alias.md (patch) (2026-11-19)
 
 ## Notes
 
