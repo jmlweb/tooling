@@ -23,11 +23,11 @@ Approach: add a `'^.+\\.jsx?$': 'babel-jest'` entry to the default transform (ba
 
 ## Acceptance Criteria
 
-- [x] Default createJestConfig() transform also handles .js/.jsx files with babel-jest
-- [x] A node:test regression test in packages/jest-config/test/ runs a .js test that relies on jest.mock hoisting and passes
-- [x] Passing a custom transform still replaces the default entirely
-- [x] packages/jest-config/README.md transform row and JSDoc @default describe the JS entry
-- [x] Changeset added for @jmlweb/jest-config
+- [x] Default createJestConfig() transform also handles .js/.jsx files with babel-jest — evidence: node --test test/*.test.mjs: default transform maps ^.+\.jsx?$ to babel-jest (failed before fix, passes after) (2026-11-21)
+- [x] A node:test regression test in packages/jest-config/test/ runs a .js test that relies on jest.mock hoisting and passes — evidence: node --test test/*.test.mjs: hoists jest.mock above require in .js tests (failed before: Received "real"; passes after, 24/0) (2026-11-21)
+- [x] Passing a custom transform still replaces the default entirely — evidence: node --test test/*.test.mjs: a custom transform replaces the default entirely → pass (2026-11-21)
+- [x] packages/jest-config/README.md transform row and JSDoc @default describe the JS entry — evidence: README transform row and JSDoc @default name babel-jest; pnpm validate:docs → exit 0 (2026-11-21)
+- [x] Changeset added for @jmlweb/jest-config — evidence: .changeset/jest-config-babel-jest-transform.md (minor) (2026-11-21)
 
 ## Notes
 
@@ -44,3 +44,4 @@ Approach: add a `'^.+\\.jsx?$': 'babel-jest'` entry to the default transform (ba
 - [2026-11-21] criterion 4 — evidence: git diff packages/jest-config/README.md packages/jest-config/src/index.ts → README transform row, extending note, install and peer list name babel-jest; JSDoc @default includes '^.+\.jsx?$': 'babel-jest'; docs site page mirrored; pnpm validate:docs → exit 0 (2026-11-21)
 - [2026-11-21] criterion 5 — evidence: .changeset/jest-config-babel-jest-transform.md ('@jmlweb/jest-config': minor, notes new babel-jest peer) (2026-11-21)
 - [2026-11-21] Completed
+- [2026-11-21] Attached inline evidence to criteria 1-5; integration suite (test-testing-configs) and docs build pass locally

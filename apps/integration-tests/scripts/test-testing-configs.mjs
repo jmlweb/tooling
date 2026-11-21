@@ -54,6 +54,7 @@ async function testTestingPackage(pkg, allPackages) {
     } else if (pkg.name.includes('jest-config')) {
       deps.jest = '^29.7.0';
       deps['ts-jest'] = '^29.2.5';
+      deps['babel-jest'] = '^29.7.0';
       deps['@types/jest'] = '^29.5.14';
     }
 
