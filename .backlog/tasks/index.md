@@ -4,10 +4,10 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 2 |
+| Pending | 1 |
 | Active | 0 |
 | Blocked | 0 |
-| Complete | 7 |
+| Complete | 8 |
 
 ## Active Tasks
 
@@ -17,13 +17,13 @@ _No active tasks._
 
 | ID | Title | Priority | Tags | Created |
 |----|-------|----------|------|---------|
-| TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
 | TSK-009 | Fix: tsconfig-internal outDir resolves to the shared config package, not each consuming package | P4 |  | 2026-11-19 |
 
 ## Recently Completed
 
 | ID | Title | Completed |
 |----|-------|-----------|
+| TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | 2026-11-21 |
 | TSK-008 | Fix: tsconfig-nextjs @/* path alias resolves inside node_modules, not the project root | 2026-11-19 |
 | TSK-007 | Fix: createReactViteConfig types reactPlugin as Plugin, so the documented react() call fails type-checking | 2026-11-17 |
 | TSK-006 | Fix: vite-config JSDoc alias examples use a relative './src' path that Vite cannot resolve | 2026-11-15 |

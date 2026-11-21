@@ -14,24 +14,29 @@ const SOURCE = 'module.exports = (a, b) => a + b;\n';
 const SOURCE_TEST =
   "const sum = require('./sum');\ntest('sums', () => { expect(sum(1, 2)).toBe(3); });\n";
 
-// The temp project has no node_modules, so the default ts-jest transform
+const resolveFromThisPackage = createRequire(import.meta.url).resolve;
+
+// The temp project has no node_modules, so the default transform modules
 // would not resolve from its rootDir
-const defaultConfigWithResolvableTransform = () => {
-  const { transform } = createJestConfig();
-  const tsJestPath = createRequire(import.meta.url).resolve('ts-jest');
-  const resolvedTransform = Object.fromEntries(
-    Object.entries(transform).map(([pattern, [, options]]) => [
+const resolveTransformModules = (transform) =>
+  Object.fromEntries(
+    Object.entries(transform).map(([pattern, entry]) => [
       pattern,
-      [tsJestPath, options],
+      typeof entry === 'string'
+        ? resolveFromThisPackage(entry)
+        : [resolveFromThisPackage(entry[0]), entry[1]],
     ]),
   );
+
+const defaultConfigWithResolvableTransform = () => {
+  const { transform } = createJestConfig();
   // runCLI loads this as a project config, where Jest warns about the
   // global-only coverage options
   const {
     coverageThreshold: _threshold,
     coverageReporters: _reporters,
     ...config
-  } = createJestConfig({ transform: resolvedTransform });
+  } = createJestConfig({ transform: resolveTransformModules(transform) });
   return config;
 };
 
@@ -53,6 +58,10 @@ const runInsideAncestor = async (ancestorName, files, cliOptions = {}) => {
   );
   const projectDir = join(tempRoot, ancestorName, 'project');
   await writeFiles(projectDir, files);
+  // babel-jest only instruments files inside the working directory, and
+  // consumers run Jest from their project root
+  const previousCwd = process.cwd();
+  process.chdir(projectDir);
 
   try {
     const { results } = await runCLI(
@@ -74,6 +83,7 @@ const runInsideAncestor = async (ancestorName, files, cliOptions = {}) => {
     );
     return results;
   } finally {
+    process.chdir(previousCwd);
     await rm(tempRoot, { recursive: true, force: true });
   }
 };
@@ -204,4 +214,35 @@ await test('default config still ignores the project output directories', async 
 
   assert.equal(results.numTotalTests, 1);
   assert.equal(results.numPassedTests, 1);
+});
+
+await test('default transform', async (t) => {
+  await t.test('handles .js and .jsx files with babel-jest', () => {
+    const { transform } = createJestConfig();
+
+    assert.equal(transform['^.+\\.jsx?$'], 'babel-jest');
+  });
+
+  await t.test('hoists jest.mock above require in .js tests', async () => {
+    const results = await runInsideAncestor('plain', {
+      'src/dependency.js': "module.exports = 'real';\n",
+      'src/hoisting.test.js': [
+        "const dependency = require('./dependency');",
+        "jest.mock('./dependency', () => 'mocked');",
+        "test('uses the mock', () => { expect(dependency).toBe('mocked'); });",
+        '',
+      ].join('\n'),
+    });
+
+    assert.equal(results.numTotalTests, 1);
+    assert.equal(results.numPassedTests, 1);
+  });
+});
+
+await test('a custom transform replaces the default entirely', () => {
+  const customTransform = { '^.+\\.mjs$': 'custom-transformer' };
+
+  const { transform } = createJestConfig({ transform: customTransform });
+
+  assert.deepEqual(transform, customTransform);
 });
