@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 2 |
+| Pending | 3 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 7 |
@@ -19,6 +19,7 @@ _No active tasks._
 |----|-------|----------|------|---------|
 | TSK-005 | Fix: createJestConfig default transform drops babel-jest for the .js/.jsx tests it matches | P3 |  | 2026-11-11 |
 | TSK-009 | Fix: tsconfig-internal outDir resolves to the shared config package, not each consuming package | P4 |  | 2026-11-19 |
+| TSK-010 | Fix: eslint-config-base crashes on every .js/.mjs/.cjs file because type-checked presets are not scoped to TypeScript | P2 |  | 2026-11-21 |
 
 ## Recently Completed
 
