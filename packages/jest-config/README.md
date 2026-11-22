@@ -11,7 +11,7 @@
 
 ## ✨ Features
 
-- 🔧 **TypeScript**: ts-jest transform out of the box
+- 🔧 **TypeScript and JavaScript**: ts-jest for `.ts`/`.tsx`, babel-jest for `.js`/`.jsx` out of the box
 - 📊 **Coverage**: 80% global thresholds, text/json/html reporters
 - 🎯 **Sensible defaults**: Node environment, mocks cleared and restored between tests
 - 🚀 **Configurable**: `createJestConfig()` factory with typed options
@@ -19,7 +19,7 @@
 ## 📦 Installation
 
 ```bash
-npm install --save-dev @jmlweb/jest-config jest ts-jest @types/jest
+npm install --save-dev @jmlweb/jest-config jest ts-jest babel-jest @types/jest
 ```
 
 > 💡 Upgrading? See the [Migration Guide](#-migration-guide).
@@ -91,7 +91,7 @@ export default {
 | `coverageReporters`          | `['text', 'json', 'html']`                                                                                           |
 | `setupFilesAfterEnv`         | `[]` (omitted when empty)                                                                                            |
 | `moduleNameMapper`           | `{}` (omitted when empty)                                                                                            |
-| `transform`                  | `ts-jest` for `.ts`/`.tsx` with `esModuleInterop` and `allowSyntheticDefaultImports`                                 |
+| `transform`                  | `ts-jest` for `.ts`/`.tsx` with `esModuleInterop` and `allowSyntheticDefaultImports`; `babel-jest` for `.js`/`.jsx`  |
 | `testTimeout`                | `5000`                                                                                                               |
 
 Jest matches ignore patterns against absolute paths, so the output directories are anchored to `<rootDir>`: a project inside a directory named `build`, `dist`, `.cache` or `coverage` still finds its tests and coverage. `node_modules` stays unanchored to skip nested ones. Jest itself skips every path containing a `.git` directory, so do not place a project inside one.
@@ -107,7 +107,7 @@ Not for you if you are starting a new project: use [`@jmlweb/vitest-config`](../
 
 ## 🔧 Extending the Configuration
 
-Pass options to `createJestConfig`, or spread the result and override. Passing `transform` replaces the default entirely, so include the `ts-jest` entry again if you still need it.
+Pass options to `createJestConfig`, or spread the result and override. Passing `transform` replaces the default entirely, so include the `ts-jest` and `babel-jest` entries again if you still need them. Jest only applies its implicit `babel-jest` default when no `transform` is set, so without the `babel-jest` entry `.js`/`.jsx` tests lose `jest.mock` hoisting and your Babel config.
 
 ## 📝 Usage with Scripts
 
@@ -126,11 +126,13 @@ Pass options to `createJestConfig`, or spread the result and override. Passing `
 - **Node.js** >= 22.12.0
 - **Jest** >= 29.0.0
 - **ts-jest** >= 29.0.0
+- **babel-jest** >= 29.0.0
 
 ## 📦 Peer Dependencies
 
 - `jest` (`>=29.0.0`)
 - `ts-jest` (`>=29.0.0`)
+- `babel-jest` (`>=29.0.0`)
 - `@types/jest` (`>=29.0.0`)
 
 ## 🔗 Related Packages
