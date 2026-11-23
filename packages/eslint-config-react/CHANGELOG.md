@@ -1,5 +1,11 @@
 # @jmlweb/eslint-config-react
 
+## 6.0.5
+
+### Patch Changes
+
+- 7cf62b4: Accept `@stylistic/eslint-plugin` 6 as a peer dependency (`^5.0.0 || ^6.0.0`). The config only uses `jsx-pascal-case`, `jsx-self-closing-comp` and `jsx-curly-brace-presence`, which are unchanged in v6.
+
 ## 6.0.4
 
 ### Patch Changes
