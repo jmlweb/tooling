@@ -19,8 +19,8 @@
     "@jmlweb/oxfmt-config-base": "workspace:*",
     "@jmlweb/oxlint-config-node": "workspace:*",
     "eslint-plugin-n": "^18.5.0",
-    "oxfmt": "^0.78.0",
-    "oxlint": "^1.93.0"
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0"
   },
   "prettier": "@jmlweb/prettier-config-base",
   "engines": {

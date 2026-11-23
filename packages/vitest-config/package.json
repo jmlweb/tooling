@@ -56,10 +56,10 @@
   "devDependencies": {
     "@jmlweb/tsconfig-internal": "workspace:*",
     "@jmlweb/tsdown-config-base": "workspace:*",
-    "@vitest/coverage-v8": "^5.1.0",
-    "@vitest/ui": "^5.1.0",
+    "@vitest/coverage-v8": "^5.1.1",
+    "@vitest/ui": "^5.1.1",
     "tsdown": "~0.23.7",
     "typescript": "^6.0.3",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   }
 }
