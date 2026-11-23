@@ -4,7 +4,7 @@
 
 | Status   | Count |
 | -------- | ----- |
-| Pending | 2 |
+| Pending | 3 |
 | Active | 0 |
 | Blocked | 0 |
 | Complete | 8 |
@@ -19,6 +19,7 @@ _No active tasks._
 |----|-------|----------|------|---------|
 | TSK-009 | Fix: tsconfig-internal outDir resolves to the shared config package, not each consuming package | P4 |  | 2026-11-19 |
 | TSK-010 | Fix: eslint-config-base crashes on every .js/.mjs/.cjs file because type-checked presets are not scoped to TypeScript | P2 |  | 2026-11-21 |
+| TSK-011 | Fix: prettier-config-tailwind fails under pnpm: prettier-plugin-tailwindcss cannot be resolved from the consumer | P2 |  | 2026-11-23 |
 
 ## Recently Completed
 
