@@ -5,6 +5,18 @@ import prettierConfig from 'eslint-config-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
+const TYPESCRIPT_FILES = ['**/*.ts', '**/*.tsx'];
+
+/**
+ * Type-checked presets ship without a `files` glob, so they would also run on
+ * JavaScript files, where `projectService` is not enabled and ESLint throws.
+ */
+const scopeToTypeScript = (configs: Linter.Config[]): Linter.Config[] =>
+  configs.map((presetConfig) => ({
+    ...presetConfig,
+    files: presetConfig.files ?? TYPESCRIPT_FILES,
+  }));
+
 /**
  * TypeScript ESLint configuration that extends the base config.
  * Includes strict type checking, stylistic rules, and best practices.
@@ -13,10 +25,10 @@ import tseslint from 'typescript-eslint';
 const config = [
   ...baseConfig,
   ...tseslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
+  ...scopeToTypeScript(tseslint.configs.strictTypeChecked),
+  ...scopeToTypeScript(tseslint.configs.stylisticTypeChecked),
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: TYPESCRIPT_FILES,
     plugins: {
       'simple-import-sort': simpleImportSort,
     },
