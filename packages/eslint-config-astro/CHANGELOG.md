@@ -1,5 +1,12 @@
 # @jmlweb/eslint-config-astro
 
+## 2.0.5
+
+### Patch Changes
+
+- Updated dependencies [e3dee51]
+  - @jmlweb/eslint-config-base@3.0.5
+
 ## 2.0.4
 
 ### Patch Changes
