@@ -69,9 +69,11 @@ After:
 
 The config is the [base config](../prettier-config-base#-configuration-details) plus:
 
-| Option    | Value                             | Description                |
-| --------- | --------------------------------- | -------------------------- |
-| `plugins` | `['prettier-plugin-tailwindcss']` | Sorts Tailwind CSS classes |
+| Option    | Value                                          | Description                |
+| --------- | ---------------------------------------------- | -------------------------- |
+| `plugins` | Absolute path to `prettier-plugin-tailwindcss` | Sorts Tailwind CSS classes |
+
+The plugin path is resolved from this package, so Prettier loads the bundled plugin even when your package manager does not hoist it (pnpm).
 
 ## 🎯 When to Use
 
@@ -120,7 +122,7 @@ npm run format:check  # check without writing
 
 - `prettier` (`^3.0.0`)
 
-`prettier-plugin-tailwindcss` is a regular dependency, so it needs no separate install.
+`prettier-plugin-tailwindcss` is a regular dependency, so it needs no separate install with npm, Yarn or pnpm. The config loads it from its own dependencies, not from your project.
 
 ## 🔗 Related Packages
 

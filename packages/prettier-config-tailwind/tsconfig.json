@@ -1,4 +1,7 @@
 {
   "extends": "@jmlweb/tsconfig-internal",
+  "compilerOptions": {
+    "types": ["node"]
+  },
   "include": ["src"]
 }

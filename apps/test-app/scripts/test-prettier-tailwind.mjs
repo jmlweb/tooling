@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import chalk from 'chalk';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, isAbsolute, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { format } from 'prettier';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,10 +43,14 @@ try {
   const prettierConfig = await import('@jmlweb/prettier-config-tailwind');
   const config = prettierConfig.default;
 
-  if (
-    config.plugins &&
-    config.plugins.includes('prettier-plugin-tailwindcss')
-  ) {
+  // The config lists the plugin by absolute path so pnpm consumers load it
+  const isTailwindPluginPath = (plugin) =>
+    typeof plugin === 'string' &&
+    isAbsolute(plugin) &&
+    plugin.includes('prettier-plugin-tailwindcss') &&
+    existsSync(plugin);
+
+  if (config.plugins && config.plugins.some(isTailwindPluginPath)) {
     log.success('Tailwind plugin configured');
   } else {
     log.error('Tailwind plugin not found in config');

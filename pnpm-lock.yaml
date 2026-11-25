@@ -820,6 +820,9 @@ importers:
       '@jmlweb/tsdown-config-base':
         specifier: workspace:*
         version: link:../tsdown-config-base
+      '@types/node':
+        specifier: ^26.6.5
+        version: 26.6.5
       prettier:
         specifier: ^3.10.1
         version: 3.10.1
@@ -10025,7 +10028,7 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 24.19.2
+      '@types/node': 26.6.5
 
   '@types/send@1.2.1':
     dependencies:

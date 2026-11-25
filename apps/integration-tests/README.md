@@ -22,7 +22,7 @@ Runs in CI (see [`docs/CI.md`](../../docs/CI.md)).
 | File                       | Covers                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------ |
 | `test-oxc.mjs`             | Oxfmt/Oxlint configs run on fixtures: output, native, type-aware and JS plugin rules |
-| `test-prettier.mjs`        | Prettier configs                                                                     |
+| `test-prettier.mjs`        | Prettier configs; Tailwind class sorting in a pnpm consumer with no direct plugin    |
 | `test-eslint.mjs`          | ESLint configs                                                                       |
 | `test-tsconfig.mjs`        | TypeScript configs                                                                   |
 | `test-testing-configs.mjs` | Vitest and Jest configs                                                              |

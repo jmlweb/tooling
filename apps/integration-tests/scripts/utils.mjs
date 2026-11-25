@@ -150,8 +150,12 @@ function getPackageDirectories() {
 
 /**
  * Initialize a test project with package.json
+ *
+ * Every packed package becomes a pnpm override, so nested dependencies resolve
+ * to the local tarballs. `directDependencies` limits which of them the project
+ * lists itself, to reproduce a consumer that installs a single package.
  */
-export function initTestProject(packages = []) {
+export function initTestProject(packages = [], { directDependencies } = {}) {
   const packageJson = {
     name: 'test-project',
     version: '1.0.0',
@@ -166,8 +170,12 @@ export function initTestProject(packages = []) {
     packageJson.dependencies = {};
 
     for (const pkg of packages) {
-      // Use absolute path to packed tarball since test dir is in system temp
-      packageJson.dependencies[pkg.name] = `file:${pkg.path}`;
+      const isDirectDependency =
+        !directDependencies || directDependencies.includes(pkg.name);
+      if (isDirectDependency) {
+        // Use absolute path to packed tarball since test dir is in system temp
+        packageJson.dependencies[pkg.name] = `file:${pkg.path}`;
+      }
 
       // Add pnpm override to force this package version to use local file
       // This ensures nested dependencies also resolve to local packages
