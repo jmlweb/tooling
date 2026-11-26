@@ -4,7 +4,9 @@ import chalk from 'chalk';
 import { format } from 'prettier';
 
 import {
+  createTestEnvironment,
   createTestFile,
+  execInTestProject,
   importFromTestEnv,
   initTestProject,
   installDependencies,
@@ -35,6 +37,80 @@ export async function testPrettierConfigs(packages) {
   for (const pkg of prettierPackages) {
     await testPrettierPackage(pkg, packages);
   }
+
+  const tailwindPackage = prettierPackages.find(
+    (pkg) => pkg.name === TAILWIND_CONFIG_NAME,
+  );
+  if (tailwindPackage) {
+    testTailwindPnpmConsumer(packages);
+  }
+}
+
+const TAILWIND_CONFIG_NAME = '@jmlweb/prettier-config-tailwind';
+const UNSORTED_TAILWIND_MARKUP =
+  '<button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Click me</button>\n';
+const SORTED_TAILWIND_CLASSES =
+  'class="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"';
+
+/**
+ * A pnpm consumer that installs only the Tailwind config and Prettier must
+ * get class sorting: pnpm does not hoist prettier-plugin-tailwindcss to the
+ * consumer, so the config has to resolve the plugin itself
+ */
+function testTailwindPnpmConsumer(allPackages) {
+  log.section(`Testing ${TAILWIND_CONFIG_NAME} in a pnpm consumer`);
+
+  createTestEnvironment();
+  initTestProject(allPackages, { directDependencies: [TAILWIND_CONFIG_NAME] });
+  installDependencies({ prettier: '^3.3.3' });
+
+  const hoistedPlugin = execInTestProject(
+    "node -e \"process.stdout.write(String(require('node:fs').existsSync('node_modules/prettier-plugin-tailwindcss')))\"",
+  );
+  if (hoistedPlugin !== 'false') {
+    log.error(
+      'prettier-plugin-tailwindcss is visible from the consumer, the test cannot prove the config resolves it',
+    );
+  }
+
+  createTestFile('index.html', UNSORTED_TAILWIND_MARKUP);
+
+  const configFiles = {
+    ESM: {
+      '.prettierrc.mjs': `export { default } from '${TAILWIND_CONFIG_NAME}';\n`,
+    },
+    // The CJS build exports the config as `exports.default` (cjsDefault: false)
+    CJS: {
+      '.prettierrc.cjs': `module.exports = require('${TAILWIND_CONFIG_NAME}').default;\n`,
+    },
+  };
+
+  for (const [buildFormat, files] of Object.entries(configFiles)) {
+    log.info(`Formatting with the ${buildFormat} build...`);
+    const [[configFile, configContent]] = Object.entries(files);
+    createTestFile(configFile, configContent);
+
+    let output;
+    try {
+      output = execInTestProject(
+        `node_modules/.bin/prettier --config ${configFile} index.html`,
+        { stdio: ['ignore', 'pipe', 'pipe'] },
+      );
+    } catch (error) {
+      log.error(
+        `Prettier failed with the ${buildFormat} config: ${error.stderr || error.message}`,
+      );
+    }
+
+    if (!output.includes(SORTED_TAILWIND_CLASSES)) {
+      log.error(
+        `Tailwind classes were not sorted with the ${buildFormat} config:\n${output}`,
+      );
+    }
+    log.success(`${buildFormat} build resolves the plugin and sorts classes`);
+  }
+
+  log.success(`✅ ${TAILWIND_CONFIG_NAME} works in a pnpm consumer\n`);
 }
 
 async function testPrettierPackage(pkg, allPackages) {
