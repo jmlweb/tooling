@@ -847,7 +847,11 @@ importers:
 
   packages/tsconfig-base: {}
 
-  packages/tsconfig-internal: {}
+  packages/tsconfig-internal:
+    devDependencies:
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
   packages/tsconfig-nextjs:
     dependencies:
