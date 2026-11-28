@@ -14,6 +14,6 @@
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
     "rootDir": "${configDir}/src",
-    "outDir": "dist"
+    "outDir": "${configDir}/dist"
   }
 }

@@ -23,7 +23,7 @@ Standalone (does not extend another config), tuned for packages built with tsdow
 | `declaration`, `declarationMap`                        | `true`               |
 | `esModuleInterop`, `skipLibCheck`, `resolveJsonModule` | `true`               |
 | `rootDir`                                              | `${configDir}/src`   |
-| `outDir`                                               | `dist`               |
+| `outDir`                                               | `${configDir}/dist`  |
 
 `rootDir` and `outDir` resolve per package, so sources must live in `src/`. No `include`/`exclude` is set; each package defines its own.
 
